@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+						http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>Archetype Created Web Application</display-name>
+	<!-- 配置session时时间,单位是分钟 -->
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+
+	<!-- 起始欢迎界面 -->
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+	</welcome-file-list>
+
+	<!-- 设计路径变量值 -->
+	<!-- <context-param> -->
+	<!-- <param-name>webAppRootKey</param-name> -->
+	<!-- <param-value>weixin-manage.root</param-value> -->
+	<!-- </context-param> -->
+	<!-- ====================================================================== 
+		日志记录配置 -->
+	<context-param>
+		<!--log4j配置文件加载 -->
+		<description>日志配置文件路径</description>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:properties/log4j.properties</param-value>
+	</context-param>
+	<context-param>
+		<!--启动一个watchdog线程每6秒扫描一下log4j配置文件的变化 -->
+		<description>日志页面的刷新间隔</description>
+		<param-name>log4jRefreshInterval</param-name>
+		<param-value>6000</param-value>
+	</context-param>
+
+	<!-- ====================================================================== 
+		设置Spring容器加载所有的配置文件的路径 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:systemConfig/spring-applicationContext.xml,
+			classpath:systemConfig/dataSource-config.xml
+		</param-value>
+	</context-param>
+
+	<!-- ====================================================================== 
+		配置SpringMVC核心控制器 -->
+	<servlet>
+		<!-- springmvc的核心是DispatcherServlet，它负责控制整个页面的请求路径 -->
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<!-- 这个param-name必须是contextConfigLocation -->
+			<description>spring mvc 配置文件</description>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				classpath:systemConfig/spring-servlet-context.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!--拦截所有以shtml结尾的请求 -->
+	<servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<url-pattern>*.shtml</url-pattern>
+	</servlet-mapping>
+
+	<!-- ====================================================================== 
+		加载Spring容器配置:监听器配置 -->
+	<listener>
+		<description>log4j监听器</description>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<listener>
+		<description>spring监听器:以便在启动时就自动加载spring的配置</description>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<description>Introspector缓存清除监听器:防止spring内存溢出监听器</description>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	<listener>
+		<description>request监听器</description>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<listener>
+		<description>操作日志</description>
+		<listener-class>com.cdeledu.common.listener.MongoInitListener</listener-class>
+	</listener>
+	<!-- ====================================================================== 
+		过滤器配置 -->
+	<filter>
+		<!--处理从页面传递中文到后台而出现的中文乱码问题 -->
+		<description>编码(字符集)过滤器 </description>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<description>字符集编码</description>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--  操作日志 -->
+	<filter>
+		<filter-name>webOperateFilter</filter-name>
+		<filter-class>com.cdeledu.rad3.filter.WebOperateFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>webOperateFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Druid,监控数据库,以及WEB访问连接信息 -->
+	<filter>
+		<!-- WebStatFilter用于采集web-jdbc关联监控的数据。 -->
+		<filter-name>druidWebStatFilter</filter-name>
+		<filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+		<init-param>
+			<description>经常需要排除一些不必要的url</description>
+			<param-name>exclusions</param-name>
+			<param-value>/css/*,/context/*,/plug-in/*,*.js,*.css,*/druid*,/attached/*,*.jsp</param-value>
+		</init-param>
+		<!-- 缺省sessionStatMaxCount是1000个。你可以按需要进行配置 -->
+		<init-param>
+			<param-name>sessionStatMaxCount</param-name>
+			<param-value>1000</param-value>
+		</init-param>
+		<!-- 关闭session统计功能 -->
+		<init-param>
+			<param-name>sessionStatEnable</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<!-- 配置principalSessionName，使得druid能够知道当前的session的用户是谁 -->
+		<init-param>
+			<param-name>principalSessionName</param-name>
+			<param-value></param-value>
+		</init-param>
+		<!-- druid 0.2.7版本开始支持profile，配置profileEnable能够监控单个url调用的sql列表 -->
+		<init-param>
+			<param-name>profileEnable</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>druidWebStatFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<servlet>
+		<servlet-name>druidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>druidStatView</servlet-name>
+		<url-pattern>/webpage/system/druid/*</url-pattern>
+	</servlet-mapping>
+	<!-- 验证是否登录 -->
+	<filter>
+		<filter-name>loginFilter</filter-name>
+		<filter-class>com.cdeledu.filter.AjaxAuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>*.shtml</url-pattern>
+	</filter-mapping>
+
+	<!-- 错误跳转页面 -->
+	<error-page>
+		<!-- 路径不正确 -->
+		<error-code>404</error-code>
+		<location>/webpage/common/errorpage/404.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- 没有访问权限，访问被禁止 -->
+		<error-code>405</error-code>
+		<location>/webpage/common/errorpage/405.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- 内部错误 -->
+		<error-code>500</error-code>
+		<location>/webpage/common/errorpage/500.jsp</location>
+	</error-page>
+	
+</web-app>

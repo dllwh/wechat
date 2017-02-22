@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3po-config>
+	<default-config>
+		<property name="maxConnectionAge">1800</property>
+		<property name="maxStatements">1800</property>
+
+		<!--检查所有连接池中的空闲连接间隔.Default:0 -->
+		<property name="idleConnectionTestPeriod">60</property>
+		<!--定义所有连接测试都执行的测试语句.在使用连接测试的情况下这个一显著提高测试速度.Default:null -->
+		<property name="preferredTestQuery">select 1</property>
+		<!--如果设为true那么在取得连接的同时将校验连接的有效性.Default:false -->
+		<property name="testConnectionOnCheckin">true</property>
+		<!-- 最大连接数据库连接数.默认值:15,设置为0时,表示没有限制 -->
+		<property name="maxActive">100</property>
+		<!-- 最大等待连接中的数量,设置为0时,表示没有限制 -->
+		<property name="maxIdle">100</property>
+		<!-- 连接池中保留的最小连接数 -->
+		<property name="minPoolSize">1</property>
+		<!-- 连接池中保留的最大连接数.默认为15 -->
+		<property name="maxPoolSize">100</property>
+		<!--初始化时获取连接个数,取值应在minPoolSize与maxPoolSize之间.Default:3 -->
+		<property name="initialPoolSize">1</property>
+		<!-- 隔多少秒检查所有连接池中的空闲连接。默认值:0,不检查 -->
+		<property name="idleConnectionTestPeriod">120</property>
+		<!-- 最大空闲时间,超过空闲时间的连接将被丢弃。为0或负数则永不丢弃。默认为0 -->
+		<property name="maxIdleTime">600</property>
+		<!-- 如果设为true那么在取得连接的同时将校验连接的有效性。默认值:false -->
+		<property name="testConnectionOnCheckin">true</property>
+		<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数.默认值:3 -->
+		<property name="acquireIncrement">1</property>
+		<!-- 定义在从数据库获取新连接失败后重复尝试的次数.默认值:30;小于等于0表示无限次 -->
+		<property name="acquireRetryAttempts">60</property>
+		<!-- 重新尝试的时间间隔,默认为：1000毫秒 -->
+		<property name="acquireRetryDelay">1000</property>
+		<!-- 当连接池用完时客户端调用getConnection()后等待获取新连接的时间,超时后将抛出SQLException,如设为0则无限期等待.单位毫秒 -->
+		<property name="checkoutTimeout"></property>
+		<!-- 获取连接失败将会引起所有等待连接池来获取连接的线程抛出异常。但是数据源仍有效保留,并在下次调用getConnection()的时候继续尝试获取连接。如果设为true,那么在尝试获取连接失败后该数据源将申明已断开并永久关闭。默认:false -->
+		<property name="breakAfterAcquireFailure">false</property>
+		<!-- c3p0是异步操作的,缓慢的JDBC操作通过帮助进程完成。扩展这些操作可以有效的提升性能,通过多线程实现多个操作同时被执行。Default:3 -->
+		<property name="numHelperThreads">3</property>
+		<!-- 关闭连接时,是否提交未提交的事务,默认为false,即关闭连接,回滚未提交的事务 -->
+		<property name="autoCommitOnClose">false</property>
+		<!-- 连接池内单个连接所拥有的最大缓存statements数。Default:0 -->
+		<property name="maxStatementsPerConnection">5</property>
+		<!-- c3p0将建一张名为c3p0TestTable的空表,并使用其自带的查询语句进行测试 -->
+		<property name="automaticTestTable">c3p0TestTable</property>
+	</default-config>
+</c3po-config>

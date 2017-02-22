@@ -1,0 +1,727 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!--声明项目描述符遵循哪一个POM模型版本。模型本身的版本很少改变，虽然如此，但它仍然是必不可少的，这是为了当Maven引入了新的特性或者其他模型变更的时候，确保稳定性。 -->
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- ====================================================================== 
+		基本设置 -->
+	<!--项目的全球唯一标识符，通常使用全限定的包名区分该项目和其他项目。并且构建时生成的路径也是由此生成， 如com.mycompany.app生成的相对路径为：/com/mycompany/app -->
+	<groupId>com.cdeledu</groupId>
+	<!--构件的标识符，它和group ID一起唯一标识一个构件.在某个特定的group ID下,artifact ID也必须是唯一的。构件是项目产生的或使用的一个东西，Maven为项目产生的构件包括：JARs，源码，二进制发布和WARs等。 -->
+	<artifactId>wechat</artifactId>
+	<!--项目当前版本,格式为:主版本.次版本.增量版本-限定版本号 -->
+	<version>0.0.1-SNAPSHO</version>
+	<!--项目产生的构件类型,例如jar、war、ear、pom.插件可以创建他们自己的构件类型,所以前面列的不是全部构件类型 -->
+	<packaging>pom</packaging>
+
+	<!-- ====================================================================== 
+		项目信息设置 -->
+	<!--项目的名称, Maven产生的文档用 -->
+	<name>weixin</name>
+	<!--项目主页的URL, Maven产生的文档用 -->
+	<url>http://maven.apache.org</url>
+	<!--项目的详细描述, Maven 产生的文档用 -->
+	<description>综合信息服务管理平台</description>
+	<inceptionYear>2016</inceptionYear>
+	<!-- ====================================================================== 
+		项目开发者列表 -->
+	<developers>
+		<!--某个项目开发者的信息 -->
+		<developer>
+			<!--SCM里项目开发者的唯一标识符 -->
+			<id>duleilewuhen</id>
+			<!--项目开发者的全名 -->
+			<name>独泪了无痕</name>
+			<!--项目开发者的email -->
+			<email>duleilewuhen@sina.com</email>
+			<!--项目开发者在项目中扮演的角色，角色元素描述了各种角色 -->
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>GXF5211314</id>
+			<name>皇族灬战狼</name>
+			<email>duleilewuhen@163.com</email>
+			<roles>
+				<role>java developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<!-- ====================================================================== 
+		指定属性 方便管理 -->
+	<properties>
+		<!-- 指定Maven用什么编码来读取源码及文档 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- 指定Maven用什么编码来呈现站点的HTML文件 -->
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- maven插件的版本 -->
+		<plugin.version>2.4</plugin.version>
+		
+		<!-- maven -->
+		<maven-surefire-plugin.version>2.6</maven-surefire-plugin.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<maven-resources-plugin.version>2.5</maven-resources-plugin.version>
+		<maven-processor-plugin.version>2.0.5</maven-processor-plugin.version>
+		<maven-build-helper-plugin.version>1.7</maven-build-helper-plugin.version>
+		
+		<!-- log4j日志文件管理包版本 -->
+		<slf4j.version>1.6.1</slf4j.version>
+		<log4j.version>1.2.16</log4j.version>
+		<!-- JDK版本 -->
+		<java.version>1.7</java.version>
+		<javax.version>7.0</javax.version>
+		<jsp-api.version>2.0</jsp-api.version>
+		<jstl.version>1.2</jstl.version>
+		<servlet-api.version>2.5</servlet-api.version>
+		<!-- spring 版本号 -->
+		<mybatis-spring.version>1.2.2</mybatis-spring.version>
+		<mybaitsplus.version>1.5</mybaitsplus.version>
+		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
+		<!-- spring security 版本号 -->
+		<org.springframework.security.version />
+		<!-- spring-boot 版本号 -->
+		<spring-boot.version>1.3.6.RELEASE</spring-boot.version>
+		<!-- Hibernate 版本号 -->
+		<hibernate.version />
+		<hibernate-validator.version>5.1.3.Final</hibernate-validator.version>
+		<!-- 数据库版本号 -->
+		<mysql.version>5.1.35</mysql.version>
+		<sqlserver.version>4.0</sqlserver.version>
+		<c3p0.version>0.9.1.2</c3p0.version>
+		<druid.version>1.0.13</druid.version>
+		<mybatis.version>3.2.8</mybatis.version>
+		<!-- Apache POI 版本号 -->
+		<org.apache.poi.version>3.9</org.apache.poi.version>
+		<!-- org.apache.shiro 版本号(用于身份验证和授权) -->
+		<org.apache.shiro.version>1.3.2</org.apache.shiro.version>
+		<!-- FreeMarker 版本号 -->
+		<org.freemarker.version>2.3.23</org.freemarker.version>
+		<!-- jetty 版本号 -->
+		<jetty.version>6.1.5</jetty.version>
+		<!-- 定时:Quartz -->
+		<quartz.version>2.2.3</quartz.version>
+		<!-- Java开源爬虫框架WebCollector 2.x -->
+		<webCollector.version>2.32</webCollector.version>
+
+	</properties>
+
+
+	<!-- ====================================================================== 
+		模块（有时称作子项目） 被构建成项目的一部分。列出的每个模块元素是指向该模块的目录的相对路径 -->
+	<modules>
+		<module>wechat-arithmetic</module>
+		<module>wechat-common</module>
+		<module>wechat-mybatis</module>
+		<module>wechat-shell</module>
+		<module>wechat-template</module>
+		<module>wechat-utils</module>
+		<module>wechat-webCrawler</module>
+		<module>weixin-base</module>
+		<module>weixin-mp</module>
+		<module>weixin-qy</module>
+		<module>wechat-manage</module>
+	</modules>
+
+
+	<!-- ======== <dependency></dependency>===================================================== 
+		该元素描述了项目相关的所有依赖,这些依赖组成了项目构建过程中的一个个环节,它们自动从项目定义的仓库中下载 -->
+	<dependencies>
+		<!-- 单元测试(开始) -->
+		<dependency>
+			<groupId>junit</groupId> 		<!--依赖的group ID -->
+			<artifactId>junit</artifactId>	<!--依赖的artifact ID -->
+			<version>4.11</version>			<!--依赖的版本号。 在Maven 2里, 也可以配置成版本号的范围。 -->
+			<scope>test</scope>				<!-- 依赖项的适用范围：test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。 -->
+		</dependency>
+		<!-- 单元测试(end ) -->
+
+		<!-- 日志文件管理包 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>mail</artifactId>
+					<groupId>javax.mail</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jms</artifactId>
+					<groupId>javax.jms</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxtools</artifactId>
+					<groupId>com.sun.jdmk</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxri</artifactId>
+					<groupId>com.sun.jmx</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 日志输出依赖包 (结束) -->
+
+		<!-- web 依赖包(开始) -->
+		<!-- 以防止JSP页面报错所引入的 -->
+		<!-- javaee-api包 注意和项目使用的JDK版本对应 -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>${javax.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- javaee-web-api包 注意和项目使用的JDK版本对应 -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>${javax.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>2.2.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId><!-- j2ee web spec -->
+			<version>${servlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${jsp-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId><!-- JSTL标签类 -->
+			<version>${jstl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- web 依赖包(结束) -->
+
+		<!-- 数据库相关依赖包 (开始) -->
+		<!-- MSYQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId><!-- 导入Mysql数据库驱动包 -->
+			<version>${mysql.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- SQLSERVER -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>sqljdbc4</artifactId>
+			<version>${sqlserver.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- C3P0 -->
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>${c3p0.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- 数据源 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId><!-- connection pool:数据库连接池,用来在spingMVC-mybatis.xml中配置数据库 -->
+			<version>${druid.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- mybatis 持久层框架 -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring.version}</version>
+		</dependency>
+		<!-- mybatis 代码自动生成器 -->
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<version>1.3.5</version>
+		</dependency>
+		<!-- mybatis-plus Mybatis增强辅助工具 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus</artifactId>
+			<version>${mybaitsplus.version}</version>
+		</dependency>
+		<!-- 数据库相关依赖包 (结束) -->
+
+		<!-- 简单的Java库，用于将一个对象到另一个对象(开始) -->
+		<dependency>
+			<groupId>net.sf.ezmorph</groupId>
+			<artifactId>ezmorph</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<!-- Google -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-stax-api_1.0_spec</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<!-- 简单的Java库，用于将一个对象到另一个对象 (结束) -->
+
+		<!-- JSON 工具包 (开始) -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+		<!-- json-lib是需要区分jdk版本的,pom.xml中的配置应加上<classifier>标签,如用jdk15. -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.7.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId><!-- jackson json:高性能的JSON处理 -->
+			<version>2.7.3</version>
+		</dependency>
+		<!-- JSON 工具包 (结束) -->
+
+		<!-- FreeMarker (开始) -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>${org.freemarker.version}</version>
+		</dependency>
+		<!-- FreeMarker(结束) -->
+
+		<!-- Apache POI (开始) -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${org.apache.poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-examples</artifactId>
+			<version>${org.apache.poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-excelant</artifactId>
+			<version>${org.apache.poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${org.apache.poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>${org.apache.poi.version}</version>
+		</dependency>
+		<!-- Apache POI (结束) -->
+
+		<!-- Apache Commons (开始) -->
+		<!-- commons-beanutils -->
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<!-- commons-chain -->
+		<dependency>
+			<groupId>commons-chain</groupId>
+			<artifactId>commons-chain</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!-- commons-codec -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
+		<!-- commons-collections -->
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<!-- 数据库相关依赖包 -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- commons-dbutils -->
+		<dependency>
+			<groupId>commons-dbutils</groupId>
+			<artifactId>commons-dbutils</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<!-- commons-digester -->
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<!-- commons-email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<!-- commons-fileupload:上传组件包 -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<!-- commons-httpclient -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<!-- commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<!-- commons-lang -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<!-- commons-net -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.3</version>
+		</dependency>
+		<!-- 数据库相关依赖包 -->
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+			<version>1.6</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- commons-validator -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<!-- commons-configuration -->
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.10</version>
+		</dependency>
+		<!-- Apache Commons (结束) -->
+
+		<!-- 网络爬虫:页面分析工具 (开始) -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20140107</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId><!-- 格式化对象，方便输出日志 -->
+			<version>1.1.41</version>
+		</dependency>
+		<!-- Htmlunit -->
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.18</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit-core-js</artifactId>
+			<version>2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.cssparser</groupId>
+			<artifactId>cssparser</artifactId>
+			<version>0.9.16</version>
+		</dependency>
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>xalan</groupId>
+			<artifactId>serializer</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+		<!-- httpclient -->
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>9.2.12.v20150709</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-io</artifactId>
+			<version>9.2.12.v20150709</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.21</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient-cache</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<!-- selenium -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.53.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>2.53.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-htmlunit-driver</artifactId>
+			<version>2.52.0</version>
+		</dependency>
+		<!-- 网络爬虫:页面分析工具 (结束) -->
+
+		<!-- 辅助依赖包 (开始) -->
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version> 1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<!-- Joda-Time提供了一组Java类包用于处理包括ISO8601标准在内的date和time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<!-- mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.5.0-b01</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<!-- 获取User Agent用户代理:解析客户端操作系统、浏览器等 -->
+		<dependency>
+			<groupId>eu.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>1.20</version>
+		</dependency>
+
+	</dependencies>
+
+	<!-- ====================================================================== 
+		构建项目需要的信息 -->
+	<build>
+		<!-- 定义默认的目标或者阶段 -->
+		<defaultGoal>compile</defaultGoal>
+
+		<!-- 使用的插件列表 。 -->
+		<pluginManagement>
+			<plugins>
+				<!-- plugin元素包含描述插件所需要的信息。 -->
+				<plugin>
+					<!-- 把依赖的jar包拷到lib目录下 -->
+
+					<!-- 插件在仓库里的group ID -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>package</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${project.build.directory}/lib</outputDirectory>
+								<overWriteReleases>false</overWriteReleases>
+								<overWriteSnapshots>false</overWriteSnapshots>
+								<overWriteIfNewer>true</overWriteIfNewer>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- eclipse中解决update maven之后jre的版本1.7 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin.version}</version>
+					<configuration>
+						<encoding>${file.encoding}</encoding>
+						<outputDirectory />
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addClasspath>true</addClasspath>  <!-- 在jar包中增加依赖jar路径说明 -->
+								<classpathPrefix>lib/</classpathPrefix>
+								<mainClass>com.garfield.gui.Main</mainClass>
+							</manifest>
+
+							<!-- 用maven在MANIFEST.MF资料中的Class-Path中增加当前目录(.) -->
+							<manifestEntries>
+								<Class-Path>.</Class-Path>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<!-- 这个元素描述了项目相关的所有资源路径列表，例如和项目相关的属性文件，这些资源被包含在最终的打包文件里。 -->
+		<resources>
+			<!--打包进XML等文件，排除java及版本控制文件 -->
+			<resource>
+				<!-- 描述存放资源的目录，该路径相对POM路径 -->
+				<directory>src/main/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+					<exclude>**/.svn/*</exclude>
+				</excludes>
+			</resource>
+
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+</project>

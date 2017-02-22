@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 配置注解扫描 -->
+	<context:annotation-config />
+	<!-- 激活自动代理功能 -->
+	<aop:aspectj-autoproxy />
+	<!-- 拦截器 -->
+	<context:component-scan base-package="com.cdeledu.interceptors" />
+	<!-- 数据库配置 -->
+	<import resource="dataSource-config.xml" />
+	<!-- 缓存配置 -->
+	<!-- <import resource="cache-config.xml" /> -->
+
+
+	<!-- 配置文件上传:如果没有使用文件上传可以不用配置,当然如果不配,那么配置文件中也不必引入上传组件包 -->
+	<!-- maxUploadSize:设置允许上传的最大文件大小,以字节为单位计算,当设为-1时表示无限制.默认是-1.注意属性的限制是所有文件的容量之和 -->
+	<!-- maxInMemorySize:设置在文件上传时允许写到内存中的最大值,以字节为单位计算.默认是10240 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:defaultEncoding="UTF-8" p:maxUploadSize="104857600"
+		p:maxInMemorySize="4096" />
+
+	<!-- 国际化的消息资源文件 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找 -->
+				<value>/properties/myResources/message</value>
+				<value>/properties/myResources/content</value>
+			</list>
+		</property>
+		<property name="defaultEncoding" value="UTF-8" />
+		<!-- 刷新资源文件的周期，以秒为单位 -->
+		<property name="cacheSeconds" value="60" />
+	</bean>
+	
+	<!-- 启用缓存注解 -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<!-- cacheManager工厂类，指定ehcache.xml的位置 -->
+	<!-- 
+	<bean id="cacheManagerFactory"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+		p:configLocation="classpath:systemConfig/cache-config.xml" />
+	-->
+	<!-- 声明cacheManager -->
+	<!-- 
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+		p:cacheManager-ref="cacheManagerFactory" />
+	 -->
+	<!-- 国际化配置 -->
+	<!--
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+	-->
+	<!-- 国际化拦截器配置 -->
+	<!--
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+	</mvc:interceptors>
+	-->
+
+	<!-- servlet适配器，这里必须明确声明，因为spring默认没有初始化该适配器 -->
+	<bean id="servletHandlerAdapter"
+		class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter" />
+
+
+	<!-- Spring任务调度器之:定时任务配置 -->
+	<!-- <context:component-scan base-package="com.cdeledu.timertask" /> -->
+	<!-- 配置任务线性池 -->
+	<!-- <task:executor id="executor" pool-size="5" /> -->
+	<!-- <task:scheduler id="scheduler" pool-size="10" /> -->
+	<!-- 启用annotation方式 -->
+	<!-- <task:annotation-driven executor="executor" scheduler="scheduler" /> -->
+
+	<!-- 异常处理类 -->
+	<!-- <bean id="handlerExceptionResolver" class="com.cdeledu.exception.SpringExceptionHandler" 
+		/> -->
+
+	<!-- ====================================================================== 
+		配置自定义Spring 拦截器 -->
+	<!-- 菜单权限:设置拦截的路径,例如：后台目录:如果不配置或/*,将拦截所有的Controller -->
+	<!-- 
+	<bean id="authInterceptor" class="com.cdeledu.common.interceptors.AuthInterceptor">-->
+		<!-- 不被拦截范围（路径）；例如：后台登录页面 -->
+		<!-- 
+		<property name="excludeUrls">
+			<list>
+				<value>loginController.shtml?doLogin</value>
+				<value>loginController.shtml?checkuser</value>
+				<value>loginController.shtml?noAuth</value>
+				<value>iconController.shtml?saveIcon</value>
+				<value>system.shtml?checkBrowser</value>
+			</list>
+		</property>
+		-->
+	<!--</bean>-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.cdeledu.common.interceptors.EncodingInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="loginController.shtml?doLogin"/>
+			<mvc:exclude-mapping path="loginController.shtml?checkuser"/>
+			<mvc:exclude-mapping path="loginController.shtml?noAuth"/>
+			<mvc:exclude-mapping path="iconController.shtml?saveIcon"/>
+			<mvc:exclude-mapping path="system.shtml?checkBrowser"/>
+			<bean class="com.cdeledu.common.interceptors.AuthInterceptor" />
+			<!-- 
+			<ref bean="authInterceptor" />
+			-->
+		</mvc:interceptor>
+	</mvc:interceptors>
+</beans>

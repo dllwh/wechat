@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<!-- 自动扫描dao和service包(自动注入) -->
+	<!-- <context:component-scan base-package="com.cdeledu.dao" /> -->
+<!-- 	<context:component-scan base-package="com.cdeledu.service" /> -->
+
+	<!-- 加载service,此时要排除要controller,因为controller已经spring-servlet-context中加载过了 -->
+	<context:component-scan base-package="com.cdeledu.service">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 定义个缺省的控制适配器 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+
+	<!-- ====================================================================== 
+		加载资源文件 其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载 -->
+	<!-- 适用于多个资源文件加载 -->
+	<bean id="config"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/dbConfig.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- ====================================================================== 
+		数据库映射 指定连接数据库的基本属性信息 -->
+
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 指定连接数据库的驱动 -->
+		<property name="driverClassName" value="${database.jdbcName}" />
+		<!-- 指定连接数据库的URL 数据库名称,注意编码 -->
+		<property name="url" value="${database.dbUrl}" />
+		<!-- 指定连接数据库的用户名 -->
+		<property name="username" value="${database.dbUserName}" />
+		<!-- 指定连接数据库的密码 -->
+		<property name="password" value="${database.dbPassword}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="0" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="20" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="0" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 用来检测有效sql -->
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+
+		<!-- 开启Druid的监控统计功能,去掉后监控界面sql无法统计 -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!-- ====================================================================== 
+		配置mybatis模板 -->
+	<!-- 配置sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="dataSource" p:mapperLocations="classpath:com/cdeledu/dao/impl/*.xml" />
+
+	<!-- 配置mapper扫描器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:sqlSessionFactoryBeanName="sqlSessionFactory">
+		<!-- 扫描包的路径，如果需要扫描多个包，中间使用半角 逗号隔开 -->
+		<property name="basePackage" value="com.cdeledu.dao" />
+	</bean>
+
+	<!-- ====================================================================== 
+		JDBC 事务管理:在*ServiceImpl里写@Transactional就可以启用事物管理 -->
+	<!-- 声明式事务管理器 -->
+	<bean id="transactionManager" name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource" />
+
+	<!-- 用注解来实现事务管理(配置事务规则) -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 配置事务特性 -->
+	<!-- AOP切面的事务管理 (开启注解事务 只对当前配置文件有效 ) -->
+	<!-- REQUIRED:支持当前事务，如果当前没有事务，就新建一个事务。这是最常见的选择 -->
+	<!-- SUPPORTS:支持当前事务，如果当前没有事务，就以非事务方式执行。 -->
+	<!-- MANDATORY:支持当前事务，如果当前没有事务，就抛出异常。 -->
+	<!-- REQUIRES_NEW:新建事务，如果当前存在事务，把当前事务挂起。 -->
+	<!-- NOT_SUPPORTED:以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。 -->
+	<!-- NEVER:以非事务方式执行，如果当前存在事务，则抛出异常。 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
+			<!-- 数据增加 -->
+			<tx:method name="save*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="add*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="create*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="insert*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="append*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<!-- 数据删除 -->
+			<tx:method name="delete*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="remove*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<!-- 数据修改 -->
+			<tx:method name="update*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="merge*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="modify*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="edit*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<!-- 数据查询 -->
+			<tx:method name="get*" read-only="true" propagation="SUPPORTS" />
+			<tx:method name="count*" read-only="true" propagation="SUPPORTS" />
+			<tx:method name="query*" read-only="true" propagation="SUPPORTS" />
+			<tx:method name="select*" read-only="true" propagation="SUPPORTS" />
+			<tx:method name="find*" read-only="true" propagation="SUPPORTS" />
+			<tx:method name="load*" read-only="true" propagation="SUPPORTS" />
+			<tx:method name="search*" read-only="true" propagation="SUPPORTS" />
+<!-- 			<tx:method name="*" read-only="true" /> -->
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 配置事务代理拦截器 -->
+	<!-- PROPAGATION_REQUIRED:如果存在一个事务,则支持当前事务;如果没有事务则开启 -->
+	<!-- PROPAGATION_SUPPORTS:如果存在一个事务,支持当前事务.如果没有事务.则非事务的执行 -->
+	<!-- PROPAGATION_MANDATORY:如果已经存在一个事务,支持当前事务;如果没有一个活动的事务,则抛出异常 -->
+	<!-- PROPAGATION_REQUIRES_NEW:总是开启一个新的事务.如果一个事务存在,则将这个存在的事务挂起 -->
+	<!-- PROPAGATION_NOT_SUPPORTED:总是非事务地执行,并挂起任何存在的事务 -->
+	<!-- PROPAGATION_NEVER:总是非事务地执行,如果存在一个活动事务,则抛出异常 -->
+	<!-- PROPAGATION_NESTED:如果一个活动的事务存在,则运行在一个嵌套的事务中，如果没有活动事务,则按PROPAGATION_REQUIRED属性执行 -->
+	<bean id="baseTransactionProxy" abstract="true"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="append*">PROPAGATION_REQUIRED</prop>
+				
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="merge*">PROPAGATION_REQUIRED</prop>
+				<prop key="modify*">PROPAGATION_REQUIRED</prop>
+				<prop key="edit*">PROPAGATION_REQUIRED</prop>
+				
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="remove*">PROPAGATION_REQUIRED</prop>
+<!-- 				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop> -->
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置哪些类的方法需要进行事务管理 -->
+	<aop:config>
+		<aop:pointcut id="baseServiceMethods"
+			expression="execution(* com.cdeledu.service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="baseServiceMethods" />
+	</aop:config>
+
+	<!-- 开启AOP监听 只对当前配置文件有效 -->
+	<aop:aspectj-autoproxy />
+</beans>

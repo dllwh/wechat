@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.cdeledu</groupId>
+		<artifactId>wechat</artifactId>
+		<version>${project.version}</version>
+	</parent>
+	<artifactId>wechat-manage</artifactId>
+	<packaging>war</packaging>
+	<name>wechat-manage Maven Webapp</name>
+	<url>https://github.com/dllwh/wechat/tree/master/weixin-manage</url>
+
+
+	<dependencies>
+	<!-- 配置子项目的相关调用 -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>wechat-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId><!-- springIoC（依赖注入）的基础实现 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId><!-- spring 提供在基础 IoC 功能上的扩展服务 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId><!-- 包含Spring框架基本的核心工具类 -->
+			<version>${org.springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- ②.spring 持久层依赖 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId><!-- 封装了spring对于事物的控制 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId><!-- 包含对Spring对JDBC数据访问进行封装的所有类 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		<!-- ③.spring web相关依赖 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId><!-- 包含Web应用开发时，用到Spring框架时所需的核心类，包括自动载入 
+				WebApplicationContext 特性的类、Struts与JSF集成类、文件上传的支持类、Filter类和大量工具辅助类 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId><!-- Spring Web MVC是一种基于Java的实现了Web 
+				MVC设计模式的请求驱动类型的轻量级Web框架 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		<!-- ④.spring test依赖 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId><!-- 与Junit单元测试、集成测试 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		<!-- ⑤.spring 其它依赖 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springmodules</groupId>
+			<artifactId>spring-modules-validation</artifactId>
+			<version>0.8</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>*</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- springSource (结束) -->
+
+		<!-- 安全框架SECURITY:shiro begin -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>${org.apache.shiro.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>${org.apache.shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
+			<version>${org.apache.shiro.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- spring 定时:Quartz 时间配置详解 -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>${quartz.version}</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>wechat-manage</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<!-- tomcat7部署管理路径:http://ip地址:端口/manager/text -->
+					<url>http://localhost:80/manager/text</url> <!-- 注意此处的url -->
+					<!-- 此处的名字必须和setting.xml中配置的ID一致 -->
+					<!-- <server>tomcat7</server> -->
+					<!--settings.xml文件已配置，此处可不配 -->
+					<username>admin</username>
+					<!--settings.xml文件已配置，此处可不配 -->
+					<password>admin</password>
+					<path>/wechat-manage</path><!-- 此处的名字是项目发布的工程名 -->
+					<charset>UTF-8</charset>
+					<encoding>UTF-8</encoding>
+					<!-- 运行redeploy命令前，要能正常访问http://localhost:80/manager -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

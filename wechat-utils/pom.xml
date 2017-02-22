@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.cdeledu</groupId>
+		<artifactId>wechat</artifactId>
+		<version>${project.version}</version>
+	</parent>
+
+
+	<!-- ====================================================================== 
+		项目信息设置 -->
+	<!--构件的标识符，它和group ID一起唯一标识一个构件.在某个特定的group ID下,artifact ID也必须是唯一的。构件是项目产生的或使用的一个东西，Maven为项目产生的构件包括：JARs，源码，二进制发布和WARs等。 -->
+	<artifactId>wechat-utils</artifactId>
+	<!--项目的名称, Maven产生的文档用 -->
+	<name>wechat-utils</name>
+	<!--项目主页的URL, Maven产生的文档用 -->
+	<url>http://maven.apache.org</url>
+	<!--项目的详细描述, Maven 产生的文档用 -->
+	<description>Java开发中常用的工具类</description>
+	<inceptionYear>2016</inceptionYear>
+
+	<dependencies>
+		<!-- 配置子项目的相关调用 -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>wechat-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Google -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+
+		<!-- Mongodb -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+	</dependencies>
+</project>

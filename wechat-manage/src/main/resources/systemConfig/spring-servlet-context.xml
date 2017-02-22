@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- ====================================================================== 
+		自动扫描的包名:对包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
+
+	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
+	<!-- 加载controller的时候,不加载service,因为此时事物并未生效,若此时加载了service,那么事物无法对service进行拦截 -->
+	<context:component-scan base-package="com.cdeledu.controller">
+		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" 
+			/> -->
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- ====================================================================== 
+		注解映射的支持 -->
+	<!-- 通过注解，把URL映射到Controller上，该标签默认注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter -->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean
+				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/plain;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+						<value>application/x-www-form-urlencode</value>
+					</list>
+				</property>
+			</bean>
+			<!-- 避免IE执行AJA时候，返回JSON出现下载文件 -->
+			<bean id="mappingJacksonHttpMessageConverter"
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<!-- 防止在使用IE8请求用@ResponseBody注解返回json格式数据时出现下载页面 -->
+						<value>text/html;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- ====================================================================== 
+		默认的模型视图名称解析器 (如果你要访问index视图,它会自动 prefix(前缀)+index+suffix(后缀) -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:viewClass="org.springframework.web.servlet.view.JstlView" p:cache="false"
+		p:contentType="text/html;charset=UTF-8" p:prefix="/webpage/" p:suffix=".jsp" />
+
+	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
+	<bean id="defaultViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:order="3" p:viewClass="org.springframework.web.servlet.view.JstlView"
+		p:contentType="text/html" p:prefix="/webpage/" p:suffix=".jsp" />
+
+	<!-- ====================================================================== 
+		直接跳转:对模型视图名称的解析，即定义JSP文件的位置，在模型视图名称添加前后缀 -->
+	<!-- <mvc:view-controller path="/index" view-name="index" /> -->
+
+	<!-- ====================================================================== 
+		静态资源访问 -->
+	<!-- 容器默认的defaultServletHandler处理所有静态内容与RequestMapping处理的URL -->
+	<mvc:default-servlet-handler />
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/css/" mapping="/css/**" />
+	<mvc:resources location="/images/" mapping="/images/**" />
+	<mvc:resources location="/ueditor/" mapping="/ueditor/**" />
+	<mvc:resources location="/upload/" mapping="/upload/**" />
+	<mvc:resources location="/front/" mapping="/front/**" />
+	<mvc:resources location="/html/" mapping="/html/**" />
+	<mvc:resources location="/json/" mapping="/json/**" />
+	<!-- 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理 -->
+</beans>
