@@ -16,7 +16,7 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 
 /**
- * @类描述:
+ * @类描述: 一些中文相关的操作方法
  *       <ul>
  *       <li>pinyin4j是一个支持将中文转换到拼音的Java开源类库</li>
  *       <li>1.支持简体中文和繁体中文字符</li>
@@ -25,12 +25,13 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
  *       <li>4.支持多种字符串输出格式</li>
  *       </ul>
  * @创建者: 皇族灬战狼
- * @创建时间: 2016年11月25日 下午1:52:00
- * @版本: V2.0
+ * @创建时间: 2017年3月5日 上午9:57:05
+ * @版本: V1.0
  * @since: JDK 1.7
+ * @see <a href="">TODO(连接内容简介)</a>
  */
-public class PinyinUtil {
-	/** -------------------------- 私有属性 start ------------------------------- */
+public class ChineseHelper {
+	/** ----------------------------------------------------- Fields start */
 	/** 创建汉语拼音处理类 */
 	private static final HanyuPinyinOutputFormat DEFAULTFORMAT = new HanyuPinyinOutputFormat();
 	static {
@@ -39,8 +40,9 @@ public class PinyinUtil {
 		DEFAULTFORMAT.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
 	}
 
-	/** -------------------------- 私有属性 end ------------------------------- */
-	/** -------------------------- 私有方法 start ------------------------------- */
+	/** ----------------------------------------------------- Fields end */
+
+	/** ----------------------------------------------- [私有方法] */
 	/**
 	 * @方法描述: 去除多音字重复数据
 	 * @param chineseStr
@@ -109,8 +111,7 @@ public class PinyinUtil {
 		return resultList;
 	}
 
-	/** -------------------------- 私有方法 end ------------------------------- */
-	/** -------------------------- 公有方法 start ------------------------------- */
+	/** ----------------------------------------------- [私有方法] */
 
 	/**
 	 * @方法描述: 将某个字符串的首字母 大写
@@ -187,7 +188,7 @@ public class PinyinUtil {
 		return parseTheChineseByObject(discountTheChinese(pinyinName.toString()));
 	}
 
-	/*-------------------------- 公有方法 end   -------------------------------*/
+	/*-------------------------- 测试方法   -------------------------------*/
 	public static void main(String[] args) throws Exception {
 		String chinese = "重当参";
 		System.out.println(converterToSpell(chinese, true));
