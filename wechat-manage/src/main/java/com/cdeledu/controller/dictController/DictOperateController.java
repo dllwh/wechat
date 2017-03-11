@@ -1,6 +1,7 @@
 package com.cdeledu.controller.dictController;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping(value = "DictOperate")
-public class DictOperateController{
+@Transactional(readOnly = true)
+public class DictOperateController {
 
 }

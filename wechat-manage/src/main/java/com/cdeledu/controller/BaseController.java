@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.common.interceptors.DateConvertEditor;
 
 /**
@@ -16,7 +17,7 @@ import com.cdeledu.common.interceptors.DateConvertEditor;
  * @since: JDK 1.7
  */
 @Controller
-public class BaseController {
+public class BaseController extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
 
 	/** ----------------------------------------------------- Fields end */
