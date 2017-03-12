@@ -1,5 +1,7 @@
 package com.cdeledu.common.constants;
 
+import com.cdeledu.util.ResourceUtil;
+
 /**
  * @类描述: 全局配置类、系统常量
  * @创建者: 皇族灬战狼
@@ -37,28 +39,70 @@ public class GlobalConstants {
 	public static final Integer Log_Type_UPDATE = 5; // 更新
 	public static final Integer Log_Type_UPLOAD = 6; // 上传
 	public static final Integer Log_Type_OTHER = 7; // 其他
-	
-	
+
+	/**
+	 * 上传图片大小限制，单位byte
+	 */
+	public final static long MAX_UPLOAD_PIC_SIZE = 1000 * 1024 * 4;
+	/**
+	 * 上传文件大小限制，单位byte
+	 */
+	public final static long MAX_UPLOAD_FILE_SIZE = 10 * 1024 * 1024 * 8;
+
+	/**
+	 * 上传软件大小限制，单位byte
+	 */
+	public final static long MAX_UPLOAD_SOFT_SIZE = 100 * 1024 * 1024 * 8;
+
+	/**
+	 * 错误登录次数最多3次
+	 */
+	public final static int MAX_LOGIN_TIMES = 3;
+	/**
+	 * 错误登录3次后用户被锁10分钟
+	 */
+	public final static int LOCK_TIME = +10;
+
 	/**
 	 * 获取Key加载信息
 	 */
-	public static boolean printKeyLoadMessage(){
+	public static boolean printKeyLoadMessage() {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("\r\n            ================================================================================================\r\n");
-		stringBuilder.append("\r\n                  ___           ___           ___           ___                       ___           ___     ");
-		stringBuilder.append("\r\n                 /\\__\\         /\\  \\         /\\  \\         /\\__\\          ___        /\\__\\         /\\  \\    ");
-		stringBuilder.append("\r\n                /::|  |       /::\\  \\       /::\\  \\       /::|  |        /\\  \\      /::|  |       /::\\  \\   ");
-		stringBuilder.append("\r\n               /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:|:|  |        \\:\\  \\    /:|:|  |      /:/\\:\\  \\  ");
-		stringBuilder.append("\r\n              /:/|:|__|__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/|:|  |__      /::\\__\\  /:/|:|  |__   /:/  \\:\\  \\ ");
-		stringBuilder.append("\r\n             /:/ |::::\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/ |:| /\\__\\  __/:/\\/__/ /:/ |:| /\\__\\ /:/__/_\\:\\__\\");
-		stringBuilder.append("\r\n             \\/__/~~/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\/__|:|/:/  / /\\/:/  /    \\/__|:|/:/  / \\:\\  /\\ \\/__/");
-		stringBuilder.append("\r\n                   /:/  /   \\:\\  /:/  /     |:|::/  /      |:/:/  /  \\::/__/         |:/:/  /   \\:\\ \\:\\__\\  ");
-		stringBuilder.append("\r\n                  /:/  /     \\:\\/:/  /      |:|\\/__/       |::/  /    \\:\\__\\         |::/  /     \\:\\/:/  /  ");
-		stringBuilder.append("\r\n                 /:/  /       \\::/  /       |:|  |         /:/  /      \\/__/         /:/  /       \\::/  /   ");
-		stringBuilder.append("\r\n                 \\/__/         \\/__/         \\|__|         \\/__/                     \\/__/         \\/__/    \r\n");
-		stringBuilder.append("\r\n                                                                   欢迎使用 猫宁Morning电子商城  - Powered By 爬梯子的猫                     \r\n");
-		stringBuilder.append("\r\n            ================================================================================================\r\n");
+		stringBuilder.append(
+				"\r\n            ================================================================================================\r\n");
+		stringBuilder.append(
+				"\r\n                  ___           ___           ___           ___                       ___           ___     ");
+		stringBuilder.append(
+				"\r\n                 /\\__\\         /\\  \\         /\\  \\         /\\__\\          ___        /\\__\\         /\\  \\    ");
+		stringBuilder.append(
+				"\r\n                /::|  |       /::\\  \\       /::\\  \\       /::|  |        /\\  \\      /::|  |       /::\\  \\   ");
+		stringBuilder.append(
+				"\r\n               /:|:|  |      /:/\\:\\  \\     /:/\\:\\  \\     /:|:|  |        \\:\\  \\    /:|:|  |      /:/\\:\\  \\  ");
+		stringBuilder.append(
+				"\r\n              /:/|:|__|__   /:/  \\:\\  \\   /::\\~\\:\\  \\   /:/|:|  |__      /::\\__\\  /:/|:|  |__   /:/  \\:\\  \\ ");
+		stringBuilder.append(
+				"\r\n             /:/ |::::\\__\\ /:/__/ \\:\\__\\ /:/\\:\\ \\:\\__\\ /:/ |:| /\\__\\  __/:/\\/__/ /:/ |:| /\\__\\ /:/__/_\\:\\__\\");
+		stringBuilder.append(
+				"\r\n             \\/__/~~/:/  / \\:\\  \\ /:/  / \\/_|::\\/:/  / \\/__|:|/:/  / /\\/:/  /    \\/__|:|/:/  / \\:\\  /\\ \\/__/");
+		stringBuilder.append(
+				"\r\n                   /:/  /   \\:\\  /:/  /     |:|::/  /      |:/:/  /  \\::/__/         |:/:/  /   \\:\\ \\:\\__\\  ");
+		stringBuilder.append(
+				"\r\n                  /:/  /     \\:\\/:/  /      |:|\\/__/       |::/  /    \\:\\__\\         |::/  /     \\:\\/:/  /  ");
+		stringBuilder.append(
+				"\r\n                 /:/  /       \\::/  /       |:|  |         /:/  /      \\/__/         /:/  /       \\::/  /   ");
+		stringBuilder.append(
+				"\r\n                 \\/__/         \\/__/         \\|__|         \\/__/                     \\/__/         \\/__/    \r\n");
+		stringBuilder.append(
+				"\r\n            ================================================================================================\r\n");
 		System.out.println(stringBuilder.toString());
 		return true;
+	}
+
+	/**
+	 * 是否是演示模式，演示模式下不能修改用户、角色、密码、菜单、授权
+	 */
+	public static Boolean isDemoMode() {
+		String dm = ResourceUtil.getConfigByName("demoMode");
+		return "true".equals(dm) || "1".equals(dm);
 	}
 }
