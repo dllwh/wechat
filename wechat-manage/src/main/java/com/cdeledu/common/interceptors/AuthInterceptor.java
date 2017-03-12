@@ -6,14 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.model.SessionInfo;
-import com.cdeledu.service.SystemService;
+import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.WebUtilHelper;
 
 /**
@@ -23,9 +23,9 @@ import com.cdeledu.util.WebUtilHelper;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class AuthInterceptor implements HandlerInterceptor {
+public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
-	private static final Logger logger = Logger.getLogger(AuthInterceptor.class);
 	@Autowired
 	private SystemService systemService;
 	private List<String> excludeUrls;
