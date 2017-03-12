@@ -1,8 +1,9 @@
-package com.cdeledu.controller.dictController;
+package com.cdeledu.controller.system.dict;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,7 +18,10 @@ import com.cdeledu.controller.BaseController;
  */
 @Controller
 @RequestMapping(value = "DictView")
+@Transactional(readOnly = true)
 public class DictViewController extends BaseController {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @方法描述: 类型字典列表页面跳转
 	 * @创建者: 皇族灬战狼

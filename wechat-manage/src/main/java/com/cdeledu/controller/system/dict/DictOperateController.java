@@ -1,8 +1,10 @@
-package com.cdeledu.controller.dictController;
+package com.cdeledu.controller.system.dict;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cdeledu.controller.BaseController;
 
 /**
  * @类描述: 数据字典控制类:数据操作层(对数据的增、删、改)
@@ -13,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping(value = "DictOperate")
-@Transactional(readOnly = true)
-public class DictOperateController {
+@Transactional(readOnly = false)
+public class DictOperateController extends BaseController {
+	private static final long serialVersionUID = 1L;
 
 }

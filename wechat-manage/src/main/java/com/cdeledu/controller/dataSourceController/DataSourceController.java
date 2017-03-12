@@ -20,6 +20,8 @@ import com.cdeledu.controller.BaseController;
 public class DataSourceController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 
+	private static final long serialVersionUID = 1L;
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法: 跳转到连接池监控页面
