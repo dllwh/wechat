@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.common.model.AjaxJson;
+import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.Menu;
-import com.cdeledu.service.SystemService;
+import com.cdeledu.service.sys.SystemService;
 
 /**
  * @类描述: 菜单操作控制类
@@ -24,7 +25,8 @@ import com.cdeledu.service.SystemService;
 @Controller
 @RequestMapping("/MenuOperate")
 @SessionAttributes("managerUser")
-public class MenuOperateController {
+public class MenuOperateController extends BaseController {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	@Autowired
 	private SystemService systemService;
@@ -55,8 +57,7 @@ public class MenuOperateController {
 	 */
 	@RequestMapping(params = "saveMenu")
 	@ResponseBody
-	public AjaxJson saveMenu(HttpServletRequest request, HttpServletResponse response,
-			Menu menu) {
+	public AjaxJson saveMenu(HttpServletRequest request, HttpServletResponse response, Menu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		return ajaxJson;
 	}
@@ -70,8 +71,7 @@ public class MenuOperateController {
 	 */
 	@RequestMapping(params = "del")
 	@ResponseBody
-	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response,
-			Menu menu) {
+	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response, Menu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		message = "权限: " + menu.getMenuName() + "被删除成功";
 		// 删除权限菜单时先删除权限菜单与角色之间关联表信息

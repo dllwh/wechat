@@ -22,6 +22,8 @@ import com.cdeledu.controller.BaseController;
 public class LogViewController  extends BaseController{
 	/** ----------------------------------------------------- Fields start */
 
+	private static final long serialVersionUID = 1L;
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法:日志列表页面跳转

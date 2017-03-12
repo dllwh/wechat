@@ -13,6 +13,7 @@ import com.cdeledu.controller.BaseController;
  */
 @Controller
 public class MonitorViewController extends BaseController {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */
 

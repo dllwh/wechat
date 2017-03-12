@@ -13,6 +13,8 @@ import com.cdeledu.controller.BaseController;
 @Controller
 @RequestMapping("/system")
 public class SystemController extends BaseController {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @方法描述: 浏览器配置检查
 	 * @创建者: 皇族灬战狼

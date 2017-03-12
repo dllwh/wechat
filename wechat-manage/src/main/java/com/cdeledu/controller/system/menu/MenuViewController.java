@@ -19,6 +19,7 @@ import com.cdeledu.controller.BaseController;
 @SessionAttributes("managerUser")
 public class MenuViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
+	private static final long serialVersionUID = 1L;
 
 	/** ----------------------------------------------------- Fields end */
 	/**

@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.common.model.AjaxJson;
+import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.ManagerUser;
 import com.cdeledu.model.rbac.Role;
-import com.cdeledu.service.SystemService;
+import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.WebUtilHelper;
 
 /**
@@ -25,7 +26,8 @@ import com.cdeledu.util.WebUtilHelper;
  */
 @Controller
 @RequestMapping("/roleOperate")
-public class RoleOperateController {
+public class RoleOperateController extends BaseController {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	@Autowired
 	private SystemService systemService;

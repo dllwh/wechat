@@ -17,6 +17,7 @@ import com.cdeledu.model.rbac.ManagerUser;
 @SessionAttributes("managerUser")
 public class ManagerUserViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
+	private static final long serialVersionUID = 1L;
 
 	/** ----------------------------------------------------- Fields end */
 	/**

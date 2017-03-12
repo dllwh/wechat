@@ -18,8 +18,8 @@ import com.cdeledu.common.model.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.ManagerUser;
 import com.cdeledu.model.system.LoginLog;
-import com.cdeledu.service.ManagerUserService;
-import com.cdeledu.service.SystemService;
+import com.cdeledu.service.sys.ManagerUserService;
+import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.WebUtilHelper;
 
 /**
@@ -32,6 +32,7 @@ import com.cdeledu.util.WebUtilHelper;
 @Controller
 @RequestMapping("/loginController")
 public class LoginController extends BaseController {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	@Autowired
 	private ManagerUserService manageruserService;

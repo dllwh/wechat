@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cdeledu.common.model.AjaxJson;
+import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.ManagerUser;
 import com.cdeledu.model.rbac.ManagerUserRole;
-import com.cdeledu.service.ManagerUserService;
+import com.cdeledu.service.sys.ManagerUserService;
 import com.google.common.collect.Lists;
 
 /**
@@ -29,7 +30,8 @@ import com.google.common.collect.Lists;
 @Controller
 @RequestMapping("/managerUserOperate")
 @SessionAttributes("managerUser")
-public class ManagerUserOperateController {
+public class ManagerUserOperateController extends BaseController {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	@Autowired
 	private ManagerUserService manageruserService;

@@ -21,6 +21,7 @@ import com.cdeledu.controller.BaseController;
 @Controller
 @RequestMapping("/IconController")
 public class IconController  extends BaseController{
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	private String message;// 操作提示语
 	/** ----------------------------------------------------- Fields end */

@@ -20,6 +20,8 @@ import com.cdeledu.model.rbac.Role;
 @Controller
 @RequestMapping("/roleView")
 public class RoleViewController extends BaseController {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @方法:角色列表页面跳转
 	 * @创建人:独泪了无痕

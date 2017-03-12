@@ -19,6 +19,7 @@ import com.cdeledu.common.interceptors.DateConvertEditor;
 @Controller
 public class BaseController extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
+	private static final long serialVersionUID = 1L;
 
 	/** ----------------------------------------------------- Fields end */
 	/**
