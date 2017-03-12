@@ -1,4 +1,4 @@
-package com.cdeledu.service;
+package com.cdeledu.service.sys;
 
 import com.cdeledu.common.base.BaseService;
 import com.cdeledu.model.rbac.ManagerUser;

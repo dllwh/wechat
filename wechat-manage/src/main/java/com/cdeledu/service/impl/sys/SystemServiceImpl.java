@@ -1,16 +1,19 @@
-package com.cdeledu.service.impl;
+package com.cdeledu.service.impl.sys;
 
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.model.system.LoginLog;
-import com.cdeledu.service.SystemService;
+import com.cdeledu.service.sys.SystemService;
 
 @Service
-@Transactional
-public class SystemServiceImpl implements SystemService {
+@Transactional(readOnly = true)
+public class SystemServiceImpl extends BaseClass implements SystemService {
+
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public void addLog(String LogContent, Integer loglevel, Integer operatetype) {

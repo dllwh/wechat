@@ -1,4 +1,4 @@
-package com.cdeledu.service.impl;
+package com.cdeledu.service.impl.sys;
 
 import java.util.List;
 
@@ -7,13 +7,15 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.dao.RoleDao;
 import com.cdeledu.model.rbac.Role;
-import com.cdeledu.service.RoleService;
+import com.cdeledu.service.sys.RoleService;
 
 @Service
-@Transactional
-public class RoleServiceImpl implements RoleService {
+@Transactional(readOnly = true)
+public class RoleServiceImpl extends BaseClass implements RoleService {
+	private static final long serialVersionUID = 1L;
 	@Resource
 	private RoleDao roleDao;
 

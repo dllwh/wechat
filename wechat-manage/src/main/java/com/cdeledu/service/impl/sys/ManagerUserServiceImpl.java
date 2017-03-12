@@ -1,4 +1,4 @@
-package com.cdeledu.service.impl;
+package com.cdeledu.service.impl.sys;
 
 import java.util.List;
 
@@ -7,10 +7,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.dao.ManagerUserDao;
 import com.cdeledu.model.rbac.ManagerUser;
 import com.cdeledu.model.rbac.ManagerUserRole;
-import com.cdeledu.service.ManagerUserService;
+import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.util.security.PasswordUtil;
 
 /**
@@ -21,8 +22,9 @@ import com.cdeledu.util.security.PasswordUtil;
  * @since: JDK 1.7
  */
 @Service
-@Transactional
-public class ManagerUserServiceImpl implements ManagerUserService {
+@Transactional(readOnly = true)
+public class ManagerUserServiceImpl extends BaseClass implements ManagerUserService {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	@Resource
 	private ManagerUserDao managerUserDao;
@@ -32,6 +34,7 @@ public class ManagerUserServiceImpl implements ManagerUserService {
 	 * 保存用户基本信息
 	 */
 	public int insertSelective(ManagerUser record) throws Exception {
+		logger.info("保存用户基本信息");
 		String newPassWord = PasswordUtil.encrypt(record.getUserName(), record.getPassword());
 		record.setPassword(newPassWord);
 		return managerUserDao.insertSelective(record);
