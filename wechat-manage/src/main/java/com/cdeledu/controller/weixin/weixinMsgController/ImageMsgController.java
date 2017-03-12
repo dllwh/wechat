@@ -15,6 +15,7 @@ import com.cdeledu.controller.BaseController;
 @Controller
 @RequestMapping(value = "imageMsg")
 public class ImageMsgController extends BaseController {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */
 

@@ -15,6 +15,7 @@ import com.cdeledu.controller.BaseController;
 @Controller
 @RequestMapping(value = "invoiceMsg")
 public class InVoiceMsgController extends BaseController {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */
 
