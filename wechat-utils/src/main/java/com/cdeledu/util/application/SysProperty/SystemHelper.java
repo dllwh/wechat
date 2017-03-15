@@ -11,7 +11,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import com.cdeledu.common.property.PropertyHelperUtils;
+import com.cdeledu.common.property.PropertyHelper;
 import com.google.common.collect.Lists;
 
 /**
@@ -26,34 +26,32 @@ public class SystemHelper {
 	/**
 	 * JVM的版本
 	 */
-	public static final String JVM_VERSION = PropertyHelperUtils
-			.getSyskey(SysProperty.JAVA_VERSION);
-
+	public static final String JVM_VERSION = PropertyHelper.getSyskey(SysProperty.JAVA_VERSION);
 	/**
 	 * 主机架构
 	 */
-	public static String OS_ARCH = PropertyHelperUtils.getSyskey(SysProperty.OS_ARCH);
+	public static final String OS_ARCH = PropertyHelper.getSyskey(SysProperty.OS_ARCH);
 	/**
 	 * 主机类型:取得当前OS的名称
 	 */
-	public static String OS_NAME = PropertyHelperUtils.getSyskey(SysProperty.OS_NAME);
+	public static final String OS_NAME = PropertyHelper.getSyskey(SysProperty.OS_NAME);
 	/**
 	 * 主机类型版本:当前OS的版本
 	 */
-	public static String OS_VERSION = PropertyHelperUtils.getSyskey(SysProperty.OS_VERSION);
+	public static final String OS_VERSION = PropertyHelper.getSyskey(SysProperty.OS_VERSION);
 	/**
 	 * 操作系统类型
 	 */
-	public static String SUN_DESKTOP = PropertyHelperUtils.getSyskey(SysProperty.SUN_DESKTOP);
+	public static final String SUN_DESKTOP = PropertyHelper.getSyskey(SysProperty.SUN_DESKTOP);
 	/**
 	 * 当前用户
 	 */
-	public static String CURRENT_USER = PropertyHelperUtils.getSyskey(SysProperty.USER_NAME);
+	public static final String CURRENT_USER = PropertyHelper.getSyskey(SysProperty.USER_NAME);
 
 	/**
 	 * 当前用户的家目录
 	 */
-	public static String CURRENT_USER_HOME = PropertyHelperUtils.getSyskey(SysProperty.USER_HOME);
+	public static final String CURRENT_USER_HOME = PropertyHelper.getSyskey(SysProperty.USER_HOME);
 	private static OperatingSystemMXBean osmxb;
 	static {
 		try {
@@ -133,6 +131,7 @@ public class SystemHelper {
 	 */
 	public final static void setHttpProxy(String host, String port, String username,
 			String password) {
+		System.getProperties().setProperty("proxySet", "true");
 		System.getProperties().put(SysProperty.HTTP_PROXY_HOST, host);
 		System.getProperties().put(SysProperty.HTTP_PROXY_PORT, port);
 		System.getProperties().put(SysProperty.HTTP_PROXY_USER, username);
@@ -143,6 +142,7 @@ public class SystemHelper {
 	 * Sets HTTP proxy settings.
 	 */
 	public final static void setHttpProxy(String host, String port) {
+		System.getProperties().setProperty("proxySet", "true");
 		System.getProperties().put(SysProperty.HTTP_PROXY_HOST, host);
 		System.getProperties().put(SysProperty.HTTP_PROXY_PORT, port);
 	}
