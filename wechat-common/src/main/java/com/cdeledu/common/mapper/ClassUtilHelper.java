@@ -1,4 +1,4 @@
-package com.cdeledu.common.reflection;
+package com.cdeledu.common.mapper;
 
 import java.util.Collection;
 import java.util.Date;

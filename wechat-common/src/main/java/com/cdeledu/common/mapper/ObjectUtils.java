@@ -1,4 +1,4 @@
-package com.cdeledu.common.reflection;
+package com.cdeledu.common.mapper;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
