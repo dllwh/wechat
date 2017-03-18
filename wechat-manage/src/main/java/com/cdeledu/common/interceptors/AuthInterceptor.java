@@ -120,7 +120,7 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 				// ----------------------------------------------------------------
 			} else {
 				// 没有登录系统，或登录超时 forward("您没有登录或登录超时，请重新登录！", request, response);
-				request.getRequestDispatcher("webpage/login/timeout.jsp").forward(request,
+				request.getRequestDispatcher("/webViews/login/timeout.jsp").forward(request,
 						response);
 				return false;
 			}

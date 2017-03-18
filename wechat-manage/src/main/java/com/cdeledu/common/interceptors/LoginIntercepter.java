@@ -40,7 +40,7 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
 				.getAttribute(GlobalConstants.USER_SESSION);
 		if ((null == sessioninfo || null == sessioninfo.getManagerUser())
 				&& FilterHelper.isURILogin(httpRequest.getRequestURI(), httpRequest)) {
-			request.getRequestDispatcher("/webpage/login/login.jsp").forward(request, response);
+			request.getRequestDispatcher("/webViews/login/login.jsp").forward(request, response);
 			return false;
 		} else {
 			return true;	

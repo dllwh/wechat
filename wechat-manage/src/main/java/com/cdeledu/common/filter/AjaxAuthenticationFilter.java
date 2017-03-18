@@ -62,7 +62,7 @@ public class AjaxAuthenticationFilter implements Filter {
 				}
 				logger.info("登录跳转页面" + toUrl);
 				// ②-5转发到登录页面
-				request.getRequestDispatcher("/webpage/login/login.jsp").forward(request, response);
+				request.getRequestDispatcher("/webViews/login/login.jsp").forward(request, response);
 				return;
 			}
 			filterChain.doFilter(request, response);
