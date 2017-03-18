@@ -8,8 +8,9 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 
-import org.apache.log4j.Logger;
+import com.cdeledu.common.base.BaseClass;
 
 /**
  * @类描述: 请求拦截
@@ -18,19 +19,21 @@ import org.apache.log4j.Logger;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class WebChatFilter implements Filter{
-	 private final Logger logger = Logger.getLogger(WebChatFilter.class);
+@WebFilter(filterName = "WebChatFilter", urlPatterns = { "*.shtml" })
+public class WebChatFilter extends BaseClass implements Filter {
+	private static final long serialVersionUID = 1L;
+
 	public void destroy() {
 		logger.info("WebChatFilter已经销毁");
 	}
 
-	public void doFilter(ServletRequest request , ServletResponse response , FilterChain filterChain)
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
-		
+		filterChain.doFilter(request, response);
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		logger.info("WebChatFilter已经启动！");
 	}
-	
+
 }

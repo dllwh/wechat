@@ -1,5 +1,6 @@
 package com.cdeledu.common.listener;
 
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -12,6 +13,7 @@ import com.cdeledu.common.constants.GlobalConstants;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@WebListener
 public class MySessionListener implements HttpSessionListener {
 
 	/** ----------------------------------------------------- Fields start */

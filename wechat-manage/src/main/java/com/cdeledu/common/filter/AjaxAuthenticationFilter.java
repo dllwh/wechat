@@ -8,27 +8,29 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.model.SessionInfo;
 import com.cdeledu.util.WebUtilHelper;
 
 /**
- * @类描述: 登录过滤器
+ * @类描述: 登录过滤器,验证是否登录
  * @创建者: 皇族灬战狼
  * @创建时间: 2016年5月26日 下午2:28:49
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
-public class AjaxAuthenticationFilter implements Filter {
+@WebFilter(filterName = "LoginFilter", urlPatterns = { "*.shtml" })
+public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 	/** ----------------------------------------------------- Fields start */
-	private static final Logger logger = Logger.getLogger(AjaxAuthenticationFilter.class);
+	private static final long serialVersionUID = 1L;
 
 	/** ----------------------------------------------------- Fields end */
 	@Override
@@ -62,7 +64,8 @@ public class AjaxAuthenticationFilter implements Filter {
 				}
 				logger.info("登录跳转页面" + toUrl);
 				// ②-5转发到登录页面
-				request.getRequestDispatcher("/webViews/login/login.jsp").forward(request, response);
+				request.getRequestDispatcher("/webViews/login/login.jsp").forward(request,
+						response);
 				return;
 			}
 			filterChain.doFilter(request, response);
