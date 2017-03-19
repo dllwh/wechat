@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 /**
@@ -20,7 +21,7 @@ import org.apache.commons.lang3.time.DateUtils;
  *               </ul>
  * @author: 独泪了无痕
  * @date: 2015年8月28日 上午8:04:32
- * @version: V1.0
+ * @version: V1.2
  * @history:
  */
 public class DateUtilHelper extends DateUtils {
@@ -36,24 +37,24 @@ public class DateUtilHelper extends DateUtils {
 	/** 每天的毫秒数 */
 	public final static long DAY_MS = DateUtils.MILLIS_PER_DAY;
 
-	/** 时间格式01 */
+	/** 时间格式01 ：yyyy-MM-dd HH:mm */
 	public final static String NORM_TIME_PATTERN_ONE = "yyyy-MM-dd HH:mm";
-	/** 时间格式02 */
+	/** 时间格式02 : MM-dd HH:mm*/
 	public final static String NORM_TIME_PATTERN_TWO = "MM-dd HH:mm";
-	/** 时间格式03 */
+	/** 时间格式03 : HH:mm" */
 	public final static String NORM_TIME_PATTERN_THREE = "HH:mm";
 
-	/** 标准日期格式 : 英文简写（默认） */
+	/** 标准日期格式 :yyyy-MM-dd */
 	public final static String NORM_DATE_PATTERN_ENG = "yyyy-MM-dd";
-	/** 日期时间格式(中文简写) */
+	/** 日期时间格式 : yyyy年MM月dd */
 	public final static String NORM_DATE_PATTERN_CN = "yyyy年MM月dd";
-	/** 标准时间格式(英文) */
+	/** 标准时间格式 : HH:mm:s */
 	public final static String NORM_TIME_PATTERN_ENG = "HH:mm:ss";
-	/** 标准时间格式 (中文) */
+	/** 标准时间格式 : HH时mm分ss秒 */
 	public final static String NORM_TIME_PATTERN_CN = "HH时mm分ss秒";
-	/** 标准日期时间格式 */
+	/** 标准日期时间格式 : yyyy-MM-dd HH:mm:s */
 	public final static String NORM_DATETIME_PATTERN_ENG = "yyyy-MM-dd HH:mm:ss";
-	/** 标准日期时间格式(中文全称) */
+	/** 标准日期时间格式 : yyyy年MM月dd日 HH时mm分ss秒 */
 	public final static String NORM_DATETIME_PATTERN_CN = "yyyy年MM月dd日  HH时mm分ss秒";
 
 	/** 标准日期（不含时间）格式化器 */
@@ -78,30 +79,114 @@ public class DateUtilHelper extends DateUtils {
 
 	/** -------------------------- 公有方法 begin ------------------------------- */
 	/**
-	 * @方法:当前时间，格式 yyyy-MM-dd HH:mm:ss
-	 * @创建人:独泪了无痕
-	 * @return 当前时间的标准形式字符串
+	 * 当前时间，格式 yyyy-MM-dd HH:mm:ss
 	 */
 	public static String getCurrentTime() {
-		return formatDateTime(new Date(), false);
+		return DateFormatUtils.format(new Date(), NORM_DATETIME_PATTERN_ENG);
 	}
 
 	/**
-	 * @方法: 当前日期，格式 yyyy-MM-dd
-	 * @创建人:独泪了无痕
-	 * @return 当前日期的标准形式字符串
+	 * 得到当前日期和时间字符串 格式（yyyy-MM-dd HH:mm:ss）
+	 */
+	public static String getDateTime() {
+		return formatDate(new Date(), NORM_DATETIME_PATTERN_ENG);
+	}
+
+	/**
+	 * @方法描述: 得到当前日期字符串 格式（yyyy-MM-dd）
 	 */
 	public static String getCurrentDate() {
-		return formatDate(new Date(), false);
+		return getCurrentDate(NORM_DATE_PATTERN_ENG);
 	}
 
 	/**
-	 * @Description: 当前年份
-	 * @author: 独泪了无痕
+	 * @方法描述: 得到当前日期字符串 格式（yyyy-MM-dd）
+	 * @param pattern
+	 *            可以为："yyyy-MM-dd" "HH:mm:ss" "E"
 	 * @return
 	 */
+	public static String getCurrentDate(String pattern) {
+		return DateFormatUtils.format(new Date(), pattern);
+	}
+
+	/**
+	 * 得到当前时间字符串 格式（HH:mm:ss）
+	 */
+	public static String getTime() {
+		return formatDate(new Date(), "HH:mm:ss");
+	}
+
+	/**
+	 * 得到当前年份字符串 格式（yyyy）
+	 */
 	public static int getCurrYear() {
+		String year = formatDate(new Date(), "yyyy");
+		if (StringUtils.isNotEmpty(year)) {
+			return Integer.parseInt(year);
+		}
 		return Calendar.getInstance().get(Calendar.YEAR);
+	}
+
+	/**
+	 * 得到当前月份字符串 格式（MM）
+	 */
+	public static int getCurrMonth() {
+		String month = formatDate(new Date(), "MM");
+		if (StringUtils.isNotEmpty(month)) {
+			return Integer.parseInt(month);
+		}
+		// 0表示1月份
+		return Calendar.getInstance().get(Calendar.MONTH) + 1;
+	}
+
+	/**
+	 * 得到获取当前天数 格式（dd）
+	 */
+	public static int getCurrDay() {
+		String day = formatDate(new Date(), "dd");
+		if (StringUtils.isNotEmpty(day)) {
+			return Integer.parseInt(day);
+		}
+		return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+	}
+
+	/**
+	 * 获取当前小时
+	 */
+	public static int getCurrHour() {
+		String hour = formatDate(new Date(), "HH");
+		if (StringUtils.isNotEmpty(hour)) {
+			return Integer.parseInt(hour);
+		}
+		return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+	}
+
+	/**
+	 * 获取当前分钟
+	 */
+	public static int getCurrMinute() {
+		String minute = formatDate(new Date(), "mm");
+		if (StringUtils.isNotEmpty(minute)) {
+			return Integer.parseInt(minute);
+		}
+		return Calendar.getInstance().get(Calendar.MINUTE);
+	}
+
+	/**
+	 * 获取本月最大天数
+	 */
+	public static int getLastDay() {
+		return getLastDay(getCurrYear(), getCurrMonth());
+	}
+
+	/**
+	 * 获取指定年月的最大天数
+	 */
+	public static int getLastDay(int year, int month) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(year, month - 1, 1);
+		return cal.getActualMaximum(Calendar.DATE);
 	}
 
 	/**
@@ -124,35 +209,25 @@ public class DateUtilHelper extends DateUtils {
 	/**
 	 * 
 	 * @方法:计算两个日期相差天数
-	 * @创建人:独泪了无痕
-	 * @param date1
-	 *            减数日期
-	 * @param date2
-	 *            被减数日期
-	 * @return long 返回类型
 	 */
-	public static long getDiffDays(Date date1, Date date2) {
-		return (date1.getTime() - date2.getTime()) / DAY_MS;
+	public static long getDistanceOfTwoDate(Date before, Date after) {
+		return (before.getTime() - after.getTime()) / DAY_MS;
 	}
 
 	/**
 	 * @方法描述: 计算两个日期相差月份数
-	 * @param date1
-	 *            被减数日期
-	 * @param date2
-	 *            被减数日期
 	 * @return
 	 */
-	public static Integer getDiffMonths(Date date1, Date date2) {
+	public static Integer getDiffMonths(Date before, Date after) {
 		Calendar calendar = Calendar.getInstance();
 
 		// 得到第一个日期的年分和月份数
-		calendar.setTime(date1);
+		calendar.setTime(before);
 		int yearOne = calendar.get(Calendar.YEAR);
 		int monthOne = calendar.get(Calendar.MONDAY);
 
 		// 得到第二个日期的年份和月份
-		calendar.setTime(date2);
+		calendar.setTime(after);
 		int yearTwo = calendar.get(Calendar.YEAR);
 		int monthTwo = calendar.get(Calendar.MONDAY);
 
@@ -175,8 +250,9 @@ public class DateUtilHelper extends DateUtils {
 	}
 
 	/*----------------------------- Format(格式化) begin -----------------------------*/
+
 	/**
-	 * @方法:根据特定格式格式化日期
+	 * @方法:根据特定格式格式化日期,默认格式（yyyy-MM-dd）
 	 * @创建人:独泪了无痕
 	 * @param date
 	 *            被格式化的日期
@@ -184,38 +260,37 @@ public class DateUtilHelper extends DateUtils {
 	 *            格式
 	 * @return 格式化后的字符串
 	 */
-	public static String format(Date date, String format) {
-		return new SimpleDateFormat(format).format(date);
+	public static String formatDate(Date date, String pattern) {
+		String formatDate = null;
+		if (StringUtils.isNotBlank(pattern)) {
+			formatDate = DateFormatUtils.format(date, pattern);
+		} else {
+			formatDate = DateFormatUtils.format(date, NORM_DATE_PATTERN_ENG);
+		}
+		return formatDate;
 	}
 
 	/**
+	 * 得到日期时间字符串，转换格式（yyyy-MM-dd HH:mm:ss）
+	 */
+	public static String formatDateTime(Date date) {
+		return formatDate(date, "yyyy-MM-dd HH:mm:ss");
+	}
+
+	/**
+	 * 转换为时间（天,时:分:秒.毫秒）
 	 * 
-	 * @方法描述:格式化日期时间
-	 * @param date
-	 *            被格式化的日期时间
-	 * @param isCN
-	 *            判断返回值是否需要是中文下的时间格式
-	 * @return String 返回类型
+	 * @param timeMillis
+	 * @return
 	 */
-	public static String formatDateTime(Date date, boolean isCN) {
-		if (isCN)
-			return NORM_DATETIME_FORMAT_CN.format(date);
-		return NORM_DATETIME_FORMAT_ENG.format(date);
+	public static String formatDateTime(long timeMillis) {
+		long day = timeMillis / DAY_MS;
+		long hour = (timeMillis / (HOUR_MS) - day * 24);
+		long min = ((timeMillis / (MINUTE_MS)) - day * 24 * 60 - hour * 60);
+		long s = (timeMillis / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+		long sss = (timeMillis - day * DAY_MS - hour * HOUR_MS - min * MINUTE_MS - s * 1000);
+		return (day > 0 ? day + "," : "") + hour + ":" + min + ":" + s + "." + sss;
 	}
-
-	/**
-	 * @param date
-	 *            被格式化的日期
-	 * @param isCN
-	 *            判断返回值是否需要是中文下的时间格式
-	 * @return 格式化后的字符串
-	 */
-	public static String formatDate(Date date, boolean isCN) {
-		if (isCN)
-			return NORM_DATE_FORMAT_CN.format(date);
-		return NORM_DATE_FORMAT_ENG.format(date);
-	}
-
 	/*----------------------------- Format(格式化) end -------------------------------*/
 
 	/*----------------------------- Parse(解析) begin -----------------------------*/
