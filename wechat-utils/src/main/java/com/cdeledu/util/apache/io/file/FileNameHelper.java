@@ -5,6 +5,7 @@ import java.io.File;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 
@@ -56,7 +57,24 @@ public class FileNameHelper extends FilenameUtils {
 	 * @return
 	 */
 	public static String getFileExt(String fileName) {
-		return fileName.substring(fileName.lastIndexOf('.'), fileName.length());
+		return getExtend(fileName, "");
+	}
+
+	/**
+	 * @方法描述:获取文件扩展名
+	 * @param fileName
+	 * @param defExt
+	 *            默认值
+	 * @return
+	 */
+	public static String getExtend(String fileName, String defExt) {
+		if (StringUtils.isNotBlank(fileName)) {
+			int i = fileName.lastIndexOf('.');
+			if ((i > 0) && (i < (fileName.length() - 1))) {
+				return (fileName.substring(i + 1)).toLowerCase();
+			}
+		}
+		return defExt.toLowerCase();
 	}
 	/*-------------------------- 公有方法 end   -------------------------------*/
 }

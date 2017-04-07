@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cdeledu.common.property.PropertyHelperUtils;
+import com.cdeledu.common.property.PropertyHelper;
 
 /**
  * @描述: 对字符串按照常用规则进行验证的工具类(正则表达式)
@@ -25,7 +25,7 @@ public class RegexUtil {
 	static Map<String, String> expMap = null;
 
 	static {
-		expMap = PropertyHelperUtils.getMapByProperties("properties/expression/expression.properties");
+		expMap = PropertyHelper.getMapByProperties("properties/expression/expression.properties");
 
 	}
 
@@ -83,8 +83,11 @@ public class RegexUtil {
 	 *            正则表达式
 	 * @return true/false
 	 */
-	private static boolean isRegexMatch(String str, String regex) {
-		return str != null && str.matches(regex);
+	public static boolean isRegexMatch(String str, String regex) {
+		// return str != null && str.matches(regex);
+		Pattern pattern = Pattern.compile(str);
+		Matcher isNum = pattern.matcher(str);
+		return isNum.matches();
 	}
 
 	/** --------------------------私有方法 end------------------------------- */
@@ -141,20 +144,20 @@ public class RegexUtil {
 	 * @return 如果是符合的字符串,返回 <b>true </b>,否则为 <b>false </b>
 	 */
 	public static boolean isEmail(String email) {
-		System.out.println("******************"+expMap.get("9_Email地址"));
-		return isRegexMatch(email,expMap.get("9_Email地址"));
+		return isRegexMatch(email, expMap.get("9_Email地址"));
 	}
 
 	/** 验证身份证 */
 	public static boolean isUserIdentity(String str) {
-		return isRegexMatch(str,expMap.get("13_userIdentity"));
+		return isRegexMatch(str, expMap.get("13_userIdentity"));
 	}
+
 	/** 判断是否为正确IP */
 	public static boolean isIp(String ipAddress) {
 		if (ipAddress.length() < 7 || ipAddress.length() > 15 || "".equals(ipAddress)) {
 			return false;
 		}
-		return checkByFind(ipAddress,expMap.get("11_ip"));
+		return checkByFind(ipAddress, expMap.get("11_ip"));
 	}
 
 	/** 判断该字符串是否是IPV4地址 */
@@ -162,7 +165,7 @@ public class RegexUtil {
 		if (StringUtils.isNotBlank(ip)) {
 			return false;
 		}
-		return Pattern.matches(ip,expMap.get("12_IPV4"));
+		return Pattern.matches(ip, expMap.get("12_IPV4"));
 	}
 
 	/** 是否是简体中文字符串 */
@@ -180,27 +183,32 @@ public class RegexUtil {
 	public static boolean isUrl(String str) {
 		return isRegexMatch(str, expMap.get("14_url"));
 	}
+
 	/** 验证输入邮政编号 */
 	public static boolean isPostalcode(String str) {
 		return isRegexMatch(str, expMap.get("15_postalCode"));
 	}
+
 	/** 验证输入两位小数 */
 	public static boolean isDecimal(String str) {
 		return isRegexMatch(str, expMap.get("16_isDecimal"));
 	}
+
 	/** 验证输入一年的12个月 */
 	public static boolean isMonth(String str) {
 		return isRegexMatch(str, expMap.get("17_isMonth"));
 	}
+
 	/** 验证输入一个月的31天 */
 	public static boolean isDay(String str) {
 		return isRegexMatch(str, expMap.get("18_isDay"));
 	}
+
 	/** 验证日期时间 */
 	public static boolean isDate(String str) {
 		return isRegexMatch(str, expMap.get("19_isDate"));
 	}
-	
+
 	/**
 	 * @Title: delFirst
 	 * @Description: 删除匹配的内容

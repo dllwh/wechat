@@ -21,7 +21,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import com.cdeledu.common.property.PropertyHelperUtils;
+import com.cdeledu.common.property.PropertyHelper;
 
 /**
  * 
@@ -53,8 +53,8 @@ public class UploadUtils {
 	private static Map<String, String> propMap = null;
 
 	static {
-		props = PropertyHelperUtils.getProps("/properties/config.properties");
-		propMap = PropertyHelperUtils.getPropertyMap(props);
+		props = PropertyHelper.getProps("/properties/config.properties");
+		propMap = PropertyHelper.getPropertyMap(props);
 	}
 
 	/*-------------------------- 私有属性 begin -------------------------------*/
@@ -68,7 +68,7 @@ public class UploadUtils {
 	public static final String FILE_FIELDS = propMap.get("file");
 
 	// 最大文件大小
-	private static long maxSize = PropertyHelperUtils.getLongValue(props, "uploadFileMaxSize");
+	private static long maxSize = PropertyHelper.getLongValue(props, "uploadFileMaxSize");
 	// 定义允许上传的文件扩展名
 	private static Map<String, String> extMap = new HashMap<String, String>();
 
