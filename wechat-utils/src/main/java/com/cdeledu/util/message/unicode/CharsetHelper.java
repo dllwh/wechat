@@ -2,6 +2,8 @@ package com.cdeledu.util.message.unicode;
 
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.cdeledu.common.constant.ConstantHelper;
 
 /**
@@ -48,6 +50,26 @@ public class CharsetHelper {
 		return null;
 	}
 
+	/**
+	 * @方法描述: 字符串编码转换的实现方法
+	 * @param str
+	 *            待转换编码的字符串
+	 * @param oldCharset
+	 *            原编码 // * @param newCharset 目标编码
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public final static String changeCharset(String str, String oldCharset, String newCharset)
+			throws UnsupportedEncodingException {
+		if (str != null) {
+			// 用旧的字符编码解码字符串。解码可能会出现异常。
+			byte[] bs = str.getBytes(oldCharset);
+			// 用新的字符编码生成字符串
+			return new String(bs, newCharset);
+		}
+		return null;
+	}
+
 	/** ----------------------------------------------- [私有方法] */
 
 	/**
@@ -76,5 +98,39 @@ public class CharsetHelper {
 	 */
 	public final static String toGBK(String str) throws UnsupportedEncodingException {
 		return changeCharset(str, GBK);
+	}
+
+	/**
+	 * Unicode转换成GBK字符集
+	 *
+	 * @param input
+	 *            待转换字符串
+	 * @return 转换完成字符串
+	 */
+	public final static String toGBKWithUTF8(String input) throws UnsupportedEncodingException {
+		if (StringUtils.isEmpty(input)) {
+			return "";
+		} else {
+			String s1;
+			s1 = new String(input.getBytes("ISO8859_1"), "GBK");
+			return s1;
+		}
+	}
+
+	/**
+	 * GBK转换成Unicode字符集
+	 *
+	 * @param input
+	 *            待转换字符串
+	 * @return 转换完成字符串
+	 */
+	public final static String toUnicodeWithGBK(String input) throws UnsupportedEncodingException {
+		if (StringUtils.isEmpty(input)) {
+			return "";
+		} else {
+			String s1;
+			s1 = new String(input.getBytes("GBK"), "ISO8859_1");
+			return s1;
+		}
 	}
 }
