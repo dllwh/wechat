@@ -4,10 +4,14 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.common.constant.ConstantHelper;
+import com.cdeledu.util.apache.collection.MapUtilHelper;
 
 /**
  * 
@@ -481,4 +485,62 @@ public class StringUtilHelper extends StringUtils {
 	public static String newStringUtf8(final byte[] bytes) {
 		return newString(bytes, ConstantHelper.UTF_8);
 	}
+
+	/**
+	 * @方法描述: <pre>
+	 * 	格式化文本, {} 表示占位符<br>
+	 * 例如：format("aaa {} ccc", "bbb")   ---->    aaa bbb ccc
+	 * </pre>
+	 * @param template 文本模板，被替换的部分用 {} 表示
+	 * @param values 参数值
+	 * @return 格式化后的文本
+	 */
+	public static String format(String template, Object... values) {
+		if (CollectionUtils.sizeIsEmpty(values) || StringUtils.isBlank(template)) {
+			return template;
+		}
+		StringBuffer sb = new StringBuffer();
+		final int tempLength = template.length();
+		final int valLength = values.length;
+		int valueIndex = 0;
+		char currentChar;
+		for (int i = 0; i < tempLength; i++) {
+			if(valueIndex >= valLength){
+				sb.append(template.substring(i, tempLength));
+				break;
+			}
+			currentChar = template.charAt(i);
+			if (currentChar == '{') {
+				final char nextChar = template.charAt(++i);
+				if(nextChar == '}'){
+					sb.append(values[valueIndex++]);
+				} else {
+					sb.append('{').append(nextChar);
+				}
+			} else {
+				sb.append(currentChar);
+			}
+		}
+		return sb.toString();
+	}
+	/**
+	 * @方法描述: <pre>
+	 * 格式化文本，使用 {varName} 占位<br>
+	 * map = {a: "aValue", b: "bValue"}
+	 *  format("{a} and {b}", map)    ---->    aValue and bValue
+	 * </pre>
+	 * @param template 文本模板，被替换的部分用 {key} 表示
+	 * @param map 参数值对
+	 * @return 格式化后的文本
+	 */
+	public static String format(String template, Map<?, ?> map) {
+		if(MapUtilHelper.isEmpty(map)){
+			return template;
+		}
+		for (Entry<?, ?> entry : map.entrySet()) {
+			template = template.replace("{"+entry.getKey()+"}", entry.getValue().toString());
+		}
+		return template;
+	}
+	
 }
