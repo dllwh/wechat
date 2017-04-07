@@ -33,7 +33,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import com.cdeledu.common.property.PropertyHelperUtils;
+import com.cdeledu.common.property.PropertyHelper;
 import com.cdeledu.util.apache.lang.DateUtilHelper;
 import com.cdeledu.util.swing.util.GuiUtils;
 
@@ -143,9 +143,9 @@ public class CrawlMain extends JFrame {
 
 			public void run() {
 				try {
-					propsMap = PropertyHelperUtils.getMapByProperties(BASE);
-					more_propsMap = PropertyHelperUtils.getMapByProperties(MORE_TOOLS);
-					network_propsMap = PropertyHelperUtils.getMapByProperties(NETWORK_TOOLS);
+					propsMap = PropertyHelper.getMapByProperties(BASE);
+					more_propsMap = PropertyHelper.getMapByProperties(MORE_TOOLS);
+					network_propsMap = PropertyHelper.getMapByProperties(NETWORK_TOOLS);
 					propsMap.putAll(more_propsMap);
 					propsMap.putAll(network_propsMap);
 					gui_width = Integer.parseInt(propsMap.get("GUIWidth"));

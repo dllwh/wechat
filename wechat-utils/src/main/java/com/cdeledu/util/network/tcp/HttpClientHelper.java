@@ -23,7 +23,7 @@ import com.cdeledu.common.browser.UserAgentType;
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.exception.ExceptionHelper;
 import com.cdeledu.common.httpEntity.HttpHeaders;
-import com.cdeledu.common.reflection.ClassUtilHelper;
+import com.cdeledu.common.mapper.ClassUtilHelper;
 
 /**
  * @类描述:

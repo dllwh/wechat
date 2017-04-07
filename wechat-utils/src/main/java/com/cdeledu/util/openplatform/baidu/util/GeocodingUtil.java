@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.cdeledu.util.network.common.UrlHelper;
+import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.openplatform.baidu.model.LatitudeInfo;
 import com.cdeledu.util.openplatform.baidu.model.LocalInfo;
 

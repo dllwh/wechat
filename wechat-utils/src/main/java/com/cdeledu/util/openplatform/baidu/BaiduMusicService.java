@@ -12,7 +12,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.cdeledu.common.constant.ConstantHelper;
-import com.cdeledu.util.network.common.URLEncodingUtil;
+import com.cdeledu.common.network.URLEncodingUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.cdeledu.util.openplatform.baidu.model.BaiduMusic;
 import com.cdeledu.util.openplatform.baidu.model.MusicUrl;

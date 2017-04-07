@@ -8,6 +8,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
+import com.cdeledu.util.application.regex.RegexUtil;
+
 /**
  * @类描述: PBE——Password-based encryption（基于密码加密）
  *       <ul>
@@ -20,6 +22,8 @@ import javax.crypto.spec.PBEParameterSpec;
  */
 public class PasswordUtil {
 	/** ----------------------------------------------------- Fields start */
+	// 必选包含数字、大写字母、小写字母、特殊字符，长度在8到15位
+	private static final String SEC_PASSWORD = "^(?=.*?[0-9])(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[@!#$%^&*()_+\\.\\-\\?<>'\"|=]+).{8,15}$";
 	/**
 	 * 支持以下任意一种算法
 	 * 
@@ -170,5 +174,20 @@ public class PasswordUtil {
 			e.printStackTrace();
 		}
 		return new String(passDec);
+	}
+
+	/**
+	 * @方法描述:
+	 * 
+	 *        <pre>
+	 * 判断一个密码是否健壮
+	 * 必选包含数字、大写字母、小写字母、特殊字符，长度在8到15位
+	 *        </pre>
+	 * 
+	 * @param password
+	 * @return
+	 */
+	public final static boolean isSec(String password) {
+		return RegexUtil.isRegexMatch(password, SEC_PASSWORD);
 	}
 }

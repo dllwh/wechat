@@ -13,10 +13,10 @@ import org.json.JSONObject;
 
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.exception.ExceptionHelper;
+import com.cdeledu.common.network.URLEncodingUtil;
+import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.apache.lang.RandomUtil;
 import com.cdeledu.util.appConfig.ConfigUtil;
-import com.cdeledu.util.network.common.URLEncodingUtil;
-import com.cdeledu.util.network.common.UrlHelper;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.cdeledu.util.openplatform.baidu.util.constants.BaiduLangType;
 import com.cdeledu.util.openplatform.baidu.util.constants.ResultStatus;

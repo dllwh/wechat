@@ -33,9 +33,9 @@ import com.cdeledu.common.exception.ExceptionHelper;
 import com.cdeledu.common.exception.RuntimeExceptionHelper;
 import com.cdeledu.common.httpEntity.BasicAuthenticator;
 import com.cdeledu.common.httpEntity.HttpMethod;
+import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 import com.cdeledu.util.network.IpUtilHelper;
-import com.cdeledu.util.network.common.UrlHelper;
 
 /**
  * @描述:

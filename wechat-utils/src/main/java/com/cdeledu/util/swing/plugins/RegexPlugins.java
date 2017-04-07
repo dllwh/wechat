@@ -31,7 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.cdeledu.common.property.PropertyHelperUtils;
+import com.cdeledu.common.property.PropertyHelper;
 import com.cdeledu.util.swing.services.GuiJPanel;
 import com.cdeledu.util.swing.util.GuiUtils;
 
@@ -85,7 +85,7 @@ public class RegexPlugins extends GuiJPanel {
 		/**
 		 * 常用正则表达式
 		 */
-		Map<String, String> expressionsMap = PropertyHelperUtils
+		Map<String, String> expressionsMap = PropertyHelper
 				.getMapByProperties("properties/expression/expression.properties");
 
 		List<String> expsSortAndNamesList = new ArrayList<String>();

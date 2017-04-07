@@ -20,9 +20,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.cdeledu.common.constant.ConstantHelper;
+import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.appConfig.ConfigUtil;
+import com.cdeledu.util.application.SysProperty.SystemHelper;
 import com.cdeledu.util.application.regex.RegexUtil;
-import com.cdeledu.util.network.common.UrlHelper;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.google.common.collect.Lists;
 
@@ -75,12 +76,16 @@ public class IpUtilHelper {
 				}
 			}
 
-			if (ip.equals("0:0:0:0:0:0:0:1")) {
-				ip = "127.0.0.1";
-			}
 
 			if (StringUtils.isBlank(ip)) {
 				ip = request.getRemoteAddr();
+			}
+			if (ip.equals("0:0:0:0:0:0:0:1")) {
+				try {
+					ip = getRealIp();
+				} catch (Exception e) {
+					ip = "127.0.0.1";
+				}
 			}
 
 			// 如果通过多级反向代理检测的话,其值并不止一个，而是一串IP值,取第一个非unknown的有效IP字符串
@@ -316,11 +321,7 @@ public class IpUtilHelper {
 		proxyPort = String.valueOf(ipMap.get("proxyPort"));
 
 		System.setProperty("http.maxRedirects", "50");
-		System.getProperties().setProperty("proxySet", "true");
-		// 设置代理ip
-		System.getProperties().setProperty("http.proxyHost", proxyIp);
-		// 设置代理ip的端口号
-		System.getProperties().setProperty("http.proxyPort", proxyPort);
+		SystemHelper.setHttpProxy(proxyIp, proxyPort);
 	}
 
 	/**

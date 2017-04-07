@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.cdeledu.util.network.common.UrlHelper;
+import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.openplatform.baidu.model.PlaceSuggestionAPI;
 
 /**

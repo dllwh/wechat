@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.appConfig.ConfigUtil;
-import com.cdeledu.util.network.common.UrlHelper;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.cdeledu.util.openplatform.baidu.model.OneDayWeatherInfo;
 import com.cdeledu.util.openplatform.baidu.model.WeatherInfo;
