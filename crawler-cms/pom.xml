@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.cdeledu</groupId>
+		<artifactId>wechat</artifactId>
+		<version>0.0.1-SNAPSHO</version>
+	</parent>
+	<groupId>com.cdeledu.crawler</groupId>
+	<artifactId>crawler-cms</artifactId>
+	<packaging>war</packaging>
+	<name>crawler-cms</name>
+	<url>http://maven.apache.org</url>
+	<description>Java爬虫建网-CMSN内容管理系统</description>
+	<build>
+		<finalName>crawler-cms</finalName>
+	</build>
+</project>

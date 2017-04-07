@@ -9,9 +9,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import com.cdeledu.common.property.PropertyHelperUtils;
+import com.cdeledu.common.property.PropertyHelper;
 import com.cdeledu.crawler.common.bean.CrawlParameter;
-import com.cdeledu.util.device.OsInfo;
+import com.cdeledu.util.application.SysProperty.SystemHelper;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 
 /**
@@ -28,7 +28,7 @@ public class SeleniumHandler extends CrawlHandler {
 	private static Properties props = null;
 
 	static {
-		props = PropertyHelperUtils.getProps("/webdriver/crawl.properties");
+		props = PropertyHelper.getProps("/webdriver/crawl.properties");
 	}
 
 	/** ----------------------------------------------------- Fields end */
@@ -48,11 +48,11 @@ public class SeleniumHandler extends CrawlHandler {
 	 */
 	private WebDriver getFirefoxDriver() {
 		String path = "";
-		if (OsInfo.isLinux()) {
+		if (SystemHelper.isLinux()) {
 			path = props.getProperty("fireFoxDriver_linux");
-		} else if (OsInfo.isMac()) {
+		} else if (SystemHelper.isMac()) {
 			path = props.getProperty("fireFoxDriver_win");
-		} else if (OsInfo.isWindows()) {
+		} else if (SystemHelper.isWindows()) {
 			path = props.getProperty("fireFoxDriver_mac");
 		} else {
 			path = props.getProperty("fireFoxDriver_win");
