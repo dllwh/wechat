@@ -19,37 +19,39 @@ import org.apache.http.client.ClientProtocolException;
  */
 public class ExceptionHelper extends ExceptionUtils {
 	/*-------------------------- 私有属性 start -------------------------------*/
-	// private static Logger log = LoggerFactory.getLogger(ExceptionHelper.class);
+	// private static Logger log =
+	// LoggerFactory.getLogger(ExceptionHelper.class);
 	private static String MARKED_WORDS_ONE = "调用%s.%s()方法出现异常,原因是:%s";
 	private static String MARKED_WORDS_TWO = "调用%s方法出现异常,原因是:%s";
 	// private static Map<String, Object> parameterCacheDto = null;
 	// private static ExceptionVO exceptionVO = null;
 
-//	static {
-//		try {
-//			if (log.isDebugEnabled()) {
-//				log.debug("解析XML异常参数配置文件...");
-//			}
-//			parameterCacheDto = new HashMap<String, Object>();
-//			SAXReader reader = new SAXReader();
-//			InputStream is = ExceptionHelper.class.getResourceAsStream("exceptionInfo.xml");
-//			Document document = reader.read(is);
-//			Element elRoot = document.getRootElement();
-//			Iterator<?> elIt = elRoot.elementIterator();
-//			String id = "";
-//			while (elIt.hasNext()) {
-//				exceptionVO = new ExceptionVO();
-//				Element el = (Element) elIt.next();
-//				id = el.attribute("id").getText();
-//				exceptionVO.setId(el.attribute("id").getText());
-//				exceptionVO.setInfo(el.attribute("info").getText());
-//				exceptionVO.setSuggest(el.attribute("suggest").getText());
-//				parameterCacheDto.put(id, exceptionVO);
-//			}
-//		} catch (Exception exp) {
-//			throw new RuntimeExceptionHelper("解析XML异常参数配置文件出错.", exp);
-//		} 
-//	}
+	// static {
+	// try {
+	// if (log.isDebugEnabled()) {
+	// log.debug("解析XML异常参数配置文件...");
+	// }
+	// parameterCacheDto = new HashMap<String, Object>();
+	// SAXReader reader = new SAXReader();
+	// InputStream is =
+	// ExceptionHelper.class.getResourceAsStream("exceptionInfo.xml");
+	// Document document = reader.read(is);
+	// Element elRoot = document.getRootElement();
+	// Iterator<?> elIt = elRoot.elementIterator();
+	// String id = "";
+	// while (elIt.hasNext()) {
+	// exceptionVO = new ExceptionVO();
+	// Element el = (Element) elIt.next();
+	// id = el.attribute("id").getText();
+	// exceptionVO.setId(el.attribute("id").getText());
+	// exceptionVO.setInfo(el.attribute("info").getText());
+	// exceptionVO.setSuggest(el.attribute("suggest").getText());
+	// parameterCacheDto.put(id, exceptionVO);
+	// }
+	// } catch (Exception exp) {
+	// throw new RuntimeExceptionHelper("解析XML异常参数配置文件出错.", exp);
+	// }
+	// }
 
 	/**
 	 * 
@@ -140,12 +142,23 @@ public class ExceptionHelper extends ExceptionUtils {
 	}
 
 	/**
+	 * @方法描述:将CheckedException转换为UncheckedException
+	 */
+	public static RuntimeException unchecked(Exception e) {
+		if (e instanceof RuntimeException) {
+			return (RuntimeException) e;
+		} else {
+			return new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * @方法描述: 获取异常配置参数
 	 * @param errID
 	 * @return
 	 */
-	/** public ExceptionVO getExceptionInfo(String errID) {
-		ExceptionVO vo = (ExceptionVO) parameterCacheDto.get(errID);
-		return vo;
-	}*/
+	/**
+	 * public ExceptionVO getExceptionInfo(String errID) { ExceptionVO vo =
+	 * (ExceptionVO) parameterCacheDto.get(errID); return vo; }
+	 */
 }
