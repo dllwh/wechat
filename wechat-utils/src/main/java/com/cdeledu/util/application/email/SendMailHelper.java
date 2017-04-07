@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -18,8 +19,8 @@ import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cdeledu.util.application.email.model.AttachBean;
-import com.cdeledu.util.application.email.model.EmailInfo;
+import com.cdeledu.common.api.email.entity.AttachBean;
+import com.cdeledu.common.api.email.entity.EmailInfo;
 
 /**
  * @Description: JavaMail：邮件发送
@@ -29,21 +30,32 @@ import com.cdeledu.util.application.email.model.EmailInfo;
  */
 class SendMailHelper {
 	/**
+	 * Message对象将存储我们实际发送的电子邮件信息，
+	 */
+	private MimeMessage msg;
+	/**
+	 * Session类代表JavaMail中的一个邮件会话。
+	 */
+	private Session session;
+
+	/**
 	 * 
 	 * @Title: createSession
-	 * @Description: <ul>
+	 * @Description:
+	 *               <ul>
 	 *               <li>邮件服务器 认证</li>
-	 *               <li>
-	 *               Session是JavaMail提供者配置文件以及设置属性信息的“容器”,其本身不会和邮件服务器进行任何的通信</li>
+	 *               <li>Session是JavaMail提供者配置文件以及设置属性信息的“容器”,其本身不会和邮件服务器进行任何的通信
+	 *               </li>
 	 *               </ul>
 	 * @author: 独泪了无痕
 	 * @param host
 	 * @param username
 	 * @param password
+	 * @param debug
 	 * @return
 	 */
-	public static Session createSession(String host, final String username,
-			final String password) {
+	public Session createSession(String host, final String username, final String password,
+			boolean debug) {
 		Properties prop = new Properties();
 		// 指定主机
 		if (StringUtils.isNoneEmpty(host))
@@ -59,7 +71,9 @@ class SendMailHelper {
 		};
 
 		// 创建一个新的Session实例，它不会在JVM中被作为默认实例共享；
-		return Session.getInstance(prop, auth);
+		session = Session.getInstance(prop, auth);
+		session.setDebug(debug);// 开启后有调试信息
+		return session;
 	}
 
 	/**
@@ -67,14 +81,15 @@ class SendMailHelper {
 	 * @Title：send
 	 * @Description：发送指定的邮件
 	 * @param mail
+	 * @throws AddressException
 	 * @throws MessagingException
 	 * @throws IOException
 	 * @return：void 返回类型
 	 */
-	public static void sendAttach(Session session, EmailInfo mail)
-			throws MessagingException, IOException {
+	public boolean sendAttach(Session session, EmailInfo mail)
+			throws AddressException, MessagingException, IOException {
 		// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
-		MimeMessage msg = new MimeMessage(session);
+		msg = new MimeMessage(session);
 		// 设置发件人
 		msg.setFrom(new InternetAddress(mail.getFromAddress()));
 		// 设置收件人
@@ -104,8 +119,7 @@ class SendMailHelper {
 			for (AttachBean attach : attachBeanList) {
 				MimeBodyPart attachPart = new MimeBodyPart();// 创建一个部件
 				attachPart.attachFile(attach.getFile());// 设置附件文件
-				attachPart.setFileName(MimeUtility.encodeText(attach
-						.getFileName()));// 设置附件文件名
+				attachPart.setFileName(MimeUtility.encodeText(attach.getFileName()));// 设置附件文件名
 				String cid = attach.getCid();
 				if (cid != null) {
 					attachPart.setContentID(cid);
@@ -113,16 +127,16 @@ class SendMailHelper {
 				parts.addBodyPart(attachPart);
 			}
 		}
-
-		// 给邮件设置内容
+		// 保存邮件
+		msg.saveChanges();
 		Transport.send(msg);
+		return true;
 	}
 
 	/**
 	 * 
 	 * @Title：sendTextMail
-	 * @Description：以文本格式发送邮件(普通邮件)
-	 * @param EmailInfo
+	 * @Description：以文本格式发送邮件(普通邮件) @param EmailInfo
 	 * @return
 	 * @return：boolean 返回类型
 	 */
@@ -134,9 +148,25 @@ class SendMailHelper {
 	 * @Description：发送HTML格式的邮件
 	 * @param EmailInfo
 	 * @return
+	 * @throws MessagingException
+	 * @throws AddressException
 	 * @return：boolean 返回类型
 	 */
-	public boolean sendHtmlMail(EmailInfo emailInfo) {
-		return false;
+	public boolean sendHtmlMail(EmailInfo emailInfo) throws AddressException, MessagingException {
+		// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
+		msg = new MimeMessage(session);
+		// 设置发件人
+		msg.setFrom(new InternetAddress(emailInfo.getFromAddress()));
+		// 设置收件人
+		msg.addRecipients(RecipientType.TO, emailInfo.getToAddress());
+		// 设置主题
+		msg.setSubject(emailInfo.getSubject());
+		MimeBodyPart part = new MimeBodyPart();// 创建一个部件
+		part.setContent(emailInfo.getContent(), "text/html;charset=utf-8");// 设置邮件文本内容
+		// 保存邮件
+		msg.saveChanges();
+		Transport.send(msg);
+		return true;
+
 	}
 }
