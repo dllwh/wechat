@@ -1,35 +1,60 @@
 package com.cdeledu.util.security;
 
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
+import com.cdeledu.common.constant.ConstantHelper;
 
 /**
  * 
- * @类名称：SecureUtil @功能说明： 安全相关的工具类，包括各种加密算法
- * 
- * @创建人：dell
- *
+ * @类描述: 安全相关的工具类，包括各种加密算法
+ * @创建者: 皇族灬战狼
+ * @时间: 2017年4月8日 下午12:14:48
+ * @版本: V1.0
+ * @since: JDK 1.7
  */
 public class SecureUtil {
-	public static final String MD2 = "MD2";
-	public static final String MD4 = "MD4";
-	public static final String MD5 = "MD5";
-	public static final String DES = "DES";
-
-	public static final String SHA1 = "SHA-1";
-	public static final String SHA256 = "SHA-256";
-
-	public static final String HMAC_SHA1 = "HmacSHA1";
-
-	public static final String RIPEMD128 = "RIPEMD128";
-	public static final String RIPEMD160 = "RIPEMD160";
-	/** 加密、解密key. */
-	private static final String PASSWORD_CRYPT_KEY = "bdda4ecabbd6d5c324ac44abddd107ad";
+	/**
+	 * 加密算法
+	 */
+	public final static String MD2 = "MD2";
+	public final static String MD4 = "MD4";
+	public final static String MD5 = "MD5";
+	public final static String DES = "DES";
+	public final static String SHA1 = "SHA-1";
+	public final static String SHA256 = "SHA-256";
+	/**
+	 * DES<BE/>
+	 * 
+	 * <pre>
+	 *加密解密模式:ECB,CBC,CTR,OFB,CFB
+	 *常见的填充模式有： 'pkcs5','pkcs7','iso10126','ansix923','zero' 类型
+	 * </pre>
+	 */
+	public final static String DES_ECB_PKCS5 = "DES/ECB/PKCS5Padding";
+	public final static String DES_ECB_PKCS7 = "DES/ECB/PKCS7Padding";
+	public final static String DES_ECB_ZERO = "DES/ECB/zeropadding";
+	public final static String DES_ECB_ISO10126 = "DES/ECB/iso10126";
+	public final static String DES_ECB_ANSIX923 = "DES/ECB/ansix923";
+	public final static String DES_CBC_PKCS5 = "DES/CBC/PKCS5Padding";
+	public final static String DES_CBC_PKCS7 = "DES/CBC/PKCS7Padding";
+	public final static String DES_CBC_ZERO = "DES/CBC/zeropadding";
+	public final static String DES_CBC_ISO10126 = "CBC/ECB/iso10126";
+	public final static String DES_CBC_ANSIX923 = "CBC/ECB/ansix923";
+	public final static String DES_CTR_PKCS5 = "DES/CTR/PKCS5Padding";
+	public final static String DES_CTR_PKCS7 = "DES/CTR/PKCS7Padding";
+	public final static String DES_CTR_ZERO = "DES/CTR/zeropadding";
+	public final static String DES_CTR_ISO10126 = "DES/CTR/iso10126";
+	public final static String DES_CTR_ANSIX923 = "DES/CTR/ansix923";
+	public final static String DES_OFB_PKCS5 = "DES/OFB/PKCS5Padding";
+	public final static String DES_OFB_PKCS7 = "DES/OFB/PKCS7Padding";
+	public final static String DES_OFB_ZERO = "DES/OFB/zeropadding";
+	public final static String DES_OFB_ISO10126 = "DES/OFB/iso10126";
+	public final static String DES_OFB_ANSIX923 = "DES/OFB/ansix923";
+	public final static String DES_CFB_PKCS5 = "DES/CFB/PKCS5Padding";
+	public final static String DES_CFB_PKCS7 = "DES/CFB/PKCS7Padding";
+	public final static String DES_CFB_ZERO = "DES/CFB/zeropadding";
+	public final static String DES_CFB_ISO10126 = "DES/CFB/iso10126";
+	public final static String DES_CFB_ANSIX923 = "DES/CFB/ansix923";
 
 	/** base64码表 */
 	public static char[] base64EncodeTable = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -37,106 +62,87 @@ public class SecureUtil {
 			'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
 			's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', '+', '/' };
+	// 加解密统一使用的编码方式
+	public final static String ENCODING = ConstantHelper.UTF_8.name();
 
 	/**
-	 * @方法描述: MD5加密
-	 * @创建者: 皇族灬战狼
-	 * @创建时间: 2016年6月8日 上午11:05:20
-	 * @param plainText
-	 * @param num
-	 * @return
+	 * @方法描述: 对数据进行加密.
+	 * @param datasource
+	 *            加密数据
+	 * @param key
+	 *            加密密钥
+	 * @param encryptType
+	 *            加密类型
+	 * @param length
+	 *            长度
+	 * @return 返回加密后的数据
 	 */
-	public static String Md5(String plainText, int num) {
-		StringBuffer buf = new StringBuffer();
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(plainText.getBytes());
-			byte b[] = md.digest();
-			int i;
-			for (int offset = 0; offset < b.length; offset++) {
-				i = b[offset];
-				if (i < 0)
-					i += 256;
-				if (i < 16)
-					buf.append("0");
-				buf.append(Integer.toHexString(i));
+	public String encrypt(String dataSource, String key, String encryptType,  String fillType,Integer length)
+			throws Exception {
+		String result = "";
+		switch (encryptType) {
+		case MD2:
+			break;
+		case MD4:
+			break;
+		case MD5:
+			result = Md5Helper.Md5(dataSource, length);
+			break;
+		case DES:{
+			if(StringUtils.isBlank(fillType)){
+				fillType = DES_CBC_PKCS5;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			result = DesHelper.encrypt(dataSource, key,fillType);
+			break;
 		}
-		if (num == 16) {
-			return buf.toString().substring(8, 24);
-		} else {
-			return buf.toString();
+		case SHA1:
+			break;
+		case SHA256:
+			break;
+		default:
+			result = dataSource;
+			break;
 		}
+		return result;
 	}
 
 	/**
-	 * @方法描述: 对数据进行DES加密.
-	 * @param datasource
-	 *            DES加密数据
+	 * @方法描述: 对数据进行解密
+	 * @param dataSource
+	 *            解密数据
+	 * @param key
+	 *            解密密钥
+	 * @param decryptType
+	 *            解密类型
+	 * @param length
+	 *            长度
 	 * @return 返回解密后的数据
 	 */
-	public static String encrypt(String datasource) {
-		return encrypt(datasource, PASSWORD_CRYPT_KEY);
-	}
-
-	/**
-	 * @方法描述: 用指定的key对数据进行DES加密.
-	 * @param datasource
-	 *            DES加密数据
-	 * @param password
-	 *            DES加密的key
-	 * @return 返回解密后的数据
-	 */
-	public static String encrypt(String datasource, String key) {
-		try {
-			// DES算法要求有一个可信任的随机数源
-			SecureRandom random = new SecureRandom();
-			DESKeySpec desKey = new DESKeySpec(key.getBytes());
-			// 创建一个密匙工厂，然后用它把DESKeySpec转换成
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
-			SecretKey securekey = keyFactory.generateSecret(desKey);
-			// Cipher对象实际完成加密操作
-			Cipher cipher = Cipher.getInstance(DES);
-			// 用密匙初始化Cipher对象
-			cipher.init(Cipher.ENCRYPT_MODE, securekey, random);
-			// 现在，获取数据并加密
-			// 正式执行加密操作
-			return cipher.doFinal(datasource.getBytes()).toString();
-		} catch (Exception e) {
-
+	public String decrypt(String dataSource, String key, String decryptType, String fillType,Integer length)
+			throws Exception {
+		String result = "";
+		switch (decryptType) {
+		case MD2:
+			break;
+		case MD4:
+			break;
+		case MD5:
+			break;
+		case DES:{
+			if(StringUtils.isBlank(fillType)){
+				fillType = DES_CBC_PKCS5;
+			}
+			result = DesHelper.decrypt(dataSource, key,fillType);
+			break;
 		}
-		return "";
-	}
-
-	/**
-	 * @方法描述: 用指定的key对数据进行DES解密.
-	 * @param datasource
-	 *            待解密的数据
-	 * @param password
-	 *            DES解密的key
-	 * @return 返回DES解密后的数据
-	 */
-	public static String decrypt(String datasource, String key) {
-		try {
-			// DES算法要求有一个可信任的随机数源
-			SecureRandom sr = new SecureRandom();
-			// 从原始密匙数据创建一个DESKeySpec对象
-			DESKeySpec dks = new DESKeySpec(key.getBytes());
-			// 创建一个密匙工厂，然后用它把DESKeySpec对象转换成
-			// 一个SecretKey对象
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
-			SecretKey securekey = keyFactory.generateSecret(dks);
-			// Cipher对象实际完成解密操作
-			Cipher cipher = Cipher.getInstance(DES);
-			// 用密匙初始化Cipher对象
-			cipher.init(Cipher.DECRYPT_MODE, securekey, sr);
-			// 现在，获取数据并解密
-			// 正式执行解密操作
-			return cipher.doFinal(datasource.getBytes()).toString();
-		} catch (Exception e) {
+		case SHA1:
+			break;
+		case SHA256:
+			break;
+		default:
+			result = dataSource;
+			break;
 		}
-		return "";
+		return result;
 	}
 }

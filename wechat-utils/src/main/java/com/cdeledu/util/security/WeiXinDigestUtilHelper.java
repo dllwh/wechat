@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 
 import com.cdeledu.common.weixin.WeiXinConstants;
 import com.cdeledu.util.apache.lang.StringUtilHelper;
-import com.cdeledu.util.message.encrypt.HexUtilHelper;
 
 /**
  * @类描述: 签名加密工具类
