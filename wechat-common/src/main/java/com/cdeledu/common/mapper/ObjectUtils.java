@@ -129,7 +129,8 @@ public class ObjectUtils {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <V> int compare(V v1, V v2) {
-		return v1 == null ? (v2 == null ? 0 : -1) : (v2 == null ? 1 : ((Comparable) v1).compareTo(v2));
+		return v1 == null ? (v2 == null ? 0 : -1)
+				: (v2 == null ? 1 : ((Comparable) v1).compareTo(v2));
 	}
 
 	/**
@@ -215,5 +216,50 @@ public class ObjectUtils {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @方法描述: 计算对象长度，如果是字符串调用其length函数，集合类调用其size函数，数组调用其length属性，其他可遍历对象遍历计算长度
+	 * @param obj
+	 *            被计算长度的对象
+	 * @return
+	 */
+	public static int getLength(Object obj) {
+		if (obj == null) {
+			return 0;
+		}
+		if (obj instanceof CharSequence) {
+			return ((CharSequence) obj).length();
+		}
+		if (obj instanceof Collection) {
+			return ((Collection<?>) obj).size();
+		}
+		if (obj instanceof Map) {
+			return ((Map<?, ?>) obj).size();
+		}
+
+		int count;
+		if (obj instanceof Iterator) {
+			Iterator<?> iter = (Iterator<?>) obj;
+			count = 0;
+			while (iter.hasNext()) {
+				count++;
+				iter.next();
+			}
+			return count;
+		}
+		if (obj instanceof Enumeration) {
+			Enumeration<?> enumeration = (Enumeration<?>) obj;
+			count = 0;
+			while (enumeration.hasMoreElements()) {
+				count++;
+				enumeration.nextElement();
+			}
+			return count;
+		}
+		if (obj.getClass().isArray() == true) {
+			return Array.getLength(obj);
+		}
+		return -1;
 	}
 }
