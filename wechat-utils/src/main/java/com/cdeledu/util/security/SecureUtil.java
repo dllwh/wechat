@@ -77,10 +77,10 @@ public class SecureUtil {
 	 *            长度
 	 * @return 返回加密后的数据
 	 */
-	public String encrypt(String dataSource, String key, String encryptType,  String fillType,Integer length)
+	public String encrypt(String dataSource, String key, String algorithmName,  String fillType,Integer length)
 			throws Exception {
 		String result = "";
-		switch (encryptType) {
+		switch (algorithmName) {
 		case MD2:
 			break;
 		case MD4:
@@ -118,10 +118,10 @@ public class SecureUtil {
 	 *            长度
 	 * @return 返回解密后的数据
 	 */
-	public String decrypt(String dataSource, String key, String decryptType, String fillType,Integer length)
+	public String decrypt(String dataSource, String key, String algorithmName, String fillType,Integer length)
 			throws Exception {
 		String result = "";
-		switch (decryptType) {
+		switch (algorithmName) {
 		case MD2:
 			break;
 		case MD4:
