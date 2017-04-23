@@ -49,7 +49,9 @@
 	</bean>
 	
 	<!-- 启用缓存注解 -->
-	<cache:annotation-driven cache-manager="cacheManager" />
+	<!-- 
+		<cache:annotation-driven cache-manager="cacheManager" />
+	-->
 	<!-- cacheManager工厂类，指定ehcache.xml的位置 -->
 	<!-- 
 	<bean id="cacheManagerFactory"
@@ -118,7 +120,6 @@
 			<mvc:exclude-mapping path="loginController.shtml?doLogin"/>
 			<mvc:exclude-mapping path="loginController.shtml?checkuser"/>
 			<mvc:exclude-mapping path="loginController.shtml?noAuth"/>
-			<mvc:exclude-mapping path="iconController.shtml?saveIcon"/>
 			<mvc:exclude-mapping path="system.shtml?checkBrowser"/>
 			<bean class="com.cdeledu.common.interceptors.AuthInterceptor" />
 			<!-- 
