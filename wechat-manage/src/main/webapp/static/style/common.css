@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+
+TABLE .lms {
+   border-top:1pxsolid#BBDDE5;
+   border-left:1pxsolid#BBDDE5;
+   border-right:10px;
+   border-bottom:5px;
+   border:0;
+   margin:0;
+   border-collapse:collapse;
+}
+ 
+.lms td {
+   border-top:1pxsolid#BBDDE5;
+   border-left:1pxsolid#BBDDE5;
+   border-right:1pxsolid#BBDDE5;
+   border-bottom:1pxsolid#BBDDE5;
+   padding:5px;
+   white-space:nowrap; // 表格列宽自适应
+}
+ 
+.lms th {
+   line-height:20px;
+   background:url(../image/common/table_background.jpg);
+   border-top:1pxsolid#BBDDE5;
+   border-left:1pxsolid#BBDDE5;
+   border-right:1pxsolid#BBDDE5;
+   border-bottom:1pxsolid#BBDDE5;
+   padding:5px;
+   text-align:right;
+   font-weight:bold;
+   FONT-SIZE:13px;
+   COLOR:#000000;
+   FONT-FAMILY:verdana,Geneva,Arial,Helvetica,sans-serif
+}
+ 
+.lms CAPTION {
+   text-align:center;
+   FONT-SIZE:13px;
+   COLOR:#000000;
+   FONT-FAMILY:verdana,Geneva,Arial,Helvetica,sans-serif
+}
