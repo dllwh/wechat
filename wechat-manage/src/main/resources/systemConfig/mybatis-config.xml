@@ -54,4 +54,7 @@
 		<setting name="aggressiveLazyLoading" value="false" />
 		<setting name="proxyFactory" value="CGLIB" />
 	</settings>
+	<mappers>
+		 <mapper resource="classpath:com/cdeledu/dao/impl/sys/*.xml"/>  
+	</mappers>
 </configuration>
