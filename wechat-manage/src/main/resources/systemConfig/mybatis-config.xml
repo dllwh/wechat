@@ -55,6 +55,6 @@
 		<setting name="proxyFactory" value="CGLIB" />
 	</settings>
 	<mappers>
-		 <mapper resource="classpath:com/cdeledu/dao/impl/sys/*.xml"/>  
+<!-- 		<mapper resource="classpath:com/cdeledu/dao/impl/*.xml"/>   -->
 	</mappers>
 </configuration>

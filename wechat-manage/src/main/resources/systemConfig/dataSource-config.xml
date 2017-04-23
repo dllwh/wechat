@@ -83,10 +83,12 @@
 		p:dataSource-ref="dataSource" p:mapperLocations="classpath:com/cdeledu/dao/impl/*.xml" />
 
 	<!-- 配置mapper扫描器 -->
+	<!-- 扫描basePackage下所有以@Repository标识的 接口进行自动生成代理的Dao -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
 		p:sqlSessionFactoryBeanName="sqlSessionFactory">
 		<!-- 扫描包的路径，如果需要扫描多个包，中间使用半角 逗号隔开 -->
 		<property name="basePackage" value="com.cdeledu.dao" />
+		<property name="annotationClass" value="org.springframework.stereotype.Repository"/>
 	</bean>
 
 	<!-- ====================================================================== 
