@@ -2,9 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- ====================================================================== 
 		自动扫描的包名:对包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
@@ -12,10 +16,7 @@
 	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
 	<!-- 加载controller的时候,不加载service,因为此时事物并未生效,若此时加载了service,那么事物无法对service进行拦截 -->
 	<context:component-scan base-package="com.cdeledu.controller">
-		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" 
-			/> -->
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
 	<!-- ====================================================================== 
@@ -52,13 +53,14 @@
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:viewClass="org.springframework.web.servlet.view.JstlView" p:cache="false"
-		p:contentType="text/html;charset=UTF-8" p:prefix="/webpage/" p:suffix=".jsp" />
+		p:contentType="text/html;charset=UTF-8" p:prefix="/WEB-INF/webViews/"
+		p:suffix=".jsp" />
 
 	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
 	<bean id="defaultViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:order="3" p:viewClass="org.springframework.web.servlet.view.JstlView"
-		p:contentType="text/html" p:prefix="/webpage/" p:suffix=".jsp" />
+		p:contentType="text/html" p:prefix="/WEB-INF/webViews/" p:suffix=".jsp" />
 
 	<!-- ====================================================================== 
 		直接跳转:对模型视图名称的解析，即定义JSP文件的位置，在模型视图名称添加前后缀 -->
