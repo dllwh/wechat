@@ -12,6 +12,11 @@
 	<!-- 起始欢迎界面 -->
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 
 	<!-- 设计路径变量值 -->
@@ -69,7 +74,7 @@
 
 	<!-- ====================================================================== 
 		加载Spring容器配置:监听器配置 -->
-		
+
 	<listener>
 		<description>log4j监听器</description>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
