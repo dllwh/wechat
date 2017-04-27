@@ -1,42 +1,116 @@
 @CHARSET "UTF-8";
 
+/** 表格样式 */
 TABLE .lms {
-   border-top:1pxsolid#BBDDE5;
-   border-left:1pxsolid#BBDDE5;
-   border-right:10px;
-   border-bottom:5px;
-   border:0;
-   margin:0;
-   border-collapse:collapse;
+	border-top: 1pxsolid #BBDDE5;
+	border-left: 1pxsolid #BBDDE5;
+	border-right: 10px;
+	border-bottom: 5px;
+	border: 0;
+	margin: 0;
+	border-collapse: collapse;
 }
- 
+
 .lms td {
-   border-top:1pxsolid#BBDDE5;
-   border-left:1pxsolid#BBDDE5;
-   border-right:1pxsolid#BBDDE5;
-   border-bottom:1pxsolid#BBDDE5;
-   padding:5px;
-   white-space:nowrap; // 表格列宽自适应
+	border-top: 1pxsolid #BBDDE5;
+	border-left: 1pxsolid #BBDDE5;
+	border-right: 1pxsolid #BBDDE5;
+	border-bottom: 1pxsolid #BBDDE5;
+	padding: 5px;
+	white-space: nowrap; /* 表格列宽自适应*/
 }
- 
+
 .lms th {
-   line-height:20px;
-   background:url(../image/common/table_background.jpg);
-   border-top:1pxsolid#BBDDE5;
-   border-left:1pxsolid#BBDDE5;
-   border-right:1pxsolid#BBDDE5;
-   border-bottom:1pxsolid#BBDDE5;
-   padding:5px;
-   text-align:right;
-   font-weight:bold;
-   FONT-SIZE:13px;
-   COLOR:#000000;
-   FONT-FAMILY:verdana,Geneva,Arial,Helvetica,sans-serif
+	line-height: 20px;
+	background: url(../image/common/table_background.jpg);
+	border-top: 1pxsolid #BBDDE5;
+	border-left: 1pxsolid #BBDDE5;
+	border-right: 1pxsolid #BBDDE5;
+	border-bottom: 1pxsolid #BBDDE5;
+	padding: 5px;
+	text-align: right;
+	font-weight: bold;
+	FONT-SIZE: 13px;
+	COLOR: #000000;
+	FONT-FAMILY: verdana, Geneva, Arial, Helvetica, sans-serif
 }
- 
+
 .lms CAPTION {
-   text-align:center;
-   FONT-SIZE:13px;
-   COLOR:#000000;
-   FONT-FAMILY:verdana,Geneva,Arial,Helvetica,sans-serif
+	text-align: center;
+	FONT-SIZE: 13px;
+	COLOR: #000000;
+	FONT-FAMILY: verdana, Geneva, Arial, Helvetica, sans-serif
+}
+
+/** 文本颜色*/
+.text-red {
+	color: #dd4b39 !important;
+}
+
+.text-yellow {
+	color: #f39c12 !important;
+}
+
+.text-aqua {
+	color: #00c0ef !important;
+}
+
+.text-blue {
+	color: #0073b7 !important;
+}
+
+.text-black {
+	color: #111111 !important;
+}
+
+.text-light-blue {
+	color: #3c8dbc !important;
+}
+
+.text-green {
+	color: #00a65a !important;
+}
+
+.text-gray {
+	color: #d2d6de !important;
+}
+
+.text-navy {
+	color: #001f3f !important;
+}
+
+.text-teal {
+	color: #39cccc !important;
+}
+
+.text-olive {
+	color: #3d9970 !important;
+}
+
+.text-lime {
+	color: #01ff70 !important;
+}
+
+.text-orange {
+	color: #ff851b !important;
+}
+
+.text-fuchsia {
+	color: #f012be !important;
+}
+
+.text-purple {
+	color: #605ca8 !important;
+}
+
+.text-maroon {
+	color: #d81b60 !important;
+}
+
+.text-bold {
+	font-weight: 700;
+}
+
+.text-sm {
+	font-size: 12px;
 }
