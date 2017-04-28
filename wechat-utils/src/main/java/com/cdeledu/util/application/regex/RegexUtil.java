@@ -54,23 +54,41 @@ public class RegexUtil {
 	}
 
 	/**
-	 * @Title: get
+	 * @Title: getKeyWords
 	 * @Description: 获得匹配的字符串
 	 * @param regex
 	 *            匹配的正则
 	 * @param content
 	 *            被匹配的内容
 	 * @param groupIndex
-	 *            匹配正则的分组序号
+	 *            匹配正则的分组序号:第几个分组, 从1开始, 0代表不分组
 	 * @return 匹配后得到的字符串，未匹配返回null
 	 * @return:String 返回类型
 	 */
-	private static String get(String regex, String content, int groupIndex) {
+	public static String getKeyWords(String regex, String content, int groupIndex) {
 		Matcher matcher = Pattern.compile(regex, Pattern.MULTILINE).matcher(content);
 		if (matcher.find()) {
 			return matcher.group(groupIndex);
 		}
-		return null;
+		return null; // 必须是null,否则会进入死循环
+	}
+
+	/**
+	 * @方法描述: 提取 关键字
+	 * @param sInput
+	 *            输入内容
+	 * @param sRegex
+	 *            表达式字符串
+	 * @return
+	 */
+	public static String getKeyWords(String regex, String sInput) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(sInput);
+
+		if (matcher.find()) {
+			return matcher.group(1);
+		}
+		return sInput;
 	}
 
 	/**
@@ -255,10 +273,10 @@ public class RegexUtil {
 	 * @return
 	 * @return:T 返回类型
 	 */
-	public static <T extends Collection<String>> T gets(String regex, String content, int group,
+	public static <T extends Collection<String>> T getList(String regex, String content, int group,
 			T collection) {
 		while (true) {
-			String result = get(regex, content, group);
+			String result = getKeyWords(regex, content, group);
 			if (result == null)
 				break;
 			collection.add(result);
