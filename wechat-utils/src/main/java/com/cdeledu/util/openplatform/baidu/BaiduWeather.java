@@ -37,7 +37,7 @@ class BaiduWeather {
 	/*-------------------------- 私有方法 end   -------------------------------*/
 	/*-------------------------- 公有方法 begin -------------------------------*/
 	@SuppressWarnings("deprecation")
-	public static WeatherInfo getWeatherInfo(String cityName) {
+	public static WeatherInfo getWeatherInfo(String cityName) throws Exception {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
 		// 保存全部的天气信息
@@ -132,7 +132,8 @@ class BaiduWeather {
 				 * 天气预报时间
 				 */
 				String dayData = odwinfo.getString("date");
-				odwi.setDate((today.getYear() + 1900) + "." + (today.getMonth() + 1) + "." + today.getDate());
+				odwi.setDate((today.getYear() + 1900) + "." + (today.getMonth() + 1) + "."
+						+ today.getDate());
 				today.setDate(today.getDate() + 1);// 增加一天
 
 				/** 第一个，也就是当天的天气，在date字段中最后包含了实时天气 */
@@ -190,7 +191,7 @@ class BaiduWeather {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(getWeatherInfo("北京"));
+		// System.out.println(getWeatherInfo("北京"));
 		// System.out.println(URLDecoder.decode("%e5%98%89%e5%85%b4"));
 	}
 

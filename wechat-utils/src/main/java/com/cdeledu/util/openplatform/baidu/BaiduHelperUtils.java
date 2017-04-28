@@ -24,7 +24,7 @@ public class BaiduHelperUtils {
 	 *            作者
 	 * @return
 	 */
-	public static BaiduMusic getMusicInfo(String titile, String musicAuthor) {
+	public static BaiduMusic getMusicInfo(String titile, String musicAuthor) throws Exception {
 		return BaiduMusicService.searchMusic(titile, musicAuthor);
 	}
 
@@ -36,7 +36,7 @@ public class BaiduHelperUtils {
 	 *            城市名称
 	 * @return
 	 */
-	public static WeatherInfo getWeatherInfo(String cityName) {
+	public static WeatherInfo getWeatherInfo(String cityName) throws Exception {
 		return BaiduWeather.getWeatherInfo(cityName);
 	}
 
@@ -52,7 +52,8 @@ public class BaiduHelperUtils {
 	 *            待翻译内容
 	 * @return
 	 */
-	public static List<String> getTransInfo(String from, String to, String source) {
+	public static List<String> getTransInfo(String from, String to, String source)
+			throws Exception {
 		return BaiduTranslate.translate(from, to, source);
 	}
 }

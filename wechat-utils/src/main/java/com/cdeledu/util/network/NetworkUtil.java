@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.cdeledu.common.exception.RuntimeExceptionHelper;
+import com.cdeledu.util.application.regex.RegexUtil;
 
 /**
  * @类描述: 网络相关操作辅助类
@@ -31,6 +32,39 @@ public class NetworkUtil {
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [私有方法] */
+	/**
+	 * @方法描述: 根据ip地址计算出long型的数据
+	 * @param strIP
+	 *            IP V4 地址
+	 * @return
+	 */
+	private static long ipv4ToLong(String strIP) {
+		if (RegexUtil.isIpv4(strIP)) {
+			long[] ip = new long[4];
+			// 先找到IP地址字符串中.的位置
+			int position1 = strIP.indexOf(".");
+			int position2 = strIP.indexOf(".", position1 + 1);
+			int position3 = strIP.indexOf(".", position2 + 1);
+			// 将每个.之间的字符串转换成整型
+			ip[0] = Long.parseLong(strIP.substring(0, position1));
+			ip[1] = Long.parseLong(strIP.substring(position1 + 1, position2));
+			ip[2] = Long.parseLong(strIP.substring(position2 + 1, position3));
+			ip[3] = Long.parseLong(strIP.substring(position3 + 1));
+			return (ip[0] << 24) + (ip[1] << 16) + (ip[2] << 8) + ip[3];
+		}
+		return 0;
+	}
+
+	/**
+	 * @方法描述: 指定IP的long是否在指定范围内
+	 * @param userIp  用户IP
+	 * @param begin 开始IP
+	 * @param end 结束IP
+	 * @return 是否在范围内
+	 */
+	private static boolean isInner(long userIp, long begin, long end){
+		return (userIp >= begin) && (userIp <= end);
+	}
 	/** ----------------------------------------------- [私有方法] */
 	/**
 	 * @方法描述: 获取本地机器IP地址
@@ -84,13 +118,43 @@ public class NetworkUtil {
 	}
 
 	/**
+	 * @方法描述:
+	 * 
+	 *        <pre>
+	 *        判定是否为内网IP
+	 *        私有IP： A类 10.0.0.0-10.255.255.255
+	 *               B类 172.16.0.0-172.31.255.255
+	 *               C类 192.168.0.0-192.168.255.255
+	 *               当然，还有127这个网段是环回地址
+	 *        </pre>
+	 * 
+	 * @param ipAddress
+	 * @return
+	 */
+	public static boolean isInnerIP(String ipAddress) {
+		boolean isInnerIp = false;
+		long ipNum = ipv4ToLong(ipAddress);
+		
+		long aBegin = ipv4ToLong("10.0.0.0");
+		long aEnd = ipv4ToLong("10.255.255.255");
+
+		long bBegin = ipv4ToLong("172.16.0.0");
+		long bEnd = ipv4ToLong("172.31.255.255");
+
+		long cBegin = ipv4ToLong("192.168.0.0");
+		long cEnd = ipv4ToLong("192.168.255.255");
+		isInnerIp = isInner(ipNum, aBegin, aEnd) || isInner(ipNum, bBegin, bEnd)||isInner(ipNum, cBegin, cEnd) || "127.0.0.1".equalsIgnoreCase(ipAddress);
+		return isInnerIp;
+	}
+
+	/**
 	 * @方法描述: 检查设置的IP地址是否正确，并返回正确的IP地址,无效IP地址返回"-1"
 	 * @param ip
 	 *            设置的IP地址
 	 * @return 非法IP 则返回 -1
 	 */
-	public final String getValidIP(String ip) {
-		return null;
+	public final boolean getValidIP(String ip) {
+		return false;
 	}
 
 	/**

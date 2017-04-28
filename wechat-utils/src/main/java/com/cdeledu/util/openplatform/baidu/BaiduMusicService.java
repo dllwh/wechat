@@ -83,7 +83,8 @@ class BaiduMusicService {
 
 				/**
 				 * ① 普通品质的encode、decode<br>
-				 * ② <encode>中包含了加密后的音乐链接，实际上只是对音乐名称进行了加密，<decode>中包含了解密后的音乐名称<br>
+				 * ② <encode>中包含了加密后的音乐链接，实际上只是对音乐名称进行了加密，<decode>中包含了解密后的音乐名称
+				 * <br>
 				 * ③ 普通品质音乐链接最终的URL是有<encode>跟<decode>拼接起来
 				 */
 				// 普通品质音乐的URL
@@ -109,8 +110,7 @@ class BaiduMusicService {
 					index = urlEncode.lastIndexOf("/") + 1;
 					if (urlDecode.lastIndexOf("&") != -1) {
 						endindex = urlDecode.lastIndexOf("&");
-						url = urlEncode.substring(0, index)
-								+ urlDecode.substring(0, endindex);
+						url = urlEncode.substring(0, index) + urlDecode.substring(0, endindex);
 					} else {
 						url = urlEncode.substring(0, index) + urlDecode;
 					}
@@ -120,10 +120,8 @@ class BaiduMusicService {
 					// 判断高品质节点是否存在
 					Element durlElement = durlList.get(i).element("encode");
 					if (null != durlElement) {
-						durlEncode = durlList.get(i).element("encode")
-								.getText();
-						durlDecode = durlList.get(i).element("decode")
-								.getText();
+						durlEncode = durlList.get(i).element("encode").getText();
+						durlDecode = durlList.get(i).element("decode").getText();
 						index = durlEncode.lastIndexOf("/") + 1;
 						// 高品质音乐的URL
 						if (durlDecode.lastIndexOf("&") != -1) {
@@ -165,7 +163,7 @@ class BaiduMusicService {
 	 *            作者
 	 * @return
 	 */
-	public static BaiduMusic searchMusic(String titile, String musicAuthor) {
+	public static BaiduMusic searchMusic(String titile, String musicAuthor) throws Exception {
 		// 对音乐名称、作者进行URL编码
 		titile = URLEncodingUtil.encoding(titile, charser);
 		musicAuthor = URLEncodingUtil.encoding(musicAuthor, charser);
@@ -174,7 +172,7 @@ class BaiduMusicService {
 		// 处理名称、作者中间的空格
 		requestUrl = requestUrl.replaceAll("\\+", "%20");
 		// 查询并获取返回结果
-		String html = HttpURLConnHelper.sendGetRequest(requestUrl,ConstantHelper.UTF_8);
+		String html = HttpURLConnHelper.sendGetRequest(requestUrl, ConstantHelper.UTF_8);
 		// 从返回结果中解析出Music
 		return parseMusic(html);
 	}

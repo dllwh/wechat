@@ -29,8 +29,8 @@ import com.cdeledu.util.openplatform.baidu.util.constants.ResultStatus;
  * @date: 2015年7月17日 下午1:38:06
  * @version: V1.0
  * @since: JDK 1.7
- * @see <a
- *      href="http://api.fanyi.baidu.com/api/trans/product/apidoc">API接入文档</a>
+ * @see <a href="http://api.fanyi.baidu.com/api/trans/product/apidoc">API接入文档
+ *      </a>
  */
 class BaiduTranslate {
 	/** -------------------------- 私有属性 begin ------------------------------- */
@@ -56,8 +56,8 @@ class BaiduTranslate {
 	 *            平台分配的密钥
 	 * @return
 	 */
-	private static String createSignature(String appid, String query,
-			String salt, String secretKey) {
+	private static String createSignature(String appid, String query, String salt,
+			String secretKey) {
 		return DigestUtils.md5Hex(appid + query + salt + secretKey);
 	}
 
@@ -78,7 +78,7 @@ class BaiduTranslate {
 	 * @param sign
 	 *            签名appid+q+salt+密钥 的MD5值
 	 */
-	private static List<String> parse(String content, String from, String to) {
+	private static List<String> parse(String content, String from, String to) throws Exception {
 		List<String> resultList = new ArrayList<String>();
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -94,7 +94,7 @@ class BaiduTranslate {
 		paramMap.put("sign", createSignature(appid, content, salt, secretKey));
 		String realUrl = UrlHelper.appendParaToUrl(BAIDU_TRANS_URL,
 				UrlHelper.formatParameters(paramMap));
-		String _result = HttpURLConnHelper.sendGetRequest(realUrl,ConstantHelper.UTF_8);
+		String _result = HttpURLConnHelper.sendGetRequest(realUrl, ConstantHelper.UTF_8);
 		JSONObject object = new JSONObject(_result);
 		if (object.has("error_code")) {
 			ExceptionHelper.getExceptionHint("BaiduTranslate",
@@ -113,7 +113,8 @@ class BaiduTranslate {
 	/** -------------------------- 共有方法 begin ------------------------------- */
 	/**
 	 * @Title: translate
-	 * @Description: <ul>
+	 * @Description:
+	 *               <ul>
 	 *               <li>将指定内容从指定源语言语种翻译为指定目标语言语种</li>
 	 *               <li>UTF-8编码的PHP数组对应的标准JSON字符串</li>
 	 *               <li>GET请求方式</li>
@@ -127,13 +128,12 @@ class BaiduTranslate {
 	 * @param source
 	 *            待翻译内容
 	 */
-	public static List<String> translate(String from, String to, String source) {
+	public static List<String> translate(String from, String to, String source) throws Exception {
 		if (StringUtils.isBlank(from)) {
 			from = BaiduLangType.AUTO.getDesc();
 		}
 		if (StringUtils.isBlank(to)) {
-			ExceptionHelper.getExceptionHint("BaiduTranslate", "translate",
-					"参数为空");
+			ExceptionHelper.getExceptionHint("BaiduTranslate", "translate", "参数为空");
 		}
 		return parse(source, from, to);
 	}

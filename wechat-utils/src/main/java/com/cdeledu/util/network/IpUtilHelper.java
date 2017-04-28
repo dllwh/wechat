@@ -154,7 +154,7 @@ public class IpUtilHelper {
 	 *         </ul>
 	 * @return：String 返回类型
 	 */
-	public static String getIpInfoBySinaUrl(String ip) {
+	public static String getIpInfoBySinaUrl(String ip) throws Exception{
 		if (RegexUtil.isIp(ip)) {
 			Map<String, Object> paramsMap = new HashMap<String, Object>();
 			paramsMap.put("format", "json");
@@ -185,7 +185,7 @@ public class IpUtilHelper {
 	 *         </ul>
 	 * @return：String 返回类型
 	 */
-	public static String getIpInfoByTaoBaoUrl(String ip) {
+	public static String getIpInfoByTaoBaoUrl(String ip) throws Exception{
 		String url = String.format(TAO_BAO_URL, ip);
 		return HttpURLConnHelper.sendGetRequest(url, null);
 	}
@@ -198,7 +198,7 @@ public class IpUtilHelper {
 	 * @return 根据提供ip地址就能得到IP相关的信息
 	 * @return：JSONObject 返回类型
 	 */
-	public static JSONObject iplookup(String ip) {
+	public static JSONObject iplookup(String ip) throws Exception{
 		String url = String.format(IP_LOOKUP_SERVICE, ip);
 		String result = HttpURLConnHelper.sendGetRequest(url, headerMap,ConstantHelper.UTF_8);
 		// 转化为JSON类
