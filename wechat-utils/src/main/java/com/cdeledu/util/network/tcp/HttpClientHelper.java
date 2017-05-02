@@ -73,154 +73,7 @@ public class HttpClientHelper {
 	private void setUrlCharset(String urlCharset) {
 		URLCHARSET = urlCharset;
 	}
-
-	/**
-	 * @方法描述: 设置响应头信息
-	 * @param url
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 */
-	private HttpPost setHttpPost(String url, HttpPost httpPost) {
-		httpPost = new HttpPost(url);
-		httpPost.addHeader(HttpHeaders.CONNECTION, "keep-alive");
-		httpPost.addHeader(HttpHeaders.ACCEPT, "*/*");
-		httpPost.addHeader(HttpHeaders.CONTENT_TYPE,
-				"application/x-www-form-urlencoded; charset=UTF-8");
-		httpPost.addHeader("X-Requested-With", "XMLHttpRequest");
-		httpPost.addHeader(HttpHeaders.CACHE_CONTROL, "max-age=0");
-		httpPost.addHeader(HttpHeaders.USER_AGENT, UserAgentType.PC_Firefox.getValue());
-		return httpPost;
-	}
-
-	/**
-	 * @方法描述: 获取响应体内容
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 */
-	private String getHttpResponseContent(HttpResponse response) throws Exception {
-		// 得到相应实体、包括响应头以及相应内容
-		entity = response.getEntity();
-		if (entity == null) {
-			return null;
-		}
-		// 得到response的内容
-		String content = EntityUtils.toString(entity, "utf-8");
-		// 关闭输入流
-		EntityUtils.consume(entity);
-		return content;
-	}
-
-	/**
-	 * @方法描述: 通过post提交方式获取url指定的资源和数据
-	 * @param targetUrl
-	 *            服务器地址
-	 * @param headersMap
-	 *            请求header参数
-	 * @param nameValuePairs
-	 *            请求参数
-	 * @return
-	 * @throws Exception
-	 */
-	private String sendPostRequestData(String targetUrl, Map<String, Object> headersMap,
-			List<NameValuePair> nvps) throws Exception {
-		HttpEntity entity = null;
-		// HttpClient中的post请求包装类
-		HttpPost httpPost = new HttpPost(targetUrl);
-
-		try {
-			if (MapUtils.isNotEmpty(headersMap)) {
-				for (String key : headersMap.keySet()) {
-					Object hKey = null == headersMap.get(key) ? "" : headersMap.get(key);
-					httpPost.setHeader(key, String.valueOf(hKey));
-				}
-			}
-			// nvps是包装请求参数的list
-			if (CollectionUtils.isNotEmpty(nvps)) {
-				httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
-			}
-			// 执行请求用execute方法,content用来帮我们附带上额外信息
-			response = httpClient.execute(httpPost, context);
-
-			int statusCode = response.getStatusLine().getStatusCode();
-			// 请求和响应都成功了
-			if (statusCode == 200) {
-				try {
-					result = getHttpResponseContent(response);
-				} catch (Exception ioe) {
-					ioe.printStackTrace();
-				}
-			} else {
-				httpPost.abort();
-				throw new RuntimeException("HttpClient,error status code :" + statusCode);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			// 关闭输入流
-			EntityUtils.consume(entity);
-			if (httpPost != null) {
-				httpPost.releaseConnection();
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * @方法描述: 通过GET提交方式获取url指定的资源和数据
-	 * @param targetUrl
-	 *            服务器地址
-	 * @param headersMap
-	 *            请求header参数
-	 * @return
-	 * @throws Exception
-	 */
-	public String sendGetRequestDate(String targetUrl, Map<String, Object> headersMap)
-			throws Exception {
-		HttpGet httpGet = new HttpGet(targetUrl);
-		// 设置响应头信息
-		httpGet.addHeader(HttpHeaders.ACCEPT,
-				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		httpGet.addHeader(HttpHeaders.CONNECTION, "keep-alive");
-		httpGet.addHeader(HttpHeaders.CACHE_CONTROL, "max-age=0");
-		httpGet.addHeader(HttpHeaders.USER_AGENT, UserAgentType.PC_Firefox.getValue());
-
-		try {
-			if (MapUtils.isNotEmpty(headersMap)) {
-				for (String key : headersMap.keySet()) {
-					Object hKey = null == headersMap.get(key) ? "" : headersMap.get(key);
-					httpGet.setHeader(key, String.valueOf(hKey));
-				}
-			}
-
-			response = httpClient.execute(httpGet);
-
-			statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode == 200) {
-				try {
-					result = getHttpResponseContent(response);
-				} catch (Exception ioe) {
-					ioe.printStackTrace();
-				}
-			} else {
-				httpGet.abort();
-				throw new RuntimeException("HttpClient,error status code :" + statusCode);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			// 释放资源
-			if (httpGet != null) {
-				httpGet.releaseConnection();
-			}
-		}
-
-		return result;
-	}
-
-	/** -------------------------- 私有方法 end ------------------------------- */
-	/** -------------------------- 公有方法 begin ------------------------------- */
+	
 	public HttpClientHelper getInstance() {
 		return getInstance(URLCHARSET);
 	}
@@ -241,32 +94,28 @@ public class HttpClientHelper {
 		instance.setUrlCharset(urlCharset);
 		return instance;
 	}
-
+	
 	/**
-	 * 
-	 * @Title: sendGetRequest
-	 * @Description: 发送HTTP_GET请求获取url指定的资源和数据
-	 * @param targetUrl
-	 *            服务器地址
-	 * @return 返回响应的文本
-	 */
-	public String sendGetRequest(String url) throws Exception {
-		return sendGetRequestDate(url, null);
-	}
-
-	/**
-	 * @方法描述: 带header的get请求
-	 * @param targetUrl
-	 *            请求服务器地址
-	 * @param headersMap
-	 *            添加的请求header信息
+	 * @方法描述: 获取响应体内容
+	 * @param response
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendGetRequest(String url, Map<String, Object> headersMap) throws Exception {
-		return sendGetRequestDate(url, headersMap);
+	private String getHttpResponseContent(HttpResponse response) throws Exception {
+		// 得到相应实体、包括响应头以及相应内容
+		entity = response.getEntity();
+		if (entity == null) {
+			return null;
+		}
+		// 得到response的内容
+		String content = EntityUtils.toString(entity, URLCHARSET);
+		// 关闭输入流
+		EntityUtils.consume(entity);
+		return content;
 	}
-
+	/** -------------------------- 私有方法 end ------------------------------- */
+	
+	/** -------------------------- POST begin ------------------------------- */
 	/**
 	 * 
 	 * @Title: sendPostRequest
@@ -320,7 +169,57 @@ public class HttpClientHelper {
 			List<NameValuePair> nvps) throws Exception {
 		return sendPostRequestData(url, headersMap, nvps);
 	}
+	/**
+	 * @方法描述: 通过post提交方式获取url指定的资源和数据
+	 * @param targetUrl
+	 *            服务器地址
+	 * @param headersMap
+	 *            请求header参数
+	 * @param nameValuePairs
+	 *            请求参数
+	 * @return
+	 * @throws Exception
+	 */
+	public String sendPostRequestData(String targetUrl, Map<String, Object> headersMap,
+			List<NameValuePair> nvps) throws Exception {
+		// HttpClient中的post请求包装类
+		HttpPost httpPost = new HttpPost(targetUrl);
 
+		try {
+			if (MapUtils.isNotEmpty(headersMap)) {
+				for (String key : headersMap.keySet()) {
+					Object hKey = null == headersMap.get(key) ? "" : headersMap.get(key);
+					httpPost.setHeader(key, String.valueOf(hKey));
+				}
+			}
+			// nvps是包装请求参数的list
+			if (CollectionUtils.isNotEmpty(nvps)) {
+				httpPost.setEntity(new UrlEncodedFormEntity(nvps, URLCHARSET));
+			}
+			// 执行请求用execute方法,content用来帮我们附带上额外信息
+			response = httpClient.execute(httpPost, context);
+
+			int statusCode = response.getStatusLine().getStatusCode();
+			// 请求和响应都成功了
+			if (statusCode == 200) {
+				try {
+					result = getHttpResponseContent(response);
+				} catch (Exception ioe) {
+					ioe.printStackTrace();
+				}
+			} else {
+				httpPost.abort();
+				throw new RuntimeException("HttpClient,error status code :" + statusCode);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (httpPost != null) {
+				httpPost.releaseConnection();
+			}
+		}
+		return result;
+	}
 	/**
 	 * 
 	 * @Title: sendPostRequestByJsonData
@@ -341,7 +240,14 @@ public class HttpClientHelper {
 		}
 		try {
 			// 发送POST请求:创建一个HttpPost对象,传入目标的网络地址
-			httpPost = setHttpPost(targetUrl, httpPost);
+			httpPost = new HttpPost(targetUrl);
+			httpPost.addHeader(HttpHeaders.CONNECTION, "keep-alive");
+			httpPost.addHeader(HttpHeaders.ACCEPT, "*/*");
+			httpPost.addHeader(HttpHeaders.CONTENT_TYPE,"application/x-www-form-urlencoded; charset=UTF-8");
+			httpPost.addHeader("X-Requested-With", "XMLHttpRequest");
+			httpPost.addHeader(HttpHeaders.CACHE_CONTROL, "max-age=0");
+			httpPost.addHeader(HttpHeaders.USER_AGENT, UserAgentType.PC_Firefox.getValue());
+			
 
 			if (StringUtils.isNoneBlank(content)) {
 				httpPost.setEntity(new StringEntity(content, ContentType.APPLICATION_JSON));
@@ -373,6 +279,83 @@ public class HttpClientHelper {
 		}
 		return result;
 	}
+	/** -------------------------- POST end ------------------------------- */
+	
+	/** -------------------------- 公有方法 begin ------------------------------- */
 
+	/**
+	 * 
+	 * @Title: sendGetRequest
+	 * @Description: 发送HTTP_GET请求获取url指定的资源和数据
+	 * @param targetUrl
+	 *            服务器地址
+	 * @return 返回响应的文本
+	 */
+	public String sendGetRequest(String url) throws Exception {
+		return sendGetRequestDate(url, null);
+	}
+
+	/**
+	 * @方法描述: 带header的get请求
+	 * @param targetUrl
+	 *            请求服务器地址
+	 * @param headersMap
+	 *            添加的请求header信息
+	 * @return
+	 * @throws Exception
+	 */
+	public String sendGetRequest(String url, Map<String, Object> headersMap) throws Exception {
+		return sendGetRequestDate(url, headersMap);
+	}
+	/**
+	 * @方法描述: 通过GET提交方式获取url指定的资源和数据
+	 * @param targetUrl
+	 *            服务器地址
+	 * @param headersMap
+	 *            请求header参数
+	 * @return
+	 * @throws Exception
+	 */
+	public String sendGetRequestDate(String targetUrl, Map<String, Object> headersMap)
+			throws Exception {
+		HttpGet httpGet = new HttpGet(targetUrl);
+		// 设置响应头信息
+		httpGet.addHeader(HttpHeaders.ACCEPT,"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		httpGet.addHeader(HttpHeaders.CONNECTION, "keep-alive");
+		httpGet.addHeader(HttpHeaders.CACHE_CONTROL, "max-age=0");
+		httpGet.addHeader(HttpHeaders.USER_AGENT, UserAgentType.PC_Firefox.getValue());
+
+		try {
+			if (MapUtils.isNotEmpty(headersMap)) {
+				for (String key : headersMap.keySet()) {
+					Object hKey = null == headersMap.get(key) ? "" : headersMap.get(key);
+					httpGet.setHeader(key, String.valueOf(hKey));
+				}
+			}
+
+			response = httpClient.execute(httpGet);
+
+			statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode == 200) {
+				try {
+					result = getHttpResponseContent(response);
+				} catch (Exception ioe) {
+					ioe.printStackTrace();
+				}
+			} else {
+				httpGet.abort();
+				throw new RuntimeException("HttpClient,error status code :" + statusCode);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			// 释放资源
+			if (httpGet != null) {
+				httpGet.releaseConnection();
+			}
+		}
+
+		return result;
+	}
 	/** -------------------------- 公有方法 end ------------------------------- */
 }
