@@ -26,7 +26,7 @@ public class CtripHelperUtil {
 	 * @see <a href="http://www.rijiben.com/">历史上今天大事记</a>
 	 * @return
 	 */
-	public static String getTodayInHistory() {
+	public static String getTodayInHistory() throws Exception{
 		/**
 		 * 1.发起http get请求获取指定url的网页源码
 		 */

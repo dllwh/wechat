@@ -95,7 +95,10 @@ public class CrawlerMailHelper {
 		}
 		if (StringUtils.isNotEmpty(type) && StringUtils.isNotEmpty(postid)) {
 			String url = String.format(getComInfoUrl, type, postid, muti, orderBy);
-			result = HttpURLConnHelper.sendGetRequest(url,ConstantHelper.UTF_8);
+			try {
+				result = HttpURLConnHelper.sendGetRequest(url,ConstantHelper.UTF_8);
+			} catch (Exception e) {
+			}
 		}
 		return result;
 	}

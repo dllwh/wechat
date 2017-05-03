@@ -40,11 +40,11 @@ public class crawlerCityHelper {
 	private static QueryRunner runner = null;
 	private static DataTableHelper dataTableHelper = null;
 	/** SQL执行工具:执行SQL语句 */
-	private static String SQL = "INSERT INTO sys_date_china_cityinfo"
+	private static String SQL = "INSERT INTO sys_dict_china_city"
 			+ "(areaName,areaCode,areaUrl,parentId,areaLevel,areaType)"
 			+ " VALUES ('%s', '%s','%s', %s, '%s','%s')";
-	private static String ISEXIST = "SELECT COUNT(1) FROM sys_date_china_cityinfo WHERE areaCode = '%s'";
-	private static String EACHSQL = "SELECT id,areaUrl FROM sys_date_china_cityinfo"
+	private static String ISEXIST = "SELECT COUNT(1) FROM sys_dict_china_city WHERE areaCode = '%s'";
+	private static String EACHSQL = "SELECT id,areaUrl FROM sys_dict_china_city"
 			+ " WHERE areaLevel = '%s' and areaUrl !=''";
 
 	/** ----------------------------------------------------- Fields end */
@@ -385,11 +385,11 @@ public class crawlerCityHelper {
 	}
 	
 	public static void main(String[] args) {
-		// getProvinceInfo();
-		// getSpecialArea();
-		// getCityInfo();
-		// getCountyInfo();
-		// getTownInfo();
-		// getVillageInfo();
+		// getProvinceInfo();  // 省级行政区
+		// getSpecialArea(); // 插入特别地区
+		// getCityInfo(); // 地级行政区划单位
+		// getCountyInfo();// 县级行政区划单位
+		// getTownInfo(); // 乡级行政区划单位
+		// getVillageInfo();// 村级行政单位
 	}
 }
