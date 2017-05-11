@@ -25,4 +25,26 @@ public class URLParameter extends NameValue {
 		return String.format("【URLParameter name = %s,value=%S】", getName(), getValue());
 	}
 
+	/**
+	 * 连接字符串.
+	 * 
+	 * @param connector
+	 * @param arr
+	 * @return
+	 */
+	public static String join(String connector, String[] arr) {
+
+		StringBuffer sBuffer = new StringBuffer();
+
+		for (Object object : arr) {
+			sBuffer.append(object).append(connector);
+		}
+
+		if (sBuffer.length() > 0) {
+			sBuffer.delete(sBuffer.length() - connector.length(), sBuffer.length());
+		}
+
+		return sBuffer.toString();
+	}
+
 }

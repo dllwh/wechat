@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +15,14 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.cdeledu.common.constant.ConstantHelper;
 
 /**
  * @Description: URL 操作工具类
@@ -26,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UrlHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = LoggerFactory.getLogger(UrlHelper.class);
 	/** -------------------------- 私有属性 begin ------------------------------- */
 	/** 请求网址与请求参数之间的分隔符 **/
 	public static final String QUESTION_MARK = "?";
@@ -274,6 +282,57 @@ public class UrlHelper implements Serializable {
 		}
 
 		return paramMap;
+	}
+	
+	public static Map<String, String[]> parseParams(HttpServletRequest request) {
+		Map<String, String[]> resultMap = new HashMap<String, String[]>();
+		Enumeration<?> params = request.getParameterNames();
+
+		StringBuffer paramSb = null;
+		StringBuffer emptyParamSb = null;
+
+		if (logger.isDebugEnabled()) {
+			paramSb = new StringBuffer();
+			emptyParamSb = new StringBuffer();
+			paramSb.append("<<请求参数[request params]>>");
+			paramSb.append(ConstantHelper.NEW_LINE);
+		}
+		while (params.hasMoreElements()) {
+			// 得到参数名
+			String name = params.nextElement().toString();
+			String[] value = request.getParameterValues(name);
+			resultMap.put(name, value);
+			if (logger.isDebugEnabled()) {
+
+				String values = URLParameter.join(ConstantHelper.COMMA, value);
+
+				if (StringUtils.isEmpty(values)) {
+					emptyParamSb.append(name + "=" + values);
+					emptyParamSb.append(ConstantHelper.NEW_LINE);
+				} else {
+					paramSb.append(name + "=" + values);
+					paramSb.append(ConstantHelper.NEW_LINE);
+				}
+			}
+		}
+		
+		if (logger.isDebugEnabled()) {
+
+			if (emptyParamSb.length() > 0) {
+				paramSb.append("--------------------------------------------");
+				paramSb.append(ConstantHelper.NEW_LINE);
+				paramSb.append(emptyParamSb);
+			}
+
+			if (paramSb.length() > 0) {
+				paramSb.delete(paramSb.length() - ConstantHelper.NEW_LINE.length(),
+						paramSb.length());
+			}
+
+			logger.debug(paramSb.toString());
+		}
+
+		return resultMap;
 	}
 	/** -------------------------- 公有方法 end ------------------------------- */
 }
