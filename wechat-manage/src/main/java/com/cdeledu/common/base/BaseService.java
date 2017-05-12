@@ -3,14 +3,13 @@ package com.cdeledu.common.base;
 import java.util.List;
 
 /**
- * @类描述: 基础服务层类，所有的业务服务类都继承于这个
+ * @类描述: 基础service类，所有的service业务服务类都继承于这个
  * @创建者: 皇族灬战狼
  * @创建时间: 2016年9月26日 上午9:48:26
  * @版本: V1.0
  * @since: JDK 1.7
  */
 public interface BaseService<T> {
-
 	/**
 	 * 插入一条数据 <br/>
 	 * 支持Oracle序列,UUID,类似Mysql的INDENTITY自动增长(自动回写)<br/>

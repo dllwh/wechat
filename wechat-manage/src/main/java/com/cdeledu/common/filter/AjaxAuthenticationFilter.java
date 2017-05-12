@@ -56,7 +56,7 @@ public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 			SessionInfo sessioninfo = (SessionInfo) session
 					.getAttribute(GlobalConstants.USER_SESSION);
 			if ((null == sessioninfo || null == sessioninfo.getManagerUser())
-					&& FilterHelper.isURILogin(httpRequest.getRequestURI(), httpRequest)) {
+					&& FilterHelper.isURILogin( httpRequest)) {
 				// ②-4将用户的请求URL保存在session中，用于登录成功之后，跳到目标URL
 				String toUrl = httpRequest.getRequestURL().toString();
 				if (!StringUtils.isEmpty(httpRequest.getQueryString())) {
@@ -64,7 +64,7 @@ public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 				}
 				logger.info("登录跳转页面" + toUrl);
 				// ②-5转发到登录页面
-				request.getRequestDispatcher("/webViews/login/login.jsp").forward(request,
+				request.getRequestDispatcher(httpRequest.getContextPath() + GlobalConstants.LOGIN).forward(request,
 						response);
 				return;
 			}

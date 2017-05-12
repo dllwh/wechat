@@ -12,6 +12,7 @@ import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.model.SessionInfo;
 import com.cdeledu.util.WebUtilHelper;
+
 /**
  * @类描述: 登陆拦截器实现登陆控制
  * @创建者: 皇族灬战狼
@@ -30,22 +31,24 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object handler) throws Exception {
-		logger.debug("Access Auth Interceptor - 进入拦截器");
+		if (logger.isDebugEnabled()) {
+			logger.debug("Access Auth Interceptor - 进入拦截器");
+		}
 		// 记录访问开始时间
 		request.setAttribute("access_begin_time", System.currentTimeMillis());
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 
 		HttpSession session = WebUtilHelper.getSession();
-		SessionInfo sessioninfo = (SessionInfo) session
-				.getAttribute(GlobalConstants.USER_SESSION);
+		SessionInfo sessioninfo = (SessionInfo) session.getAttribute(GlobalConstants.USER_SESSION);
 		if ((null == sessioninfo || null == sessioninfo.getManagerUser())
-				&& FilterHelper.isURILogin(httpRequest.getRequestURI(), httpRequest)) {
-			request.getRequestDispatcher("/webViews/login/login.jsp").forward(request, response);
+				&& FilterHelper.isURILogin(httpRequest)) {
+			request.getRequestDispatcher(request.getContextPath() + GlobalConstants.LOGIN)
+					.forward(request, response);
 			return false;
 		} else {
-			return true;	
+			return true;
 		}
-		
+
 	}
 
 	/**
@@ -54,11 +57,13 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		logger.debug(
-				"Access Auth Interceptor - interceptor auth execution time 拦截器验证执行时间："
-						+ (System.currentTimeMillis() - Long
-								.valueOf(request.getAttribute("access_begin_time").toString()))
-						+ "ms");
+		if (logger.isDebugEnabled()) {
+			logger.debug(
+					"Access Auth Interceptor - interceptor auth execution time 拦截器验证执行时间："
+							+ (System.currentTimeMillis() - Long
+									.valueOf(request.getAttribute("access_begin_time").toString()))
+							+ "ms");
+		}
 	}
 
 	/**
@@ -69,10 +74,12 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
 			Object handler, Exception ex) throws Exception {
-		logger.debug(
-				"Access Auth Interceptor - controller execution time 控制器方法执行时间："
-						+ (System.currentTimeMillis() - Long
-								.valueOf(request.getAttribute("access_begin_time").toString()))
-						+ "ms");
+		if (logger.isDebugEnabled()) {
+			logger.debug(
+					"Access Auth Interceptor - controller execution time 控制器方法执行时间："
+							+ (System.currentTimeMillis() - Long
+									.valueOf(request.getAttribute("access_begin_time").toString()))
+							+ "ms");
+		}
 	}
 }

@@ -20,9 +20,10 @@ public class GlobalConstants {
 	public static final String USER_SESSION = "USER_SESSION";
 	/** 将登录前的URL放到Session中的键名称 */
 	public static final String LOGIN_TO_URL = "toUrl";
+	/** 不对匹配该值的访问路径拦截（正则） */
+	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(logout)|(code)|(app)|(weixin)|(static)|(main)|(websocket)).*";
 	/** 需要登录即可访问的URI资源 */
-	public static final String[] INHERENT_URIS = { "/select", "/find", "/get", "/add", "/save",
-			"/insert", "/edit", "/update", "/delete", "/bathDel" };
+	public static final String INHERENT_PATH = ".*/((select)|(find)|(get)|(add)|(save)|(insert)|(edit)|(update)|(delete)||(bathDel)).*";
 	/** 人员类型 */
 	public static final Short User_Normal = 1;// 正常
 	public static final Short User_Forbidden = 0;// 禁用
@@ -40,6 +41,9 @@ public class GlobalConstants {
 	public static final Integer Log_Type_UPLOAD = 6; // 上传
 	public static final Integer Log_Type_OTHER = 7; // 其他
 
+	public static final String LOGIN = "/webViews/login/login.jsp";								// 登录地址
+	public static final String LOGIN_ACTION = "/loginController.shtml?checkuser";				// 登录地址
+	
 	/**
 	 * 上传图片大小限制，单位byte
 	 */

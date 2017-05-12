@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+<mapper namespace="DAO">
+	<sql id="findForJdbc_body">
+		SELECT * from sys_manager_role
+		<where>
+			<if test="roleCode != null and roleCode  != '' ">  
+				and roleCode=#{roleCode}
+			</if>
+			<if test="roleName!= null and roleName != '' ">  
+				and roleName  LIKE CONCAT(CONCAT('%', #{roleName}),'%') 
+			</if>
+			<if test="categoryCode != null and categoryCode != '' ">  
+				and categoryCode=#{categoryCode}
+			</if>
+			<if test="allowEdit != null and allowEdit != '' ">  
+				and allowEdit=#{allowEdit}
+			</if>
+			<if test="allowDelete != null and allowDelete != '' ">  
+				and allowDelete=#{allowDelete}
+			</if>
+			<if test="enabled != null and enabled != '' ">  
+				and enabled=#{enabled}
+			</if>
+			<if test="creater != null and creater != '' ">  
+				and creater=#{creater}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="findForJdbc"  parameterType="com.cdeledu.model.rbac.Role"
+		resultType="com.cdeledu.model.rbac.Role">
+		select * from(
+			<include refid="findForJdbc_body"/>
+		) as myTable
+	</select>
+	
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.rbac.Role"
+		resultType="java.lang.Integer">
+		select count(*) from(
+			<include refid="findForJdbc_body"/>
+		) as myTable
+	</select>
+	
+	<!-- 通过主键查询 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" 
+		resultType="com.cdeledu.model.rbac.Role">
+		select * from sys_manager_role where id = #{id}
+	</select>
+	
+	<select id="findOneForJdbc" parameterType="com.cdeledu.model.rbac.Role" 
+		resultType="com.cdeledu.model.rbac.Role">
+		select top 1 * from(
+			<include refid="findForJdbc_body"/>
+		) as myTable
+	</select>
+	
+	<!-- 创建新的用户 -->
+	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.Role" 
+		useGeneratedKeys="true" keyProperty="id" >
+		insert into sys_manager_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null and roleCode != '' ">roleCode,</if>
+			<if test="roleName != null and roleName != '' ">roleName,</if>
+			<if test="categoryCode != null and categoryCode != '' ">categoryCode,</if>
+			<if test="allowEdit != null and allowEdit != '' ">allowEdit,</if>
+			<if test="allowDelete != null and allowDelete != '' ">allowDelete,</if>
+			<if test="sortCode != null and sortCode != '' ">sortCode,</if>
+			<if test="enabled != null and enabled != '' ">enabled,</if>
+			<if test="creater != null and creater != '' ">creater,</if>
+			<if test="createTime != null and createTime != '' ">createTime,</if>
+			<if test="roleRemark != null and roleRemark != '' ">roleRemark,</if>
+		</trim>
+		values 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null and roleCode != '' ">#{roleCode}</if>
+			<if test="roleName != null and roleName != '' ">#{roleName}</if>
+			<if test="categoryCode != null and categoryCode != '' ">#{categoryCode}</if>
+			<if test="allowEdit != null and allowEdit != '' ">#{allowEdit}</if>
+			<if test="allowDelete != null and allowDelete != '' ">#{allowDelete}</if>
+			<if test="sortCode != null and sortCode != '' ">#{sortCode}</if>
+			<if test="enabled != null and enabled != '' ">#{enabled}</if>
+			<if test="creater != null and creater != '' ">#{creater}</if>
+			<if test="createTime != null and createTime != '' ">#{createTime}</if>
+			<if test="roleRemark != null and roleRemark != '' ">#{roleRemark}</if>
+		</trim>
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.Role" >
+		update sys_manager_role
+		<trim prefix="SET" suffix="" suffixOverrides=",">
+			<if test="rolecode != null and rolecode != '' ">
+				roleCode = #{rolecode,jdbcType=VARCHAR},
+			</if>
+			<if test="rolename != null and rolename != '' ">
+				roleName = #{rolename,jdbcType=VARCHAR},
+			</if>
+			<if test="categorycode != null and categorycode != '' ">
+				categoryCode = #{categorycode,jdbcType=VARCHAR},
+			</if>
+			<if test="allowedit != null and allowedit != '' ">
+				allowEdit = #{allowedit,jdbcType=TINYINT},
+			</if>
+			<if test="allowdelete != null and allowdelete != '' ">
+				allowDelete = #{allowdelete,jdbcType=TINYINT},
+			</if>
+			<if test="sortcode != null and sortcode != '' ">
+				sortCode = #{sortcode,jdbcType=TINYINT},
+			</if>
+			<if test="enabled != null and enabled != '' ">
+				enabled = #{enabled,jdbcType=TINYINT},
+			</if>
+			<if test="modifier != null and modifier != '' ">
+				modifier = #{modifier,jdbcType=VARCHAR},
+			</if>
+			<if test="modifiedtime != null and modifiedtime != '' ">
+				modifiedTime = #{modifiedtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="roleremark != null and roleremark != '' ">
+				roleRemark = #{roleremark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 删除:支持批量删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Object" >
+		delete from sys_manager_role where id in 
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<delete id="delete" parameterType="com.cdeledu.model.rbac.Role"  >
+		delete from sys_manager_role where id = #{id}
+	</delete>
+</mapper>
