@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@Component
 public class SpringExceptionHandler implements HandlerExceptionResolver {
 	/** ----------------------------------------------------- Fields start */
 	private static final Logger logger = Logger.getLogger(SpringExceptionHandler.class);
@@ -34,7 +36,7 @@ public class SpringExceptionHandler implements HandlerExceptionResolver {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("exceptionMessage", exceptionMessage);
 		model.put("ex", exception);
-		return new ModelAndView("common/error", model);
+		return new ModelAndView("common/errorpage", model);
 	}
 
 }
