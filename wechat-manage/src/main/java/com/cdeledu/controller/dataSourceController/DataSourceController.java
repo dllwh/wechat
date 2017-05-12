@@ -31,6 +31,8 @@ public class DataSourceController extends BaseController {
 	@Transactional
 	@RequestMapping(params = "goDruid")
 	public ModelAndView goDruid() {
-		return new ModelAndView("/system/druid/index");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/system/druid/index");
+		return mv;
 	}
 }

@@ -1,5 +1,8 @@
 package com.cdeledu.controller.system.resource;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.model.AjaxJson;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.util.webpage.BootstrapHelper;
+import com.google.common.collect.Maps;
 
 /**
  * @类描述: 图标信息处理类
@@ -32,8 +37,39 @@ public class IconController  extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(params = "init")
-	public ModelAndView icon() {
-		return new ModelAndView("system/icon/iconInit");
+	public ModelAndView init() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/icon/iconInit");
+		return mv;
+	}
+	
+	@RequestMapping(value = "initIcon")
+	@ResponseBody
+	public AjaxJson initIcon() {
+		AjaxJson result = new AjaxJson();
+
+		try {
+			result.setMsg("数据初始化成功");
+			Map<String, String> filePathMap = Maps.newConcurrentMap();
+			ClassLoader baseUrl = Thread.currentThread().getContextClassLoader();
+			filePathMap.put("bootstrap", baseUrl.getResource("bootstrapIconInfo/bootstrap.css").getPath());
+			filePathMap.put("fontAwesome", baseUrl.getResource("bootstrapIconInfo/font-awesome.css").getPath());
+			filePathMap.put("simpleLine", baseUrl.getResource("bootstrapIconInfo/simple-line-icons.css").getPath());
+			List<Map<String, String>> resultList=BootstrapHelper.getBootstrapIconInfo(filePathMap);
+			String displayName="",sourceType="",className="";
+			String sql = "INSERT INTO sys_icon(displayName,sourceType,className)  VALUES('%s','%s','%s');";
+			for (Map<String, String> map : resultList) {
+				displayName = map.get("displayName");
+				sourceType = map.get("sourceType");
+				className = map.get("className");
+				System.out.println(String.format(sql, displayName,sourceType,className));
+			}
+			
+		} catch (Exception e) {
+			result.setMsg("数据初始化失败，原因"+e.getMessage());
+			result.setSuccess(false);
+		}
+		return result;
 	}
 
 	/**

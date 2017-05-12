@@ -31,6 +31,8 @@ public class DictViewController extends BaseController {
 	 */
 	@RequestMapping(params = "init")
 	public ModelAndView druid(HttpServletRequest request) {
-		return new ModelAndView("system/dict/dictInit");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/dict/dictInit");
+		return mv;
 	}
 }

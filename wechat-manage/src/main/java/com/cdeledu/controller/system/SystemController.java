@@ -26,6 +26,8 @@ public class SystemController extends BaseController {
 	@RequestMapping(params = "checkBrowser")
 	@ResponseBody
 	public ModelAndView browser(HttpServletRequest request, HttpServletResponse response) {
-		return new ModelAndView("system/browser/checkBrowser");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/browser/checkBrowser");
+		return mv;
 	}
 }

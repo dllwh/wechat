@@ -32,7 +32,9 @@ public class LogViewController  extends BaseController{
 	 */
 	@RequestMapping(params = "init")
 	public ModelAndView log() {
-		return new ModelAndView("system/log/logInit");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/log/logInit");
+		return mv;
 	}
 
 	/**
@@ -44,10 +46,14 @@ public class LogViewController  extends BaseController{
 	 *            : 统计图类型
 	 * @return
 	 */
+	// @RequestMapping(value = "userBroswer")
 	@RequestMapping(params = "userBroswer")
 	public ModelAndView userBroswer(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "reportType", required = true) String reportType) {
-		request.setAttribute("reportType", reportType);
-		return new ModelAndView("system/log/userBroswer/userBroswerInit");
+		// request.setAttribute("reportType", reportType);
+		ModelAndView mv = this.getModelAndView();
+		mv.addObject("reportType", reportType);
+		mv.setViewName("system/log/userBroswer/userBroswerInit");
+		return mv;
 	}
 }

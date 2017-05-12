@@ -15,7 +15,7 @@ import com.cdeledu.controller.BaseController;
  * @since: JDK 1.7
  */
 @Controller
-@RequestMapping("/MenuView")
+@RequestMapping("/menuView")
 @SessionAttributes("managerUser")
 public class MenuViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
@@ -29,11 +29,15 @@ public class MenuViewController extends BaseController {
 	 */
 	@RequestMapping(params = "init")
 	public ModelAndView init() {
-		return new ModelAndView("system/menu/menuInit");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/menu/menuInit");
+		return mv;
 	}
 
 	@RequestMapping(params = "menuList")
 	public ModelAndView menuList() {
-		return new ModelAndView("system/menu/menuInit");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/menu/menuInit");
+		return mv;
 	}
 }

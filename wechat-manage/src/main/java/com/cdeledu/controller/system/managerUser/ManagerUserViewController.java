@@ -28,9 +28,24 @@ public class ManagerUserViewController extends BaseController {
 	 */
 	@RequestMapping(params = "init")
 	public ModelAndView init() {
-		return new ModelAndView("system/user/managerUserInit");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/sysmanUser/managerUserInit");
+		return mv;
 	}
 
+	/**
+	 * @方法描述: 管理员页面跳转
+	 * @创建者: 皇族灬战狼
+	 * @创建时间: 2016年9月27日 下午4:43:12
+	 * @return
+	 */
+	@RequestMapping(params = "adminInfo")
+	public ModelAndView adminInfo() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/sysmanUser/adminInfo");
+		return mv;
+	}
+	
 	/**
 	 * 
 	 * @方法描述: easyuiAJAX请求数据

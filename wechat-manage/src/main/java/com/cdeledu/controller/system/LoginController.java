@@ -63,7 +63,7 @@ public class LoginController extends BaseController {
 		LoginLog loginLog = new LoginLog();
 		ManagerUser managerUser = null;
 
-		if (StringUtils.isEmpty(imageCaptcha) || !imageCaptcha.equals(user.getImageCaptcha())) {
+		if (StringUtils.isEmpty(imageCaptcha) || !imageCaptcha.equalsIgnoreCase(user.getImageCaptcha())) {
 			logMsg = "验证码错误，请重新输入";
 			suc = false;
 		} else {
@@ -117,10 +117,10 @@ public class LoginController extends BaseController {
 		ManagerUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		try {
 			if (null != managerUser) {
-				request.setAttribute("roleName",
-						manageruserService.getUserRole(managerUser).getRoleName());
+				// String roleName =manageruserService.getUserRole(managerUser).getRoleName(); 
+				// request.setAttribute("roleName",roleName);
 				request.setAttribute(GlobalConstants.USER_SESSION, managerUser);
-				return "main/main";
+				return "main/center";
 			} else {
 				return "login/login";
 			}

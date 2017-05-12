@@ -29,7 +29,9 @@ public class RoleViewController extends BaseController {
 	 */
 	@RequestMapping(params = "init")
 	public ModelAndView role() {
-		return new ModelAndView("system/role/roleInit");
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/sysmanRole/roleInit");
+		return mv;
 	}
 
 	/**
