@@ -30,14 +30,14 @@ public class MenuViewController extends BaseController {
 	@RequestMapping(params = "init")
 	public ModelAndView init() {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/menu/menuInit");
+		mv.setViewName("system/sysmanMenu/menuInit");
 		return mv;
 	}
 
 	@RequestMapping(params = "menuList")
 	public ModelAndView menuList() {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/menu/menuInit");
+		mv.setViewName("system/sysmanMenu/menuInit");
 		return mv;
 	}
 }
