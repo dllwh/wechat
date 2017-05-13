@@ -1,4 +1,4 @@
-package com.cdeledu.dao;
+package com.cdeledu.common.base;
 
 import java.util.List;
 

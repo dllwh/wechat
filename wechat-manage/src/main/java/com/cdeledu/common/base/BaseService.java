@@ -15,32 +15,33 @@ public interface BaseService<T> {
 	 * 支持Oracle序列,UUID,类似Mysql的INDENTITY自动增长(自动回写)<br/>
 	 * 优先使用传入的参数值,参数值空时,才会使用序列、UUID,自动增长
 	 */
-	Integer insertSelective(T record) throws Exception;
+	Integer insert(T record) throws Exception;
+
 	/**
-	 * @方法描述: 批量插入记录
-	 * @param record
-	 * @return 返回插入记录数
-	 * @throws Exception
+	 * @方法描述: 批量插入
 	 */
-	Integer batchInsert(List<T> record) throws Exception;
+	public Integer batchInsert(List<T> parameter) throws Exception;
 
 	/**
 	 * 根据实体类中字段不为null的条件进行删除,条件全部使用=号and条件
 	 */
-	Integer delete(T record) throws Exception;
+	Integer delete(Object record) throws Exception;
 
 	/**
-	 * 通过主键进行删除,这里支持批量删除多条数据 <br/>
-	 * 单个字段做主键时,可以直接写主键的值 <br/>
-	 * 联合主键时,key可以是实体类,也可以是Map
+	 * @方法描述: 批量更新
 	 */
-	Integer deleteByPrimaryKey(Object key) throws Exception;
+	public Integer batchUpdate(List<T> parameter) throws Exception;
 
 	/**
 	 * 根据主键进行更新,这里最多只会更新一条数据 <br/>
 	 * 参数为实体类
 	 */
-	Integer updateByPrimaryKey(T record) throws Exception;
+	Integer update(T record) throws Exception;
+
+	/**
+	 * @方法描述: 批量删除
+	 */
+	public Integer batchDelete(List<T> parameter) throws Exception;
 
 	/**
 	 * 根据实体类不为null的字段进行查询,条件全部使用=号and条件

@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.cdeledu.common.base.BaseDao;
+
 @Repository
 public class BaseDaoSupport implements BaseDao {
 
