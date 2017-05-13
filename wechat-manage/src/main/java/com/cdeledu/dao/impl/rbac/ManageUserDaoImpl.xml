@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-	
-<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 
+	<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 
 	例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀) -->
-<mapper namespace="com.cdeledu.dao.ManagerUserDao">
+<mapper namespace="ManagerUserDao">
 	<!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getUser，id属性值必须是唯一的，不能够重复.
 		使用parameterType属性指明查询时使用的参数类型，
 		resultType属性指明查询返回的结果集类型 
 		resultType="com.cdeledu.model.rbac.ManagerUser"就表示将查询结果封装成一个ManagerUser类的对象返回 
-		ManagerUser类就是sys_manager_manageruser表所对应的实体类 -->
+		ManagerUser类就是sys_manageruser表所对应的实体类 -->
 	<sql id="findForJdbc_body">
-		SELECT * from sys_manager_manageruser
+		SELECT * from sys_manageruser
 		<where>
 			<if test="userName != null and userName != '' ">  
 				and userName  LIKE CONCAT(CONCAT('%', #{userName}),'%') 
@@ -52,7 +51,7 @@
 		resultType="com.cdeledu.model.rbac.ManagerUser">
 		select * from(
 			<include refid="findForJdbc_body"/>
-		) as myTable
+		) as myTable LIMIT #{startRow},#{rows}
 	</select>
 	
 	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.rbac.ManagerUser"
@@ -62,29 +61,23 @@
 		) as myTable
 	</select>
 	
-	<!-- 通过主键查询 -->
-	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" 
-		resultType="com.cdeledu.model.rbac.ManagerUser">
-		select * from sys_manager_manageruser where id = #{id}
-	</select>
-	
 	<select id="findOneForJdbc" parameterType="com.cdeledu.model.rbac.ManagerUser"
 		resultType="com.cdeledu.model.rbac.ManagerUser">
-		select top 1 * from(
+		select * from(
 			<include refid="findForJdbc_body"/>
-		) as myTable
+		) as myTable LIMIT 1
 	</select>
 	
 	<!-- 验证用户是否存在 -->
 	<select id="checkUserExits" parameterType="com.cdeledu.model.rbac.ManagerUser"
 		resultType="com.cdeledu.model.rbac.ManagerUser">
-			SELECT * from sys_manager_manageruser WHERE userName =#{userName} AND `password` = #{password} and isEnabled =1
+			SELECT * from sys_manageruser WHERE userName =#{userName} AND `password` = #{password} and isEnabled =1
 	</select>
 	
 	<!-- 创建新的用户 -->
 	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.ManagerUser" 
 		useGeneratedKeys="true" keyProperty="id" >
-		insert into sys_manager_manageruser
+		insert into sys_manageruser
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="username != null">userName,</if>
 			<if test="password != null">password,</if>
@@ -118,7 +111,7 @@
 	
 	<!-- 更新 -->
 	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.ManagerUser" >
-		update sys_manager_manageruser
+		update sys_manageruser
 		<trim prefix="SET" suffix="" suffixOverrides=",">
 			<if test="userName != null and userName != " > 
 				userName = #{username},
@@ -165,7 +158,7 @@
 	
 	<!-- 删除:支持批量删除 -->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Object" >
-		delete from sys_manager_manageruser where id in 
+		delete from sys_manageruser where id in 
 		<foreach collection="list" item="item" open="(" close=")" separator=",">
 			#{item}
 		</foreach>
@@ -173,7 +166,7 @@
 	
 	<!-- 一旦参数没有传，会删除所有 -->
 	<delete id="delete" parameterType="com.cdeledu.model.rbac.ManagerUser"  >
-		delete from sys_manager_manageruser
+		delete from sys_manageruser
 		<where>
 			<if test="realname != null and realname != '' ">  
 				and realname=#{realname}
@@ -205,17 +198,32 @@
 		SELECT 	
 			smur.userId,smur.roleId,smr.roleName 
 		FROM 
-			sys_manager_user_role smur
-		INNER JOIN sys_manager_role smr ON smr.id = smur.roleId AND smr.isEnabled = 1
+			sys_user_role smur
+		INNER JOIN sys_role smr ON smr.id = smur.roleId AND smr.isEnabled = 1
 		WHERE smur.userId =#{id} 
 	</select>
 	
 	<!-- 保存用户-角色关联关系 -->
 	<insert id="saveRoleUser" parameterType="com.cdeledu.model.rbac.ManagerUserRole" 
 		useGeneratedKeys="true" keyProperty="id" >
-		insert 
-			into sys_manager_user_role (roleId, userId) 
+		insert  into sys_user_role (roleId, userId) 
 		values
-			(#{roleid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+			(#{roleid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER} 
 	</insert>
+	
+	<!-- 保存管理员登录信息 -->
+	<insert id="saveLoginInfo" parameterType="com.cdeledu.model.rbac.ManagerUserRole" 
+		useGeneratedKeys="true" keyProperty="id" >
+		
+	</insert>
+	
+	<!-- 删除用户角色关联数据 -->
+	<delete id="deleteUserRole" parameterType="com.cdeledu.model.rbac.ManagerUser">
+	
+	</delete>
+	
+	<!-- 更新登录信息，如：登录IP、登录时间 -->
+	<update id="updateLoginInfo" parameterType="com.cdeledu.model.rbac.ManagerUser" >
+	
+	</update>
 </mapper>
