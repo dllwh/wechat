@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sysDictDaoImpl">
+	<sql id="findForJdbc_body">
+		select * from sys_dict 
+		<where>
+			and isEnabled = 1 
+			<if test="id != null"> and id =#{id} </if>
+			<if test="itemName != null"> and itemName =#{itemName} </if>
+			<if test="itemCode != null"> and itemCode =#{itemCode} </if>
+			<if test="parentId != null"> and parentId =#{parentId} </if>
+			<if test="allowEdit != null"> and allowEdit =#{allowEdit} </if>
+			<if test="allowDelete != null"> and allowDelete =#{allowDelete} </if>
+			<if test="create != null"> and create =#{create} </if>
+			<if test="modifier != null"> and modifier =#{modifier} </if>
+		</where>
+			ORDER BY sequence
+	</sql>
+	<select id="findForJdbc"  parameterType="com.cdeledu.model.system.Dict"
+		resultType="com.cdeledu.model.system.Dict">
+		select * from(
+			<include refid="findForJdbc_body"/>
+		) as myTable LIMIT #{startRow},#{rows}
+	</select>
+
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.system.Dict"
+		resultType="java.lang.Integer">
+		select count(*) from(
+			<include refid="findForJdbc_body"/>
+		) as myTable
+	</select>
+	
+	<select id="findOneForJdbc" parameterType="com.cdeledu.model.system.Dict"
+		resultType="com.cdeledu.model.system.Dict">
+		select * from(
+			<include refid="findForJdbc_body"/>
+		) as myTable LIMIT 1
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_dict where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.cdeledu.model.system.Dict">
+		insert into sys_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="itemname != null">
+				itemName,
+			</if>
+			<if test="itemcode != null">
+				itemCode,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="parentid != null">
+				parentId,
+			</if>
+			<if test="isenabled != null">
+				isEnabled,
+			</if>
+			<if test="allowedit != null">
+				allowEdit,
+			</if>
+			<if test="allowdelete != null">
+				allowDelete,
+			</if>
+			<if test="create != null">
+				create,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="modifier != null">
+				modifier,
+			</if>
+			<if test="updatetime != null">
+				updateTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="itemname != null">
+				#{itemname,jdbcType=VARCHAR},
+			</if>
+			<if test="itemcode != null">
+				#{itemcode,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="parentid != null">
+				#{parentid,jdbcType=INTEGER},
+			</if>
+			<if test="isenabled != null">
+				#{isenabled,jdbcType=BIT},
+			</if>
+			<if test="allowedit != null">
+				#{allowedit,jdbcType=BIT},
+			</if>
+			<if test="allowdelete != null">
+				#{allowdelete,jdbcType=BIT},
+			</if>
+			<if test="create != null">
+				#{create,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifier != null">
+				#{modifier,jdbcType=INTEGER},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.system.Dict">
+		update sys_dict
+		<set>
+			<if test="itemname != null">
+				itemName = #{itemname,jdbcType=VARCHAR},
+			</if>
+			<if test="itemcode != null">
+				itemCode = #{itemcode,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="parentid != null">
+				parentId = #{parentid,jdbcType=INTEGER},
+			</if>
+			<if test="isenabled != null">
+				isEnabled = #{isenabled,jdbcType=BIT},
+			</if>
+			<if test="allowedit != null">
+				allowEdit = #{allowedit,jdbcType=BIT},
+			</if>
+			<if test="allowdelete != null">
+				allowDelete = #{allowdelete,jdbcType=BIT},
+			</if>
+			<if test="create != null">
+				create = #{create,jdbcType=INTEGER},
+			</if>
+			<if test="modifier != null">
+				modifier = #{modifier,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
