@@ -67,13 +67,14 @@ public class DictServiceImpl implements DictService {
 		return (Dict) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", record);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-	public List<Dict> findAllList(Dict dict) {
-		return null;
+	public List<Dict> findAllList(Dict dict) throws Exception {
+		return (List<Dict>) baseDao.findListForJdbcParam(prefix + "findAllList", dict);
 	}
 
 	@Transactional(readOnly = true)
-	public List<String> findTypeList(Dict dict) {
+	public List<String> findTypeList(Dict dict) throws Exception {
 		return null;
 	}
 }

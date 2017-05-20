@@ -37,6 +37,13 @@
 		) as myTable LIMIT 1
 	</select>
 	
+	<select id="findAllList"  parameterType="com.cdeledu.model.system.Dict"
+		resultType="com.cdeledu.model.system.Dict">
+		select * from(
+			<include refid="findForJdbc_body"/>
+		) as myTable
+	</select>
+	
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
 		delete from sys_dict where id = #{id,jdbcType=INTEGER}
 	</delete>

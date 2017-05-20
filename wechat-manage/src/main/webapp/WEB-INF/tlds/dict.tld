@@ -2,28 +2,14 @@
 <taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
 	version="2.0">
+	
 	<description>JSTL 1.1 functions library</description>
 	<display-name>JSTL functions dict</display-name>
 	<tlib-version>1.1</tlib-version>
-
 	<short-name>dict</short-name>
-	<uri>http://java.sun.com/jsp/jstl/dict</uri>
-
+	<uri>/dict</uri>
+	
 	<!-- DictUtils -->
-	<function>
-		<description>获取字典标签</description>
-		<name>getDictLabel</name>
-		<function-class>com.cdeledu.util.DictUtils</function-class>
-		<function-signature></function-signature>
-		<example></example>
-	</function>
-	<function>
-		<description>获取字典标签(多个)</description>
-		<name>getDictLabelList</name>
-		<function-class>com.cdeledu.util.DictUtils</function-class>
-		<function-signature></function-signature>
-		<example></example>
-	</function>
 	<function>
 		<description>获取字典值</description>
 		<name>getDictValue</name>
@@ -45,33 +31,4 @@
 		<function-signature></function-signature>
 		<example></example>
 	</function>
-	<tag>
-		<name>item</name>
-		<tag-class>com.cdeledu.common.tag.DictTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<description>数据字典的名称</description>
-			<name>name</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>数据字典的值</description>
-			<name>value</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>是否仅仅显示</description>
-			<name>onlyShow</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>数据字典的主键</description>
-			<name>id</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
 </taglib>
