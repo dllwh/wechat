@@ -30,6 +30,7 @@ public class SqlSessionFactoryUtil {
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [私有方法] */
+
 	/**
 	 * 加载到内存时第一个被初始化，且只初始化一次。
 	 */
@@ -38,6 +39,9 @@ public class SqlSessionFactoryUtil {
 	}
 
 	/** ----------------------------------------------- [私有方法] */
+
+	public SqlSessionFactoryUtil() {
+	}
 
 	/**
 	 * @方法描述: 获取连接
@@ -70,7 +74,6 @@ public class SqlSessionFactoryUtil {
 			if (logger.isDebugEnabled()) {
 				System.out.println("执行关闭会话操作。。。");
 			}
-
 			sqlSession.close();
 			threadLocal.remove();
 		}
@@ -80,7 +83,7 @@ public class SqlSessionFactoryUtil {
 	 * @方法描述: 获取工厂会话对象
 	 * @return
 	 */
-	public static SqlSessionFactory getSqlSessionFactory() {
+	public static SqlSessionFactory getSqlSessionFactory() throws Exception {
 		if (sqlSessionFactory == null) {
 			rebuildSqlSessionFactory();
 		}
@@ -90,7 +93,7 @@ public class SqlSessionFactoryUtil {
 	/**
 	 * @方法描述: 构建数据库全局会话工厂对象
 	 */
-	public static synchronized void buildSessionFactory() {
+	private static synchronized void buildSessionFactory() {
 		// 检查sf不为null才去构建sf对象
 		if (sqlSessionFactory == null) { // true 为null
 			try {
@@ -108,12 +111,18 @@ public class SqlSessionFactoryUtil {
 	}
 
 	public static void rebuildSqlSessionFactory() {
-		try {
-			InputStream inputStream = Resources.getResourceAsStream(CFG_FILE_PATH);
-			sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		if (sqlSessionFactory == null) { // true 为null
+			try {
+				InputStream inputStream = Resources.getResourceAsStream(CFG_FILE_PATH);
+				sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				if (logger.isDebugEnabled()) {
+					message = "Create sessionFactory Exception! " + e.getMessage();
+					System.out.println(message);
+				}
+
+			}
 		}
 	}
 }
