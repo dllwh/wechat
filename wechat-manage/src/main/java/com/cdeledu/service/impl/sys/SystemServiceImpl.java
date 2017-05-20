@@ -9,8 +9,8 @@ import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.model.system.LoginLog;
 import com.cdeledu.service.sys.SystemService;
 
-@Service
-@Transactional(readOnly = true)
+@Service("systemService")
+@Transactional(readOnly = false)
 public class SystemServiceImpl extends BaseClass implements SystemService {
 
 	private static final long serialVersionUID = 1L;
