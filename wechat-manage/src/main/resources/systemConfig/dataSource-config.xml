@@ -8,11 +8,10 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<!-- 自动扫描dao和service包(自动注入) -->
-	<context:component-scan base-package="com.cdeledu.dao"/>
-<!-- 	<context:component-scan base-package="com.cdeledu.service" /> -->
-
+	<!-- <context:component-scan base-package="com.cdeledu.dao"/> -->
+	<!-- <context:component-scan base-package="com.cdeledu.service" /> -->
 	<!-- 加载service,此时要排除要controller,因为controller已经spring-servlet-context中加载过了 -->
-	<context:component-scan base-package="com.cdeledu.service">
+	<context:component-scan base-package="com.cdeledu">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>

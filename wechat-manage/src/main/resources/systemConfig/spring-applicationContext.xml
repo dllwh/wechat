@@ -89,8 +89,7 @@
 	<!-- <task:annotation-driven executor="executor" scheduler="scheduler" /> -->
 
 	<!-- 异常处理类 -->
-	<!-- <bean id="handlerExceptionResolver" class="com.cdeledu.exception.SpringExceptionHandler" 
-		/> -->
+	<bean id="handlerExceptionResolver" class="com.cdeledu.common.exception.SpringExceptionHandler" />
 
 	<!-- ====================================================================== 
 		配置自定义Spring 拦截器 -->
