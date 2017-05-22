@@ -1,6 +1,8 @@
 package com.cdeledu.common.constants;
 
-import com.cdeledu.util.ResourceUtil;
+import org.springframework.context.ApplicationContext;
+
+import com.cdeledu.util.WebUtilHelper;
 
 /**
  * @类描述: 全局配置类、系统常量
@@ -41,6 +43,9 @@ public class GlobalConstants {
 	public static final Integer Log_Type_UPLOAD = 6; // 上传
 	public static final Integer Log_Type_OTHER = 7; // 其他
 
+	/** 该值会在web容器启动时由WebContextListener初始化 */
+	public static ApplicationContext WEB_APP_CONTEXT = null; 
+	public static final String LOGIN_SHORT = "/login/login";								// 登录地址
 	public static final String LOGIN = "/webViews/login/login.jsp";								// 登录地址
 	public static final String LOGIN_ACTION = "/loginController.shtml?checkuser";				// 登录地址
 	
@@ -106,7 +111,7 @@ public class GlobalConstants {
 	 * 是否是演示模式，演示模式下不能修改用户、角色、密码、菜单、授权
 	 */
 	public static Boolean isDemoMode() {
-		String dm = ResourceUtil.getConfigByName("demoMode");
+		String dm = WebUtilHelper.getConfigByName("demoMode");
 		return "true".equals(dm) || "1".equals(dm);
 	}
 }
