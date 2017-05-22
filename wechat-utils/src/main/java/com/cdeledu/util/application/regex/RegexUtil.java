@@ -284,28 +284,5 @@ public class RegexUtil {
 		}
 		return collection;
 	}
-
-	/**
-	 * @Title: findAll
-	 * @Description: 取得内容中匹配的所有结果
-	 * @param regex
-	 *            正则
-	 * @param content
-	 *            被查找的内容
-	 * @param group
-	 *            正则的分组
-	 * @param collection
-	 *            返回的集合类型
-	 * @return
-	 * @return:T 返回类型
-	 */
-	public static <T extends Collection<String>> T findAll(String regex, String content, int group,
-			T collection) {
-		Matcher matcher = Pattern.compile(regex, Pattern.MULTILINE).matcher(content);
-		while (matcher.find()) {
-			collection.add(matcher.group(group));
-		}
-		return collection;
-	}
 	/*--------------------------公有方法 end-------------------------------*/
 }
