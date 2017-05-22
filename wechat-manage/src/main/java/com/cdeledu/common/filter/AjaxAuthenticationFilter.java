@@ -45,7 +45,7 @@ public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 		logger.info("用于检查用户是否登录了系统，如果未登录，则重定向到指的登录页面。");
 		// ②-1 保证该过滤器在一次请求中只被调用一次
 		if (null != request && null != request.getAttribute(GlobalConstants.FILTERED_REQUEST)) {
-			filterChain.doFilter(request, response);
+			
 		} else {
 			// ②-2 设置过滤标识，防止一次请求多次过滤
 			request.setAttribute(GlobalConstants.FILTERED_REQUEST, Boolean.TRUE);
@@ -68,8 +68,8 @@ public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 						response);
 				return;
 			}
-			filterChain.doFilter(request, response);
 		}
+		filterChain.doFilter(request, response);
 	}
 
 	@Override
