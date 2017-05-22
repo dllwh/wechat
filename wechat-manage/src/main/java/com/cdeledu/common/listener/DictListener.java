@@ -6,11 +6,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.apache.ibatis.session.SqlSession;
-
 import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.model.system.Dict;
-import com.cdeledu.util.myBatisUtils.SqlSessionFactoryUtil;
 import com.google.common.collect.Lists;
 
 /**
@@ -42,15 +39,16 @@ public class DictListener extends BaseClass implements ServletContextListener {
 	}
 
 	public static void getAllDics() {
-		SqlSession sqlSession = SqlSessionFactoryUtil.getSqlSession();
-		try {
-			dictsList = sqlSession.selectList("sysDictDaoImpl.findAllList");
-			sqlSession.commit();
-			sqlSession.close();
-		} catch (Exception e) {
-			dictsList = Lists.newArrayList();
-			sqlSession.rollback();
-		}
+//		SqlSession sqlSession = SqlSessionFactoryUtil.getSqlSession();
+//		try {
+//			dictsList = sqlSession.selectList("sysDictDaoImpl.findAllList");
+//			sqlSession.commit();
+//			sqlSession.close();
+//		} catch (Exception e) {
+//			dictsList = Lists.newArrayList();
+//			sqlSession.rollback();
+//		}
+		dictsList = Lists.newArrayList();
 	}
 
 }

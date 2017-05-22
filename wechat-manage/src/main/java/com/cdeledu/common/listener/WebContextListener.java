@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebListener;
 
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.cdeledu.common.constants.GlobalConstants;
 
@@ -26,6 +27,7 @@ import com.cdeledu.common.constants.GlobalConstants;
 public class WebContextListener extends ContextLoaderListener {
 	@Override
 	public WebApplicationContext initWebApplicationContext(ServletContext servletContext) {
+		GlobalConstants.WEB_APP_CONTEXT = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		if (!GlobalConstants.printKeyLoadMessage()) {
 			return null;
 		}
