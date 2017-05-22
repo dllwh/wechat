@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -201,7 +202,8 @@ public class HttpClientHelper {
 
 			int statusCode = response.getStatusLine().getStatusCode();
 			// 请求和响应都成功了
-			if (statusCode == 200) {
+			// 判断网络连接状态码是否正常(0--200都数正常)
+			if (statusCode == HttpStatus.SC_OK) {
 				try {
 					result = getHttpResponseContent(response);
 				} catch (Exception ioe) {
@@ -258,7 +260,8 @@ public class HttpClientHelper {
 			response = httpClient.execute(httpPost);
 
 			statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode == 200) {
+			// 判断网络连接状态码是否正常(0--200都数正常)
+			if (statusCode == HttpStatus.SC_OK) {
 				try {
 					result = getHttpResponseContent(response);
 				} catch (Exception ioe) {
