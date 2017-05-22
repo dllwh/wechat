@@ -1,6 +1,6 @@
 package com.cdeledu.model.system;
 
-import com.cdeledu.common.model.DataEntity;
+import com.cdeledu.common.base.DataEntity;
 
 /**
  * @类描述: 数据字典
