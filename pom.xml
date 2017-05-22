@@ -126,9 +126,8 @@
 		<module>weixin-mp</module>
 		<module>weixin-qy</module>
 		<module>wechat-manage</module>
-    <module>crawler-cms</module>
-    <module>wechat-swftools</module>
-  </modules>
+		<module>crawler-cms</module>
+	</modules>
 
 
 	<!-- ======== <dependency></dependency>===================================================== 
