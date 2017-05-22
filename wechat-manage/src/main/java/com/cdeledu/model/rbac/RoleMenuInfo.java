@@ -1,6 +1,6 @@
 package com.cdeledu.model.rbac;
 
-import java.io.Serializable;
+import com.cdeledu.common.base.BaseEntity;
 
 /**
  * @类描述: 角色与权限中间表实体类
@@ -9,23 +9,14 @@ import java.io.Serializable;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class RoleMenuInfo implements Serializable {
+public class RoleMenuInfo extends BaseEntity<RoleMenuInfo> {
 	private static final long serialVersionUID = 1L;
-	private Integer id;
 	// 角色id
 	private Integer roleId;
 	// 权限id
 	private Integer powerId;
 	// 操作权限代码
 	private String operation;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public Integer getRoleId() {
 		return roleId;

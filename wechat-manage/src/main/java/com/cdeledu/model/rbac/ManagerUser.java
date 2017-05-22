@@ -1,10 +1,12 @@
 package com.cdeledu.model.rbac;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
-import com.cdeledu.common.model.BaseModel;
+import com.cdeledu.common.base.DataEntity;
+import com.google.common.collect.Lists;
 
 /**
  * 
@@ -14,7 +16,7 @@ import com.cdeledu.common.model.BaseModel;
  * @版本: V1.2
  * @since: JDK 1.7
  */
-public class ManagerUser extends BaseModel {
+public class ManagerUser extends DataEntity<ManagerUser> {
 	private static final long serialVersionUID = 1L;
 	// 用户名(数字与字母组成)
 	@NotBlank(message = "登陆账号不能为空")
@@ -46,6 +48,10 @@ public class ManagerUser extends BaseModel {
 	private Integer login_count;
 	@NotBlank(message = "验证码")
 	private String imageCaptcha;
+	// 是否允许登陆;1:允许,默认值;0:不允许
+	private Integer loginFlag;
+	private Role role; // 根据角色查询用户条件
+	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 
 	public String getUserName() {
 		return userName;
@@ -158,4 +164,40 @@ public class ManagerUser extends BaseModel {
 	public void setImageCaptcha(String imageCaptcha) {
 		this.imageCaptcha = imageCaptcha;
 	}
+
+	public Integer getLoginFlag() {
+		return loginFlag;
+	}
+
+	public void setLoginFlag(Integer loginFlag) {
+		this.loginFlag = loginFlag;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
+	}
+
+	@Override
+	public String toString() {
+		return "ManagerUser [userName=" + userName + ", password=" + password + ", UserType="
+				+ UserType + ", realName=" + realName + ", email=" + email + ", emailstatus="
+				+ emailstatus + ", userSex=" + userSex + ", mobile=" + mobile + ", telephone="
+				+ telephone + ", signature=" + signature + ", last_login_time=" + last_login_time
+				+ ", last_login_ip=" + last_login_ip + ", login_count=" + login_count
+				+ ", imageCaptcha=" + imageCaptcha + ", loginFlag=" + loginFlag + ", role=" + role
+				+ ", roleList=" + roleList + "]";
+	}
+	
 }

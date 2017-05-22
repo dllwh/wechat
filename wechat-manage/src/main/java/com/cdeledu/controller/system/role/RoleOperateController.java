@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.common.model.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.ManagerUser;
 import com.cdeledu.model.rbac.Role;

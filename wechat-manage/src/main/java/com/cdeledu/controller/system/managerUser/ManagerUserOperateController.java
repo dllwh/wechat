@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.cdeledu.common.model.AjaxJson;
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.ManagerUser;
 import com.cdeledu.model.rbac.ManagerUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
-import com.google.common.collect.Lists;
 
 /**
  * @类描述:管理员
@@ -50,7 +49,7 @@ public class ManagerUserOperateController extends BaseController {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "用户: " + managerUser.getUserName();
 		try {
-			manageruserService.insertSelective(managerUser);
+			manageruserService.insert(managerUser);
 			logMsg += ",注册(创建)成功";
 
 		} catch (Exception e) {
@@ -84,7 +83,7 @@ public class ManagerUserOperateController extends BaseController {
 				logMsg += " 不存在";
 				resultMsg.setSuccess(false);
 			} else {
-				int userId = manageruserService.insertSelective(managerUser);
+				int userId = manageruserService.insert(managerUser);
 				logMsg += " 添加成功";
 
 				if (StringUtils.isNotEmpty(String.valueOf(roleID))) {
@@ -118,7 +117,7 @@ public class ManagerUserOperateController extends BaseController {
 		logMsg = "用户: " + managerUser.getUserName();
 		try {
 			managerUser.setUserName(null);// 不能更新username
-			manageruserService.updateByPrimaryKey(managerUser);
+			manageruserService.update(managerUser);
 			logMsg += "更新成功";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,9 +142,9 @@ public class ManagerUserOperateController extends BaseController {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "删除用户ID: " + id + " 的用户";
 		try {
-			List<Integer> ids = Lists.newArrayList();
-			ids.add(id);
-			manageruserService.deleteByPrimaryKey(ids);
+			ManagerUser managerUser = new ManagerUser();
+			managerUser.setId(id);
+			manageruserService.delete(managerUser);
 			logMsg += ",删除成功";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,7 +175,7 @@ public class ManagerUserOperateController extends BaseController {
 				}
 			}
 			try {
-				manageruserService.deleteByPrimaryKey(ids);
+				// manageruserService.deleteByPrimaryKey(ids);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -1,9 +1,10 @@
 package com.cdeledu.model.personManage;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
+
+import com.cdeledu.common.base.BaseEntity;
 
 /**
  * 
@@ -13,9 +14,8 @@ import org.springmodules.validation.bean.conf.loader.annotation.handler.Email;
  * @版本: V1.2
  * @since: JDK 1.7
  */
-public class UserInfoBean implements Serializable {
+public class UserInfoBean extends BaseEntity<UserInfoBean> {
 	private static final long serialVersionUID = 1L;
-	private Integer id;
 	// 登录用户名(数字与字母组成)
 	private String loginName;
 	// 登录密码(真正的密码与用户名MD5加密)
@@ -53,22 +53,6 @@ public class UserInfoBean implements Serializable {
 	private String tel;
 	// 手机号码
 	private String mobilePhone;
-	/**
-	 * 是否删除<br>
-	 * 只有超级管理员才能够物理删除数据,而一般管理员只能逻辑删除<br>
-	 * -1:被删除;-2:被锁定;0:正常用户
-	 */
-	private int delState = Integer.valueOf(0);
-	// 创建时间
-	private Date createTime;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getLoginName() {
 		return loginName;
@@ -212,21 +196,5 @@ public class UserInfoBean implements Serializable {
 
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
-	}
-
-	public int getDelState() {
-		return delState;
-	}
-
-	public void setDelState(int delState) {
-		this.delState = delState;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 }

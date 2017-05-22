@@ -1,6 +1,6 @@
 package com.cdeledu.model.rbac;
 
-import com.cdeledu.common.model.BaseModel;
+import com.cdeledu.common.base.DataEntity;
 
 /**
  * @类描述: 角色表实体类
@@ -9,7 +9,7 @@ import com.cdeledu.common.model.BaseModel;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class Role extends BaseModel {
+public class Role extends DataEntity<Role> {
 	private static final long serialVersionUID = 1L;
 	// 角色名称
 	private String roleName;

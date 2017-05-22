@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.common.model.AjaxJson;
+import com.cdeledu.common.constants.UserReturnCode;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.ManagerUser;
 import com.cdeledu.model.system.LoginLog;
@@ -63,40 +64,46 @@ public class LoginController extends BaseController {
 		LoginLog loginLog = new LoginLog();
 		ManagerUser managerUser = null;
 
-		if (StringUtils.isEmpty(imageCaptcha) || !imageCaptcha.equalsIgnoreCase(user.getImageCaptcha())) {
-			logMsg = "验证码错误，请重新输入";
+		if (StringUtils.isEmpty(imageCaptcha) 
+				|| !imageCaptcha.equalsIgnoreCase(user.getImageCaptcha())) {
+			logMsg = UserReturnCode.register_code_error.getMessage();
 			suc = false;
 		} else {
 			try {
 				managerUser = manageruserService.checkUserExits(user);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if (null != managerUser && null != managerUser.getIsEnabled()) {
-				if (managerUser.getIsEnabled() == 1) {
-					logMsg = "用户: " + user.getUserName() + "登录成功";
-					logLeavel = GlobalConstants.Log_Leavel_INFO;
-					loginStatus = 1;
+				if (null != managerUser && null != managerUser.getIsEnabled()) {
+					if (managerUser.getIsEnabled() == 1) {
+						logMsg = "用户: " + user.getUserName() + "登录成功";
+						logLeavel = GlobalConstants.Log_Leavel_INFO;
+						loginStatus = 1;
+					} else {
+						logMsg = "用户: " + user.getUserName() + "登录失败。原因:账号未通过审核";
+						loginStatus = 0;
+						logLeavel = GlobalConstants.Log_Leavel_WARRING;
+					}
+
+					// 保存当前登录用户信息
+					WebUtilHelper.setCurrentLoginUser(managerUser);
+
+					// 添加登陆日志
+					loginLog.setUserCode(managerUser.getId());
+					loginLog.setLogContent(logMsg);
+					loginLog.setLoginStatus(loginStatus);
+					loginLog.setLogLeavel(logLeavel);
+					loginLog.setOpType(GlobalConstants.Log_Type_LOGIN);
+					// loginLog.setIpAddress(""); // 登录的IP地址
+					// loginLog.setBrower(""); // 登录的浏览器
+					systemService.addLoginLog(loginLog);
+
+					if (loginStatus > 0) {
+						session.removeAttribute(GlobalConstants.IMAGECAPTCHA);
+					}
 				} else {
-					logMsg = "用户: " + user.getUserName() + "登录失败。原因:账号未通过审核";
-					loginStatus = 0;
-					logLeavel = GlobalConstants.Log_Leavel_WARRING;
+					logMsg = UserReturnCode.wrong_password.getMessage();
+					suc = false;
 				}
-
-				// 保存当前登录用户信息
-				WebUtilHelper.setCurrentLoginUser(managerUser);
-
-				// 添加登陆日志
-				loginLog.setUserCode(managerUser.getId());
-				loginLog.setLogContent(logMsg);
-				loginLog.setLoginStatus(loginStatus);
-				loginLog.setLogLeavel(logLeavel);
-				loginLog.setOpType(GlobalConstants.Log_Type_LOGIN);
-				// loginLog.setIpAddress(""); // 登录的IP地址
-				// loginLog.setBrower(""); // 登录的浏览器
-				systemService.addLoginLog(loginLog);
-			} else {
-				logMsg = "用户名或密码错误,请重新登录!";
+			} catch (Exception e) {
+				logMsg = UserReturnCode.wrong_password.getMessage();
 				suc = false;
 			}
 		}
@@ -117,15 +124,16 @@ public class LoginController extends BaseController {
 		ManagerUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		try {
 			if (null != managerUser) {
-				// String roleName =manageruserService.getUserRole(managerUser).getRoleName(); 
+				// String roleName
+				// =manageruserService.getUserRole(managerUser).getRoleName();
 				// request.setAttribute("roleName",roleName);
 				request.setAttribute(GlobalConstants.USER_SESSION, managerUser);
 				return "main/center";
 			} else {
-				return "login/login";
+				return GlobalConstants.LOGIN_SHORT;
 			}
 		} catch (Exception e) {
-			return "login/login";
+			return GlobalConstants.LOGIN_SHORT;
 		}
 	}
 
@@ -138,6 +146,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "doLogout")
 	public ModelAndView doLogout(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = this.getModelAndView();
 		HttpSession session = WebUtilHelper.getSession();
 		ManagerUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		// 判断用户是否为空,不为空,则清空session中的用户object
@@ -156,7 +165,10 @@ public class LoginController extends BaseController {
 			// loginLog.setBrower(""); // 登录的浏览器
 			systemService.addLoginLog(loginLog);
 		}
-		return new ModelAndView(new RedirectView("loginController.shtml?doLogin"));
+		mv.setViewName(GlobalConstants.LOGIN_SHORT);
+		// return new ModelAndView(new
+		// RedirectView("loginController.shtml?doLogin"));
+		return mv;
 	}
 
 	/**

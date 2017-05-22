@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.common.model.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.Menu;
 import com.cdeledu.service.sys.SystemService;

@@ -1,6 +1,6 @@
 package com.cdeledu.model.rbac;
 
-import java.io.Serializable;
+import com.cdeledu.common.base.BaseEntity;
 
 /**
  * @类描述: 功能操作表 实体类
@@ -9,9 +9,8 @@ import java.io.Serializable;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class OperationInfo implements Serializable {
+public class OperationInfo extends BaseEntity<OperationInfo> {
 	private static final long serialVersionUID = 1L;
-	private Integer id;
 	// 菜单ID
 	private String functionid;
 	// 操作名称
@@ -22,16 +21,6 @@ public class OperationInfo implements Serializable {
 	private String opIcon;
 	// 拦截URL前缀
 	private String intercept;
-	// 状态
-	private Integer status;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getFunctionid() {
 		return functionid;
@@ -71,13 +60,5 @@ public class OperationInfo implements Serializable {
 
 	public void setIntercept(String intercept) {
 		this.intercept = intercept;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
 	}
 }
