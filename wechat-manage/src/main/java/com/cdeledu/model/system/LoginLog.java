@@ -2,7 +2,7 @@ package com.cdeledu.model.system;
 
 import java.util.Date;
 
-import com.cdeledu.common.model.BaseModel;
+import com.cdeledu.common.base.BaseEntity;
 
 /**
  * @类描述: 登录日志表
@@ -12,7 +12,7 @@ import com.cdeledu.common.model.BaseModel;
  * @since: JDK 1.7
  * @see <a href=""></a>
  */
-public class LoginLog extends BaseModel {
+public class LoginLog extends BaseEntity<LoginLog> {
 	private static final long serialVersionUID = 1L;
 	// 登录人
 	private Integer userCode;
@@ -33,63 +33,83 @@ public class LoginLog extends BaseModel {
 	// 记录时间
 	private String createTime_start;
 	private String createTime_end;
+
 	public Integer getUserCode() {
 		return userCode;
 	}
+
 	public void setUserCode(Integer userCode) {
 		this.userCode = userCode;
 	}
+
 	public Date getLoginTime() {
 		return loginTime;
 	}
+
 	public void setLoginTime(Date loginTime) {
 		this.loginTime = loginTime;
 	}
+
 	public String getIpAddress() {
 		return ipAddress;
 	}
+
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
+
 	public Integer getLoginStatus() {
 		return loginStatus;
 	}
+
 	public void setLoginStatus(Integer loginStatus) {
 		this.loginStatus = loginStatus;
 	}
+
 	public Integer getBrower() {
 		return brower;
 	}
+
 	public void setBrower(Integer brower) {
 		this.brower = brower;
 	}
+
 	public Integer getLogLeavel() {
 		return logLeavel;
 	}
+
 	public void setLogLeavel(Integer logLeavel) {
 		this.logLeavel = logLeavel;
 	}
+
 	public Integer getOpType() {
 		return opType;
 	}
+
 	public void setOpType(Integer opType) {
 		this.opType = opType;
 	}
+
 	public String getLogContent() {
 		return logContent;
 	}
+
 	public void setLogContent(String logContent) {
 		this.logContent = logContent;
 	}
+
 	public String getCreateTime_start() {
 		return createTime_start;
 	}
+
 	public void setCreateTime_start(String createTime_start) {
 		this.createTime_start = createTime_start;
 	}
+
 	public String getCreateTime_end() {
 		return createTime_end;
 	}
+
 	public void setCreateTime_end(String createTime_end) {
 		this.createTime_end = createTime_end;
 	}
