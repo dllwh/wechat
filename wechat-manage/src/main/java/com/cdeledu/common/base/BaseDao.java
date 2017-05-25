@@ -3,7 +3,7 @@ package com.cdeledu.common.base;
 public interface BaseDao<T> {
 
 	/**
-	 * @方法描述:执行SQL
+	 * @方法描述:执行SQL:插入记录,返回写入数据的主键
 	 */
 	public Integer insert(String statement, Object parameter) throws Exception;
 
@@ -13,7 +13,7 @@ public interface BaseDao<T> {
 	public Integer delete(String statement, Object parameter) throws Exception;
 
 	/**
-	 * @方法描述:执行SQL
+	 * @方法描述:执行SQL:更新记录,返回更新记录数
 	 */
 	public Integer update(String statement, Object parameter) throws Exception;
 
