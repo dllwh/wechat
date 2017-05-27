@@ -65,10 +65,6 @@ weixin
 
 > 		主要提供了接口和对外实体对象
 
-> * **wechat-shell**
-
-> >`shell执行:因某些原因此项目暂无开发，若有人有兴趣开的话且愿意将代码开源的话，可以联系我：联系方式duleilewuhen@sina.com;QQ:134910440`
-
 > * **wechat-template**
 
 > 		各种模板引擎

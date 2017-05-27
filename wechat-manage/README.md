@@ -16,7 +16,7 @@ weinxin-manage
 > 1. 下载项目代码，安装jdk 1.7+、maven-3.0.1、mysql-5.6。
 > 2. 在项目目录下运行mvn install，提示BUILD SUCCESS即可。
 > 3. 创建mysql用户和数据库，运行/weixin-manage/src/main/resource/doc下对应db-wbchat.sql。
-> 4. 数据库配置文件：/weixin-manage/src/main/resources/properties/dbConfig.properties
+> 4. 数据库配置文件：/wechat-manage/src/main/resources/properties/dbConfig.properties
 
 
 其他说明
