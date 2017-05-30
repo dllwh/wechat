@@ -42,7 +42,7 @@ class SendMailHelper {
 	 * 
 	 * @Title: createSession
 	 * @Description:
-	 *               <ul>
+	 * 				<ul>
 	 *               <li>邮件服务器 认证</li>
 	 *               <li>Session是JavaMail提供者配置文件以及设置属性信息的“容器”,其本身不会和邮件服务器进行任何的通信
 	 *               </li>
@@ -86,51 +86,59 @@ class SendMailHelper {
 	 * @throws IOException
 	 * @return：void 返回类型
 	 */
-	public boolean sendAttach(Session session, EmailInfo mail)
-			throws AddressException, MessagingException, IOException {
-		// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
-		msg = new MimeMessage(session);
-		// 设置发件人
-		msg.setFrom(new InternetAddress(mail.getFromAddress()));
-		// 设置收件人
-		msg.addRecipients(RecipientType.TO, mail.getToAddress());
-		// 设置抄送
-		String cc = mail.getCcAddress();
-		if (StringUtils.isNotBlank(cc)) {
-			msg.addRecipients(RecipientType.CC, cc);
-		}
-		// 设置暗送
-		String bcc = mail.getBccAddress();
-		if (StringUtils.isNotBlank(bcc)) {
-			msg.addRecipients(RecipientType.BCC, bcc);
-		}
-		// 设置主题
-		msg.setSubject(mail.getSubject());
-		// 添加附件
-		MimeMultipart parts = new MimeMultipart();// 创建部件集对象
-
-		MimeBodyPart part = new MimeBodyPart();// 创建一个部件
-		part.setContent(mail.getContent(), "text/html;charset=utf-8");// 设置邮件文本内容
-		parts.addBodyPart(part);// 把部件添加到部件集中
-
-		// 添加附件
-		List<AttachBean> attachBeanList = mail.getAttachs();// 获取所有附件
-		if (attachBeanList != null) {
-			for (AttachBean attach : attachBeanList) {
-				MimeBodyPart attachPart = new MimeBodyPart();// 创建一个部件
-				attachPart.attachFile(attach.getFile());// 设置附件文件
-				attachPart.setFileName(MimeUtility.encodeText(attach.getFileName()));// 设置附件文件名
-				String cid = attach.getCid();
-				if (cid != null) {
-					attachPart.setContentID(cid);
-				}
-				parts.addBodyPart(attachPart);
+	public boolean sendAttach(Session session, EmailInfo mail) {
+		try {
+			// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
+			msg = new MimeMessage(session);
+			// 设置发件人
+			msg.setFrom(new InternetAddress(mail.getFromAddress()));
+			// 设置收件人
+			msg.addRecipients(RecipientType.TO, mail.getToAddress());
+			// 设置抄送
+			String cc = mail.getCcAddress();
+			if (StringUtils.isNotBlank(cc)) {
+				msg.addRecipients(RecipientType.CC, cc);
 			}
+			// 设置暗送
+			String bcc = mail.getBccAddress();
+			if (StringUtils.isNotBlank(bcc)) {
+				msg.addRecipients(RecipientType.BCC, bcc);
+			}
+			// 设置主题
+			msg.setSubject(mail.getSubject());
+			// 添加附件
+			MimeMultipart parts = new MimeMultipart();// 创建部件集对象
+
+			MimeBodyPart part = new MimeBodyPart();// 创建一个部件
+			part.setContent(mail.getContent(), "text/html;charset=utf-8");// 设置邮件文本内容
+			parts.addBodyPart(part);// 把部件添加到部件集中
+
+			// 添加附件
+			List<AttachBean> attachBeanList = mail.getAttachs();// 获取所有附件
+			if (attachBeanList != null) {
+				for (AttachBean attach : attachBeanList) {
+					MimeBodyPart attachPart = new MimeBodyPart();// 创建一个部件
+					attachPart.attachFile(attach.getFile());// 设置附件文件
+					// 网上流传的解决文件名乱码的方法，其实用MimeUtility.encodeWord就可以很方便的搞定
+					// 这里很重要，通过下面的Base64编码的转换可以保证你的中文附件标题名在发送时不会变成乱码
+					attachPart.setFileName(MimeUtility.encodeText(attach.getFileName()));// 设置附件文件名
+					String cid = attach.getCid();
+					if (cid != null) {
+						attachPart.setContentID(cid);
+					}
+					parts.addBodyPart(attachPart);
+				}
+			}
+			// 将multipart对象放到message中
+			msg.setContent(parts);
+			// 保存邮件
+			msg.saveChanges();
+			Transport.send(msg);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return true;
 		}
-		// 保存邮件
-		msg.saveChanges();
-		Transport.send(msg);
-		return true;
 	}
 
 	/**
@@ -152,21 +160,25 @@ class SendMailHelper {
 	 * @throws AddressException
 	 * @return：boolean 返回类型
 	 */
-	public boolean sendHtmlMail(EmailInfo emailInfo) throws AddressException, MessagingException {
-		// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
-		msg = new MimeMessage(session);
-		// 设置发件人
-		msg.setFrom(new InternetAddress(emailInfo.getFromAddress()));
-		// 设置收件人
-		msg.addRecipients(RecipientType.TO, emailInfo.getToAddress());
-		// 设置主题
-		msg.setSubject(emailInfo.getSubject());
-		MimeBodyPart part = new MimeBodyPart();// 创建一个部件
-		part.setContent(emailInfo.getContent(), "text/html;charset=utf-8");// 设置邮件文本内容
-		// 保存邮件
-		msg.saveChanges();
-		Transport.send(msg);
-		return true;
-
+	public boolean sendHtmlMail(EmailInfo emailInfo) {
+		try {
+			// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
+			msg = new MimeMessage(session);
+			// 设置发件人
+			msg.setFrom(new InternetAddress(emailInfo.getFromAddress()));
+			// 设置收件人
+			msg.addRecipients(RecipientType.TO, emailInfo.getToAddress());
+			// 设置主题
+			msg.setSubject(emailInfo.getSubject());
+			MimeBodyPart part = new MimeBodyPart();// 创建一个部件
+			part.setContent(emailInfo.getContent(), "text/html;charset=utf-8");// 设置邮件文本内容
+			// 保存邮件
+			msg.saveChanges();
+			Transport.send(msg);
+			return true;
+		} catch (Exception sExp) {
+			sExp.printStackTrace();
+			return false;
+		}
 	}
 }
