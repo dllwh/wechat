@@ -1,7 +1,5 @@
-package com.cdeledu.util.application.SysProperty;
+package com.cdeledu.common.property;
 
-import java.lang.management.ManagementFactory;
-import com.sun.management.OperatingSystemMXBean;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.cdeledu.common.property.PropertyHelper;
+import com.cdeledu.common.property.SysProperty;
 import com.google.common.collect.Lists;
 
 /**
@@ -21,7 +20,6 @@ import com.google.common.collect.Lists;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-@SuppressWarnings("restriction")
 public class SystemHelper {
 	/**
 	 * JVM的版本
@@ -52,15 +50,6 @@ public class SystemHelper {
 	 * 当前用户的家目录
 	 */
 	public static final String CURRENT_USER_HOME = PropertyHelper.getSyskey(SysProperty.USER_HOME);
-	private static OperatingSystemMXBean osmxb;
-	static {
-		try {
-			osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-		} catch (Exception e) {
-			System.out.println("获取系统信息失败");
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * @方法描述: 获取当前所有的系统属性的名称
@@ -145,21 +134,6 @@ public class SystemHelper {
 		System.getProperties().setProperty("proxySet", "true");
 		System.getProperties().put(SysProperty.HTTP_PROXY_HOST, host);
 		System.getProperties().put(SysProperty.HTTP_PROXY_PORT, port);
-	}
-
-	public final static long getTotalMemorySize() {
-		return osmxb.getTotalPhysicalMemorySize() / 1024;
-	}
-
-	public final static long getFreeMemorySize() {
-		return osmxb.getFreePhysicalMemorySize() / 1024;
-	}
-
-	/**
-	 * 已使用的物理内存
-	 */
-	public final static long usedMemory() {
-		return (getTotalMemorySize() - getFreeMemorySize());
 	}
 
 	/**

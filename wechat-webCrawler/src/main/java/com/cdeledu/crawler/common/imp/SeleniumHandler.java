@@ -10,8 +10,8 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.cdeledu.common.property.PropertyHelper;
+import com.cdeledu.common.property.SystemHelper;
 import com.cdeledu.crawler.common.bean.CrawlParameter;
-import com.cdeledu.util.application.SysProperty.SystemHelper;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 
 /**

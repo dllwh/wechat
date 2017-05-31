@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.cdeledu.util.application.SysProperty.SystemHelper;
+import com.cdeledu.common.property.SystemHelper;
 
 /**
  * @类描述: MAC地址工具

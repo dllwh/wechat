@@ -21,8 +21,8 @@ import org.apache.log4j.Logger;
 
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.network.UrlHelper;
+import com.cdeledu.common.property.SystemHelper;
 import com.cdeledu.util.appConfig.ConfigUtil;
-import com.cdeledu.util.application.SysProperty.SystemHelper;
 import com.cdeledu.util.application.regex.RegexUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.google.common.collect.Lists;

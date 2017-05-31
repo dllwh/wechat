@@ -1,4 +1,4 @@
-package com.cdeledu.util.application.SysProperty;
+package com.cdeledu.common.property;
 
 public final class SysProperty {
 	/**
