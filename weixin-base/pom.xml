@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.cdeledu</groupId>
 		<artifactId>wechat</artifactId>
-		<version>0.0.1-SNAPSHO</version>
+		<version>${project.version}</version>
 	</parent>
 	<artifactId>weixin-base</artifactId>
 	<name>weixin-base</name>
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>wechat-utils</artifactId>
-			<version>0.0.1-SNAPSHO</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

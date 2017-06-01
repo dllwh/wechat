@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.cdeledu</groupId>
 		<artifactId>wechat</artifactId>
-		<version>0.0.1-SNAPSHO</version>
+		<version>${project.version}</version>
 	</parent>
 
 
@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>wechat-common</artifactId>
-			<version>0.0.1-SNAPSHO</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Google -->

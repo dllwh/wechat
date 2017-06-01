@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.cdeledu</groupId>
 		<artifactId>wechat</artifactId>
-		<version>0.0.1-SNAPSHO</version>
+		<version>${project.version}</version>
 	</parent>
 	<artifactId>weixin-mp</artifactId>
 	<name>weixin-mp</name>
@@ -16,12 +16,12 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>weixin-base</artifactId>
-			<version>0.0.1-SNAPSHO</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>wechat-utils</artifactId>
-			<version>0.0.1-SNAPSHO</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<description>微信公众平台API</description>
