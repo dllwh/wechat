@@ -32,13 +32,50 @@ public class NetworkUtil {
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [私有方法] */
+
+	/**
+	 * @方法描述: 指定IP的long是否在指定范围内
+	 * @param userIp
+	 *            用户IP
+	 * @param begin
+	 *            开始IP
+	 * @param end
+	 *            结束IP
+	 * @return 是否在范围内
+	 */
+	private static boolean isInner(long userIp, long begin, long end) {
+		return (userIp >= begin) && (userIp <= end);
+	}
+
+	/** ----------------------------------------------- [私有方法] */
+	/**
+	 * 根据long值获取ip v4地址
+	 * 
+	 * @param longIP
+	 *            IP的long表示形式
+	 * @return IP V4 地址
+	 */
+	public static String longToIpv4(long longIP) {
+		StringBuffer sb = new StringBuffer();
+		// 直接右移24位
+		sb.append(String.valueOf(longIP >>> 24));
+		sb.append(".");
+		// 将高8位置0，然后右移16位
+		sb.append(String.valueOf((longIP & 0x00FFFFFF) >>> 16));
+		sb.append(".");
+		sb.append(String.valueOf((longIP & 0x0000FFFF) >>> 8));
+		sb.append(".");
+		sb.append(String.valueOf(longIP & 0x000000FF));
+		return sb.toString();
+	}
+
 	/**
 	 * @方法描述: 根据ip地址计算出long型的数据
 	 * @param strIP
 	 *            IP V4 地址
 	 * @return
 	 */
-	private static long ipv4ToLong(String strIP) {
+	public static long ipv4ToLong(String strIP) {
 		if (RegexUtil.isIpv4(strIP)) {
 			long[] ip = new long[4];
 			// 先找到IP地址字符串中.的位置
@@ -55,17 +92,6 @@ public class NetworkUtil {
 		return 0;
 	}
 
-	/**
-	 * @方法描述: 指定IP的long是否在指定范围内
-	 * @param userIp  用户IP
-	 * @param begin 开始IP
-	 * @param end 结束IP
-	 * @return 是否在范围内
-	 */
-	private static boolean isInner(long userIp, long begin, long end){
-		return (userIp >= begin) && (userIp <= end);
-	}
-	/** ----------------------------------------------- [私有方法] */
 	/**
 	 * @方法描述: 获取本地机器IP地址
 	 * @return
@@ -134,7 +160,7 @@ public class NetworkUtil {
 	public static boolean isInnerIP(String ipAddress) {
 		boolean isInnerIp = false;
 		long ipNum = ipv4ToLong(ipAddress);
-		
+
 		long aBegin = ipv4ToLong("10.0.0.0");
 		long aEnd = ipv4ToLong("10.255.255.255");
 
@@ -143,7 +169,8 @@ public class NetworkUtil {
 
 		long cBegin = ipv4ToLong("192.168.0.0");
 		long cEnd = ipv4ToLong("192.168.255.255");
-		isInnerIp = isInner(ipNum, aBegin, aEnd) || isInner(ipNum, bBegin, bEnd)||isInner(ipNum, cBegin, cEnd) || "127.0.0.1".equalsIgnoreCase(ipAddress);
+		isInnerIp = isInner(ipNum, aBegin, aEnd) || isInner(ipNum, bBegin, bEnd)
+				|| isInner(ipNum, cBegin, cEnd) || "127.0.0.1".equalsIgnoreCase(ipAddress);
 		return isInnerIp;
 	}
 

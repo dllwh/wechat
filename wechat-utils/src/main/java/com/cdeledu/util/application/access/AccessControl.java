@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cdeledu.util.application.access.util.Span;
 import com.cdeledu.util.network.IpUtilHelper;
-import com.cdeledu.util.network.socket.SocketUtilHelper;
+import com.cdeledu.util.network.NetworkUtil;
 import com.cdeledu.util.xml.XmlUtils;
 
 /**
@@ -101,13 +101,13 @@ public class AccessControl {
 		while (iterator.hasNext()) {
 			String[] ipSection = iterator.next().getText().trim().split("-");
 			if (ipSection.length == 1) {
-				long ipLong = SocketUtilHelper.ipv4ToLong(ipSection[0]);
+				long ipLong = NetworkUtil.ipv4ToLong(ipSection[0]);
 				if (ipLong != 0) {
 					ipSections.add(new Span(ipLong, ipLong));
 				}
 			} else if (ipSection.length == 2) {
-				long ipLong1 = SocketUtilHelper.ipv4ToLong(ipSection[0]);
-				long ipLong2 = SocketUtilHelper.ipv4ToLong(ipSection[1]);
+				long ipLong1 = NetworkUtil.ipv4ToLong(ipSection[0]);
+				long ipLong2 = NetworkUtil.ipv4ToLong(ipSection[1]);
 				if (ipLong1 != 0 && ipLong2 != 0 && ipLong1 <= ipLong2) {
 					ipSections.add(new Span(ipLong1, ipLong2));
 				}
@@ -193,7 +193,7 @@ public class AccessControl {
 	 * @return 是否在名单中
 	 */
 	private boolean isInSection(String ip) {
-		long ipLong = SocketUtilHelper.ipv4ToLong(ip);
+		long ipLong = NetworkUtil.ipv4ToLong(ip);
 		if (ipLong != 0) {
 			for (Span ipSection : ipSections) {
 				if (ipSection.isInBetween(ipLong))
