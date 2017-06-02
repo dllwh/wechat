@@ -37,7 +37,11 @@ class BaiduTranslate {
 	// 翻译API HTTP地址
 	private final static String BAIDU_TRANS_URL = "http://api.fanyi.baidu.com/api/trans/vip/translate";
 	// 编码格式
-	private final static Charset charser = ConstantHelper.UTF_8;
+	private final static Charset CHARSER = ConstantHelper.UTF_8;
+	private static HttpURLConnHelper conn = null;
+	static {
+		conn = HttpURLConnHelper.getInstance(CHARSER.name());
+	}
 
 	/** -------------------------- 私有属性 end ------------------------------- */
 	/** -------------------------- 私有方法 begin ------------------------------- */
@@ -82,7 +86,7 @@ class BaiduTranslate {
 		List<String> resultList = new ArrayList<String>();
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("q", URLEncodingUtil.encoding(content, charser));
+		paramMap.put("q", URLEncodingUtil.encoding(content, CHARSER));
 		paramMap.put("from", from);
 		paramMap.put("to", to);
 		Map<String, String> appMap = ConfigUtil.getBaiduTrans();
@@ -94,7 +98,7 @@ class BaiduTranslate {
 		paramMap.put("sign", createSignature(appid, content, salt, secretKey));
 		String realUrl = UrlHelper.appendParaToUrl(BAIDU_TRANS_URL,
 				UrlHelper.formatParameters(paramMap));
-		String _result = HttpURLConnHelper.sendGetRequest(realUrl, ConstantHelper.UTF_8);
+		String _result = conn.sendGetRequest(realUrl);
 		JSONObject object = new JSONObject(_result);
 		if (object.has("error_code")) {
 			ExceptionHelper.getExceptionHint("BaiduTranslate",

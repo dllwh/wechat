@@ -16,7 +16,12 @@ import com.cdeledu.util.network.tcp.HttpURLConnHelper;
  */
 public class CtripHelperUtil {
 	/** ----------------------------------------------------- Fields start */
-	
+	// 编码格式
+	private final static String CHARSER = ConstantHelper.UTF_8.name();
+	private static HttpURLConnHelper conn = null;
+	static {
+		conn = HttpURLConnHelper.getInstance(CHARSER);
+	}
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -26,11 +31,11 @@ public class CtripHelperUtil {
 	 * @see <a href="http://www.rijiben.com/">历史上今天大事记</a>
 	 * @return
 	 */
-	public static String getTodayInHistory() throws Exception{
+	public static String getTodayInHistory() throws Exception {
 		/**
 		 * 1.发起http get请求获取指定url的网页源码
 		 */
-		String html = HttpURLConnHelper.sendGetRequest("http://www.rijiben.com",ConstantHelper.UTF_8);
+		String html = conn.sendGetRequest("http://www.rijiben.com");
 		/**
 		 * 2.利用正则表达式从网页源码中抽取"历史上的今天"信心数据<br/>
 		 */
@@ -60,5 +65,4 @@ public class CtripHelperUtil {
 		return (null == sb) ? "" : sb.substring(0, sb.lastIndexOf("\n\n"));
 	}
 
-	
 }

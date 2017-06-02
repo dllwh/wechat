@@ -9,6 +9,13 @@ import com.google.common.collect.Lists;
 
 public class TrainHelper {
 	/** ----------------------------------------------------- Fields start */
+	// 编码格式
+	private final static String CHARSER = ConstantHelper.UTF_8.name();
+	private static HttpURLConnHelper conn = null;
+	static {
+		conn = HttpURLConnHelper.getInstance(CHARSER);
+	}
+
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [私有方法] */
@@ -21,7 +28,7 @@ public class TrainHelper {
 	public List<String> getStationInfo() throws Exception {
 		/** 列车站点列表 */
 		String url = "https://kyfw.12306.cn/otn/resources/js/framework/station_name.js?station_version=1.8968";
-		String result = HttpURLConnHelper.sendGetRequest(url, ConstantHelper.UTF_8);
+		String result = conn.sendGetRequest(url);
 		List<String> resultList = Lists.newArrayList();
 		/** 简称|车站名字|车站代码|城市拼音|简称|排序 */
 		// String regex =

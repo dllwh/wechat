@@ -16,7 +16,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,9 +63,12 @@ public class HttpURLConnHelper {
 	private static final String POST_HTTP = HttpMethod.POST.getValue();
 	private static final String GET_HTTP = HttpMethod.GET.getValue();
 	private static URLConnection urlConn = null;
+	/** 请求编码，默认使用utf-8 */
+	private static String URLCHARSET = ConstantHelper.UTF_8.name();
 	/** URL连结对象。 */
 	private static HttpURLConnection httpConn = null;
 	private static URL realUrl = null;
+	private static HttpURLConnHelper instance;
 
 	/*--------------------------私有方法 start-------------------------------*/
 	/** 转码 */
@@ -78,6 +80,10 @@ public class HttpURLConnHelper {
 			str = str.replace(matcher.group(1), ch + "");
 		}
 		return str;
+	}
+
+	private void setUrlCharset(String urlCharset) {
+		URLCHARSET = urlCharset;
 	}
 
 	/**
@@ -92,8 +98,8 @@ public class HttpURLConnHelper {
 	 *            是否代理
 	 * @return
 	 */
-	private static HttpURLConnection initConn(String url, String ReqMethod, boolean isUseProxy,
-			Charset charset) throws Exception {
+	private HttpURLConnection initConn(String url, String ReqMethod, boolean isUseProxy)
+			throws Exception {
 
 		if (StringUtils.isBlank(url)) {
 			throw new RuntimeExceptionHelper("请求的URL不能为空");
@@ -120,35 +126,30 @@ public class HttpURLConnHelper {
 		} else {
 			urlConn = realUrl.openConnection();
 		}
-		
+
 		/** 设置http头通用的请求属性 */
 		urlConn.setRequestProperty(HttpHeaders.ACCEPT, "*/*");
 		urlConn.setRequestProperty(HttpHeaders.CONNECTION, "Keep-Alive");
 		// 请求表示提交内容类型或返回返回内容的MIME类型
 		urlConn.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
 		// 设置 HttpURLConnection的字符编码,从而避免出现乱码
-		if (charset == null ||  StringUtils.isBlank(charset.name())) {
-			urlConn.setRequestProperty(HttpHeaders.ACCEPT_CHARSET, ConstantHelper.UTF_8.name());
-		} else {
-			urlConn.setRequestProperty(HttpHeaders.ACCEPT_CHARSET, charset.name());
-		}
+		urlConn.setRequestProperty(HttpHeaders.ACCEPT_CHARSET, URLCHARSET);
 
 		// 浏览页面的访问者在用什么操作系统(包括版本号)、浏览器(包括版本号)等
 		urlConn.setRequestProperty(HttpHeaders.USER_AGENT, UserAgentType.PC_Firefox.getValue());
 
 		boolean useHttps = url.startsWith("https");
 		if (useHttps) {
-			HttpsURLConnection httpsConn = (HttpsURLConnection)realUrl.openConnection();
-			//创建SSLContext对象，并使用我们指定的信任管理器初始化
-			TrustManager[] tm = {new MyX509TrustManager ()};
-			SSLContext sslContext = SSLContext.getInstance("SSL","SunJSSE");
-			sslContext.init(null, tm, new java.security.SecureRandom()); 
-			//从上述SSLContext对象中得到SSLSocketFactory对象
+			HttpsURLConnection httpsConn = (HttpsURLConnection) realUrl.openConnection();
+			// 创建SSLContext对象，并使用我们指定的信任管理器初始化
+			TrustManager[] tm = { new MyX509TrustManager() };
+			SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
+			sslContext.init(null, tm, new java.security.SecureRandom());
+			// 从上述SSLContext对象中得到SSLSocketFactory对象
 			SSLSocketFactory ssf = sslContext.getSocketFactory();
 			httpsConn.setSSLSocketFactory(ssf);
 			httpConn = (HttpsURLConnection) httpsConn;
 
-			
 		} else {
 			httpConn = (HttpURLConnection) urlConn;
 		}
@@ -190,8 +191,7 @@ public class HttpURLConnHelper {
 	}
 
 	/** 利用 HttpURLConnection发送代理服务器的POST()方法的请求 */
-	private static String sendProxyRequest(String url, String params, boolean isproxy,
-			Charset charset) throws Exception {
+	private String sendProxyRequest(String url, String params, boolean isproxy) throws Exception {
 		String result = "";// 响应内容
 		OutputStream outStrm = null;
 		InputStream is = null;
@@ -201,7 +201,7 @@ public class HttpURLConnHelper {
 					"targetUrl不能为空!");
 		}
 
-		httpConn = initConn(url, POST_HTTP, isproxy, charset);
+		httpConn = initConn(url, POST_HTTP, isproxy);
 
 		// 建立实际的连接
 		httpConn.connect();
@@ -211,12 +211,7 @@ public class HttpURLConnHelper {
 			outStrm = httpConn.getOutputStream();
 
 			// 向对象输出流写出数据，这些数据将存到内存缓冲区中
-
-			if (charset == null || StringUtils.isBlank(charset.name())) {
-				outStrm.write(params.getBytes(ConstantHelper.UTF_8.name()));
-			} else {
-				outStrm.write(params.getBytes(charset.name()));
-			}
+			outStrm.write(params.getBytes(URLCHARSET));
 
 			// 刷新对象输出流，将任何字节都写入潜在的流中(此处为ObjectOutputStream)
 			outStrm.flush();
@@ -231,12 +226,10 @@ public class HttpURLConnHelper {
 			int size = is.available();
 			byte[] jsonBytes = new byte[size];
 			is.read(jsonBytes);
-			if (charset == null || StringUtils.isEmpty(charset.name())) {
-				charset = ConstantHelper.UTF_8;
-			}
-			result = new String(jsonBytes, charset);
+			result = new String(jsonBytes, URLCHARSET);
 		} else if (httpConn.getResponseCode() >= 300) {
-			throw new Exception("HTTP Request is not success, Response code is " + httpConn.getResponseCode());
+			throw new Exception(
+					"HTTP Request is not success, Response code is " + httpConn.getResponseCode());
 		} else {
 			logger.log(Level.ALL, IO_EXCEPTION_MEG);
 			throw new RuntimeException(IO_EXCEPTION_MEG);
@@ -251,6 +244,22 @@ public class HttpURLConnHelper {
 
 	/*--------------------------私有方法 end-------------------------------*/
 	/*--------------------------公有方法 start-------------------------------*/
+	public static HttpURLConnHelper getInstance() {
+		return getInstance(URLCHARSET);
+	}
+
+	public static HttpURLConnHelper getInstance(String urlCharset) {
+		if (instance == null) {
+			instance = new HttpURLConnHelper();
+		}
+		if (StringUtils.isBlank(urlCharset)) {
+			urlCharset = URLCHARSET;
+		}
+		// 设置默认的url编码
+		instance.setUrlCharset(urlCharset);
+		return instance;
+	}
+
 	/**
 	 * @Title: sendGetRequest
 	 * @Description: 利用 HttpURLConnection 模拟发送http get方法的请求
@@ -258,8 +267,8 @@ public class HttpURLConnHelper {
 	 *            发送请求的URL(服务器地址)
 	 * @return
 	 */
-	public static String sendGetRequest(String url, Charset charset) throws Exception{
-		return sendGetRequest(url, null, charset);
+	public String sendGetRequest(String url) throws Exception {
+		return sendGetRequest(url, null);
 	}
 
 	/**
@@ -274,8 +283,7 @@ public class HttpURLConnHelper {
 	 * @return
 	 * @return：String 返回类型
 	 */
-	public static String sendGetRequest(String url, Map<String, String> headerMap,
-			Charset charset) throws Exception {
+	public String sendGetRequest(String url, Map<String, String> headerMap) throws Exception {
 		String result = "";
 		BufferedReader reader = null;
 
@@ -286,7 +294,7 @@ public class HttpURLConnHelper {
 
 		try {
 
-			httpConn = initConn(url, HttpMethod.GET.getValue(), false, charset);
+			httpConn = initConn(url, HttpMethod.GET.getValue(), false);
 			if (MapUtilHelper.isNotEmpty(headerMap)) {
 				for (Map.Entry<String, String> entry : headerMap.entrySet()) {
 					httpConn.setRequestProperty(entry.getKey(), entry.getValue());
@@ -299,13 +307,8 @@ public class HttpURLConnHelper {
 			// HTTP 状态码(只有是200的时候才说明请求成功,其余皆失败)
 			if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				// 定义 BufferedReader输入流来读取URL的响应
-				if (charset == null || StringUtils.isBlank(charset.name())) {
-					reader = new BufferedReader(
-							new InputStreamReader(httpConn.getInputStream(), ConstantHelper.UTF_8.name()));
-				} else {
-					reader = new BufferedReader(
-							new InputStreamReader(httpConn.getInputStream(), charset.name()));
-				}
+				reader = new BufferedReader(
+						new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
 				String line;
 				StringBuffer sb = new StringBuffer();
 
@@ -317,7 +320,8 @@ public class HttpURLConnHelper {
 				result = sb.toString();
 
 			} else if (httpConn.getResponseCode() >= 300) {
-				throw new Exception("HTTP Request is not success, Response code is " + httpConn.getResponseCode());
+				throw new Exception("HTTP Request is not success, Response code is "
+						+ httpConn.getResponseCode());
 			} else {
 				throw new RuntimeException(IO_EXCEPTION_MEG);
 			}
@@ -339,8 +343,8 @@ public class HttpURLConnHelper {
 	 *            发送请求的 URL(服务器地址)
 	 * @return 所代表远程资源的响应结果
 	 */
-	public static String sendPostRequest(String url, Charset charset) throws Exception {
-		return sendProxyRequest(url, null, false, charset);
+	public String sendPostRequest(String url) throws Exception {
+		return sendProxyRequest(url, null, false);
 	}
 
 	/**
@@ -353,9 +357,8 @@ public class HttpURLConnHelper {
 	 *            是否使用代理模式
 	 * @return 所代表远程资源的响应结果
 	 */
-	public static String sendPostRequest(String url, String params, Charset charset)
-			throws Exception {
-		return sendProxyRequest(url, params, false, charset);
+	public String sendPostRequest(String url, String params) throws Exception {
+		return sendProxyRequest(url, params, false);
 	}
 
 	/**
@@ -367,10 +370,9 @@ public class HttpURLConnHelper {
 	 *            请求参数
 	 * @return
 	 */
-	public static String sendPostRequest(String url, Map<String, Object> paramsMap, Charset charset)
-			throws Exception {
+	public String sendPostRequest(String url, Map<String, Object> paramsMap) throws Exception {
 		String parameters = UrlHelper.formatParameters(paramsMap);
-		return sendPostRequest(url, parameters, charset);
+		return sendPostRequest(url, parameters);
 	}
 
 	/**
@@ -384,9 +386,8 @@ public class HttpURLConnHelper {
 	 *            是否使用代理
 	 * @return
 	 */
-	public static String sendPostRequest(String url, String parameters, boolean isproxy,
-			Charset charset) throws Exception {
-		return sendProxyRequest(url, parameters, isproxy, charset);
+	public String sendPostRequest(String url, String parameters, boolean isproxy) throws Exception {
+		return sendProxyRequest(url, parameters, isproxy);
 	}
 
 	/**
@@ -399,7 +400,7 @@ public class HttpURLConnHelper {
 	 * @param file
 	 * @return
 	 */
-	public static String FileUpload(String url, File file) {
+	public String FileUpload(String url, File file) {
 		if (!file.exists())
 			return null;
 		BufferedReader br = null; // 请求后的返回信息的读取对象。
@@ -430,7 +431,7 @@ public class HttpURLConnHelper {
 			 */
 			sb.append("Content-Type:application/octet-stream\r\n\r\n");
 
-			byte[] data = sb.toString().getBytes();
+			byte[] data = sb.toString().getBytes(URLCHARSET);
 			out.write(data);
 			datain = new DataInputStream(new FileInputStream(file));
 			int bytes = 0;
@@ -443,7 +444,7 @@ public class HttpURLConnHelper {
 			out.flush();
 			out.close();
 
-			br = new BufferedReader(new InputStreamReader(httpConn.getInputStream(), ConstantHelper.UTF_8.name()));
+			br = new BufferedReader(new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
 
 		} catch (FileNotFoundException fe) {
 			InputStream err = ((HttpURLConnection) httpConn).getErrorStream();
@@ -482,7 +483,7 @@ public class HttpURLConnHelper {
 	 *            指定URL网络地址
 	 * @return
 	 */
-	public static boolean isConnect(String url) {
+	public boolean isConnect(String url) {
 		int count = 0;
 		if (StringUtils.isEmpty(url))
 			return false;
@@ -503,7 +504,7 @@ public class HttpURLConnHelper {
 		return false;
 	}
 
-	public static String getFileEncoding(URL url) {
+	public String getFileEncoding(URL url) {
 		String regex = "charset=[\"']?([\\w-]+?)([^\\w-]|$)";
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		BufferedReader br = null;
@@ -548,13 +549,6 @@ public class HttpURLConnHelper {
 			IOUtils.closeQuietly(br);
 		}
 		return null;
-	}
-
-	public static void main(String[] args) throws Exception {
-		String url = "http://www.myexception.cn/eclipse/668299.html";
-		// System.out.println(isConnect(url));
-		// System.out.println(sendGetRequest(url, null));
-		getFileEncoding(new URL(url));
 	}
 	/*--------------------------公有方法 end-------------------------------*/
 }

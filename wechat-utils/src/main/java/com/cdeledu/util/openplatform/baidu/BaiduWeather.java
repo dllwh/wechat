@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.appConfig.ConfigUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
@@ -31,6 +32,12 @@ class BaiduWeather {
 	/*-------------------------- 私有属性 begin -------------------------------*/
 	private final static String WEATHER = "http://api.map.baidu.com/telematics/v3/weather";
 
+	// 编码格式
+	private final static String CHARSER = ConstantHelper.UTF_8.name();
+	private static HttpURLConnHelper conn = null;
+	static {
+		conn = HttpURLConnHelper.getInstance(CHARSER);
+	}
 	/*-------------------------- 私有属性 end   -------------------------------*/
 
 	/*-------------------------- 私有方法 begin -------------------------------*/
@@ -45,11 +52,11 @@ class BaiduWeather {
 
 		try {
 			paramsMap.put("ak", ConfigUtil.getBaiduWeatherAkValue());
-			paramsMap.put("location", URLEncoder.encode(cityName, "utf-8"));
+			paramsMap.put("location", URLEncoder.encode(cityName, CHARSER));
 			paramsMap.put("output", "json");
 
 			String url = UrlHelper.formatParameters(WEATHER, paramsMap);
-			String result = HttpURLConnHelper.sendGetRequest(url, null);
+			String result = conn.sendGetRequest(url);
 
 			JSONObject _res0 = JSONObject.fromObject(result);
 			if (_res0.getInt("error") != 0) {

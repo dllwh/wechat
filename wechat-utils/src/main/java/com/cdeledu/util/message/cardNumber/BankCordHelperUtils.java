@@ -96,7 +96,8 @@ public final class BankCordHelperUtils {
 		String result = null;
 		try {
 			// "117.135.251.133", 83
-			result = HttpURLConnHelper.sendPostRequest(YINHANGKADATA, "card=955888020016888888",ConstantHelper.GBK);
+			HttpURLConnHelper conn = HttpURLConnHelper.getInstance(ConstantHelper.GBK.name());
+			result = conn.sendPostRequest(YINHANGKADATA, "card=955888020016888888");
 			Document jsoup = Jsoup.parse(result);
 			Element home = jsoup.select("div.home_so").select("div.home_show").first();
 			Elements element = home.select("p");

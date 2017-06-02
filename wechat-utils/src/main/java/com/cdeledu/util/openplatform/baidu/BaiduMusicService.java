@@ -34,7 +34,11 @@ class BaiduMusicService {
 	/** 歌词的请求地址 */
 	public final static String IRC_URL = "http://box.zhangmen.baidu.com/bdlrc/%s/%s.lrc";
 	/** 编码格式 */
-	private final static Charset charser = ConstantHelper.UTF_8;
+	private final static Charset CHARSER = ConstantHelper.UTF_8;
+	private static HttpURLConnHelper conn = null;
+	static {
+		conn = HttpURLConnHelper.getInstance(CHARSER.name());
+	}
 
 	/** -------------------------- 属性 end ------------------------------- */
 	/** -------------------------- 私有方法 begin ------------------------------- */
@@ -165,14 +169,14 @@ class BaiduMusicService {
 	 */
 	public static BaiduMusic searchMusic(String titile, String musicAuthor) throws Exception {
 		// 对音乐名称、作者进行URL编码
-		titile = URLEncodingUtil.encoding(titile, charser);
-		musicAuthor = URLEncodingUtil.encoding(musicAuthor, charser);
+		titile = URLEncodingUtil.encoding(titile, CHARSER);
+		musicAuthor = URLEncodingUtil.encoding(musicAuthor, CHARSER);
 		// 百度音乐搜索地址
 		String requestUrl = String.format(MUSIC_URL, titile, musicAuthor);
 		// 处理名称、作者中间的空格
 		requestUrl = requestUrl.replaceAll("\\+", "%20");
 		// 查询并获取返回结果
-		String html = HttpURLConnHelper.sendGetRequest(requestUrl, ConstantHelper.UTF_8);
+		String html = conn.sendGetRequest(requestUrl);
 		// 从返回结果中解析出Music
 		return parseMusic(html);
 	}

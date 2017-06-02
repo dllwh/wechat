@@ -76,7 +76,6 @@ public class IpUtilHelper {
 				}
 			}
 
-
 			if (StringUtils.isBlank(ip)) {
 				ip = request.getRemoteAddr();
 			}
@@ -154,15 +153,15 @@ public class IpUtilHelper {
 	 *         </ul>
 	 * @return：String 返回类型
 	 */
-	public static String getIpInfoBySinaUrl(String ip) throws Exception{
+	public static String getIpInfoBySinaUrl(String ip) throws Exception {
 		if (RegexUtil.isIp(ip)) {
 			Map<String, Object> paramsMap = new HashMap<String, Object>();
 			paramsMap.put("format", "json");
 			paramsMap.put("ip", ip);
 
 			String url = UrlHelper.formatParameters(SINA_URL, paramsMap);
-
-			return HttpURLConnHelper.sendGetRequest(url, null);
+			HttpURLConnHelper conn = HttpURLConnHelper.getInstance();
+			return conn.sendGetRequest(url);
 		}
 		return "";
 	}
@@ -185,9 +184,9 @@ public class IpUtilHelper {
 	 *         </ul>
 	 * @return：String 返回类型
 	 */
-	public static String getIpInfoByTaoBaoUrl(String ip) throws Exception{
+	public static String getIpInfoByTaoBaoUrl(String ip) throws Exception {
 		String url = String.format(TAO_BAO_URL, ip);
-		return HttpURLConnHelper.sendGetRequest(url, null);
+		return HttpURLConnHelper.getInstance().sendGetRequest(url, null);
 	}
 
 	/**
@@ -198,9 +197,10 @@ public class IpUtilHelper {
 	 * @return 根据提供ip地址就能得到IP相关的信息
 	 * @return：JSONObject 返回类型
 	 */
-	public static JSONObject iplookup(String ip) throws Exception{
+	public static JSONObject iplookup(String ip) throws Exception {
 		String url = String.format(IP_LOOKUP_SERVICE, ip);
-		String result = HttpURLConnHelper.sendGetRequest(url, headerMap,ConstantHelper.UTF_8);
+		HttpURLConnHelper conn = HttpURLConnHelper.getInstance(ConstantHelper.UTF_8.name());
+		String result = conn.sendGetRequest(url, headerMap);
 		// 转化为JSON类
 		JSONObject json = JSONObject.fromObject(result);
 		JSONObject _array = null;
@@ -361,7 +361,8 @@ public class IpUtilHelper {
 		String url = "http://www.bejson.com/api/bejson/ipinfo.php?ip=%s";
 		String result = "";
 		try {
-			result = HttpURLConnHelper.sendGetRequest(String.format(url, ip),ConstantHelper.UTF_8);
+			HttpURLConnHelper conn = HttpURLConnHelper.getInstance(ConstantHelper.UTF_8.name());
+			result = conn.sendGetRequest(String.format(url, ip));
 		} catch (Exception e) {
 		}
 		return result;

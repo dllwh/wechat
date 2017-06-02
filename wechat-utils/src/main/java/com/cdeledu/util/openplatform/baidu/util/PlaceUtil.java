@@ -45,6 +45,10 @@ public class PlaceUtil {
 	private static Map<String, Object> paramsMap = null;
 	/** function返回结果 */
 	private static Map<String, Object> resultmap = null;
+	private static HttpURLConnHelper conn = null;
+	static {
+		conn = HttpURLConnHelper.getInstance(ConstantHelper.UTF_8.name());
+	}
 
 	/** ----------------------------------------------------- Fields end */
 	/** ----------------------------------------------------- [私有方法] */
@@ -251,7 +255,7 @@ public class PlaceUtil {
 		// paramsMap.put("city_limit", URLEncoder.encode(region, "UTF-8"));
 		realUrl = UrlHelper.formatParameters(PLACE_SEARCH, paramsMap);
 		try {
-			reslut = HttpURLConnHelper.sendPostRequest(realUrl, ConstantHelper.UTF_8);
+			reslut = conn.sendPostRequest(realUrl);
 			resultmap = JsonStringToMap(reslut);
 		} catch (Exception e) {
 			resultmap.put("status", 1);
@@ -299,7 +303,7 @@ public class PlaceUtil {
 
 		realUrl = UrlHelper.formatParameters(PLACE_SEARCH, paramsMap);
 		try {
-			reslut = HttpURLConnHelper.sendPostRequest(realUrl, ConstantHelper.UTF_8);
+			reslut = conn.sendPostRequest(realUrl);
 			resultmap = JsonStringToMap(reslut);
 		} catch (Exception e) {
 			resultmap.put("status", 1);
@@ -326,7 +330,7 @@ public class PlaceUtil {
 		realUrl = UrlHelper.formatParameters(PLACE_DETAIL, paramsMap);
 
 		try {
-			reslut = HttpURLConnHelper.sendPostRequest(realUrl, ConstantHelper.UTF_8);
+			reslut = conn.sendPostRequest(realUrl);
 			resultmap = JsonStringToMap(reslut);
 		} catch (Exception e) {
 			resultmap.put("status", 0);

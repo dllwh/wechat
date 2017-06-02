@@ -29,7 +29,12 @@ public class CrawlerMailHelper {
 	private static Map<Integer, Object> statuMap = new HashMap<Integer, Object>();
 	// 查询结果状态
 	private static Map<Integer, Object> statusMap = new HashMap<Integer, Object>();
-
+	// 编码格式
+	private final static String CHARSER = ConstantHelper.UTF_8.name();
+	private static HttpURLConnHelper conn = null;
+	static {
+		conn = HttpURLConnHelper.getInstance(CHARSER);
+	}
 	static {
 		statuMap.put(0, "在途:即货物处于运输过程中");
 		statuMap.put(1, "揽件:货物已由快递公司揽收");
@@ -43,6 +48,7 @@ public class CrawlerMailHelper {
 		statusMap.put(2, "接口出现异常");
 		statusMap.put(200, "查询成功");
 	}
+
 	/** ----------------------------------------------------- Fields end */
 
 	/**
@@ -96,7 +102,7 @@ public class CrawlerMailHelper {
 		if (StringUtils.isNotEmpty(type) && StringUtils.isNotEmpty(postid)) {
 			String url = String.format(getComInfoUrl, type, postid, muti, orderBy);
 			try {
-				result = HttpURLConnHelper.sendGetRequest(url,ConstantHelper.UTF_8);
+				result = conn.sendGetRequest(url);
 			} catch (Exception e) {
 			}
 		}
@@ -115,7 +121,7 @@ public class CrawlerMailHelper {
 		String comCode = "";
 		try {
 			String url = String.format(getComCodeUrl, postid);
-			String queryResult = HttpURLConnHelper.sendGetRequest(url,ConstantHelper.UTF_8);
+			String queryResult = conn.sendGetRequest(url);
 			JSONObject json = JSONObject.parseObject(queryResult);
 			String auyo = json.getString("auto");
 			if (StringUtils.isNotBlank(auyo)) {

@@ -1,6 +1,5 @@
 package com.cdeledu.crawler.common.imp;
 
-
 import org.apache.log4j.Logger;
 
 import com.cdeledu.common.constant.ConstantHelper;
@@ -11,6 +10,7 @@ public class UrlConnHandler extends CrawlHandler {
 
 	/** ----------------------------------------------------- Fields start */
 	protected static Logger logger = Logger.getLogger(UrlConnHandler.class);
+
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [私有方法] */
@@ -20,9 +20,10 @@ public class UrlConnHandler extends CrawlHandler {
 	public String crawl(String url, CrawlParameter crawlPara) {
 		String resource = "";
 		try {
-			resource = HttpURLConnHelper.sendPostRequest(url, ConstantHelper.GBK);
+			HttpURLConnHelper conn = HttpURLConnHelper.getInstance(ConstantHelper.GBK.name());
+			resource = conn.sendPostRequest(url);
 		} catch (Exception e) {
-			logger.error("通过URLConn方式抓取数据出现异常,异常信息如下:",e);
+			logger.error("通过URLConn方式抓取数据出现异常,异常信息如下:", e);
 			e.printStackTrace();
 		}
 		return resource;
