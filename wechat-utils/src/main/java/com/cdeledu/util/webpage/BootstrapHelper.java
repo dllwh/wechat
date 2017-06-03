@@ -17,7 +17,6 @@ import com.google.common.collect.Maps;
  * @创建时间: 2017年4月28日 下午8:34:01
  * @版本: V1.0
  * @since: JDK 1.7
- * @see <a href="">TODO(连接内容简介)</a>
  */
 public class BootstrapHelper {
 	/** ----------------------------------------------------- Fields start */
@@ -61,7 +60,7 @@ public class BootstrapHelper {
 				for (String item : mapShow.getValue()) {
 					item = RegexUtil.getKeyWords(regexKeyWord, item);
 					bootstrapIconInfo.put("displayName", item);// 名称
-					System.out.println(item);
+					
 					bootstrapIconInfo.put("sourceType", mapShow.getKey());// 来源
 					if (mapShow.getKey().equalsIgnoreCase("glyphicons")) {
 						bootstrapIconInfo.put("className", "glyphicons " + item);
