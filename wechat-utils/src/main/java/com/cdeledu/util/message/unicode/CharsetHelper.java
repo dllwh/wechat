@@ -1,6 +1,8 @@
 package com.cdeledu.util.message.unicode;
 
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -132,5 +134,20 @@ public class CharsetHelper {
 			s1 = new String(input.getBytes("GBK"), "ISO8859_1");
 			return s1;
 		}
+	}
+
+	/**
+	 * @方法描述: 处理乱码
+	 * @param str
+	 * @return
+	 */
+	public static String UnicodeToString(String str) {
+		Pattern pattern = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
+		Matcher matcher = pattern.matcher(str);
+		while (matcher.find()) {
+			char ch = (char) Integer.parseInt(matcher.group(2), 16);
+			str = str.replace(matcher.group(1), ch + "");
+		}
+		return str;
 	}
 }

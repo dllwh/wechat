@@ -40,6 +40,7 @@ import com.cdeledu.common.httpEntity.HttpMethod;
 import com.cdeledu.common.network.MyX509TrustManager;
 import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
+import com.cdeledu.util.message.unicode.CharsetHelper;
 import com.cdeledu.util.network.IpUtilHelper;
 
 /**
@@ -72,16 +73,6 @@ public class HttpURLConnHelper {
 
 	/*--------------------------私有方法 start-------------------------------*/
 	/** 转码 */
-	private static String UnicodeToString(String str) {
-		Pattern pattern = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
-		Matcher matcher = pattern.matcher(str);
-		while (matcher.find()) {
-			char ch = (char) Integer.parseInt(matcher.group(2), 16);
-			str = str.replace(matcher.group(1), ch + "");
-		}
-		return str;
-	}
-
 	private void setUrlCharset(String urlCharset) {
 		URLCHARSET = urlCharset;
 	}
@@ -313,7 +304,7 @@ public class HttpURLConnHelper {
 				StringBuffer sb = new StringBuffer();
 
 				while ((line = reader.readLine()) != null) {
-					String str = UnicodeToString(line);
+					String str = CharsetHelper.UnicodeToString(line);
 					sb.append(str);
 				}
 
