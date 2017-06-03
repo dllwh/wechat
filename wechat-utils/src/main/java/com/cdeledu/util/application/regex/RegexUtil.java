@@ -79,7 +79,7 @@ public class RegexUtil {
 	 *            输入内容
 	 * @param sRegex
 	 *            表达式字符串
-	 * @return
+	 * @return 若是没有匹配内容，则返回空
 	 */
 	public static String getKeyWords(String regex, String sInput) {
 		Pattern pattern = Pattern.compile(regex);
@@ -88,7 +88,7 @@ public class RegexUtil {
 		if (matcher.find()) {
 			return matcher.group(1);
 		}
-		return sInput;
+		return "";
 	}
 
 	/**
