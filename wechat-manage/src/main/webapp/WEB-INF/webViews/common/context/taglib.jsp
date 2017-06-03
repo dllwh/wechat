@@ -5,8 +5,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%-- 自定义标签：字典接口 --%>
 <%@ taglib prefix="dictInterface" uri="/WEB-INF/tlds/dict.tld"%>
-<%-- 自定义标签：页面 --%>
-<%@ taglib prefix="pageUtil" uri="/WEB-INF/tlds/pageUtil.tld"%>
 <%-- 自定义标签：登录信息 --%>
 <%@ taglib tagdir="/WEB-INF/tags/login" prefix="login"%>
 <%-- 自定义标签：登录信息 --%>
