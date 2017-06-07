@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * @类描述: 爬去花瓣网数据
+ * @类描述: 爬取花瓣网图片数据
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年6月3日 下午4:45:31
  * @版本: V1.0
@@ -47,6 +47,7 @@ public class HuabanHelper {
 	/** SQL执行工具 :实例化查询接口 */
 	private static QueryRunner runner = null;
 	private static DataTableHelper dataTableHelper = null;
+
 	static {
 		dataTableHelper = DataTableHelper.getInstance(dbUrl, dbUserName, dbPassword, jdbcName);
 		try {
@@ -83,7 +84,7 @@ public class HuabanHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	private static List<Map<String, Object>> analyze(String url) throws Exception {
+	private static List<Map<String, Object>> analyze(String url, boolean isSave) throws Exception {
 		List<Map<String, Object>> resultList = Lists.newArrayList();
 		// 创建 Pattern 对象
 		Pattern r = Pattern.compile(REGEX_IMG);
@@ -103,12 +104,14 @@ public class HuabanHelper {
 			beautyMap.put("imgType", imgType); // 图片类型
 			beautyMap.put("source", source);
 			resultList.add(beautyMap);
-		
-			if (!isExist(imgPath)) {
-				try {
-					saveDocument(String.format(SQL, boardId,pinId, imgPath, imgType, source));
-				} catch (Exception e) {
-					logger.info("解析数据入数据库出现异常: " + e);
+
+			if (isSave) {
+				if (!isExist(imgPath)) {
+					try {
+						saveDocument(String.format(SQL, boardId, pinId, imgPath, imgType, source));
+					} catch (Exception e) {
+						logger.info("解析数据入数据库出现异常: " + e);
+					}
 				}
 			}
 		}
@@ -137,7 +140,7 @@ public class HuabanHelper {
 	 */
 	private static void saveDocument(String inserSql) throws SQLException {
 		if (logger.isDebugEnabled()) {
-			// logger.info("解析数据并保存入数据库:" + inserSql);
+			logger.info("解析数据并保存入数据库:" + inserSql);
 		}
 		runner.insert(inserSql, new ScalarHandler<Long>());
 	}
@@ -173,12 +176,14 @@ public class HuabanHelper {
 	 * @方法描述: 获取图片信息
 	 * @param code
 	 * @param pid
+	 * @param isSave
+	 *            是否保存
 	 * @return
 	 * @throws Exception
 	 */
 	public static List<Map<String, Object>> getImageInfoByCode(String code, String pid,
-			Integer limit) throws Exception {
-		return analyze(getRealPath("/favorite/" + code, pid, limit));
+			Integer limit, boolean isSave) throws Exception {
+		return analyze(getRealPath("/favorite/" + code, pid, limit), isSave);
 	}
 
 	/**
@@ -188,27 +193,31 @@ public class HuabanHelper {
 	 * @param pid
 	 * @param limit
 	 *            个数
+	 * @param isSave
+	 *            是否保存
 	 * @return
 	 * @throws Exception
 	 */
 	public static List<Map<String, Object>> getImageInfoByCategpry(String category, String pid,
-			Integer limit) throws Exception {
-		return analyze(getRealPath(category, pid, limit));
+			Integer limit, boolean isSave) throws Exception {
+		return analyze(getRealPath(category, pid, limit), isSave);
 	}
 
 	/**
 	 * @方法描述: 从人物面板获取图片数据
 	 * @param bid
+	 *            人物面板ID
 	 * @param pid
+	 *            人物ID
 	 * @param limit
+	 *            个数
+	 * @param isSave
+	 *            是否保存
 	 * @return
 	 * @throws Exception
 	 */
 	public static List<Map<String, Object>> getImageInfoByBoard(String bid, String pid,
-			Integer limit) throws Exception {
-		return analyze(getRealPath("/boards/" + bid, pid, limit));
-	}
-	public static void main(String[] args)throws Exception {
-		getImageInfoByCategpry("favorite/beauty/", "496615", 100); 
+			Integer limit, boolean isSave) throws Exception {
+		return analyze(getRealPath("/boards/" + bid, pid, limit), isSave);
 	}
 }
