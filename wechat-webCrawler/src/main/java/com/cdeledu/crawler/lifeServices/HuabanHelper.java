@@ -41,7 +41,7 @@ public class HuabanHelper {
 	private static String dbUserName = JDBC.getString("database.dbUserName");
 	private static String dbPassword = JDBC.getString("database.dbPassword");
 	private static String jdbcName = JDBC.getString("database.jdbcName");
-	private static String SQL = "INSERT INTO crawler_image (userCode,url,type,source) VALUES ('%s','%s','%s','%s')";
+	private static String SQL = "INSERT INTO crawler_image (userCode,boardId,url,type,source) VALUES ('%s','%s','%s','%s','%s')";
 	private static String ISEXIST = "SELECT COUNT(1) FROM crawler_image WHERE url = '%s'";
 
 	/** SQL执行工具 :实例化查询接口 */
@@ -106,7 +106,7 @@ public class HuabanHelper {
 		
 			if (!isExist(imgPath)) {
 				try {
-					saveDocument(String.format(SQL, pinId, imgPath, imgType, source));
+					saveDocument(String.format(SQL, boardId,pinId, imgPath, imgType, source));
 				} catch (Exception e) {
 					logger.info("解析数据入数据库出现异常: " + e);
 				}
@@ -209,6 +209,6 @@ public class HuabanHelper {
 		return analyze(getRealPath("/boards/" + bid, pid, limit));
 	}
 	public static void main(String[] args)throws Exception {
-		// getImageInfoByCategpry("favorite/beauty/", "", 100); 
+		getImageInfoByCategpry("favorite/beauty/", "496615", 100); 
 	}
 }
