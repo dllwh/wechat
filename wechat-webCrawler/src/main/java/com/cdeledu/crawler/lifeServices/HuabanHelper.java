@@ -33,7 +33,7 @@ public class HuabanHelper {
 	private final static String BASE_IMG_URL = "http://img.hb.aicdn.com/";
 	private final static String BEAUTY_IMG_URL = BASE_URL + "%s/?max=%s&limit=%s&wfl=1";
 	private final static String REGEX_SETTINGS = "\\{\"id\":(.*?), \"name\":(.*?), \"nav_link\":(.*?)}";
-	private final static String REGEX_IMG = "\\{\"pin_id\":(\\d+),.+?\"file\":{\"farm\":\"farm1\", \"bucket\":\"hbimg\",.+?\"board_id\":(\\d+),.+?\"key\":\"(.*?)\",.\"type\":\"image/(.*?)\",";
+	private final static String REGEX_IMG = "\\{\"pin_id\":(\\d+),.+?\"board_id\":(\\d+),.+?\"key\":\"(.*?)\",.\"type\":\"image/(.*?)\",";
 	private final static String source = "huaban.com/";
 
 	private static ResourceBundle JDBC = ResourceBundle.getBundle("datasource/jdbc");
@@ -72,7 +72,6 @@ public class HuabanHelper {
 			while (category.endsWith("/")) {
 				category = category.substring(0, category.lastIndexOf("/"));
 			}
-			System.out.println(String.format(BEAUTY_IMG_URL, category, pid, limit));
 			return String.format(BEAUTY_IMG_URL, category, pid, limit);
 		}
 		return "";
@@ -104,7 +103,8 @@ public class HuabanHelper {
 			beautyMap.put("imgType", imgType); // 图片类型
 			beautyMap.put("source", source);
 			resultList.add(beautyMap);
-			if (!isExist(url)) {
+		
+			if (!isExist(imgPath)) {
 				try {
 					saveDocument(String.format(SQL, pinId, imgPath, imgType, source));
 				} catch (Exception e) {
@@ -136,6 +136,9 @@ public class HuabanHelper {
 	 * @throws SQLException
 	 */
 	private static void saveDocument(String inserSql) throws SQLException {
+		if (logger.isDebugEnabled()) {
+			// logger.info("解析数据并保存入数据库:" + inserSql);
+		}
 		runner.insert(inserSql, new ScalarHandler<Long>());
 	}
 
@@ -204,5 +207,8 @@ public class HuabanHelper {
 	public static List<Map<String, Object>> getImageInfoByBoard(String bid, String pid,
 			Integer limit) throws Exception {
 		return analyze(getRealPath("/boards/" + bid, pid, limit));
+	}
+	public static void main(String[] args)throws Exception {
+		// getImageInfoByCategpry("favorite/beauty/", "", 100); 
 	}
 }
