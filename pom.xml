@@ -118,7 +118,6 @@
 		<module>wechat-arithmetic</module>
 		<module>wechat-common</module>
 		<module>wechat-mybatis</module>
-		
 		<module>wechat-template</module>
 		<module>wechat-utils</module>
 		<module>wechat-webCrawler</module>
@@ -127,7 +126,8 @@
 		<module>weixin-qy</module>
 		<module>wechat-manage</module>
 		<module>crawler-cms</module>
-	</modules>
+		<module>wechat-monitor</module>
+  </modules>
 
 
 	<!-- ======== <dependency></dependency>===================================================== 
