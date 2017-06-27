@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.system.SysIcon;
+import com.cdeledu.service.sys.SysIconService;
 import com.cdeledu.util.webpage.BootstrapHelper;
 import com.google.common.collect.Maps;
 
@@ -29,6 +32,8 @@ public class IconController  extends BaseController{
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	private String message;// 操作提示语
+	@Autowired
+	private SysIconService sysIconService;
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法描述: 图标列表页面跳转
@@ -56,13 +61,17 @@ public class IconController  extends BaseController{
 			filePathMap.put("fontAwesome", baseUrl.getResource("bootstrapIconInfo/font-awesome.css").getPath());
 			filePathMap.put("simpleLine", baseUrl.getResource("bootstrapIconInfo/simple-line-icons.css").getPath());
 			List<Map<String, String>> resultList=BootstrapHelper.getBootstrapIconInfo(filePathMap);
-			String displayName="",sourceType="",className="";
-			String sql = "INSERT INTO sys_icon(displayName,sourceType,className)  VALUES('%s','%s','%s');";
+			SysIcon sysIcon = null;
 			for (Map<String, String> map : resultList) {
-				displayName = map.get("displayName");
-				sourceType = map.get("sourceType");
-				className = map.get("className");
-				System.out.println(String.format(sql, displayName,sourceType,className));
+				sysIcon = new SysIcon();
+				sysIcon.setDisplayName(map.get("displayName"));
+				sysIcon.setSourceType(map.get("sourceType"));
+				sysIcon.setClassName(map.get("className"));
+				try {
+					sysIconService.insert(sysIcon);
+				} catch (Exception e) {
+					continue;
+				}
 			}
 			
 		} catch (Exception e) {

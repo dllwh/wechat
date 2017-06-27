@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cdeledu.dao.sys.sysIconDao">
+	<sql id="findForJdbc_body">
+		SELECT * from sys_icon
+		<where>
+			<if test=" id != null and id != '' ">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="displayName != null and displayName != '' ">
+				and displayName = #{displayname,jdbcType=VARCHAR}
+			</if>
+			<if test="className != null and className != '' ">
+				and className = #{classname,jdbcType=VARCHAR}
+			</if>
+			<if test="sourceType != null and sourceType != '' ">
+				and sourceType = #{sourcetype,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+
+	<select id="findOneForJdbc" parameterType="com.cdeledu.model.system.SysIcon" 
+		resultType="com.cdeledu.model.system.SysIcon">
+		select * from (
+		<include refid="findForJdbc_body"/>
+		) as myTable LIMIT 1
+	</select>
+	
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.system.SysIcon">
+		select count(1) from (
+		<include refid="findForJdbc_body"/>
+		) as myTable
+	</select>
+	
+	<select id="findForJdbc" parameterType="com.cdeledu.model.system.SysIcon" 
+		resultType="com.cdeledu.model.system.SysIcon">
+		select * from (
+		<include refid="findForJdbc_body"/>
+		) as myTable LIMIT 1
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_icon where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<insert id="batchInsert" useGeneratedKeys="true" parameterType="java.util.List">
+		insert into sys_icon(displayName,className,sourceType) values
+		<foreach collection="list" index="index" item="item" separator=",">
+			(#{item.displayName},#{item.className},#{item.sourceType})
+		</foreach>
+	</insert>
+	
+	<insert id="insertSelective" parameterType="com.cdeledu.model.system.SysIcon">
+		insert into sys_icon
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="displayname != null">
+				displayName,
+			</if>
+			<if test="classname != null">
+				className,
+			</if>
+			<if test="sourcetype != null">
+				sourceType,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="displayname != null">
+				#{displayname,jdbcType=VARCHAR},
+			</if>
+			<if test="classname != null">
+				#{classname,jdbcType=VARCHAR},
+			</if>
+			<if test="sourcetype != null">
+				#{sourcetype,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.system.SysIcon">
+		update 
+			sys_icon
+		set 
+			displayName = #{displayname,jdbcType=VARCHAR},
+			className = #{classname,jdbcType=VARCHAR},
+			sourceType = #{sourcetype,jdbcType=VARCHAR}
+		where 
+			id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
