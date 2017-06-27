@@ -63,12 +63,14 @@ public class IconController  extends BaseController{
 			List<Map<String, String>> resultList=BootstrapHelper.getBootstrapIconInfo(filePathMap);
 			SysIcon sysIcon = null;
 			for (Map<String, String> map : resultList) {
-				sysIcon = new SysIcon();
-				sysIcon.setDisplayName(map.get("displayName"));
-				sysIcon.setSourceType(map.get("sourceType"));
-				sysIcon.setClassName(map.get("className"));
 				try {
-					sysIconService.insert(sysIcon);
+					sysIcon = new SysIcon();
+					sysIcon.setDisplayName(map.get("displayName"));
+					sysIcon.setSourceType(map.get("sourceType"));
+					if(sysIconService.findOneForJdbc(sysIcon) != null){
+						sysIcon.setClassName(map.get("className"));
+						sysIconService.insert(sysIcon);
+					}
 				} catch (Exception e) {
 					continue;
 				}
