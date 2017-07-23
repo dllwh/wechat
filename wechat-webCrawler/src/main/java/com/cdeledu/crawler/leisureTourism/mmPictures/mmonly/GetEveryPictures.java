@@ -146,7 +146,10 @@ class CrawlerTask implements Runnable {
 				main = iterator.next();
 				title = websitList.urls.get(main);
 				DetailPage detailPage = new DetailPage(main);
+				// 总数 
 				detailPage.getTotal();
+				// 详情页 
+				detailPage.initSrcs();
 			} catch (Exception e) {
 				continue;
 			}
