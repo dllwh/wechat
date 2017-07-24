@@ -153,9 +153,9 @@ class CrawlerTask implements Runnable {
 			} catch (Exception e) {
 				continue;
 			}
-			// 每下载完6个页面的图片休眠10秒，防止过于频繁访问断开连接
+			// 每下载完6个页面的图片休眠6秒，防止过于频繁访问断开连接
 			if (i % 6 == 0) {
-				for (int j = 0; j < 2; j++) {
+				for (int j = 0; j < 6; j++) {
 					try {
 						Thread.sleep(1000);
 					} catch (Exception e) {
