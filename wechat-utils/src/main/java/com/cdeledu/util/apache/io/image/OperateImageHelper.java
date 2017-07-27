@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.color.ColorSpace;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -477,5 +479,17 @@ public final class OperateImageHelper {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	/**
+	 * @方法描述: 全屏截图
+	 * @param fileName
+	 * @throws Exception
+	 */
+	public static void captureScreen(String fileName) throws Exception {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle screenRectangle = new Rectangle(screenSize);
+		Robot robot = new Robot();
+		BufferedImage image = robot.createScreenCapture(screenRectangle);
+		ImageIO.write(image, "png", new File(fileName));
 	}
 }
