@@ -117,7 +117,6 @@
 	<modules>
 		<module>wechat-arithmetic</module>
 		<module>wechat-common</module>
-		<module>wechat-mybatis</module>
 		<module>wechat-template</module>
 		<module>wechat-utils</module>
 		<module>wechat-webCrawler</module>
