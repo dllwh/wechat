@@ -1,4 +1,4 @@
-package velocity;
+package com.cdeledu.template.velocity;
 
 import java.io.InputStream;
 import java.io.StringWriter;
