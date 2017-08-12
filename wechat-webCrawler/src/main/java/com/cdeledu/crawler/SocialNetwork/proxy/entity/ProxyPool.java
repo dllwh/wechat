@@ -1,7 +1,6 @@
-package com.cdeledu.crawler.SocialNetwork.proxy.common;
+package com.cdeledu.crawler.SocialNetwork.proxy.entity;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * @类描述: 代理ip
@@ -25,80 +24,57 @@ public class ProxyPool implements Serializable {
 	private String province;
 	/** 地理位置：城市 */
 	private String city;
-	/** 运营商 */
+	/** ip所属运营商;默认: 全部, 1: 联通（网通）, 2: 电信, 3: 移动, 4: 铁通 */
 	private String isp;
-	/** 代理类型 */
-	private String[] type;
-
+	/** 按代理协议筛选代理类型 */
+	private String[] protocolType;
 	/** ----------------------------------------------------- Fields end */
 	public String getIp() {
 		return ip;
 	}
-
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
-
 	public Integer getPort() {
 		return port;
 	}
-
 	public void setPort(Integer port) {
 		this.port = port;
 	}
-
 	public String getPosition() {
 		return position;
 	}
-
 	public void setPosition(String position) {
 		this.position = position;
 	}
-
 	public String getCountry() {
 		return country;
 	}
-
 	public void setCountry(String country) {
 		this.country = country;
 	}
-
 	public String getProvince() {
 		return province;
 	}
-
 	public void setProvince(String province) {
 		this.province = province;
 	}
-
 	public String getCity() {
 		return city;
 	}
-
 	public void setCity(String city) {
 		this.city = city;
 	}
-
 	public String getIsp() {
 		return isp;
 	}
-
 	public void setIsp(String isp) {
 		this.isp = isp;
 	}
-
-	public String[] getType() {
-		return type;
+	public String[] getProtocolType() {
+		return protocolType;
 	}
-
-	public void setType(String[] type) {
-		this.type = type;
-	}
-
-	@Override
-	public String toString() {
-		return "ProxyPool [ip=" + ip + ", port=" + port + ", position=" + position + ", country="
-				+ country + ", province=" + province + ", city=" + city + ", isp=" + isp + ", type="
-				+ Arrays.toString(type) + "]";
+	public void setProtocolType(String[] protocolType) {
+		this.protocolType = protocolType;
 	}
 }

@@ -11,7 +11,7 @@ import org.jsoup.select.Elements;
 
 import com.beust.jcommander.internal.Lists;
 import com.cdeledu.common.mapper.JsonMapper;
-import com.cdeledu.crawler.SocialNetwork.proxy.common.ProxyPool;
+import com.cdeledu.crawler.SocialNetwork.proxy.entity.ProxyPool;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 
 public class Ip181Helper {
@@ -75,7 +75,7 @@ public class Ip181Helper {
 		if (StringUtils.isNoneBlank(tdData.get(1).text())) {
 			proxyIP.setPort(Integer.valueOf(tdData.get(1).text()));
 		}
-		proxyIP.setType(tdData.get(3).text().split(","));
+		proxyIP.setProtocolType(tdData.get(3).text().split(","));
 		proxyIP.setPosition(tdData.get(5).text());
 		return proxyIP;
 	}
