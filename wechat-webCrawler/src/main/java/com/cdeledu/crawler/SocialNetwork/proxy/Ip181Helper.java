@@ -55,10 +55,14 @@ public class Ip181Helper {
 	private static String getProxyIPByPage(String url) throws Exception {
 		List<Map<String, Object>> resultList = Lists.newArrayList();
 		Document document = Jsoup.connect(url).get();
-		Elements dataTable = document.select("div.panel-body").first().getElementsByTag("table")
-				.first().getElementsByTag("tr");
+		Elements dataTable = document.body().select("div.panel-body").first().select("table")
+				.first().select("tr");
 		for (int i = 1; i < dataTable.size(); i++) {
-			resultList.add(MapUtilHelper.BeanToMap(getDetailInfo(dataTable.get(i))));
+			try {
+				resultList.add(MapUtilHelper.BeanToMap(getDetailInfo(dataTable.get(i))));
+			} catch (Exception e) {
+
+			}
 		}
 		return JsonMapper.toJsonString(resultList);
 	}
@@ -75,7 +79,7 @@ public class Ip181Helper {
 		if (StringUtils.isNoneBlank(tdData.get(1).text())) {
 			proxyIP.setPort(Integer.valueOf(tdData.get(1).text()));
 		}
-		proxyIP.setProtocolType(tdData.get(3).text().split(","));
+		proxyIP.setProtocolType(tdData.get(3).text().toLowerCase().split(","));
 		proxyIP.setPosition(tdData.get(5).text());
 		return proxyIP;
 	}
