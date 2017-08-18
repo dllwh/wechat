@@ -30,13 +30,45 @@ public class XiciDailiHelper {
 
 	/** ----------------------------------------------- [私有方法] */
 	/** ----------------------------------------------- [私有方法] */
-	public static String getProxyList(String url) {
+	/**
+	 * @方法描述: 国内高匿代理
+	 * @return
+	 */
+	public static String getProxyListBySecret() throws Exception {
+		return getProxyList(BASE_URL + "nn/");
+	}
+
+	/**
+	 * @方法描述: 国内透明代理
+	 * @return
+	 */
+	public static String getProxyListByTransparent() throws Exception {
+		return getProxyList(BASE_URL + "nt/");
+	}
+
+	/**
+	 * @方法描述: 国内HTTPS代理
+	 * @return
+	 */
+	public static String getProxyListByHttps() throws Exception {
+		return getProxyList(BASE_URL + "wn/");
+	}
+
+	/**
+	 * @方法描述: 国内HTTP代理
+	 * @return
+	 */
+	public static String getProxyListByHttp() throws Exception {
+		return getProxyList(BASE_URL + "wt/");
+	}
+
+	private static String getProxyList(String url) throws Exception {
 		List<Map<String, Object>> resultList = null;
+		resultList = Lists.newArrayList();
+		Document document = Jsoup.connect(url)
+				.header("User-Agent", UserAgentType.Mobile_Firefox.name()).get();
+		Elements dataTable = document.body().select("table#ip_list").first().select("tr");
 		try {
-			resultList = Lists.newArrayList();
-			Document document = Jsoup.connect(url)
-					.header("User-Agent", UserAgentType.Mobile_Firefox.name()).get();
-			Elements dataTable = document.body().select("table#ip_list").first().select("tr");
 			ProxyPool proxyIP = null;
 			for (int i = 1; i < dataTable.size(); i++) {
 				try {
@@ -57,37 +89,4 @@ public class XiciDailiHelper {
 		}
 		return JsonMapper.toJsonString(resultList);
 	}
-
-	/**
-	 * @方法描述: 国内高匿代理
-	 * @return
-	 */
-	public static String getProxyListBySecret() {
-		return getProxyList(BASE_URL + "nn/");
-	}
-
-	/**
-	 * @方法描述: 国内透明代理
-	 * @return
-	 */
-	public static String getProxyListByTransparent() {
-		return getProxyList(BASE_URL + "nt/");
-	}
-
-	/**
-	 * @方法描述: 国内HTTPS代理
-	 * @return
-	 */
-	public static String getProxyListByHttps() {
-		return getProxyList(BASE_URL + "wn/");
-	}
-
-	/**
-	 * @方法描述: 国内HTTP代理
-	 * @return
-	 */
-	public static String getProxyListByHttp() {
-		return getProxyList(BASE_URL + "wt/");
-	}
-
 }
