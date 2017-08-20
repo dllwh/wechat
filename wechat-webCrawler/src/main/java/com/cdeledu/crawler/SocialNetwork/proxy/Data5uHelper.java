@@ -9,6 +9,8 @@ import org.jsoup.select.Elements;
 
 import com.cdeledu.common.browser.UserAgentType;
 import com.cdeledu.common.mapper.JsonMapper;
+import com.cdeledu.crawler.SocialNetwork.proxy.entity.ProxyPool;
+import com.cdeledu.util.apache.collection.MapUtilHelper;
 import com.google.common.collect.Lists;
 
 /**
@@ -21,26 +23,80 @@ import com.google.common.collect.Lists;
  */
 public class Data5uHelper {
 	/** ----------------------------------------------------- Fields start */
+	private static final String BASE_URL = "http://www.data5u.com/free/";
+
 	/** ----------------------------------------------------- Fields end */
+	/**
+	 * 
+	 * @方法描述: 普通代理IP
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getProxyListByAll() throws Exception {
+		return getProxyList(BASE_URL + "index.shtml");
+	}
 
-	/** ----------------------------------------------- [私有方法] */
-	/** ----------------------------------------------- [私有方法] */
+	/**
+	 * 
+	 * @方法描述: 普通国内高匿代理IP
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getProxyListByGngn() throws Exception {
+		return getProxyList(BASE_URL + "gngn/index.shtml");
+	}
 
-	public static void main(String[] args) throws Exception {
-		Document document = Jsoup.connect("http://www.data5u.com/free/index.shtml")
+	/**
+	 * 
+	 * @方法描述: 普通国内代理IP
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getProxyListByGnpt() throws Exception {
+		return getProxyList(BASE_URL + "gnpt/index.shtml");
+	}
+
+	/**
+	 * 
+	 * @方法描述: 国外高匿代理IP
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getProxyListByGwgn() throws Exception {
+		return getProxyList(BASE_URL + "gwpt/index.shtml");
+	}
+
+	/**
+	 * 
+	 * @方法描述: 国外普通代理IP
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getProxyListByGwpt() throws Exception {
+		return getProxyList("http://www.data5u.com/free/gwpt/index.shtml");
+	}
+
+	private static String getProxyList(String url) throws Exception {
+		Document document = Jsoup.connect(url)
 				.header("User-Agent", UserAgentType.Mobile_Firefox.name()).get();
-		Elements wList = document.select("body > div.wlist >li:eq(1) > ul");
+		Elements wList = document.select("body > div.wlist >ul > li:eq(1) > ul");
 		List<Map<String, Object>> resultList = Lists.newArrayList();
+		ProxyPool proxyIP = null;
 		for (int i = 1; i < wList.size(); i++) {
-			//	ProxyPool proxyIP = new ProxyPool();
-			// System.out.println(wList.get(i).select("span > li").html());
-			// proxyIP.setIp(wList.get(0).text());
-			// proxyIP.setPort(Integer.valueOf(wList.get(1).text()));
-			//proxyIP.setProtocolType(wList.get(3).text().split(","));
-			// proxyIP.setPosition(wList.get(4).text()+wList.get(5).text());
-			// proxyIP.setIsp(wList.get(6).text());
-			// resultList.add(MapUtilHelper.BeanToMap(proxyIP));
+			try {
+				proxyIP = new ProxyPool();
+				Elements spanData = wList.get(i).select("span");
+				proxyIP.setIp(spanData.get(0).text());
+				proxyIP.setPort(Integer.valueOf(spanData.get(1).text()));
+				proxyIP.setProtocolType(spanData.get(3).text().split(","));
+				proxyIP.setCountry(spanData.get(3).text());
+				proxyIP.setPosition(spanData.get(4).text() + spanData.get(5).text());
+				proxyIP.setIsp(spanData.get(6).text());
+				resultList.add(MapUtilHelper.BeanToMap(proxyIP));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		System.out.println(JsonMapper.toJsonString(resultList));
+		return JsonMapper.toJsonString(resultList);
 	}
 }
