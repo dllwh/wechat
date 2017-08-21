@@ -29,27 +29,33 @@ public class JsoupHandler extends CrawlHandler {
 	 * @param url
 	 * @return
 	 */
-	public static Document getDocument(String url) {
+	private static Document getDocument(String url, CrawlParameter crawlParam) {
 		Connection conn = null;
 		Document document = null;
+		String reqtype = crawlParam.getReqmethod();
 		try {
 			conn = Jsoup.connect(url)// 获取连接
 					.data("query", "Java")// 请求参数
-					.userAgent("Mozilla")// 配置模拟浏览器
+					.userAgent(crawlParam.getBrowse().getUserAgent())// 配置模拟浏览器
 					.cookie("auth", "token")// 设置 cookie
-					.timeout(10000) // 设置连接超时时间
-					.method(Method.POST);// 使用 POST 方法访问 URL
+					.timeout(10000); // 设置连接超时时间
+			if ("post".equals(reqtype.toLowerCase())) {
+				conn.method(Method.POST);
+			} else if ("get".equals(reqtype.toLowerCase())) {
+				conn.method(Method.GET);
+			} else {
+				conn.method(Method.POST);
+			}
 			document = conn.execute().parse();// 获取响应
 		} catch (Exception e) {
 			logger.error("通过JSoup方式抓取数据出现异常,异常信息如下:", e);
-			e.printStackTrace();
 		}
 		return document;
 	}
 
-	public String crawl(String url, CrawlParameter paramCrawlParameter) {
+	public String crawl(String url, CrawlParameter crawlParam) {
 		String resource = "";
-		Document document = JsoupHandler.getDocument(url);
+		Document document = JsoupHandler.getDocument(url, crawlParam);
 		if (null != document && !"".equals(document.toString())) {
 			resource = document.html();
 		}
