@@ -3,13 +3,16 @@ package com.cdeledu.crawler.SocialNetwork.proxy;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import com.cdeledu.common.browser.UserAgentType;
 import com.cdeledu.common.mapper.JsonMapper;
+import com.cdeledu.common.webCrawler.CrawlType;
 import com.cdeledu.crawler.SocialNetwork.proxy.entity.ProxyPool;
+import com.cdeledu.crawler.common.bean.CrawlParameter;
+import com.cdeledu.crawler.common.imp.JsoupHandler;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 import com.google.common.collect.Lists;
 
@@ -23,7 +26,15 @@ import com.google.common.collect.Lists;
  */
 public class Data5uHelper {
 	/** ----------------------------------------------------- Fields start */
+	protected static Logger logger = Logger.getLogger(Data5uHelper.class);
 	private static final String BASE_URL = "http://www.data5u.com/free/";
+	private static CrawlParameter crawlPara = null;
+	private static JsoupHandler webCrawler = null;
+	static {
+		crawlPara = new CrawlParameter();
+		crawlPara.setType(CrawlType.jsoup);
+		webCrawler = new JsoupHandler();
+	}
 
 	/** ----------------------------------------------------- Fields end */
 	/**
@@ -73,12 +84,13 @@ public class Data5uHelper {
 	 * @throws Exception
 	 */
 	public static String getProxyListByGwpt() throws Exception {
-		return getProxyList("http://www.data5u.com/free/gwpt/index.shtml");
+		return getProxyList(BASE_URL + "gwpt/index.shtml");
 	}
 
 	private static String getProxyList(String url) throws Exception {
-		Document document = Jsoup.connect(url)
-				.header("User-Agent", UserAgentType.Mobile_Firefox.name()).get();
+		crawlPara.setReqmethod("GET");
+		String result = webCrawler.crawl(BASE_URL + "index.shtml", crawlPara);
+		Document document = Jsoup.parse(result);
 		Elements wList = document.select("body > div.wlist >ul > li:eq(1) > ul");
 		List<Map<String, Object>> resultList = Lists.newArrayList();
 		ProxyPool proxyIP = null;
@@ -94,9 +106,15 @@ public class Data5uHelper {
 				proxyIP.setIsp(spanData.get(6).text());
 				resultList.add(MapUtilHelper.BeanToMap(proxyIP));
 			} catch (Exception e) {
-				e.printStackTrace();
+				if (logger.isDebugEnabled()) {
+					e.printStackTrace();
+				}
+				if (logger.isErrorEnabled()) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return JsonMapper.toJsonString(resultList);
 	}
+
 }

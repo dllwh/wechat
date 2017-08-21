@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,13 +12,24 @@ import org.jsoup.select.Elements;
 
 import com.beust.jcommander.internal.Lists;
 import com.cdeledu.common.mapper.JsonMapper;
+import com.cdeledu.common.webCrawler.CrawlType;
 import com.cdeledu.crawler.SocialNetwork.proxy.entity.ProxyPool;
+import com.cdeledu.crawler.common.bean.CrawlParameter;
+import com.cdeledu.crawler.common.imp.JsoupHandler;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 
 public class Ip181Helper {
 	/** ----------------------------------------------------- Fields start */
+	protected static Logger logger = Logger.getLogger(Ip181Helper.class);
 	private static final String BASE_URL = "http://ip181.com/";
 	private static final String PAGE_URL = BASE_URL + "daili/%s.html";
+	private static CrawlParameter crawlPara = null;
+	private static JsoupHandler webCrawler = null;
+	static {
+		crawlPara = new CrawlParameter();
+		crawlPara.setType(CrawlType.jsoup);
+		webCrawler = new JsoupHandler();
+	}
 
 	/** ----------------------------------------------------- Fields end */
 	/**
@@ -47,21 +59,27 @@ public class Ip181Helper {
 	 * @return
 	 */
 	public static int getProxyIPTotal() throws Exception {
-		Document document = Jsoup.connect(String.format(PAGE_URL, 1)).get();
+		String result = webCrawler.crawl(String.format(PAGE_URL, 1), crawlPara);
+		Document document = Jsoup.parse(result);
 		String total = document.select("div.page").first().getElementsByTag("font").first().text();
 		return Integer.valueOf(total);
 	}
 
 	private static String getProxyIPByPage(String url) throws Exception {
 		List<Map<String, Object>> resultList = Lists.newArrayList();
-		Document document = Jsoup.connect(url).get();
+		Document document = Jsoup.parse(webCrawler.crawl(url, crawlPara));
 		Elements dataTable = document.body().select("div.panel-body").first().select("table")
 				.first().select("tr");
 		for (int i = 1; i < dataTable.size(); i++) {
 			try {
 				resultList.add(MapUtilHelper.BeanToMap(getDetailInfo(dataTable.get(i))));
 			} catch (Exception e) {
-
+				if (logger.isDebugEnabled()) {
+					e.printStackTrace();
+				}
+				if (logger.isErrorEnabled()) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return JsonMapper.toJsonString(resultList);

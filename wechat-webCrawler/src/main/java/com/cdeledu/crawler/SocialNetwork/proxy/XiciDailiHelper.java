@@ -4,14 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.beust.jcommander.internal.Lists;
-import com.cdeledu.common.browser.UserAgentType;
 import com.cdeledu.common.mapper.JsonMapper;
+import com.cdeledu.common.webCrawler.CrawlType;
 import com.cdeledu.crawler.SocialNetwork.proxy.entity.ProxyPool;
+import com.cdeledu.crawler.common.bean.CrawlParameter;
+import com.cdeledu.crawler.common.imp.JsoupHandler;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 
 /**
@@ -24,8 +27,15 @@ import com.cdeledu.util.apache.collection.MapUtilHelper;
  */
 public class XiciDailiHelper {
 	/** ----------------------------------------------------- Fields start */
+	protected static Logger logger = Logger.getLogger(XiciDailiHelper.class);
 	private final static String BASE_URL = "http://www.xicidaili.com/";
-
+	private static CrawlParameter crawlPara = null;
+	private static JsoupHandler webCrawler = null;
+	static {
+		crawlPara = new CrawlParameter();
+		crawlPara.setType(CrawlType.jsoup);
+		webCrawler = new JsoupHandler();
+	}
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [私有方法] */
@@ -65,8 +75,7 @@ public class XiciDailiHelper {
 	private static String getProxyList(String url) throws Exception {
 		List<Map<String, Object>> resultList = null;
 		resultList = Lists.newArrayList();
-		Document document = Jsoup.connect(url)
-				.header("User-Agent", UserAgentType.Mobile_Firefox.name()).get();
+		Document document = Jsoup.parse(webCrawler.crawl(url, crawlPara));
 		Elements dataTable = document.body().select("table#ip_list").first().select("tr");
 		try {
 			ProxyPool proxyIP = null;
@@ -82,6 +91,12 @@ public class XiciDailiHelper {
 					proxyIP.setProtocolType(tdData.get(5).text().toLowerCase().split(","));
 					resultList.add(MapUtilHelper.BeanToMap(proxyIP));
 				} catch (Exception e) {
+					if (logger.isDebugEnabled()) {
+						e.printStackTrace();
+					}
+					if (logger.isErrorEnabled()) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} catch (Exception ex) {
