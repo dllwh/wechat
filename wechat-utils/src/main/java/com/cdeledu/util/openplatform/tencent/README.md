@@ -18,6 +18,10 @@
 	
 	http://wiki.connect.qq.com/api%E5%88%97%E8%A1%A8
 	
+`腾讯优图开放平台—最好的人工智能开放平台`![](http://open.youtu.qq.com/content/img/navibar_logo_1170.png)
+	
+	http://open.youtu.qq.com/welcome/index
+	
 `腾讯云`![](https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1728860989,3885986767&fm=58&s=C9C7D61280B0F9920C6824C6000030B2)
 	
 	https://www.qcloud.com/	
@@ -25,4 +29,3 @@
 > ![腾讯地图开放平台](http://lbs.qq.com/web/img/logo.png "腾讯地图开放平台")
 
 	http://lbs.qq.com/
-
