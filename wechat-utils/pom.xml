@@ -59,5 +59,10 @@
 			<artifactId>scala-library</artifactId>
 			<version>2.11.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-cypher</artifactId>
+			<version>2.2.5</version>
+		</dependency>
 	</dependencies>
 </project>
