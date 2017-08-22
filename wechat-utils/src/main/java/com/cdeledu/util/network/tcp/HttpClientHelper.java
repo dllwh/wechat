@@ -76,7 +76,8 @@ public class HttpClientHelper {
 	}
 	
 	public HttpClientHelper getInstance() {
-		return getInstance(URLCHARSET);
+		init(URLCHARSET);
+		return instance;
 	}
 
 	/** 当HttpClient实例不再需要是，确保关闭connection manager，以释放其系统资源 */
@@ -85,6 +86,12 @@ public class HttpClientHelper {
 	}
 
 	public HttpClientHelper getInstance(String urlCharset) {
+		init(urlCharset);
+		return instance;
+	}
+	
+	private static synchronized void init(String urlCharset)
+	  {
 		if (instance == null) {
 			instance = new HttpClientHelper();
 		}
@@ -93,8 +100,7 @@ public class HttpClientHelper {
 		}
 		// 设置默认的url编码
 		instance.setUrlCharset(urlCharset);
-		return instance;
-	}
+	  }
 	
 	/**
 	 * @方法描述: 获取响应体内容

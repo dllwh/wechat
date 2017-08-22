@@ -149,11 +149,17 @@ public class MongodbHelper {
 
 	public static MongodbHelper getInstance() {
 		if (mongodbHelper == null) {
-			mongodbHelper = new MongodbHelper();
+			init();
 		}
 		return mongodbHelper;
 	}
 
+	private static synchronized void init() {
+		if (mongodbHelper == null) {
+			mongodbHelper = new MongodbHelper();
+		}
+	}
+	
 	/**
 	 * @方法描述: 对象销毁，清除内存
 	 * @创建者: 皇族灬战狼

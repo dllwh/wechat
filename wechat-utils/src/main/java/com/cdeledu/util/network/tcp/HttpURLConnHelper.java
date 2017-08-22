@@ -236,10 +236,16 @@ public class HttpURLConnHelper {
 	/*--------------------------私有方法 end-------------------------------*/
 	/*--------------------------公有方法 start-------------------------------*/
 	public static HttpURLConnHelper getInstance() {
-		return getInstance(URLCHARSET);
+		init(URLCHARSET);
+		return instance;
 	}
 
 	public static HttpURLConnHelper getInstance(String urlCharset) {
+		init(urlCharset);
+		return instance;
+	}
+
+	private static synchronized void init(String urlCharset) {
 		if (instance == null) {
 			instance = new HttpURLConnHelper();
 		}
@@ -248,9 +254,8 @@ public class HttpURLConnHelper {
 		}
 		// 设置默认的url编码
 		instance.setUrlCharset(urlCharset);
-		return instance;
 	}
-
+	
 	/**
 	 * @Title: sendGetRequest
 	 * @Description: 利用 HttpURLConnection 模拟发送http get方法的请求
