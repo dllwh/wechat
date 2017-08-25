@@ -67,14 +67,13 @@ public class HttpClientHelper {
 	/*-------------------------- 私有属性 end   -------------------------------*/
 	/*-------------------------- 私有方法 begin -------------------------------*/
 
-	public HttpClientHelper() {
-		httpClient = new DefaultHttpClient();
+	HttpClientHelper() {
 	}
 
 	private void setUrlCharset(String urlCharset) {
 		URLCHARSET = urlCharset;
 	}
-	
+
 	public HttpClientHelper getInstance() {
 		init(URLCHARSET);
 		return instance;
@@ -89,9 +88,8 @@ public class HttpClientHelper {
 		init(urlCharset);
 		return instance;
 	}
-	
-	private static synchronized void init(String urlCharset)
-	  {
+
+	private static synchronized void init(String urlCharset) {
 		if (instance == null) {
 			instance = new HttpClientHelper();
 		}
@@ -100,8 +98,8 @@ public class HttpClientHelper {
 		}
 		// 设置默认的url编码
 		instance.setUrlCharset(urlCharset);
-	  }
-	
+	}
+
 	/**
 	 * @方法描述: 获取响应体内容
 	 * @param response
@@ -120,8 +118,9 @@ public class HttpClientHelper {
 		EntityUtils.consume(entity);
 		return content;
 	}
+
 	/** -------------------------- 私有方法 end ------------------------------- */
-	
+
 	/** -------------------------- POST begin ------------------------------- */
 	/**
 	 * 
@@ -176,6 +175,7 @@ public class HttpClientHelper {
 			List<NameValuePair> nvps) throws Exception {
 		return sendPostRequestData(url, headersMap, nvps);
 	}
+
 	/**
 	 * @方法描述: 通过post提交方式获取url指定的资源和数据
 	 * @param targetUrl
@@ -228,6 +228,7 @@ public class HttpClientHelper {
 		}
 		return result;
 	}
+
 	/**
 	 * 
 	 * @Title: sendPostRequestByJsonData
@@ -251,11 +252,11 @@ public class HttpClientHelper {
 			httpPost = new HttpPost(targetUrl);
 			httpPost.addHeader(HttpHeaders.CONNECTION, "keep-alive");
 			httpPost.addHeader(HttpHeaders.ACCEPT, "*/*");
-			httpPost.addHeader(HttpHeaders.CONTENT_TYPE,"application/x-www-form-urlencoded; charset=UTF-8");
+			httpPost.addHeader(HttpHeaders.CONTENT_TYPE,
+					"application/x-www-form-urlencoded; charset=UTF-8");
 			httpPost.addHeader("X-Requested-With", "XMLHttpRequest");
 			httpPost.addHeader(HttpHeaders.CACHE_CONTROL, "max-age=0");
 			httpPost.addHeader(HttpHeaders.USER_AGENT, UserAgentType.PC_Firefox.getValue());
-			
 
 			if (StringUtils.isNoneBlank(content)) {
 				httpPost.setEntity(new StringEntity(content, ContentType.APPLICATION_JSON));
@@ -288,8 +289,9 @@ public class HttpClientHelper {
 		}
 		return result;
 	}
+
 	/** -------------------------- POST end ------------------------------- */
-	
+
 	/** -------------------------- 公有方法 begin ------------------------------- */
 
 	/**
@@ -316,6 +318,7 @@ public class HttpClientHelper {
 	public String sendGetRequest(String url, Map<String, Object> headersMap) throws Exception {
 		return sendGetRequestDate(url, headersMap);
 	}
+
 	/**
 	 * @方法描述: 通过GET提交方式获取url指定的资源和数据
 	 * @param targetUrl
@@ -329,7 +332,8 @@ public class HttpClientHelper {
 			throws Exception {
 		HttpGet httpGet = new HttpGet(targetUrl);
 		// 设置响应头信息
-		httpGet.addHeader(HttpHeaders.ACCEPT,"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		httpGet.addHeader(HttpHeaders.ACCEPT,
+				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		httpGet.addHeader(HttpHeaders.CONNECTION, "keep-alive");
 		httpGet.addHeader(HttpHeaders.CACHE_CONTROL, "max-age=0");
 		httpGet.addHeader(HttpHeaders.USER_AGENT, UserAgentType.PC_Firefox.getValue());
