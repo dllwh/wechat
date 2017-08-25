@@ -73,7 +73,7 @@ public class HttpClientHelper {
 		URLCHARSET = urlCharset;
 	}
 
-	public HttpClientHelper getInstance() {
+	public static HttpClientHelper getInstance() {
 		init(URLCHARSET);
 		return instance;
 	}
@@ -83,7 +83,7 @@ public class HttpClientHelper {
 		httpClient.getConnectionManager().shutdown();
 	}
 
-	public HttpClientHelper getInstance(String urlCharset) {
+	public static HttpClientHelper getInstance(String urlCharset) {
 		init(urlCharset);
 		return instance;
 	}

@@ -19,7 +19,7 @@ public class CsdnHelper {
 	private static boolean isLogin = false;
 	private static String msg = null;
 	/** 【特别注意】:登陆信息全部在"httpClient"中保存,所以需要设置为全局变量 */
-	private static HttpClientHelper httpClient = new HttpClientHelper().getInstance();
+	private static HttpClientHelper httpClient =HttpClientHelper.getInstance();
 	/** CSDN 登录网址 */
 	public static final String LOGINURL = "https://passport.csdn.net/account/login?ref=toolbar";
 	/** CSDN登录成功后的网址 */

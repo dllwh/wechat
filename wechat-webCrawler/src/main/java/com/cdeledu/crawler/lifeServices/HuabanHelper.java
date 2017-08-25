@@ -88,7 +88,7 @@ public class HuabanHelper {
 		List<Map<String, Object>> resultList = Lists.newArrayList();
 		// 创建 Pattern 对象
 		Pattern r = Pattern.compile(REGEX_IMG);
-		Matcher m = r.matcher(new HttpURLConnHelper().sendGetRequest(url));
+		Matcher m = r.matcher(HttpURLConnHelper.getInstance().sendGetRequest(url));
 		Map<String, Object> beautyMap = null;
 		String pinId, boardId, imgPath, imgType = "";
 		while (m.find()) {
@@ -155,7 +155,7 @@ public class HuabanHelper {
 	 * @throws Exception
 	 */
 	public static List<Map<String, Object>> getCategoryInfo() throws Exception {
-		String result = new HttpURLConnHelper().sendGetRequest(BASE_URL);
+		String result = HttpURLConnHelper.getInstance().sendGetRequest(BASE_URL);
 		List<Map<String, Object>> resultList = Lists.newArrayList();
 		Map<String, Object> catMap = null;
 		JSONObject jsRes = null;
