@@ -35,18 +35,18 @@ public class JsoupHandler extends CrawlHandler {
 		String reqtype = crawlParam.getReqmethod();
 		try {
 			conn = Jsoup.connect(url)// 获取连接
-					.data("query", "Java")// 请求参数
 					.userAgent(crawlParam.getBrowse().getUserAgent())// 配置模拟浏览器
 					.cookie("auth", "token")// 设置 cookie
 					.timeout(10000); // 设置连接超时时间
 			if ("post".equals(reqtype.toLowerCase())) {
 				conn.method(Method.POST);
+				document = conn.post();
 			} else if ("get".equals(reqtype.toLowerCase())) {
-				conn.method(Method.GET);
+				document = conn.get();
 			} else {
-				conn.method(Method.POST);
+				document = conn.execute().parse();
 			}
-			document = conn.execute().parse();// 获取响应
+			
 		} catch (Exception e) {
 			logger.error("通过JSoup方式抓取数据出现异常,异常信息如下:", e);
 		}
