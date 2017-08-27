@@ -49,11 +49,6 @@ public class JsoupHandler extends CrawlHandler {
 				conn.method(Method.POST);
 			}
 			document = conn.execute().parse();
-			/*
-			Response response  = conn.execute();
-			 if(response.statusCode() == 200){
-				document = response.parse();
-			}*/
 			
 		} catch (Exception e) {
 			e.printStackTrace();
