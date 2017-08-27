@@ -3,6 +3,8 @@ package com.cdeledu.crawler.common.bean;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.jsoup.Connection.Method;
+
 import com.cdeledu.common.webCrawler.CrawlType;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 
@@ -32,7 +34,7 @@ public class CrawlParameter implements Serializable {
 	// 浏览器路径
 	private String browserPath;
 	// 请求方法
-	private String reqmethod;
+	private String reqmethod = Method.POST.name();
 	// 请求参数
 	private Map<String, String> reqmap;
 	// 设置链接超时为60秒

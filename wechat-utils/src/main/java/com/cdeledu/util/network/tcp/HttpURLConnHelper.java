@@ -45,7 +45,7 @@ import com.cdeledu.util.network.IpUtilHelper;
 
 /**
  * @描述:
- *      <ul>
+ * 		<ul>
  *      <li>HttpURLConnection模拟HTTP请求网页内容</li>
  *      <li>Https协议工具类:封装了采用HttpURLConnection发送HTTP请求的GET\POST方法</li>
  *      <li>get请求可以获取静态页面，也可以把参数放在URL字串后面</li>
@@ -185,7 +185,7 @@ public class HttpURLConnHelper {
 	private String sendProxyRequest(String url, String params, boolean isproxy) throws Exception {
 		String result = "";// 响应内容
 		OutputStream outStrm = null;
-		InputStream is = null;
+		BufferedReader reader = null;
 
 		if (StringUtils.isEmpty(url)) {
 			ExceptionHelper.getExceptionHint("HttpURLConnHelper", "sendPostRequest",
@@ -196,39 +196,49 @@ public class HttpURLConnHelper {
 
 		// 建立实际的连接
 		httpConn.connect();
+		try {
 
-		if (StringUtils.isNoneBlank(params)) {
-			// 现在通过输出流对象构建对象输出流对象，以实现输出可序列化的对象。
-			outStrm = httpConn.getOutputStream();
+			if (StringUtils.isNoneBlank(params)) {
+				// 现在通过输出流对象构建对象输出流对象，以实现输出可序列化的对象。
+				outStrm = httpConn.getOutputStream();
 
-			// 向对象输出流写出数据，这些数据将存到内存缓冲区中
-			outStrm.write(params.getBytes(URLCHARSET));
+				// 向对象输出流写出数据，这些数据将存到内存缓冲区中
+				outStrm.write(params.getBytes(URLCHARSET));
 
-			// 刷新对象输出流，将任何字节都写入潜在的流中(此处为ObjectOutputStream)
-			outStrm.flush();
-			// 关闭流对象
-			outStrm.close();
+				// 刷新对象输出流，将任何字节都写入潜在的流中(此处为ObjectOutputStream)
+				outStrm.flush();
+				// 关闭流对象
+				outStrm.close();
+			}
+
+			// HTTP 状态码(只有是200的时候才说明请求成功,其余皆失败)
+			if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				reader = new BufferedReader(
+						new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
+				String line;
+				StringBuffer sb = new StringBuffer();
+
+				while ((line = reader.readLine()) != null) {
+					String str = CharsetHelper.UnicodeToString(line);
+					sb.append(str);
+				}
+
+				result = sb.toString();
+
+			} else if (httpConn.getResponseCode() >= 300) {
+				throw new RuntimeExceptionHelper("HTTP Request is not success, Response code is "
+						+ httpConn.getResponseCode());
+			} else {
+				logger.log(Level.ALL, IO_EXCEPTION_MEG);
+				throw new RuntimeException(IO_EXCEPTION_MEG);
+			}
+		} catch (Exception e) {
+			ExceptionHelper.catchHttpUtilException(e, url);
+		} finally {
+			// 释放资源
+			IOUtils.closeQuietly(reader);
+			IOUtils.close(httpConn);
 		}
-
-		// HTTP 状态码(只有是200的时候才说明请求成功,其余皆失败)
-		if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			// 将返回的输入流转换成字符串
-			is = httpConn.getInputStream();
-			int size = is.available();
-			byte[] jsonBytes = new byte[size];
-			is.read(jsonBytes);
-			result = new String(jsonBytes, URLCHARSET);
-		} else if (httpConn.getResponseCode() >= 300) {
-			throw new Exception(
-					"HTTP Request is not success, Response code is " + httpConn.getResponseCode());
-		} else {
-			logger.log(Level.ALL, IO_EXCEPTION_MEG);
-			throw new RuntimeException(IO_EXCEPTION_MEG);
-		}
-
-		logger.log(Level.INFO, "---> post to: " + url);
-		logger.log(Level.INFO, "---> data is: " + params);
-		logger.log(Level.INFO, "---> back data is: " + result);
 
 		return result;
 	}
@@ -316,7 +326,7 @@ public class HttpURLConnHelper {
 					String str = CharsetHelper.UnicodeToString(line);
 					sb.append(str);
 				}
-
+				
 				result = sb.toString();
 
 			} else if (httpConn.getResponseCode() >= 300) {

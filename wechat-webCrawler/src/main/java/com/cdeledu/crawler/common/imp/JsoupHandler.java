@@ -3,8 +3,10 @@ package com.cdeledu.crawler.common.imp;
 import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 import org.jsoup.safety.Whitelist;
 
 import com.cdeledu.crawler.common.bean.CrawlParameter;
@@ -36,19 +38,26 @@ public class JsoupHandler extends CrawlHandler {
 		try {
 			conn = Jsoup.connect(url)// 获取连接
 					.userAgent(crawlParam.getBrowse().getUserAgent())// 配置模拟浏览器
-					.cookie("auth", "token")// 设置 cookie
+					//.cookie("auth", "token")// 设置 cookie
+					.ignoreContentType(true).ignoreHttpErrors(true)
 					.timeout(10000); // 设置连接超时时间
 			if ("post".equals(reqtype.toLowerCase())) {
 				conn.method(Method.POST);
-				document = conn.post();
 			} else if ("get".equals(reqtype.toLowerCase())) {
-				document = conn.get();
+				conn.method(Method.GET);
 			} else {
-				document = conn.execute().parse();
+				conn.method(Method.POST);
 			}
+			document = conn.execute().parse();
+			/*
+			Response response  = conn.execute();
+			 if(response.statusCode() == 200){
+				document = response.parse();
+			}*/
 			
 		} catch (Exception e) {
-			logger.error("通过JSoup方式抓取数据出现异常,异常信息如下:", e);
+			e.printStackTrace();
+			// logger.error("通过JSoup方式抓取数据出现异常,异常信息如下:", e);
 		}
 		return document;
 	}
