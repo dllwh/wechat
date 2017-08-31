@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.cdeledu</groupId>
+		<artifactId>wechat</artifactId>
+		<version>${project.version}</version>
+	</parent>
+	<artifactId>crapApi-ApiManager</artifactId>
+	<packaging>war</packaging>
+	<name>crapApi-ApiManager Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<description>API接口管理系统、API接口调试工具：API接口管理、文档管理、接口调试</description>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>crapApi-ApiManager</finalName>
+	</build>
+</project>
