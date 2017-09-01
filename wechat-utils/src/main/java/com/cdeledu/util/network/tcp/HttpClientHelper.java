@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import com.cdeledu.common.browser.UserAgentType;
@@ -54,7 +55,7 @@ import com.cdeledu.common.mapper.ClassUtilHelper;
 public class HttpClientHelper {
 	/*-------------------------- 私有属性 begin -------------------------------*/
 	public static HttpClientContext context = new HttpClientContext();
-	private HttpClient httpClient = null;
+	private HttpClient httpClient =  HttpClients.createDefault(); ;
 	private static HttpClientHelper instance;
 	/** 请求编码，默认使用utf-8 */
 	private static String URLCHARSET = ConstantHelper.UTF_8.name();
