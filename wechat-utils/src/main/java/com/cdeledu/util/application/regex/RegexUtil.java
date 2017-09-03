@@ -68,7 +68,11 @@ public class RegexUtil {
 	public static String getKeyWords(String regex, String content, int groupIndex) {
 		Matcher matcher = Pattern.compile(regex, Pattern.MULTILINE).matcher(content);
 		if (matcher.find()) {
-			return matcher.group(groupIndex);
+			if(groupIndex == 0 ){
+				return matcher.replaceAll("").trim();
+			}else {
+				return matcher.group(groupIndex);
+			}
 		}
 		return null; // 必须是null,否则会进入死循环
 	}
@@ -82,11 +86,11 @@ public class RegexUtil {
 	 * @return 若是没有匹配内容，则返回空
 	 */
 	public static String getKeyWords(String regex, String sInput) {
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(sInput);
+		Matcher matcher = Pattern.compile(regex).matcher(sInput);
 
 		if (matcher.find()) {
-			return matcher.group(1);
+			// return matcher.group(1);
+			return matcher.replaceAll("").trim();
 		}
 		return "";
 	}
