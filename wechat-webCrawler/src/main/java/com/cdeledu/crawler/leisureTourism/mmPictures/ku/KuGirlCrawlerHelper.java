@@ -12,7 +12,7 @@ import com.google.common.collect.Maps;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class KuGirlCralerHelper {
+public class KuGirlCrawlerHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static final String BASEURL = "http://www.169ku.com/";
 	private static final String XINGGANMEINV = BASEURL + "xingganmeinv/";
