@@ -168,7 +168,7 @@ public class HttpURLConnHelper {
 		// 设置连接超时时间，单位毫秒
 		httpConn.setConnectTimeout(10 * 1000);
 		// 设置读取数据超时时间，单位毫秒
-		httpConn.setReadTimeout(10 * 1000);
+		httpConn.setReadTimeout(60 * 1000);
 
 		// 设置 HttpURLConnection的请求方式-->POST|GET,默认是GET
 		if (POST_HTTP.equalsIgnoreCase(ReqMethod)) {
