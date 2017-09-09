@@ -3,25 +3,38 @@ package com.cdeledu.crawler.leisureTourism.mmPictures.taobao;
 import java.io.Serializable;
 
 /**
+ * 把今天最好的表现当作明天最新的起点．．～
+ * 
+ * Today the best performance as tomorrow newest starter!
+ *
  * @类描述: 淘女郎信息
  * @创建者: 独泪了无痕--duleilewuhen@sina.com
  * @创建日期: 2017年8月27日 下午10:30:51
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class TaobaoGirlInfo implements Serializable {
+
+class TaobaoGirlInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
-	/** 妹子的身高 */
-	private Float height;
-	/** 妹子的 体重 */
-	private Float weight;
-	/** 妹子的姓名 */
+	/** 身高 .单位：cm */
+	private Double height;
+	/** 体重 .单位：KG */
+	private Double weight;
+	/** 姓名 */
 	private String realName;
-	/** 妹子的id */
+	/** 昵称 */
+	private String nickName;
+	/** 生日 */
+	private String birthday;
+	/** 职业 */
+	private String occupation;
+	/** 血型 */
+	private String bloodType;
+	/** id */
 	private Integer userID;
-	/** 妹子的封面图片小图地址 */
+	/** 妹子个人信息的封面图片地址 */
 	private String avatarUrl;
-	/** 妹子的封面图片大图地址 */
+	/** 封面图片地址 */
 	private String cardUrl;
 	/** 妹子所在城市 */
 	private String city;
@@ -30,25 +43,27 @@ public class TaobaoGirlInfo implements Serializable {
 	/** */
 	private String modelUrl;
 	/** 粉丝数 */
-	private Integer totalFanNum;
+	private Long totalFanNum;
 	/** 点赞数 */
-	private Integer totalFavorNum;
+	private Long totalFavorNum;
 	/** */
 	private String viewFlag;
+	/** 个人主页地址 */
+	private String girlsHURL;
 
-	public Float getHeight() {
+	public Double getHeight() {
 		return height;
 	}
 
-	public void setHeight(Float height) {
+	public void setHeight(Double height) {
 		this.height = height;
 	}
 
-	public Float getWeight() {
+	public Double getWeight() {
 		return weight;
 	}
 
-	public void setWeight(Float weight) {
+	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
 
@@ -58,6 +73,38 @@ public class TaobaoGirlInfo implements Serializable {
 
 	public void setRealName(String realName) {
 		this.realName = realName;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
+
+	public String getBloodType() {
+		return bloodType;
+	}
+
+	public void setBloodType(String bloodType) {
+		this.bloodType = bloodType;
 	}
 
 	public Integer getUserID() {
@@ -108,19 +155,19 @@ public class TaobaoGirlInfo implements Serializable {
 		this.modelUrl = modelUrl;
 	}
 
-	public Integer getTotalFanNum() {
+	public Long getTotalFanNum() {
 		return totalFanNum;
 	}
 
-	public void setTotalFanNum(Integer totalFanNum) {
+	public void setTotalFanNum(Long totalFanNum) {
 		this.totalFanNum = totalFanNum;
 	}
 
-	public Integer getTotalFavorNum() {
+	public Long getTotalFavorNum() {
 		return totalFavorNum;
 	}
 
-	public void setTotalFavorNum(Integer totalFavorNum) {
+	public void setTotalFavorNum(Long totalFavorNum) {
 		this.totalFavorNum = totalFavorNum;
 	}
 
@@ -130,5 +177,13 @@ public class TaobaoGirlInfo implements Serializable {
 
 	public void setViewFlag(String viewFlag) {
 		this.viewFlag = viewFlag;
+	}
+
+	public String getGirlsHURL() {
+		return girlsHURL;
+	}
+
+	public void setGirlsHURL(String girlsHURL) {
+		this.girlsHURL = girlsHURL;
 	}
 }
