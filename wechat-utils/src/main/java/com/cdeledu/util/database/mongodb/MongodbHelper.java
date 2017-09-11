@@ -1,4 +1,4 @@
-package com.cdeledu.util.database;
+package com.cdeledu.util.database.mongodb;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
