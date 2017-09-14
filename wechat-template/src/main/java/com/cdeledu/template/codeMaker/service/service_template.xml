@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class>
+package #class.package#.service;
+
+import java.util.List;
+import #class.package#.model.#class.name#;
+import java.util.Map;
+
+	/**
+	* 把今天最好的表现当作明天最新的起点．．～
+	*
+	* Today the best performance as tomorrow newest starter!
+	*
+	* @类描述:#table.desc#服务接口
+	* @创建者: 独泪了无痕--duleilewuhen@sina.com
+	* @创建时间: #now#
+	* @版本: V1.0
+	* @since: JDK 1.7
+	*/
+	public interface #class.name#Service{
+	
+	}
+</class>
