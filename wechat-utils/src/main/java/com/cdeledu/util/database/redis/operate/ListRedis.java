@@ -21,10 +21,13 @@ public class ListRedis extends RedisOperate {
 	 *            可以是字符传，还是可以是字符数组
 	 * @return 返回List的长度
 	 */
-	public static int lpush(String key, final String... value) {
+	public static Long lpush(String key, String... value) throws Exception {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			return jedis.lpush(key, value).intValue();
+			return jedis.lpush(key, value);
 		} finally {
 			returnResource();
 		}
@@ -37,10 +40,13 @@ public class ListRedis extends RedisOperate {
 	 *            可以是字符传，还是可以是字符数组
 	 * @return 返回List的长度
 	 */
-	public static int lpushx(String key, final String... value) {
+	public static Long lpushx(String key, String... value) throws Exception {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			return jedis.lpushx(key, value).intValue();
+			return jedis.lpushx(key, value);
 		} finally {
 			returnResource();
 		}
@@ -53,10 +59,13 @@ public class ListRedis extends RedisOperate {
 	 *            可以是字符传，还是可以是字符数组
 	 * @return
 	 */
-	public static int rpush(String key, final String... value) {
+	public static Long rpush(String key, String... value) throws Exception {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			return jedis.rpush(key, value).intValue();
+			return jedis.rpush(key, value);
 		} finally {
 			returnResource();
 		}
@@ -69,10 +78,13 @@ public class ListRedis extends RedisOperate {
 	 *            可以是字符传，还是可以是字符数组
 	 * @return
 	 */
-	public static int rpushx(String key, final String... value) {
+	public static Long rpushx(String key, String... value) throws Exception {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			return jedis.rpushx(key, value).intValue();
+			return jedis.rpushx(key, value);
 		} finally {
 			returnResource();
 		}
@@ -83,13 +95,13 @@ public class ListRedis extends RedisOperate {
 	 * @param key
 	 * @return
 	 */
-	public static int llen(String key) {
+	public static Long llen(String key) throws Exception {
 		if (isEmpty(key)) {
-			return 0;
+			return 0L;
 		}
 		try {
 			jedis = acquireConnection();
-			return jedis.llen(key).intValue();
+			return jedis.llen(key);
 		} finally {
 			returnResource();
 		}
@@ -106,10 +118,13 @@ public class ListRedis extends RedisOperate {
 	 *            匹配的元素
 	 * @return
 	 */
-	public static int lrem(String key, long count, String value) {
+	public static Long lrem(String key, long count, String value) {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			return jedis.lrem(key, count, value).intValue();
+			return jedis.lrem(key, count, value);
 		} finally {
 			returnResource();
 		}
@@ -123,7 +138,10 @@ public class ListRedis extends RedisOperate {
 	 * @param value
 	 * @return
 	 */
-	public static boolean lset(String key, long index, String value) {
+	public static boolean lset(String key, long index, String value) throws Exception {
+		if (isEmpty(key)) {
+			return false;
+		}
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.lset(key, index, value);
@@ -146,7 +164,10 @@ public class ListRedis extends RedisOperate {
 	 *            结束索引
 	 * @return
 	 */
-	public static List<String> lrange(String key, long start, long end) {
+	public static List<String> lrange(String key, long start, long end) throws Exception {
+		if (isEmpty(key)) {
+			return null;
+		}
 		try {
 			jedis = acquireConnection();
 			return jedis.lrange(key, start, end);
@@ -166,7 +187,10 @@ public class ListRedis extends RedisOperate {
 	 *            <li>可以超出索引，不影响结果</li>
 	 * @return
 	 */
-	public static boolean ltrim(String key, long start, long end) {
+	public static boolean ltrim(String key, long start, long end) throws Exception {
+		if (isEmpty(key)) {
+			return false;
+		}
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.ltrim(key, start, end);
@@ -187,7 +211,10 @@ public class ListRedis extends RedisOperate {
 	 *            索引，0表示最新的一个元素
 	 * @return
 	 */
-	public static String lindex(String key, long index) {
+	public static String lindex(String key, long index) throws Exception {
+		if (isEmpty(key)) {
+			return "";
+		}
 		try {
 			jedis = acquireConnection();
 			return jedis.lindex(key, index);
@@ -201,7 +228,7 @@ public class ListRedis extends RedisOperate {
 	 * @param key
 	 * @return
 	 */
-	public static String lpop(String key) {
+	public static String lpop(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -218,7 +245,7 @@ public class ListRedis extends RedisOperate {
 	 * @param key
 	 * @return
 	 */
-	public static String rpop(String key) {
+	public static String rpop(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -238,7 +265,10 @@ public class ListRedis extends RedisOperate {
 	 *            目标列表的key，当目标key不存在时，会自动创建新的
 	 * @return
 	 */
-	public static String rpoplpush(String srckey, String dstkey) {
+	public static String rpoplpush(String srckey, String dstkey) throws Exception {
+		if (isEmpty(srckey)) {
+			return "";
+		}
 		try {
 			jedis = acquireConnection();
 			return jedis.rpoplpush(srckey, dstkey);

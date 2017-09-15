@@ -28,10 +28,13 @@ public class HashRedis extends RedisOperate {
 	 * @param field
 	 * @param value
 	 */
-	public static void hset(String key, String field, String value) {
+	public static Long hset(String key, String field, String value) throws Exception {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			jedis.hset(key, field, value);
+			return jedis.hset(key, field, value);
 		} finally {
 			returnResource();
 		}
@@ -42,7 +45,7 @@ public class HashRedis extends RedisOperate {
 	 * @param key
 	 * @param hash
 	 */
-	public static boolean hmset(String key, Map<String, String> hash) {
+	public static boolean hmset(String key, Map<String, String> hash) throws Exception {
 		if (MapUtils.isEmpty(hash) || MapUtilHelper.isEmpty(hash)) {
 			return false;
 		}
@@ -64,7 +67,7 @@ public class HashRedis extends RedisOperate {
 	 * @param key
 	 * @param field
 	 */
-	public static String hget(String key, String field) {
+	public static String hget(String key, String field) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -81,7 +84,7 @@ public class HashRedis extends RedisOperate {
 	 * @param key
 	 * @return
 	 */
-	public static Map<String, String> hgetAll(String key) {
+	public static Map<String, String> hgetAll(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -98,7 +101,7 @@ public class HashRedis extends RedisOperate {
 	 * @param key
 	 * @param fields
 	 */
-	public static List<String> hmget(String key, String... fields) {
+	public static List<String> hmget(String key, String... fields) throws Exception {
 		if (isEmpty(key) || isEmpty(fields)) {
 			return null;
 		}
@@ -118,7 +121,7 @@ public class HashRedis extends RedisOperate {
 	 *            不能为空
 	 * @return
 	 */
-	public static boolean hexists(String key, String field) {
+	public static boolean hexists(String key, String field) throws Exception {
 		if (isEmpty(key) || isEmpty(field)) {
 			return false;
 		}
@@ -134,13 +137,13 @@ public class HashRedis extends RedisOperate {
 	 * @方法描述: 删除指定的hash field
 	 * @param keys
 	 */
-	public static int hdel(String... keys) {
+	public static Long hdel(String... keys) throws Exception {
 		if (isEmpty(keys)) {
-			return 0;
+			return 0L;
 		}
 		try {
 			jedis = acquireConnection();
-			return jedis.del(keys).intValue();
+			return jedis.del(keys);
 		} finally {
 			returnResource();
 		}
@@ -150,13 +153,13 @@ public class HashRedis extends RedisOperate {
 	 * @方法描述: 返回指定hash的field数量
 	 * @param key
 	 */
-	public static int hlen(String key) {
+	public static Long hlen(String key) throws Exception {
 		if (isEmpty(key)) {
-			return 0;
+			return 0L;
 		}
 		try {
 			jedis = acquireConnection();
-			return jedis.hlen(key).intValue();
+			return jedis.hlen(key);
 		} finally {
 			returnResource();
 		}
@@ -166,7 +169,7 @@ public class HashRedis extends RedisOperate {
 	 * @方法描述: 返回hash的所有field
 	 * @param key
 	 */
-	public static Set<String> hkeys(String key) {
+	public static Set<String> hkeys(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -182,7 +185,7 @@ public class HashRedis extends RedisOperate {
 	 * @方法描述: 返回hash的所有value
 	 * @param key
 	 */
-	public static List<String> hvals(String key) {
+	public static List<String> hvals(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}

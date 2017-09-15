@@ -27,7 +27,7 @@ public class SlowlogRedis extends RedisOperate {
 	 * @param entries
 	 * @return
 	 */
-	public static List<OperateLog> getLogs(long entries) {
+	public static List<OperateLog> getLogs(long entries) throws Exception {
 		List<OperateLog> opList = null;
 		OperateLog op = null;
 		try {
@@ -61,7 +61,7 @@ public class SlowlogRedis extends RedisOperate {
 	 * @方法描述: 获取日志条数
 	 * @return
 	 */
-	public Long getLogsLen() {
+	public Long getLogsLen() throws Exception {
 		try {
 			jedis = acquireConnection();
 			return jedis.slowlogLen();
@@ -73,7 +73,7 @@ public class SlowlogRedis extends RedisOperate {
 	/**
 	 * @方法描述: 清空日志
 	 */
-	public static void logEmpty() {
+	public static void logEmpty() throws Exception {
 		try {
 			jedis = acquireConnection();
 			jedis.slowlogReset();

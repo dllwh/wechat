@@ -28,7 +28,7 @@ public class ServerRedis extends RedisOperate {
 	 * @方法描述: 获取redis 服务器信息
 	 * @return
 	 */
-	public static String getRedisInfo() {
+	public static String getRedisInfo() throws Exception {
 		try {
 			jedis = acquireConnection();
 			Client client = jedis.getClient();
@@ -43,7 +43,7 @@ public class ServerRedis extends RedisOperate {
 	 * @方法描述: 获取redis 服务器信息
 	 * @return
 	 */
-	public List<RedisInfoDetail> getRedisServerInfo() {
+	public static List<RedisInfoDetail> getRedisServerInfo() throws Exception {
 		List<RedisInfoDetail> redisList = Lists.newArrayList();
 
 		String[] strs = getRedisInfo().split("\n");
@@ -68,11 +68,11 @@ public class ServerRedis extends RedisOperate {
 	 * @方法描述: 获取占用内存大小
 	 * @return
 	 */
-	public int dbSize() {
+	public static Long dbSize() throws Exception {
 		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
-			return jedis.dbSize().intValue();
+			return jedis.dbSize();
 		} finally {
 			returnResource();
 		}
@@ -82,7 +82,7 @@ public class ServerRedis extends RedisOperate {
 	 * @方法描述: 获取当前redis使用内存大小情况
 	 * @return
 	 */
-	public Map<String, Object> getMemeryInfo() {
+	public static Map<String, Object> getMemeryInfo() throws Exception {
 		String[] strs = getRedisInfo().split("\n");
 		Map<String, Object> map = null;
 		for (int i = 0; i < strs.length; i++) {

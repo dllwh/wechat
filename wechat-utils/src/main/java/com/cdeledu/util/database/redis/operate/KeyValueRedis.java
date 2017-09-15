@@ -2,8 +2,6 @@ package com.cdeledu.util.database.redis.operate;
 
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-
 import redis.clients.jedis.Jedis;
 
 /**
@@ -22,7 +20,7 @@ public class KeyValueRedis extends RedisOperate {
 	 * @方法描述: 遍历所有的key
 	 * @return
 	 */
-	public static Set<String> getAllkeys() {
+	public static Set<String> getAllkeys() throws Exception {
 		try {
 			jedis = acquireConnection();
 			// 获取数据并输出
@@ -38,7 +36,10 @@ public class KeyValueRedis extends RedisOperate {
 	 * @param value
 	 * @return
 	 */
-	public static boolean set(String key, String value) {
+	public static boolean set(String key, String value) throws Exception {
+		if (isEmpty(key)) {
+			return false;
+		}
 		try {
 			jedis = acquireConnection();
 			String result = jedis.set(key, value);
@@ -62,10 +63,13 @@ public class KeyValueRedis extends RedisOperate {
 	 * @param value
 	 * @return 1表示设置成功，否则0
 	 */
-	public static int setnx(String key, String value) {
+	public static Long setnx(String key, String value) throws Exception {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			return jedis.setnx(key, value).intValue();
+			return jedis.setnx(key, value);
 		} finally {
 			returnResource();
 		}
@@ -82,7 +86,10 @@ public class KeyValueRedis extends RedisOperate {
 	 * @param value
 	 * @return
 	 */
-	public static boolean setex(String key, int time, String value) {
+	public static boolean setex(String key, int time, String value) throws Exception {
+		if (isEmpty(key)) {
+			return false;
+		}
 		try {
 			jedis = acquireConnection();
 			// 如果在键中设置了值，返回简单字符串回复：OK。如果值没有设置则返回 Null
@@ -104,7 +111,7 @@ public class KeyValueRedis extends RedisOperate {
 	 *            键值
 	 * @return 成功返回value，失败返回""
 	 */
-	public static String get(String key) {
+	public static String get(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -121,14 +128,14 @@ public class KeyValueRedis extends RedisOperate {
 	 * @param key
 	 * @return 返回删除个数
 	 */
-	public static int del(String key) {
+	public static Long del(String key) throws Exception {
 		if (isEmpty(key)) {
-			return 0;
+			return 0L;
 		}
 		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
-			return jedis.del(key).intValue();
+			return jedis.del(key);
 		} finally {
 			returnResource();
 		}
@@ -139,19 +146,16 @@ public class KeyValueRedis extends RedisOperate {
 	 * @param key
 	 * @return 返回删除个数
 	 */
-	public static int del(String[] key) {
+	public static Long del(String[] key) throws Exception {
 		if (isEmpty(key)) {
-			return 0;
+			return 0L;
 		}
-		if (StringUtils.isNoneBlank(key)) {
-			try {
-				jedis = acquireConnection();
-				return jedis.del(key).intValue();
-			} finally {
-				returnResource();
-			}
+		try {
+			jedis = acquireConnection();
+			return jedis.del(key);
+		} finally {
+			returnResource();
 		}
-		return 0;
 	}
 
 	/**
@@ -159,7 +163,7 @@ public class KeyValueRedis extends RedisOperate {
 	 * @param key
 	 * @return 存在返回true，否则返回false
 	 */
-	public static boolean exists(String key) {
+	public static boolean exists(String key) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -176,10 +180,13 @@ public class KeyValueRedis extends RedisOperate {
 	 * @param key
 	 * @return
 	 */
-	public static int StrLength(String key) {
+	public static Long StrLength(String key) throws Exception {
+		if (isEmpty(key)) {
+			return 0L;
+		}
 		try {
 			jedis = acquireConnection();
-			return jedis.strlen(key).intValue();
+			return jedis.strlen(key);
 		} finally {
 			returnResource();
 		}

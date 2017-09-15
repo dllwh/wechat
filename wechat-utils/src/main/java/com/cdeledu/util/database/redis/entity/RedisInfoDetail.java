@@ -57,6 +57,19 @@ public class RedisInfoDetail {
 		map.put("used_memory_lua", "Lua 引擎所使用的内存大小（以字节为单位）");
 		map.put("mem_fragmentation_ratio", "sed_memory_rss 和 used_memory 之间的比率");
 		map.put("mem_allocator", "在编译时指定的， Redis 所使用的内存分配器。可以是 libc 、 jemalloc 或者 tcmalloc");
+		
+		/**
+		 * Stats
+		 */
+		map.put("total_connections_received", "运行以来连接过的客户端的总数量");
+		map.put("total_commands_processed", "运行以来执行过的命令的总数量");
+		map.put("expired_keys", "运行以来过期的 key 的数量");
+		map.put("evicted_keys", "运行以来删除过的key的数量");
+		
+		/**
+		 * Replication
+		 */
+		map.put("role", "当前实例的角色master还是slave");
 	}
 	private String key;
 	private String value;
