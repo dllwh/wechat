@@ -184,8 +184,4 @@ public class KeyValueRedis extends RedisOperate {
 			returnResource();
 		}
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(get("chinatetLive"));
-	}
 }

@@ -1,10 +1,12 @@
 package com.cdeledu.util.database.redis.operate;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.MapUtils;
+
+import com.cdeledu.util.apache.collection.MapUtilHelper;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -40,8 +42,8 @@ public class HashRedis extends RedisOperate {
 	 * @param key
 	 * @param hash
 	 */
-	private static boolean hmset(String key, Map<String, String> hash) {
-		if (MapUtils.isEmpty(hash)) {
+	public static boolean hmset(String key, Map<String, String> hash) {
+		if (MapUtils.isEmpty(hash) || MapUtilHelper.isEmpty(hash)) {
 			return false;
 		}
 		try {
@@ -62,10 +64,13 @@ public class HashRedis extends RedisOperate {
 	 * @param key
 	 * @param field
 	 */
-	private static void hget(String key, String field) {
+	public static String hget(String key, String field) {
+		if (isEmpty(key)) {
+			return "";
+		}
 		try {
 			jedis = acquireConnection();
-			jedis.hget(key, field);
+			return jedis.hget(key, field);
 		} finally {
 			returnResource();
 		}
@@ -145,10 +150,13 @@ public class HashRedis extends RedisOperate {
 	 * @方法描述: 返回指定hash的field数量
 	 * @param key
 	 */
-	private static void hlen(String key) {
+	public static int hlen(String key) {
+		if (isEmpty(key)) {
+			return 0;
+		}
 		try {
 			jedis = acquireConnection();
-			jedis.hlen(key);
+			return jedis.hlen(key).intValue();
 		} finally {
 			returnResource();
 		}
@@ -158,10 +166,13 @@ public class HashRedis extends RedisOperate {
 	 * @方法描述: 返回hash的所有field
 	 * @param key
 	 */
-	private static void hkeys(String key) {
+	public static Set<String> hkeys(String key) {
+		if (isEmpty(key)) {
+			return null;
+		}
 		try {
 			jedis = acquireConnection();
-			jedis.hkeys(key);
+			return jedis.hkeys(key);
 		} finally {
 			returnResource();
 		}
@@ -171,7 +182,7 @@ public class HashRedis extends RedisOperate {
 	 * @方法描述: 返回hash的所有value
 	 * @param key
 	 */
-	private static List<String> hvals(String key) {
+	public static List<String> hvals(String key) {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -182,13 +193,4 @@ public class HashRedis extends RedisOperate {
 			returnResource();
 		}
 	}
-
-	public static void main(String[] args) {
-		// Map<String, String> map = new HashMap<String, String>();
-		// map.put("name", "xinxin");
-		// map.put("age", "22");
-		// map.put("qq", "123456");
-		// hmset("chinatetLive", map);
-	}
-
 }
