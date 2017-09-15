@@ -30,7 +30,14 @@ class RedisOperate {
 	protected final static int EXRP_DAY = 60 * 60 * 24; // 一天
 	protected final static int EXRP_MONTH = 60 * 60 * 24 * 30; // 一个月
 
+	/**
+	 * 成功,"OK"
+	 */
 	protected final static String SUCCESS_OK = "ok";
+	/**
+	 * 成功,1L
+	 */
+	protected static final Long SUCCESS_STATUS_LONG = 1L;
 
 	/** ----------------------------------------------------- Fields end */
 

@@ -124,7 +124,7 @@ public class KeyValueRedis extends RedisOperate {
 	}
 
 	/**
-	 * @方法描述: 根据key删除
+	 * @方法描述: 删除指定的一批keys，如果删除中的某些key不存在，则直接忽略
 	 * @param key
 	 * @return 返回删除个数
 	 */
@@ -187,6 +187,119 @@ public class KeyValueRedis extends RedisOperate {
 		try {
 			jedis = acquireConnection();
 			return jedis.strlen(key);
+		} finally {
+			returnResource();
+		}
+	}
+
+	/**
+	 * @方法描述: 设置超期时间
+	 * @param key
+	 * @param seconds
+	 *            为Null时，将会马上过期。可以设置-1，0，表示马上过期
+	 * @return
+	 */
+	public static boolean expire(String key, Integer seconds) throws Exception {
+		if (isEmpty(key)) {
+			return false;
+		}
+
+		if (seconds == null) {
+			seconds = -1;
+		}
+		try {
+			jedis = acquireConnection();
+			Long statusCode = jedis.expire(key, seconds);
+			if (SUCCESS_STATUS_LONG == statusCode) {
+				return true;
+			}
+		} finally {
+			returnResource();
+		}
+		return false;
+	}
+
+	/**
+	 * @方法描述: 将key设置为永久
+	 * @param key
+	 * @return
+	 */
+	public static boolean persist(String key) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			jedis = acquireConnection();
+			Long statusCode = jedis.persist(key);
+			if (SUCCESS_STATUS_LONG == statusCode) {
+				return true;
+			}
+		} finally {
+			returnResource();
+		}
+		return false;
+	}
+
+	/**
+	 * @方法描述: 修改 key的名称,成功返回true;<br/>
+	 *        如果key与newkey相同，将返回一个错误。如果newkey已经存在，则值将被覆盖
+	 * @param oldkey
+	 * @param newKey
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean rename(String oldkey, String newKey) throws Exception {
+		if (isEmpty(oldkey) || isEmpty(newKey) || oldkey.equalsIgnoreCase(newKey)) {
+			return false;
+		}
+		try {
+			jedis = acquireConnection();
+			String statusCode = jedis.rename(oldkey, newKey);
+			if (SUCCESS_OK.equalsIgnoreCase(statusCode)) {
+				return true;
+			}
+		} finally {
+			returnResource();
+		}
+		return false;
+	}
+
+	/**
+	 * @方法描述: 仅当 newkey 不存在时,将 key 改名为 newkey,成功返回true
+	 * @param oldkey
+	 * @param newKey
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean renamenx(String oldkey, String newKey) throws Exception {
+		if (isEmpty(oldkey) || isEmpty(newKey) || !exists(oldkey) || exists(newKey)) {
+			return false;
+		}
+		try {
+			jedis = acquireConnection();
+			Long statusCode = jedis.renamenx(oldkey, newKey);
+			if (SUCCESS_STATUS_LONG == statusCode) {
+				return true;
+			}
+		} finally {
+			returnResource();
+		}
+		return false;
+	}
+
+	/**
+	 * @方法描述: 返回key所存储的value的数据结构类型，它可以返回string, list, set, zset 和 hash等不同的类型。
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
+	public static String type(String key) throws Exception {
+		if (isEmpty(key) || !exists(key)) {
+			return "";
+		}
+		try {
+			jedis = acquireConnection();
+			return jedis.type(key);
 		} finally {
 			returnResource();
 		}

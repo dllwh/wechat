@@ -29,7 +29,7 @@ public class HashRedis extends RedisOperate {
 	 * @param value
 	 */
 	public static Long hset(String key, String field, String value) throws Exception {
-		if (isEmpty(key)) {
+		if (isEmpty(key) || isEmpty(field)) {
 			return 0L;
 		}
 		try {
@@ -68,7 +68,7 @@ public class HashRedis extends RedisOperate {
 	 * @param field
 	 */
 	public static String hget(String key, String field) throws Exception {
-		if (isEmpty(key)) {
+		if (isEmpty(key) || isEmpty(field)) {
 			return "";
 		}
 		try {
@@ -119,7 +119,7 @@ public class HashRedis extends RedisOperate {
 	 *            不能为空
 	 * @param field
 	 *            不能为空
-	 * @return
+	 * @return 返回hash里面field是否存在
 	 */
 	public static boolean hexists(String key, String field) throws Exception {
 		if (isEmpty(key) || isEmpty(field)) {
@@ -166,7 +166,7 @@ public class HashRedis extends RedisOperate {
 	}
 
 	/**
-	 * @方法描述: 返回hash的所有field
+	 * @方法描述: 返回 key 指定的哈希集中所有字段的名字
 	 * @param key
 	 */
 	public static Set<String> hkeys(String key) throws Exception {
