@@ -107,7 +107,7 @@
 		<!-- Java开源爬虫框架WebCollector 2.x -->
 		<webCollector.version>2.32</webCollector.version>
 
-		<jackson.version>2.2.3</jackson.version>
+		<jackson.version>2.7.3</jackson.version>
 		<fastjson.version>1.1.41</fastjson.version>
 	</properties>
 
@@ -326,16 +326,6 @@
 			<artifactId>json-lib</artifactId>
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.7.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId><!-- jackson json:高性能的JSON处理 -->
-			<version>2.7.3</version>
 		</dependency>
 		<!-- jackson json -->
 		<dependency>

@@ -12,6 +12,12 @@
 	<name>wechat-template</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
+			<!-- 配置子项目的相关调用 -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>wechat-utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
