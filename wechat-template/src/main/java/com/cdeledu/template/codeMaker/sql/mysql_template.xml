@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+	<!--获取表名和注释映射 -->
+	<table>
+		SELECT
+			table_name AS name,
+			IFNULL(TABLE_COMMENT, table_name) AS table_desc
+		FROM INFORMATION_SCHEMA.TABLES
+		WHERE TABLE_TYPE LIKE '%table%' AND table_name = '#table#' AND table_schema = '#database#'
+		ORDER BY table_name
+	</table>
+
+	<!-- 获取获取表字段注释 -->
+	<column>
+
+	</column>
+</database>

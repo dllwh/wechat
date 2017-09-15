@@ -13,6 +13,36 @@ package com.cdeledu.template.codeMaker.config;
  */
 public class Configuration {
 	/** ----------------------------------------------------- Fields start */
+	private static final String BEAN_TEMPLATE = "%sbean%s_template.xml";
+
+	private static final String SERVICE_TEMPLATE = "%sservice%s_template.xml";
+
+	private static final String SERVICEIMPL_TEMPLATE = "%sserviceimpl%s_template.xml";
+
+	private static final String DAO_TEMPLATE = "%sdao%s_template.xml";
+
+	private static final String MYBATIS_TEMPLATE = "%smybatis%s_template.xml";
 
 	/** ----------------------------------------------------- Fields end */
+
+	public static String getBeanTemplateLocation() {
+		return "";
+	}
+
+	public static String getServiceTemplateLocation() {
+		return "";
+	}
+
+	public static String getServiceImplTemplateLocation() {
+		return "";
+	}
+
+	public static String getDaoTemplateLocation() {
+		return "";
+	}
+
+	public static String getMybatisTemplateLocation() {
+		return "";
+	}
+
 }

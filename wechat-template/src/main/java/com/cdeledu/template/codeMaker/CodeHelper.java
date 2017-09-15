@@ -1,28 +1,34 @@
 package com.cdeledu.template.codeMaker;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.template.codeMaker.config.Column;
 import com.cdeledu.template.codeMaker.config.Table;
@@ -42,8 +48,9 @@ import com.google.common.collect.Lists;
 public class CodeHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static JFrame frame = new JFrame("代码生成器");
+	
+	private static JTextField databaseField = new JTextField("");
 	private static JTextField driverField = new JTextField("");
-
 	private static JTextField urlField = new JTextField("");
 	private static JTextField usernameField = new JTextField("");
 	private static JTextField passwordField = new JTextField("");
@@ -51,11 +58,11 @@ public class CodeHelper {
 	private static JTextField packageField = new JTextField("");
 
 	private static JButton codeButton = new JButton(" 生成代码 ");
+
 	private static JTextArea beanText = new JTextArea();
 	private static JTextArea mybatisText = new JTextArea();
 	private static JTextArea serviceText = new JTextArea();
 	private static JTextArea serviceImplText = new JTextArea();
-
 	private static JTextArea daoText = new JTextArea();
 
 	/** ----------------------------------------------------- Fields end */
@@ -69,27 +76,48 @@ public class CodeHelper {
 		JPanel topPanel = new JPanel();
 		BoxLayout boxLayout = new BoxLayout(topPanel, BoxLayout.Y_AXIS);
 		topPanel.setLayout(boxLayout);
-		topPanel.add(getField("驱动", driverField));
-		topPanel.add(getField("URL", urlField));
-		topPanel.add(getField("用户名", usernameField));
-		topPanel.add(getField("密码", passwordField));
-		topPanel.add(getField("数据库表", tableField));
-		topPanel.add(getField("基础路径", packageField));
+		
+		topPanel.add(getFieldByBox("数据类型", databaseField,new String[]{"MySQL","SQL Server"}));
+		topPanel.add(getFieldByText("驱动", driverField));
+		topPanel.add(getFieldByText("URL", urlField));
+		topPanel.add(getFieldByText("用户名", usernameField));
+		topPanel.add(getFieldByText("密码", passwordField));
+		topPanel.add(getFieldByText("数据库表", tableField));
+		topPanel.add(getFieldByText("基础路径", packageField));
 		topPanel.add(getFieldSpecial("操作"));
 		topPanel.setPreferredSize(new Dimension(0, 270));
 
-		mybatisText.setBorder(BorderFactory.createEtchedBorder());
-		beanText.setBorder(BorderFactory.createEtchedBorder());
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(tab, BorderLayout.CENTER);
-		JScrollPane beanScroll = new JScrollPane(beanText);
+		JScrollPane beanScroll = setTextAreaByTab(beanText);
 		final JScrollBar beanScrollBar = beanScroll.getVerticalScrollBar();
 		beanScrollBar.setUnitIncrement(100);
+		// 生成代码
+		codeButton.setEnabled(false);
+		codeButton.setVisible(false);
+		codeButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				try {
+					createCode();
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					tab.setSelectedIndex(0);
+					beanScrollBar.setValue(beanScrollBar.getMinimum());
+				}
+			}
+		});
+
+		mybatisText.setBorder(BorderFactory.createEtchedBorder());
+		beanText.setBorder(BorderFactory.createEtchedBorder());
+
 		tab.addTab("Bean 代码", beanScroll);
-		tab.addTab("Service 接口", new JScrollPane(serviceText));
-		tab.addTab("Service 实现", new JScrollPane(serviceImplText));
-		tab.addTab("Dao 实现", new JScrollPane(daoText));
-		tab.addTab("MyBatis 配置", new JScrollPane(mybatisText));
+		tab.addTab("Service 接口", setTextAreaByTab(serviceText));
+		tab.addTab("Service 实现", setTextAreaByTab(serviceImplText));
+		tab.addTab("MyBatis 配置", setTextAreaByTab(daoText));
+		tab.addTab("MyBatis 配置", setTextAreaByTab(mybatisText));
+
 		frame.setVisible(true);
 		frame.setSize(800, 700);
 		frame.setLayout(new BorderLayout());
@@ -98,83 +126,76 @@ public class CodeHelper {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		// frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // 设置窗体全屏显示
-		codeButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				try {
-					createCode();
-				} catch (Exception e) {
-					e.printStackTrace();
 
-				} finally {
-					tab.setSelectedIndex(0);
-					beanScrollBar.setValue(beanScrollBar.getMinimum());
-				}
-			}
-		});
-		beanText.setLineWrap(true);// 激活自动换行功能
-		beanText.setTabSize(4);
-		serviceText.setLineWrap(true);// 激活自动换行功能
-		serviceText.setTabSize(4);
-		serviceImplText.setLineWrap(true);// 激活自动换行功能
-		serviceImplText.setTabSize(4);
-		daoText.setLineWrap(true);// 激活自动换行功能
-		daoText.setTabSize(4);
-		mybatisText.setLineWrap(true);// 激活自动换行功能
-		mybatisText.setTabSize(4);
 	}
 
-	private static JPanel getField(String title, JComponent c) {
+	private static <E> JPanel getFieldByBox(String title, JComponent c,String[] Item) {
+		JPanel tr = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel label = new JLabel(title);
+		label.setPreferredSize(new Dimension(80, 30));
+		tr.add(label);
+		final JComboBox<String> comboBox = new JComboBox<String>(Item);
+		comboBox.setSelectedItem(null);// 设置初始选项为空
+		comboBox.setPreferredSize(new Dimension(679, 30));
+		comboBox.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (ItemEvent.SELECTED == e.getStateChange()) {  
+					System.out.println(comboBox.getSelectedItem());
+					codeButton.setEnabled(true);
+					codeButton.setVisible(true);
+				} 
+			}
+		});
+		comboBox.setForeground(Color.red);
+		tr.add(comboBox);
+		return tr;
+	}
+
+	/**
+	 * @方法描述: 取得字段
+	 * @param title
+	 * @param c
+	 * @return 标签 + 输入框
+	 */
+	private static JPanel getFieldByText(String title, JComponent c) {
 		JPanel tr = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel label = new JLabel(title);
 		label.setPreferredSize(new Dimension(80, 30));
 		tr.add(label);
 		tr.add(c);
-		c.setPreferredSize(new Dimension(579, 30));
+		c.setPreferredSize(new Dimension(679, 30));
 		return tr;
 	}
 
+	/**
+	 * @方法描述: 取得字段
+	 * @param title
+	 * @param c
+	 * @return 标签 + 按钮
+	 */
 	private static JPanel getFieldSpecial(String title) {
 		JPanel tr = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel label = new JLabel(title);
 		label.setPreferredSize(new Dimension(80, 30));
 		tr.add(label);
-		JCheckBox box = new JCheckBox();
-		box.setText("lombok");
-		box.setSelected(true);
-		box.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showConfirmDialog(null, "choose one", "choose one",
-						JOptionPane.YES_NO_OPTION);
-			}
-		});
-		tr.add(box);
-		JRadioButton daoRandioButton = new JRadioButton("Dao");
-		daoRandioButton.setSelected(true);
-		daoRandioButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showConfirmDialog(null, "choose one", "choose one",
-						JOptionPane.YES_NO_OPTION);
-			}
-		});
-		JRadioButton mapperRandioButton = new JRadioButton("Mapper");
-		mapperRandioButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showConfirmDialog(null, "choose one", "choose one",
-						JOptionPane.YES_NO_OPTION);
-			}
-		});
-		ButtonGroup group = new ButtonGroup();
-		group.add(daoRandioButton);
-		group.add(mapperRandioButton);
-		tr.add(daoRandioButton);
-		tr.add(mapperRandioButton);
-		codeButton.setPreferredSize(new Dimension(356, 30));
+		codeButton.setPreferredSize(new Dimension(679, 30));
 		tr.add(codeButton);
 		return tr;
+	}
+
+	/**
+	 * @方法描述: 设置文本区
+	 * @param jta
+	 * @return
+	 */
+	private static JScrollPane setTextAreaByTab(JTextArea jta) {
+		jta.setLineWrap(true);// 激活自动换行功能
+		jta.setWrapStyleWord(true); // 激活断行不断字功能
+		jta.setEditable(false);// 设置不可编辑
+		jta.setTabSize(6);
+		return new JScrollPane(jta);
 	}
 
 	/**
@@ -183,6 +204,13 @@ public class CodeHelper {
 	 * @throws Exception
 	 */
 	private static void createCode() throws Exception {
+		
+		System.out.println("--------------------"+databaseField.getText());
+		if(StringUtils.isBlank(databaseField.getText())){
+			JOptionPane.showConfirmDialog(null, "参数不能为空","温馨提示",JOptionPane.DEFAULT_OPTION);
+			databaseField.grabFocus();
+			return;
+		}
 		List<Column> columns = getColumns(tableField.getText());
 		Table table = getTable(tableField.getText());
 		String packages = "";
@@ -277,6 +305,16 @@ public class CodeHelper {
 	 */
 	private static Table getTable(String tableName) throws Exception {
 		Table table = new Table(tableName, tableName);
+		String url = "jdbc:sqlserver://192.168.192.250:1433;DatabaseName=chinatet_live_302";
+		String user = "sa";
+		String password = "cailiqiang";
+		String sql = "SELECT  st.name,ISNULL(cast([value] as varchar(500)), st.name) table_desc  FROM sys.tables st LEFT JOIN sys.extended_properties sep ON st.object_id = sep.major_id AND sep.minor_id = 0 where st.name = 'zb_comment' ORDER BY st.name";
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		Connection conn = DriverManager.getConnection(url, user, password);
+		ResultSet rs = conn.prepareStatement(sql).executeQuery();
+		while (rs.next()) {
+			System.out.println(rs.getString("name"));
+		}
 		return table;
 	}
 
@@ -294,5 +332,11 @@ public class CodeHelper {
 
 	public static void main(String[] args) {
 		createView();
+
+		try {
+			// getTable("");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

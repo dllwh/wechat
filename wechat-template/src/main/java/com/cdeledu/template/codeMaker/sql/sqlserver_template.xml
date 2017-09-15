@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+	<!--获取表名和注释映射 -->
+	<table>
+		SELECT
+			st.name,
+			ISNULL(sep.value,st.name)   table_desc
+		FROM sys.tables st
+		LEFT JOIN sys.extended_properties sep ON st.object_id = sep.major_id AND sep.minor_id = 0
+		where st.name ='#table#'
+		ORDER BY st.name
+	</table>
+
+	<!-- 获取获取表字段注释 -->
+	<column>
+
+	</column>
+</database>
