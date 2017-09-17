@@ -4,7 +4,7 @@
 	<table>
 		SELECT
 			st.name,
-			ISNULL(sep.value,st.name)   table_desc
+			ISNULL(cast([value] as varchar(500)), st.name) table_desc
 		FROM sys.tables st
 		LEFT JOIN sys.extended_properties sep ON st.object_id = sep.major_id AND sep.minor_id = 0
 		where st.name ='#table#'

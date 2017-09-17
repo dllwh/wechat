@@ -12,5 +12,5 @@ package com.cdeledu.template.codeMaker.config;
  * @since: JDK 1.7
  */
 public enum MyBatisType {
-	dao, mapper
+	mysql, sqlserver
 }

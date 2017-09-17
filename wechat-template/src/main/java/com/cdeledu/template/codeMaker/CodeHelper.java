@@ -1,11 +1,8 @@
 package com.cdeledu.template.codeMaker;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -15,23 +12,25 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.cdeledu.template.codeMaker.config.CodeMakerUtil;
 import com.cdeledu.template.codeMaker.config.Column;
+import com.cdeledu.template.codeMaker.config.Configuration;
+import com.cdeledu.template.codeMaker.config.MyBatisType;
 import com.cdeledu.template.codeMaker.config.Table;
+import com.cdeledu.util.application.regex.RegexUtil;
 import com.google.common.collect.Lists;
 
 /**
@@ -48,8 +47,7 @@ import com.google.common.collect.Lists;
 public class CodeHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static JFrame frame = new JFrame("代码生成器");
-	
-	private static JTextField databaseField = new JTextField("");
+
 	private static JTextField driverField = new JTextField("");
 	private static JTextField urlField = new JTextField("");
 	private static JTextField usernameField = new JTextField("");
@@ -58,6 +56,7 @@ public class CodeHelper {
 	private static JTextField packageField = new JTextField("");
 
 	private static JButton codeButton = new JButton(" 生成代码 ");
+	private static JButton connButton = new JButton(" 连接 ");
 
 	private static JTextArea beanText = new JTextArea();
 	private static JTextArea mybatisText = new JTextArea();
@@ -76,8 +75,7 @@ public class CodeHelper {
 		JPanel topPanel = new JPanel();
 		BoxLayout boxLayout = new BoxLayout(topPanel, BoxLayout.Y_AXIS);
 		topPanel.setLayout(boxLayout);
-		
-		topPanel.add(getFieldByBox("数据类型", databaseField,new String[]{"MySQL","SQL Server"}));
+
 		topPanel.add(getFieldByText("驱动", driverField));
 		topPanel.add(getFieldByText("URL", urlField));
 		topPanel.add(getFieldByText("用户名", usernameField));
@@ -92,14 +90,33 @@ public class CodeHelper {
 		JScrollPane beanScroll = setTextAreaByTab(beanText);
 		final JScrollBar beanScrollBar = beanScroll.getVerticalScrollBar();
 		beanScrollBar.setUnitIncrement(100);
-		// 生成代码
+
 		codeButton.setEnabled(false);
-		codeButton.setVisible(false);
-		codeButton.addMouseListener(new MouseAdapter() {
+		// 测试链接
+		connButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				try {
-					createCode();
+					if (getConnection()) {
+						codeButton.setEnabled(true);
+						// 生成代码
+						codeButton.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent event) {
+								try {
+									createCode();
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									tab.setSelectedIndex(0);
+									beanScrollBar.setValue(beanScrollBar.getMinimum());
+								}
+							}
+						});
+					} else {
+
+					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -118,8 +135,8 @@ public class CodeHelper {
 		tab.addTab("MyBatis 配置", setTextAreaByTab(daoText));
 		tab.addTab("MyBatis 配置", setTextAreaByTab(mybatisText));
 
-		frame.setVisible(true);
-		frame.setSize(800, 700);
+		frame.setVisible(true); // 使窗体可视
+		frame.setSize(800, 700);// 设置窗体大小
 		frame.setLayout(new BorderLayout());
 		frame.add(topPanel, BorderLayout.NORTH);
 		frame.add(centerPanel, BorderLayout.CENTER);
@@ -127,30 +144,6 @@ public class CodeHelper {
 		frame.setLocationRelativeTo(null);
 		// frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // 设置窗体全屏显示
 
-	}
-
-	private static <E> JPanel getFieldByBox(String title, JComponent c,String[] Item) {
-		JPanel tr = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JLabel label = new JLabel(title);
-		label.setPreferredSize(new Dimension(80, 30));
-		tr.add(label);
-		final JComboBox<String> comboBox = new JComboBox<String>(Item);
-		comboBox.setSelectedItem(null);// 设置初始选项为空
-		comboBox.setPreferredSize(new Dimension(679, 30));
-		comboBox.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (ItemEvent.SELECTED == e.getStateChange()) {  
-					System.out.println(comboBox.getSelectedItem());
-					codeButton.setEnabled(true);
-					codeButton.setVisible(true);
-				} 
-			}
-		});
-		comboBox.setForeground(Color.red);
-		tr.add(comboBox);
-		return tr;
 	}
 
 	/**
@@ -180,7 +173,29 @@ public class CodeHelper {
 		JLabel label = new JLabel(title);
 		label.setPreferredSize(new Dimension(80, 30));
 		tr.add(label);
-		codeButton.setPreferredSize(new Dimension(679, 30));
+		JRadioButton daoRandioButton = new JRadioButton("mysql");
+		daoRandioButton.setSelected(true);
+		daoRandioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Configuration.setCodeTemplateType(MyBatisType.mysql);
+			}
+		});
+		JRadioButton mapperRandioButton = new JRadioButton("sqlserver");
+		mapperRandioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Configuration.setCodeTemplateType(MyBatisType.sqlserver);
+			}
+		});
+		ButtonGroup group = new ButtonGroup();
+		group.add(daoRandioButton);
+		group.add(mapperRandioButton);
+		tr.add(daoRandioButton);
+		tr.add(mapperRandioButton);
+		connButton.setPreferredSize(new Dimension(260, 30));
+		tr.add(connButton);
+		codeButton.setPreferredSize(new Dimension(260, 30));
 		tr.add(codeButton);
 		return tr;
 	}
@@ -198,19 +213,28 @@ public class CodeHelper {
 		return new JScrollPane(jta);
 	}
 
+	private static boolean getConnection() throws Exception {
+		Connection conn = null;
+		try {
+			Class.forName(driverField.getText());
+			conn = DriverManager.getConnection(urlField.getText(), usernameField.getText(),
+					passwordField.getText());
+			return true;
+		} catch (Exception e) {
+			return false;
+		} finally {
+			if (conn != null)
+				conn.close();
+		}
+	}
+
 	/**
 	 * @方法:生成代码
 	 * @创建人:独泪了无痕
 	 * @throws Exception
 	 */
 	private static void createCode() throws Exception {
-		
-		System.out.println("--------------------"+databaseField.getText());
-		if(StringUtils.isBlank(databaseField.getText())){
-			JOptionPane.showConfirmDialog(null, "参数不能为空","温馨提示",JOptionPane.DEFAULT_OPTION);
-			databaseField.grabFocus();
-			return;
-		}
+
 		List<Column> columns = getColumns(tableField.getText());
 		Table table = getTable(tableField.getText());
 		String packages = "";
@@ -304,16 +328,24 @@ public class CodeHelper {
 	 * @throws Exception
 	 */
 	private static Table getTable(String tableName) throws Exception {
+		String xml = CodeMakerUtil.read(Configuration.getSQLTemplateLocation());
+		// 匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。
+		String sql = RegexUtil.getKeyWords("<table>([\\w\\W]+?)</table>", xml, 1);
+		sql = sql.replace("#table#", tableName);
+		Connection conn = null;
+		ResultSet rs = null;
 		Table table = new Table(tableName, tableName);
-		String url = "jdbc:sqlserver://192.168.192.250:1433;DatabaseName=chinatet_live_302";
-		String user = "sa";
-		String password = "cailiqiang";
-		String sql = "SELECT  st.name,ISNULL(cast([value] as varchar(500)), st.name) table_desc  FROM sys.tables st LEFT JOIN sys.extended_properties sep ON st.object_id = sep.major_id AND sep.minor_id = 0 where st.name = 'zb_comment' ORDER BY st.name";
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		Connection conn = DriverManager.getConnection(url, user, password);
-		ResultSet rs = conn.prepareStatement(sql).executeQuery();
-		while (rs.next()) {
-			System.out.println(rs.getString("name"));
+		try {
+			Class.forName(driverField.getText());
+			conn = DriverManager.getConnection(urlField.getText(), usernameField.getText(),
+					passwordField.getText());
+			rs = conn.prepareStatement(sql.toString()).executeQuery();
+			while (rs.next()) {
+				table = new Table(tableName, rs.getString("table_desc"));
+			}
+		} finally {
+			if (conn != null)
+				conn.close();
 		}
 		return table;
 	}
@@ -330,13 +362,8 @@ public class CodeHelper {
 		return rows;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		createView();
-
-		try {
-			// getTable("");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// getTable("");
 	}
 }

@@ -13,36 +13,85 @@ package com.cdeledu.template.codeMaker.config;
  */
 public class Configuration {
 	/** ----------------------------------------------------- Fields start */
-	private static final String BEAN_TEMPLATE = "%sbean%s_template.xml";
-
-	private static final String SERVICE_TEMPLATE = "%sservice%s_template.xml";
-
-	private static final String SERVICEIMPL_TEMPLATE = "%sserviceimpl%s_template.xml";
-
-	private static final String DAO_TEMPLATE = "%sdao%s_template.xml";
-
-	private static final String MYBATIS_TEMPLATE = "%smybatis%s_template.xml";
+	private static MyBatisType codeTemplateType = MyBatisType.mysql;
+	private static final String BEAN_TEMPLATE = "entity/bean_template.xml";
+	private static final String SERVICE_TEMPLATE = "service/service_template.xml";
+	private static final String SERVICEIMPL_TEMPLATE = "service/impl/serviceimpl_template.xml";
+	private static final String DAO_TEMPLATE = "dao/dao_template.xml";
+	private static final String MYBATIS_TEMPLATE = "mapper/mybatis_%s_template.xml";
+	private static final String SQL_TEMPLATE = "sql/%s_template.xml";
 
 	/** ----------------------------------------------------- Fields end */
 
+	/**
+	 * @方法:获取实体类的配置文件路径
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
 	public static String getBeanTemplateLocation() {
-		return "";
+		return BEAN_TEMPLATE;
 	}
 
+	/**
+	 * @方法:获取服务接口的配置文件路径
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
 	public static String getServiceTemplateLocation() {
-		return "";
+		return SERVICE_TEMPLATE;
 	}
 
+	/**
+	 * @方法:获取服务实现的配置文件路径
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
 	public static String getServiceImplTemplateLocation() {
-		return "";
+		return SERVICEIMPL_TEMPLATE;
 	}
 
+	/**
+	 * @方法:获取Dao服务的配置文件路径
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
 	public static String getDaoTemplateLocation() {
-		return "";
+		return DAO_TEMPLATE;
 	}
 
+	/**
+	 * @方法:获取数据库操作的配置文件路径
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
 	public static String getMybatisTemplateLocation() {
-		return "";
+		return String.format(MYBATIS_TEMPLATE, codeTemplateType);
+	}
+
+	/**
+	 * @方法:获取sql的配置文件路径
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	public static String getSQLTemplateLocation() {
+		return String.format(SQL_TEMPLATE, codeTemplateType);
+	}
+
+	/**
+	 * @方法:设置连接数据库链接类型
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	public static void setCodeTemplateType(MyBatisType codeTemplateType) {
+		Configuration.codeTemplateType = codeTemplateType;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(getBeanTemplateLocation());
+		System.out.println(getServiceTemplateLocation());
+		System.out.println(getServiceImplTemplateLocation());
+		System.out.println(getDaoTemplateLocation());
+		System.out.println(getMybatisTemplateLocation());
 	}
 
 }

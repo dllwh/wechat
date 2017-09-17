@@ -1,11 +1,17 @@
 package com.cdeledu.template.codeMaker.config;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+
 import org.apache.commons.lang3.StringUtils;
+
+import com.cdeledu.common.constant.ConstantHelper;
+import com.cdeledu.template.codeMaker.CodeHelper;
 
 public class CodeMakerUtil {
 	/** ----------------------------------------------------- Fields start */
-	/** 字符编码 */
-	public static final String CHARSET = "UTF-8";
+
 	/** ----------------------------------------------------- Fields end */
 
 	/**
@@ -69,5 +75,32 @@ public class CodeMakerUtil {
 		}
 
 		return b.toString();
+	}
+
+	/**
+	 * @方法:读取配置信息
+	 * @创建人:独泪了无痕
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	public static String read(String file) throws Exception {
+		InputStream in = null;
+		InputStreamReader reader = null;
+		try {
+			in = CodeHelper.class.getResourceAsStream(file);
+			reader = new InputStreamReader(in, ConstantHelper.UTF_8);
+			StringWriter writer = new StringWriter();
+			int len = -1;
+			char[] buffer = new char[128];
+			while ((len = reader.read(buffer)) != -1) {
+				writer.write(buffer, 0, len);
+			}
+			writer.flush();
+			return writer.toString();
+		} finally {
+			if (reader != null)
+				reader.close();
+		}
 	}
 }
