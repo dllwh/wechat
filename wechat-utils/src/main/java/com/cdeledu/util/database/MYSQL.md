@@ -2,11 +2,14 @@
 ------------------------------
 * **获取表名和注释映射**
 
-	String sql = "SELECT table_name tname, TABLE_COMMENT comments FROM INFORMATION_SCHEMA. TABLES ";
-	StringBuilder sqlBuilder = new StringBuilder(sql);
-	sqlBuilder.append("WHERE TABLE_COMMENT is not NULL AND TABLE_COMMENT != '' AND TABLE_TYPE LIKE '%table%' ");
-	sqlBuilder.append("table_schema = 'db_wechat'");
-	sqlBuilder.append("order by tname ");
+	SELECT
+		table_name AS name,
+		IFNULL(TABLE_COMMENT, table_name) AS table_desc
+	FROM INFORMATION_SCHEMA.TABLES
+	WHERE TABLE_TYPE LIKE '%table%' AND table_schema = 'db_wechat'
+	ORDER BY table_name
+	
+	
 * **获取获取表字段注释**
 
 	String sql = "SELECT TABLE_NAME tname, COLUMN_NAME cname, 	COLUMN_COMMENT comments FROM INFORMATION_SCHEMA. COLUMNS ";

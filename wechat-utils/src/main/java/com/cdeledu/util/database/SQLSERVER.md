@@ -1,13 +1,14 @@
 数据库表说明:
 ------------------------------
 * **获取表名和注释映射**
+		
+	SELECT
+		st.name,
+		ISNULL(sep.value,st.name)   table_desc
+	FROM sys.tables st
+	LEFT JOIN sys.extended_properties sep ON st.object_id = sep.major_id AND sep.minor_id = 0
+	ORDER BY st.name
 	
-	StringBuilder sqlBuilder = new StringBuilder("select a.name tname, b.value comments ");
-	sqlBuilder.append("from sys.tables a left join sys.extended_properties b on a.object_id=b.major_id ");
-	sqlBuilder.append("where b.minor_id=0 and b.name = 'MS_Description' ");
-	sqlBuilder.append("and a.schema_id in ( ");
-	sqlBuilder.append(" select schema_id from sys.schemas  ");
-	sqlBuilder.append(")  and b.value is not null ");
 	
 * **获取获取表字段注释**
 
