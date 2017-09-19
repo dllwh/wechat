@@ -29,8 +29,8 @@ public class RedisConfig {
 	private static ReentrantLock lockPool = new ReentrantLock();
 	protected static Logger logger = Logger.getLogger(RedisConfig.class);
 	private static String auth, address, masterName;
-	private static int max_active, max_idle, max_wait, timeout;
-	private static boolean test_on_borrow, test_on_return;
+	private static int max_active, max_idle, max_wait, timeout, database = 0;
+	private static boolean test_on_borrow, test_on_return,test_whileIdle;
 	private static Map<String, String> proMap = null;
 
 	private static JedisSentinelPool jedisPool = null;
@@ -44,12 +44,17 @@ public class RedisConfig {
 			proMap = PropertyHelper.getMapByProperties("datasource/redis.properties");
 			address = (String) proMap.get("redis.address");
 			auth = (String) proMap.get("redis.auth");
+			try {
+				database = Integer.valueOf(proMap.get("redis.database"));
+			} catch (Exception e) {
+			}
 			max_active = Integer.valueOf(proMap.get("redis.max-active"));
 			max_idle = Integer.valueOf(proMap.get("redis.min-idle"));
 			max_wait = Integer.valueOf(proMap.get("redis.max-wait"));
 			timeout = Integer.valueOf(proMap.get("redis.timeout"));
 			test_on_borrow = Boolean.valueOf(proMap.get("redis.borrow"));
 			test_on_return = Boolean.valueOf(proMap.get("redis.return"));
+			test_whileIdle = Boolean.valueOf(proMap.get("redis.whileIdle"));
 			masterName = (String) proMap.get("redis.masterName");
 			logger.info("初始化Redis配置参数成功.");
 		} catch (Exception ex) {
@@ -81,11 +86,18 @@ public class RedisConfig {
 	 */
 	private void initConfig() {
 		poolConfig = new JedisPoolConfig();
+		//设置最大连接数
 		poolConfig.setMaxTotal(max_active);
+		//最大空闲连接数
 		poolConfig.setMaxIdle(max_idle);
+		 //获取Jedis连接的最大等待时间
 		poolConfig.setMaxWaitMillis(max_wait);
+		 //在获取Jedis连接时，自动检验连接是否可用
 		poolConfig.setTestOnBorrow(test_on_borrow);
+		//在将连接放回池中前，自动检验连接是否有效
 		poolConfig.setTestOnReturn(test_on_return);
+		//自动测试池中的空闲连接是否都是可用连接
+		poolConfig.setTestWhileIdle(test_whileIdle);
 	}
 
 	/**
@@ -104,9 +116,10 @@ public class RedisConfig {
 				}
 				if (StringUtils.isNoneBlank(auth)) {
 					jedisPool = new JedisSentinelPool(masterName, sentinels, poolConfig, timeout,
-							auth);
+							auth, database);
 				} else {
-					jedisPool = new JedisSentinelPool(masterName, sentinels, poolConfig, timeout);
+					jedisPool = new JedisSentinelPool(masterName, sentinels, poolConfig, timeout,
+							null, database);
 				}
 			}
 			logger.info("JedisPool注入成功！！");

@@ -41,7 +41,7 @@ public class RedisClient {
 	private static ReentrantLock lockJedis = new ReentrantLock();
 	private static JedisSentinelPool jedisPool = null;
 	private static RedisClient redisClient;
-	private static Jedis jedis = null;
+	// private static Jedis jedis = null;
 
 	/**
 	 * redis过期时间,以秒为单位
@@ -98,6 +98,7 @@ public class RedisClient {
 	 * @return
 	 */
 	public Set<String> getAllkeys() throws Exception {
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			// 获取数据并输出
@@ -117,6 +118,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			String result = jedis.set(key, value);
@@ -144,6 +146,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.setnx(key, value);
@@ -167,6 +170,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			// 如果在键中设置了值，返回简单字符串回复：OK。如果值没有设置则返回 Null
@@ -192,6 +196,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.get(key);
@@ -227,6 +232,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.del(key);
@@ -244,6 +250,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.exists(key);
@@ -261,6 +268,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.strlen(key);
@@ -284,6 +292,7 @@ public class RedisClient {
 		if (seconds == null) {
 			seconds = -1;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.expire(key, seconds);
@@ -305,6 +314,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.persist(key);
@@ -329,6 +339,7 @@ public class RedisClient {
 		if (isEmpty(oldkey) || isEmpty(newKey) || oldkey.equalsIgnoreCase(newKey)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.rename(oldkey, newKey);
@@ -352,6 +363,7 @@ public class RedisClient {
 		if (isEmpty(oldkey) || isEmpty(newKey) || !exists(oldkey) || exists(newKey)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.renamenx(oldkey, newKey);
@@ -374,6 +386,7 @@ public class RedisClient {
 		if (isEmpty(key) || !exists(key)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.type(key);
@@ -397,6 +410,7 @@ public class RedisClient {
 		if (isEmpty(key) || isEmpty(field)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hset(key, field, value);
@@ -414,6 +428,7 @@ public class RedisClient {
 		if (MapUtils.isEmpty(hash) || MapUtilHelper.isEmpty(hash)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.hmset(key, hash);
@@ -436,6 +451,7 @@ public class RedisClient {
 		if (isEmpty(key) || isEmpty(field)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hget(key, field);
@@ -453,6 +469,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hgetAll(key);
@@ -470,6 +487,7 @@ public class RedisClient {
 		if (isEmpty(key) || isEmpty(fields)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hmget(key, fields);
@@ -490,6 +508,7 @@ public class RedisClient {
 		if (isEmpty(key) || isEmpty(field)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hexists(key, field);
@@ -506,6 +525,7 @@ public class RedisClient {
 		if (isEmpty(key) || isEmpty(fields)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hdel(key, fields);
@@ -522,6 +542,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hlen(key);
@@ -538,6 +559,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hkeys(key);
@@ -554,6 +576,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.hvals(key);
@@ -576,6 +599,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.lpush(key, value);
@@ -595,6 +619,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.lpushx(key, value);
@@ -614,6 +639,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.rpush(key, value);
@@ -633,6 +659,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.rpushx(key, value);
@@ -650,6 +677,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.llen(key);
@@ -673,6 +701,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.lrem(key, count, value);
@@ -693,6 +722,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.lset(key, index, value);
@@ -719,6 +749,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.lrange(key, start, end);
@@ -742,6 +773,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.ltrim(key, start, end);
@@ -766,6 +798,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.lindex(key, index);
@@ -783,6 +816,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.lpop(key);
@@ -800,6 +834,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.rpop(key);
@@ -820,6 +855,7 @@ public class RedisClient {
 		if (isEmpty(srckey)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.rpoplpush(srckey, dstkey);
@@ -842,6 +878,7 @@ public class RedisClient {
 		if (isEmpty(key) || isEmpty(members)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.sadd(key, members);
@@ -860,6 +897,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.smembers(key);
@@ -878,6 +916,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.sismember(key, member);
@@ -896,6 +935,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.scard(key);
@@ -914,6 +954,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.srandmember(key);
@@ -932,6 +973,7 @@ public class RedisClient {
 		if (isEmpty(key) || isEmpty(members)) {
 			return 0L;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.srem(key, members);
@@ -950,6 +992,7 @@ public class RedisClient {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.sunion(keys);
@@ -968,6 +1011,7 @@ public class RedisClient {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.sinter(keys);
@@ -986,6 +1030,7 @@ public class RedisClient {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.sdiff(keys);
@@ -1009,6 +1054,7 @@ public class RedisClient {
 		if (isEmpty(srckey)) {
 			return false;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			Long value = jedis.smove(srckey, dstkey, member);
@@ -1032,10 +1078,10 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return "";
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.spop(key);
-
 		} finally {
 			returnConnection(jedis);
 		}
@@ -1055,6 +1101,7 @@ public class RedisClient {
 		if (isEmpty(key)) {
 			return null;
 		}
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.srandmember(key, count);
@@ -1078,6 +1125,8 @@ public class RedisClient {
 	public List<OperateLog> getLogs(long entries) throws Exception {
 		List<OperateLog> opList = null;
 		OperateLog op = null;
+		Jedis jedis = null;
+		
 		try {
 			jedis = acquireConnection();
 			List<Slowlog> logList = jedis.slowlogGet(entries);
@@ -1110,6 +1159,7 @@ public class RedisClient {
 	 * @return
 	 */
 	public Long getLogsLen() throws Exception {
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			return jedis.slowlogLen();
@@ -1122,6 +1172,7 @@ public class RedisClient {
 	 * @方法描述: 清空日志
 	 */
 	public void logEmpty() throws Exception {
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			jedis.slowlogReset();
@@ -1139,6 +1190,7 @@ public class RedisClient {
 	 * @return
 	 */
 	public String getRedisInfo() throws Exception {
+		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
 			Client client = jedis.getClient();
