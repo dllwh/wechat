@@ -45,7 +45,7 @@ import com.cdeledu.util.network.IpUtilHelper;
 
 /**
  * @描述:
- * 		<ul>
+ *      <ul>
  *      <li>HttpURLConnection模拟HTTP请求网页内容</li>
  *      <li>Https协议工具类:封装了采用HttpURLConnection发送HTTP请求的GET\POST方法</li>
  *      <li>get请求可以获取静态页面，也可以把参数放在URL字串后面</li>
@@ -66,9 +66,6 @@ public class HttpURLConnHelper {
 	private static URLConnection urlConn = null;
 	/** 请求编码，默认使用utf-8 */
 	private static String URLCHARSET = ConstantHelper.UTF_8.name();
-	/** URL连结对象。 */
-	private static HttpURLConnection httpConn = null;
-	private static URL realUrl = null;
 	private static HttpURLConnHelper instance;
 
 	/*--------------------------私有方法 start-------------------------------*/
@@ -95,8 +92,9 @@ public class HttpURLConnHelper {
 		if (StringUtils.isBlank(url)) {
 			throw new RuntimeExceptionHelper("请求的URL不能为空");
 		}
+		HttpURLConnection httpConn = null;
 		// 打开HttpURLConnection
-		realUrl = new URL(url);
+		URL realUrl = new URL(url);
 		if (isUseProxy) {
 			Map<String, Object> ipMap = IpUtilHelper.getProxyIp();
 			// http访问要使用的代理服务器的地址
@@ -186,6 +184,7 @@ public class HttpURLConnHelper {
 		String result = "";// 响应内容
 		OutputStream outStrm = null;
 		BufferedReader reader = null;
+		HttpURLConnection httpConn = null;
 
 		if (StringUtils.isEmpty(url)) {
 			ExceptionHelper.getExceptionHint("HttpURLConnHelper", "sendPostRequest",
@@ -296,6 +295,7 @@ public class HttpURLConnHelper {
 	public String sendGetRequest(String url, Map<String, String> headerMap) throws Exception {
 		String result = "";
 		BufferedReader reader = null;
+		HttpURLConnection httpConn = null;
 
 		if (StringUtils.isEmpty(url)) {
 			ExceptionHelper.getExceptionHint("HttpURLConnHelper", "sendGetRequest",
@@ -326,7 +326,7 @@ public class HttpURLConnHelper {
 					String str = CharsetHelper.UnicodeToString(line);
 					sb.append(str);
 				}
-				
+
 				result = sb.toString();
 
 			} else if (httpConn.getResponseCode() >= 300) {
@@ -416,6 +416,8 @@ public class HttpURLConnHelper {
 		BufferedReader br = null; // 请求后的返回信息的读取对象。
 		OutputStream out = null;
 		DataInputStream datain = null;
+		HttpURLConnection httpConn = null;
+
 		try {
 			httpConn = (HttpURLConnection) new URL(url).openConnection();
 			httpConn.setUseCaches(false);
@@ -495,12 +497,14 @@ public class HttpURLConnHelper {
 	 */
 	public boolean isConnect(String url) {
 		int count = 0;
+		HttpURLConnection httpConn = null;
+
 		if (StringUtils.isEmpty(url))
 			return false;
 
 		while (count < 5) {
 			try {
-				realUrl = new URL(url);
+				URL realUrl = new URL(url);
 				httpConn = (HttpURLConnection) realUrl.openConnection();
 				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					return true;
@@ -518,6 +522,8 @@ public class HttpURLConnHelper {
 		String regex = "charset=[\"']?([\\w-]+?)([^\\w-]|$)";
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		BufferedReader br = null;
+		HttpURLConnection httpConn = null;
+
 		try {
 			httpConn = (HttpURLConnection) url.openConnection();
 			httpConn.setRequestProperty(HttpHeaders.USER_AGENT,
@@ -560,5 +566,70 @@ public class HttpURLConnHelper {
 		}
 		return null;
 	}
+
+	/**
+	 * @方法描述: 获取sessionID
+	 * @param url
+	 * @return
+	 */
+	public String getSessionByPost(String url) {
+		String sessionId = "";
+		HttpURLConnection httpConn = null;
+		try {
+			URL realUrl = new URL(url);
+			httpConn = (HttpURLConnection) realUrl.openConnection();
+			httpConn.setRequestMethod("POST");
+			String cookieValue = httpConn.getHeaderField("Set-Cookie");
+			sessionId = cookieValue.substring(0, cookieValue.indexOf(";"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (httpConn != null) {
+				httpConn.disconnect();
+			}
+		}
+		return sessionId;
+	}
+
+	/**
+	 * @方法描述: 带有sessionID的请求
+	 * @param url
+	 * @param sessionId
+	 * @return
+	 */
+	public static String connectionBySession(String url, String sessionId) {
+		String result = "";// 响应内容
+		BufferedReader reader = null;
+		HttpURLConnection con = null;
+		try {
+			URL u = new URL(url);
+			con = (HttpURLConnection) u.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Cookie", sessionId);
+			reader = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+			String line;
+			StringBuffer sb = new StringBuffer();
+
+			while ((line = reader.readLine()) != null) {
+				String str = CharsetHelper.UnicodeToString(line);
+				sb.append(str);
+			}
+			result = sb.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				con.disconnect();
+			}
+			try {
+				if (reader != null)
+					reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 	/*--------------------------公有方法 end-------------------------------*/
 }
