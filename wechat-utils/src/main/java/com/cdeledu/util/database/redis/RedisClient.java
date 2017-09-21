@@ -64,7 +64,12 @@ public class RedisClient {
 	static {
 		logger.info("start jredis connection pool");
 		jedisPool = new RedisConfig().redisPoolFactory();
-		logger.info("start jredis connection pool successfully");
+		if(jedisPool == null){
+			logger.info("start jredis connection pool faily");
+		} else {
+			logger.info("start jredis connection pool successfully");
+		}
+		
 	}
 
 	private RedisClient() {
@@ -1309,5 +1314,8 @@ public class RedisClient {
 		if (StringUtils.isNoneBlank(key))
 			return false;
 		return true;
+	}
+	public static void main(String[] args) {
+		
 	}
 }

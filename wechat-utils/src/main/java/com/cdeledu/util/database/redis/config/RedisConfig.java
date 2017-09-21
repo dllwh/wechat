@@ -30,7 +30,7 @@ public class RedisConfig {
 	protected static Logger logger = Logger.getLogger(RedisConfig.class);
 	private static String auth, address, masterName;
 	private static int max_active, max_idle, max_wait, timeout, database = 0;
-	private static boolean test_on_borrow, test_on_return,test_whileIdle;
+	private static boolean test_on_borrow, test_on_return, test_whileIdle;
 	private static Map<String, String> proMap = null;
 
 	private static JedisSentinelPool jedisPool = null;
@@ -67,6 +67,7 @@ public class RedisConfig {
 		super();
 		// 完成初始化工作
 		initConfig();
+		setShutdownWork();
 	}
 
 	/**
@@ -86,17 +87,17 @@ public class RedisConfig {
 	 */
 	private void initConfig() {
 		poolConfig = new JedisPoolConfig();
-		//设置最大连接数
+		// 设置最大连接数
 		poolConfig.setMaxTotal(max_active);
-		//最大空闲连接数
+		// 最大空闲连接数
 		poolConfig.setMaxIdle(max_idle);
-		 //获取Jedis连接的最大等待时间
+		// 获取Jedis连接的最大等待时间
 		poolConfig.setMaxWaitMillis(max_wait);
-		 //在获取Jedis连接时，自动检验连接是否可用
+		// 在获取Jedis连接时，自动检验连接是否可用
 		poolConfig.setTestOnBorrow(test_on_borrow);
-		//在将连接放回池中前，自动检验连接是否有效
+		// 在将连接放回池中前，自动检验连接是否有效
 		poolConfig.setTestOnReturn(test_on_return);
-		//自动测试池中的空闲连接是否都是可用连接
+		// 自动测试池中的空闲连接是否都是可用连接
 		poolConfig.setTestWhileIdle(test_whileIdle);
 	}
 
@@ -128,5 +129,32 @@ public class RedisConfig {
 		} finally {
 			lockPool.unlock();
 		}
+	}
+
+	/**
+	 * @方法描述: 设置系统停止时需执行的任务
+	 */
+	private static void setShutdownWork() {
+		try {
+			Runtime runtime = Runtime.getRuntime();
+			runtime.addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					try {
+						if (jedisPool != null) {
+							jedisPool.destroy();
+							jedisPool = null;
+							logger.info("关闭Redis Pool成功.");
+						}
+					} catch (Exception ex) {
+						logger.error("关闭Redis Pool失败.", ex);
+					}
+				}
+			});
+			logger.info("设置系统停止时关闭Redis Pool的任务成功.");
+		} catch (Exception e) {
+			logger.error("设置系统停止时关闭Redis Pool的任务失败.");
+		}
+
 	}
 }
