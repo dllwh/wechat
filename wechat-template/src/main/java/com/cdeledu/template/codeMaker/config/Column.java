@@ -1,6 +1,9 @@
 package com.cdeledu.template.codeMaker.config;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -15,28 +18,51 @@ import java.sql.ResultSet;
  */
 public class Column {
 	/** ----------------------------------------------------- Fields start */
+	/** 名称 */
 	private String name;
+	/** 说明 */
 	private String desc;
+	/** 类型 */
 	private String type;
-	private boolean nullable;
-	private int length;
-	private Boolean isPrikey;
-	private Boolean isAutoIncrement;
+	/** 是否允许为空 */
+	private boolean nullable = false;
+	/** 长度 */
+	private Integer length;
+	/** 是否主键 */
+	private Boolean isPrikey = false;
+	/** 是否自增 */
+	private Boolean isAutoIncrement = false;
 
 	/** ----------------------------------------------------- Fields end */
 
 	public Column(ResultSet rs) throws Exception {
 		this.name = rs.getString("name");
-		this.desc = rs.getString("desc");
+		String desc = rs.getString("description");
+		if (StringUtils.isNotBlank(desc)) {
+			this.desc = desc;
+		} else {
+			this.desc = rs.getString("name");
+		}
+
 		this.type = rs.getString("type");
 		this.nullable = rs.getBoolean("nullable");
+
+		if (isExistColumn(rs, "key")) {
+			this.isPrikey = rs.getString("key").contains("PRI");
+		} else if (isExistColumn(rs, "isPrikey")) {
+			this.isPrikey = rs.getInt("isPrikey") == 1;
+		}
+		if (isExistColumn(rs, "extra")) {
+			this.isAutoIncrement = rs.getString("extra").contains("auto_increment");
+		} else if (isExistColumn(rs, "isAutoIncrement")) {
+			this.isAutoIncrement = rs.getInt("isAutoIncrement") == 1;
+		}
+
 		String length = rs.getString("length");
-		this.isPrikey = rs.getString("key").contains("PRI");
-		this.isAutoIncrement = rs.getString("extra").contains("auto_increment");
 		this.length = length != null ? Integer.parseInt(length) : 0;
 	}
 
-	public Column(String name, String desc, String type, boolean nullable, int length) {
+	public Column(String name, String desc, String type, boolean nullable, Integer length) {
 		this.name = name;
 		this.desc = desc;
 		this.type = type;
@@ -94,6 +120,10 @@ public class Column {
 		return "unknown";
 	}
 
+	/**
+	 * @方法描述: 获取引用
+	 * @return
+	 */
 	public String getImport() {
 		if (type.contains("date") || type.contains("time")) {
 			return "java.util.Date";
@@ -109,5 +139,25 @@ public class Column {
 		return "Column [name=" + name + ", desc=" + desc + ", type=" + type + ", nullable="
 				+ nullable + ", length=" + length + ", isPrikey=" + isPrikey + ", isAutoIncrement="
 				+ isAutoIncrement + "]";
+	}
+
+	/**
+	 * @方法描述: 判断查询结果集中是否存在某列
+	 * @param rs
+	 *            查询结果集
+	 * @param columnName
+	 *            列名
+	 * @returntrue 存在; false 不存在
+	 */
+	public boolean isExistColumn(ResultSet rs, String columnName) {
+		try {
+			if (rs.findColumn(columnName) > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
+
+		return false;
 	}
 }

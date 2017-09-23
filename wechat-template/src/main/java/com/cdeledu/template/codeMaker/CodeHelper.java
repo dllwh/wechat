@@ -8,7 +8,12 @@ import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -17,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
@@ -25,11 +31,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.cdeledu.template.codeMaker.config.CodeMakerUtil;
 import com.cdeledu.template.codeMaker.config.Column;
 import com.cdeledu.template.codeMaker.config.Configuration;
 import com.cdeledu.template.codeMaker.config.MyBatisType;
 import com.cdeledu.template.codeMaker.config.Table;
+import com.cdeledu.util.apache.collection.ListUtilHelper;
+import com.cdeledu.util.apache.lang.DateUtilHelper;
 import com.cdeledu.util.application.regex.RegexUtil;
 import com.google.common.collect.Lists;
 
@@ -48,15 +58,17 @@ public class CodeHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static JFrame frame = new JFrame("代码生成器");
 
-	private static JTextField driverField = new JTextField("");
-	private static JTextField urlField = new JTextField("");
-	private static JTextField usernameField = new JTextField("");
-	private static JTextField passwordField = new JTextField("");
-	private static JTextField tableField = new JTextField("");
-	private static JTextField packageField = new JTextField("");
+	private static JTextField driverField = new JTextField(
+			"com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	private static JTextField urlField = new JTextField(
+			"jdbc:sqlserver://192.168.192.250:1433;DatabaseName=chinatet_live_302");
+	private static JTextField usernameField = new JTextField("sa");
+	private static JTextField passwordField = new JTextField("cailiqiang");
+	private static JTextField tableField = new JTextField("chat_client");
+	private static JTextField packageField = new JTextField("com.cdeledu");
 
 	private static JButton codeButton = new JButton(" 生成代码 ");
-	private static JButton connButton = new JButton(" 连接 ");
+	private static JButton connButton = new JButton(" 连接测试 ");
 
 	private static JTextArea beanText = new JTextArea();
 	private static JTextArea mybatisText = new JTextArea();
@@ -97,7 +109,9 @@ public class CodeHelper {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				try {
-					if (getConnection()) {
+					if (checkParam() && getConnection()) {
+						showMessageDialog("连接成功", JOptionPane.INFORMATION_MESSAGE);
+
 						codeButton.setEnabled(true);
 						// 生成代码
 						codeButton.addMouseListener(new MouseAdapter() {
@@ -107,6 +121,7 @@ public class CodeHelper {
 									createCode();
 								} catch (Exception e) {
 									e.printStackTrace();
+									showMessageDialog(e.getMessage(), JOptionPane.ERROR_MESSAGE);
 								} finally {
 									tab.setSelectedIndex(0);
 									beanScrollBar.setValue(beanScrollBar.getMinimum());
@@ -114,7 +129,7 @@ public class CodeHelper {
 							}
 						});
 					} else {
-
+						showMessageDialog("无法连接，请检查参数配置是否正常", JOptionPane.ERROR_MESSAGE);
 					}
 
 				} catch (Exception e) {
@@ -213,6 +228,27 @@ public class CodeHelper {
 		return new JScrollPane(jta);
 	}
 
+	/**
+	 * @方法描述: 检查参数
+	 * @return
+	 */
+	private static boolean checkParam() {
+		if (StringUtils.isNoneBlank(driverField.getText())
+				&& StringUtils.isNoneBlank(urlField.getText())
+				&& StringUtils.isNoneBlank(usernameField.getText())
+				&& StringUtils.isNoneBlank(passwordField.getText())
+				&& StringUtils.isNoneBlank(tableField.getText())
+				&& StringUtils.isNoneBlank(packageField.getText())) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @方法描述: 检测参数
+	 * @return
+	 * @throws Exception
+	 */
 	private static boolean getConnection() throws Exception {
 		Connection conn = null;
 		try {
@@ -237,18 +273,26 @@ public class CodeHelper {
 
 		List<Column> columns = getColumns(tableField.getText());
 		Table table = getTable(tableField.getText());
-		String packages = "";
+		String packages = packageField.getText();
+		String mybatisCode = "";
+		String domainCode = "";
+		String serviceCode = "";
+		String serviceImplCode = "";
+		String daoCode = "";
 
-		mybatisText.setText("");
-		beanText.setText("");
-		serviceText.setText("");
-		serviceImplText.setText("");
+		if (ListUtilHelper.EMPTY_LIST != columns) {
+			// mybatisCode = getMyBatisCode(table, packages, columns);
+			domainCode = getBeanCode(table, packages, columns);
+			serviceCode = getServiceCode(table, packages);
+			// serviceImplCode = getServiceImplCode(table, packages);
+			// daoCode = getDaoCode(table, packages);
+		}
 
-		mybatisText.setText(getMyBatisCode(table, packages, columns));
-		beanText.setText(getBeanCode(table, packages, columns));
-		serviceText.setText(getServiceCode(table, packages));
-		serviceImplText.setText(getServiceImplCode(table, packages));
-		daoText.setText(getDaoCode(table, packages));
+		mybatisText.setText(mybatisCode);
+		beanText.setText(domainCode);
+		serviceText.setText(serviceCode);
+		serviceImplText.setText(serviceImplCode);
+		daoText.setText(daoCode);
 	}
 
 	/**
@@ -262,7 +306,76 @@ public class CodeHelper {
 	 */
 	private static String getBeanCode(Table table, String pack, List<Column> columns)
 			throws Exception {
-		String classTemplate = "", fieldTemplate = "", methodTemplate, importTemplate = "";
+		String xml = CodeMakerUtil.read(Configuration.getBeanTemplateLocation());
+		long serialVersionUID = new Random().nextLong();
+		serialVersionUID = serialVersionUID < 0 ? -serialVersionUID : serialVersionUID;
+
+		String classTemplate = RegexUtil.getKeyWords("<class>([\\w\\W]+?)</class>", xml, 1);
+		String fieldTemplate = RegexUtil.getKeyWords("<field>([\\w\\W]+?)</field>", xml, 1);
+		String methodTemplate = RegexUtil.getKeyWords("<method>([\\w\\W]+?)</method>", xml, 1);
+		String importTemplate = RegexUtil.getKeyWords("<import>([\\w\\W]+?)</import>", xml, 1);
+		String className = CodeMakerUtil
+				.firstCharUpperCase(CodeMakerUtil.toFieldName(table.getName()));
+
+		StringBuilder fields = new StringBuilder();
+		Map<String, String> fieldMap = null;
+		for (Column column : columns) {
+			String template = fieldTemplate;
+			fieldMap = new LinkedHashMap<String, String>();
+			fieldMap.put("field.col", column.getName());
+			fieldMap.put("field.name", column.getField());
+			fieldMap.put("field.length", String.valueOf(column.getLength()));
+			fieldMap.put("field.nullable", String.valueOf(column.isNullable()));
+			fieldMap.put("field.desc", String.valueOf(column.getDesc()));
+			fieldMap.put("field.type", column.getFieldType());
+			for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
+				template = template.replace("#" + entry.getKey() + "#", entry.getValue());
+			}
+			fields.append(template);
+		}
+
+		StringBuilder imports = new StringBuilder();
+		Set<String> fieldSet = new HashSet<String>();
+		for (Column c : columns) {
+			if (c.getImport() != null) {
+				fieldSet.add(c.getImport());
+			}
+		}
+		for (String field : fieldSet) {
+			String template = importTemplate;
+			template = template.replace("#import#", field);
+			imports.append(template + "\n");
+		}
+
+		StringBuilder methods = new StringBuilder();
+		for (Column c : columns) {
+			String template = methodTemplate;
+			fieldMap = new LinkedHashMap<String, String>();
+			fieldMap.put("method.get", "get" + CodeMakerUtil.firstCharUpperCase(c.getField()));
+			fieldMap.put("method.set", "set" + CodeMakerUtil.firstCharUpperCase(c.getField()));
+			fieldMap.put("field.name", c.getField());
+			fieldMap.put("field.desc",
+					StringUtils.isEmpty(c.getDesc()) ? c.getField() : String.valueOf(c.getDesc()));
+			fieldMap.put("field.type", c.getFieldType());
+			for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
+				template = template.replace("#" + entry.getKey() + "#", entry.getValue());
+			}
+			methods.append(template);
+		}
+
+		Map<String, String> classMap = new LinkedHashMap<String, String>();
+		classMap.put("class.package", pack);
+		classMap.put("imports", imports.toString());
+		classMap.put("table.desc", table.getDesc());
+		classMap.put("table.name", table.getName());
+		classMap.put("class.name", className);
+		classMap.put("serialVersionUID", String.valueOf(serialVersionUID));
+		classMap.put("fields", fields.toString());
+		classMap.put("methods", methods.toString());
+		classMap.put("now", DateUtilHelper.getCurrentTime());
+		for (Map.Entry<String, String> entry : classMap.entrySet()) {
+			classTemplate = classTemplate.replace("#" + entry.getKey() + "#", entry.getValue());
+		}
 		return classTemplate;
 	}
 
@@ -275,7 +388,20 @@ public class CodeHelper {
 	 * @throws Exception
 	 */
 	private static String getServiceCode(Table table, String pack) throws Exception {
-		String serviceTemplate = "", className = "";
+		String xml = CodeMakerUtil.read(Configuration.getServiceTemplateLocation());
+		// 匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。
+		String serviceTemplate = RegexUtil.getKeyWords("<class>([\\w\\W]+?)</class>",xml,  1);
+		String className =  CodeMakerUtil.firstCharUpperCase(CodeMakerUtil.toFieldName(table.getName()));
+		Map<String, String> classMap = new LinkedHashMap<String, String>();
+		classMap.put("class.package", pack);
+		classMap.put("class.name", className);
+		classMap.put("table.name", table.getName());
+		classMap.put("table.desc", table.getDesc());
+		classMap.put("now", DateUtilHelper.getCurrentTime());
+		for (Map.Entry<String, String> entry : classMap.entrySet()) {
+			serviceTemplate = serviceTemplate.replace("#" + entry.getKey() + "#", entry.getValue());
+		}
+		
 		return serviceTemplate;
 	}
 
@@ -359,7 +485,59 @@ public class CodeHelper {
 	 */
 	private static List<Column> getColumns(String tableName) throws Exception {
 		List<Column> rows = Lists.newArrayList();
+		String xml = CodeMakerUtil.read(Configuration.getSQLTemplateLocation());
+		// 匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。
+		String sql = RegexUtil.getKeyWords("<column>([\\w\\W]+?)</column>", xml, 1);
+		sql = sql.replace("#table#", tableName);
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			Class.forName(driverField.getText());
+			conn = DriverManager.getConnection(urlField.getText(), usernameField.getText(),
+					passwordField.getText());
+			rs = conn.prepareStatement(sql.toString()).executeQuery();
+			while (rs.next()) {
+				Column col = new Column(rs);
+				rows.add(col);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		finally {
+			if (conn != null)
+				conn.close();
+		}
 		return rows;
+	}
+
+	/**
+	 * @方法描述: 消息对话框
+	 * @param message
+	 * @param messageType
+	 *            ERROR_MESSAGE:错误 <br>
+	 *            INFORMATION_MESSAGE 信息<br>
+	 *            WARNING_MESSAGE 警告<br>
+	 *            QUESTION_MESSAGE（问题默认类型） <br>
+	 *            PLAIN_MESSAGE（无图标）
+	 */
+	private static void showMessageDialog(Object message, int messageType) {
+		showMessageDialog(message, "", messageType);
+	}
+
+	/**
+	 * @方法描述: 消息对话框
+	 * @param message
+	 * @param title
+	 * @param messageType
+	 *            ERROR_MESSAGE:错误 <br>
+	 *            INFORMATION_MESSAGE 信息<br>
+	 *            WARNING_MESSAGE 警告<br>
+	 *            QUESTION_MESSAGE（问题默认类型） <br>
+	 *            PLAIN_MESSAGE（无图标）
+	 */
+	private static void showMessageDialog(Object message, String title, int messageType) {
+		JOptionPane.showMessageDialog(null, message, title, messageType);
 	}
 
 	public static void main(String[] args) throws Exception {

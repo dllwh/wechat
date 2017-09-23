@@ -12,6 +12,27 @@
 
 	<!-- 获取获取表字段注释 -->
 	<column>
-
+		SELECT
+			column_name AS name,
+			data_type AS type,
+			ifnull(
+				character_maximum_length,
+				numeric_precision
+			) AS length,
+			CASE
+		WHEN is_nullable = 'yes' THEN
+			TRUE
+		ELSE
+			FALSE
+		END nullable,
+		 column_comment AS `description`,
+		 column_key AS `key`,
+		 extra AS `extra`
+		FROM
+			information_schema. COLUMNS
+		WHERE
+			table_name = '#table#'
+		ORDER BY
+			ordinal_position
 	</column>
 </database>

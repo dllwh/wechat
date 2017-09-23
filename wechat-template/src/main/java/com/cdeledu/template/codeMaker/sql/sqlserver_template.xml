@@ -13,6 +13,24 @@
 
 	<!-- 获取获取表字段注释 -->
 	<column>
-
+		SELECT
+			sys.columns.name,sys.types.name AS type,sys.columns.max_length length,sys.columns.is_nullable nullable,
+			(SELECT
+					COUNT(*)
+				FROM sys.identity_columns
+				WHERE sys.identity_columns.object_id = sys.columns.object_id AND sys.columns.column_id = sys.identity_columns.column_id)
+			AS isPrikey,
+			(SELECT
+					cast([value] as varchar(500))
+				FROM sys.extended_properties
+				WHERE sys.extended_properties.major_id = sys.columns.object_id AND sys.extended_properties.minor_id = sys.columns.column_id)
+			AS description,
+			COLUMNPROPERTY(sys.tables.object_id, sys.columns.name, 'IsIdentity') AS isAutoIncrement
+		FROM	
+			sys.columns
+		INNER JOIN sys.tables on sys.columns.object_id = sys.tables.object_id
+		INNER JOIN sys.types on  sys.columns.user_type_id = sys.types.user_type_id  
+		WHERE 
+			sys.tables.name = '#table#' ORDER BY sys.columns.column_id
 	</column>
 </database>

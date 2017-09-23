@@ -24,6 +24,20 @@ public class #class.name# implements Serializable {
 </class>
 	<import>import #import#;</import>
 
-	<field></field>
-	<method></method>
+	<field>
+		/** #field.name#:#field.desc# */
+		private #field.type# #field.name#;
+	</field>
+	
+	<method>
+		/** 取得#field.desc# */
+		public #field.type# #method.get#() {
+			return #field.name#;
+		}
+		
+		/** 设置#field.desc# */
+		public void #method.set#(#field.type# #field.name#) {
+			this.#field.name# = #field.name#;
+		}
+	</method>
 </domain>
