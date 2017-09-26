@@ -64,12 +64,12 @@ public class RedisClient {
 	static {
 		logger.info("start jredis connection pool");
 		jedisPool = new RedisConfig().redisPoolFactory();
-		if(jedisPool == null){
+		if (jedisPool == null) {
 			logger.info("start jredis connection pool faily");
 		} else {
 			logger.info("start jredis connection pool successfully");
 		}
-		
+
 	}
 
 	private RedisClient() {
@@ -114,6 +114,23 @@ public class RedisClient {
 	}
 
 	/**
+	 * @方法描述: 返回满足给定 pattern 的所有 key
+	 * @param keyWord
+	 * @return
+	 * @throws Exception
+	 */
+	public Set<String> getkeys(String keyWord) throws Exception {
+		Jedis jedis = null;
+		try {
+			jedis = acquireConnection();
+			// 获取数据并输出
+			return jedis.keys("*" + keyWord + "*");
+		} finally {
+			returnConnection(jedis);
+		}
+	}
+
+	/**
 	 * @方法描述: 设定该Key持有指定的字符串Value，如果该Key已经存在，则覆盖其原有值
 	 * @param key
 	 * @param value
@@ -147,17 +164,21 @@ public class RedisClient {
 	 * @param value
 	 * @return 1表示设置成功，否则0
 	 */
-	public Long setnx(String key, String value) throws Exception {
+	public boolean setnx(String key, String value) throws Exception {
 		if (isEmpty(key)) {
-			return 0L;
+			return false;
 		}
 		Jedis jedis = null;
 		try {
 			jedis = acquireConnection();
-			return jedis.setnx(key, value);
+			Long statusCode = jedis.setnx(key, value);
+			if (SUCCESS_STATUS_LONG == statusCode) {
+				return true;
+			}
 		} finally {
 			returnConnection(jedis);
 		}
+		return false;
 	}
 
 	/**
@@ -205,6 +226,46 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			return jedis.get(key);
+		} finally {
+			returnConnection(jedis);
+		}
+	}
+
+	/**
+	 * @方法描述: 一次获取多个 key 的值，如果对应 key 不存在，则对应返回null
+	 * @param key
+	 *            键值
+	 * @return 成功返回value，失败返回""
+	 */
+	public List<String> mget(String... keys) throws Exception {
+		if (isEmpty(keys)) {
+			return null;
+		}
+		Jedis jedis = null;
+		try {
+			jedis = acquireConnection();
+			return jedis.mget(keys);
+		} finally {
+			returnConnection(jedis);
+		}
+	}
+
+	/**
+	 * @方法描述: 截取字符串，从下标为n开始截取到n或n+1
+	 * @param key
+	 * @param startOffset
+	 * @param endOffset
+	 * @return
+	 * @throws Exception
+	 */
+	public String getrange(String key, long startOffset, long endOffset) throws Exception {
+		if (isEmpty(key)) {
+			return "";
+		}
+		Jedis jedis = null;
+		try {
+			jedis = acquireConnection();
+			return jedis.getrange(key, startOffset, endOffset);
 		} finally {
 			returnConnection(jedis);
 		}
@@ -403,6 +464,11 @@ public class RedisClient {
 	/******************* redis Key-Value操作结束 ************************/
 
 	/******************* redis Hash操作 ************************/
+	/*******************
+	 * Redis hash 是一个 string 类型的 field 和 value 的映射表.它的添加、删除操作都是 O(1) （平均）。 hash
+	 * 特别适合用于存储对象。相较于将对象的每个字段存成单个 string 类型。将一个对象存 储在 hash
+	 * 类型中会占用更少的内存，并且可以更方便的存取整个对象。
+	 ************************/
 	/**
 	 * @方法描述: 设置hash field为指定值<br>
 	 *        如果key不存在,则先创建;<br>
@@ -422,6 +488,32 @@ public class RedisClient {
 		} finally {
 			returnConnection(jedis);
 		}
+	}
+
+	/**
+	 * @方法描述: 设置hash\field为指定值,如果 key不存在,则先创建.如果 field已经存在,返回 0,nx 是 not exist
+	 *        的意思。
+	 * @param key
+	 * @param field
+	 * @param value
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean hsetnx(String key, String field, String value) throws Exception {
+		if (isEmpty(key) || isEmpty(field)) {
+			return false;
+		}
+		Jedis jedis = null;
+		try {
+			jedis = acquireConnection();
+			Long statusCode = jedis.hsetnx(key, field, value);
+			if (SUCCESS_STATUS_LONG == statusCode) {
+				return true;
+			}
+		} finally {
+			returnConnection(jedis);
+		}
+		return false;
 	}
 
 	/**
@@ -525,6 +617,7 @@ public class RedisClient {
 	/**
 	 * @方法描述: 删除指定的hash field
 	 * @param keys
+	 * @return 被成功删除的数量
 	 */
 	public Long hdel(String key, String... fields) throws Exception {
 		if (isEmpty(key) || isEmpty(fields)) {
@@ -1131,7 +1224,7 @@ public class RedisClient {
 		List<OperateLog> opList = null;
 		OperateLog op = null;
 		Jedis jedis = null;
-		
+
 		try {
 			jedis = acquireConnection();
 			List<Slowlog> logList = jedis.slowlogGet(entries);
@@ -1315,7 +1408,8 @@ public class RedisClient {
 			return false;
 		return true;
 	}
+
 	public static void main(String[] args) {
-		
+
 	}
 }
