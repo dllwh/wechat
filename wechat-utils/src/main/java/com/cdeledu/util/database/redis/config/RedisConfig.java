@@ -19,6 +19,7 @@ import redis.clients.jedis.JedisSentinelPool;
  * Today the best performance as tomorrow newest starter!
  *
  * @类描述: redis 集群配置参数
+ *       JedisPool连一台Redis；ShardedJedisPool连Redis集群，通过一致性哈希算法决定把数据存到哪台上
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年9月12日 下午2:17:29
  * @版本: V1.0
@@ -33,6 +34,7 @@ public class RedisConfig {
 	private static boolean test_on_borrow, test_on_return, test_whileIdle;
 	private static Map<String, String> proMap = null;
 
+	/** 支持单台Redis的非切片链接池 */
 	private static JedisSentinelPool jedisPool = null;
 	/** 建立连接池配置参数 */
 	private JedisPoolConfig poolConfig = null;
