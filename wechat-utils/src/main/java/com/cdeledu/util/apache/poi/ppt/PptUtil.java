@@ -222,7 +222,7 @@ public class PptUtil {
 				for (XSLFTextParagraph paragraph : txtshape.getTextParagraphs()) {
 					List<XSLFTextRun> truns = paragraph.getTextRuns();
 					for (XSLFTextRun textRun : truns) {
-						System.out.println("原有的字体名字: " + textRun.getFontFamily());
+						// System.out.println("原有的字体名字: " + textRun.getFontFamily());
 						textRun.setFontFamily("宋体");
 					}
 				}
@@ -240,7 +240,7 @@ public class PptUtil {
 			RichTextRun[] rtruns = truns[k].getRichTextRuns();
 
 			for (RichTextRun textRun : rtruns) {
-				System.out.println("原有的字体名字: " + textRun.getFontName());
+				// System.out.println("原有的字体名字: " + textRun.getFontName());
 				textRun.setFontName("宋体");
 			}
 		}
@@ -265,13 +265,5 @@ public class PptUtil {
 		graphics.setPaint(Color.white);
 		graphics.fill(new Rectangle2D.Float(0, 0, pageSize.width, pageSize.height));
 		return graphics;
-	}
-
-	public static void main(String[] args) throws Exception {
-		String sourceFile = "C://Users/dell/Desktop/UML-迭代子模式(黄亚丽).pptx";
-		String path = "C://Users/dell/Desktop/ppt";
-		String picName = "ppt 转图片";
-		String picType = "jpg";
-		toImage2007(sourceFile, path, picName, picType);
 	}
 }
