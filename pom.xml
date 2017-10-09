@@ -125,8 +125,8 @@
 		<module>weixin-qy</module>
 		<module>wechat-manage</module>
 		<module>wechat-monitor</module>
-    	<module>crapApi-ApiManager</module>
-  </modules>
+		<module>crapApi-ApiManager</module>
+</modules>
 
 
 	<!-- ======== <dependency></dependency>===================================================== 
@@ -384,6 +384,16 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>${org.apache.poi.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>org.apache.poi.xwpf.converter.core</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>org.apache.poi.xwpf.converter.xhtml</artifactId>
+			<version>1.0.4</version>
+		</dependency>  
 		<!-- Apache POI (结束) -->
 
 		<!-- Apache Commons (开始) -->
