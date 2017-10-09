@@ -178,12 +178,4 @@ public class WordUtil {
 			IOUtils.closeQuietly(fos);
 		}
 	}
-
-	public static void main(String[] args) throws Exception {
-		String sourceFile = "C://Users/dell/Desktop/新建 Microsoft Word 文档.doc";
-		// String sourceFile = "C://Users/dell/Desktop/共享文档接口.docx";
-		String outPutFile = "C://Users/dell/Desktop/word/";
-		convertHtmlByWord2003(sourceFile, outPutFile, "开放课堂直播-CDN相关接口直播说明文档.html", "");
-		// convertHtmlByWord2007(sourceFile, outPutFile, "共享文档接口.html", "");
-	}
 }
