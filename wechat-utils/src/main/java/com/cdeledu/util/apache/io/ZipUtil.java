@@ -20,8 +20,6 @@ import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.exception.ExceptionHelper;
 import com.cdeledu.util.apache.io.file.FileUtilHelper;
 import com.cdeledu.util.apache.lang.StringUtilHelper;
-import com.cdeledu.util.application.log.Log;
-import com.cdeledu.util.application.log.level.StaticLog;
 
 /**
  * 
@@ -34,7 +32,6 @@ import com.cdeledu.util.application.log.level.StaticLog;
  */
 public class ZipUtil {
 	/*--------------------------私有属性 start -------------------------------*/
-	private final static Log log = StaticLog.get();
 	private static final int BUFFEREDSIZE = 8192;
 
 	/*--------------------------私有属性 end   -------------------------------*/
@@ -133,8 +130,6 @@ public class ZipUtil {
 				if (new File(outPath).isDirectory()) {
 					continue;
 				}
-				// 输出文件路径信息
-				log.info(outPath);
 
 				OutputStream out = new FileOutputStream(outPath);
 				byte[] buf1 = new byte[BUFFEREDSIZE];
