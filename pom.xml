@@ -80,7 +80,7 @@
 		<!-- spring 版本号 -->
 		<mybatis-spring.version>1.2.2</mybatis-spring.version>
 		<mybaitsplus.version>1.5</mybaitsplus.version>
-		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
+		<org.springframework.version>4.3.10.RELEASE</org.springframework.version>
 		<!-- spring security 版本号 -->
 		<org.springframework.security.version/>
 		<!-- spring-boot 版本号 -->

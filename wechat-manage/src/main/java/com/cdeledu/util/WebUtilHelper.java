@@ -135,35 +135,6 @@ public class WebUtilHelper {
 	}
 	
 	/**
-	 * @方法:获得请求路径
-	 * @创建人:独泪了无痕
-	 * @param request
-	 * @return
-	 */
-	public static String getRequestPath(HttpServletRequest request) {
-		String requestPath = request.getRequestURI() + "?" + request.getQueryString();
-		if (requestPath.indexOf("&") > -1) {// 去掉其他参数
-			requestPath = requestPath.substring(0, requestPath.indexOf("&"));
-		}
-		requestPath = requestPath.substring(request.getContextPath().length() + 1);// 去掉项目路径
-		return requestPath;
-	}
-
-	/**
-	 * web应用绝对路径
-	 *
-	 * @param request
-	 *            请求对象
-	 * @return 绝对路径
-	 */
-	public static String getBasePath(HttpServletRequest request) {
-		String path = request.getContextPath();
-		String basePath = request.getScheme() + "://" + request.getServerName() + ":"
-				+ request.getServerPort() + path + "/";
-		return basePath;
-	}
-
-	/**
 	 * @方法描述:
 	 * 
 	 * <pre>

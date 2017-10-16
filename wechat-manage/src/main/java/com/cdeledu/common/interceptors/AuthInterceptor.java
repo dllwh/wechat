@@ -15,6 +15,7 @@ import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.model.SessionInfo;
 import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.WebUtilHelper;
+import com.cdeledu.util.webpage.RequestHelper;
 
 /**
  * @类描述: 权限拦截器
@@ -49,7 +50,7 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 	 */
 	private boolean hasMenuAuth(HttpServletRequest request) {
 		// 用户访问的资源地址
-		String requestPath = WebUtilHelper.getRequestPath(request);
+		String requestPath = RequestHelper.getRequestPath(request);
 		// update-start-for:菜单权限控制排除Ajax请求判断
 		if (requestPath.indexOf("loginController.shtml") != -1) {
 			return true;
@@ -97,7 +98,7 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 		// String contextPath = request.getContextPath();
 		// String url = requestUri.substring(contextPath.length());
 		// 用户访问的资源地址
-		String requestPath = WebUtilHelper.getRequestPath(request);// 用户访问的资源地址
+		String requestPath = RequestHelper.getRequestPath(request);// 用户访问的资源地址
 		HttpSession session = WebUtilHelper.getSession();
 		SessionInfo sessioninfo = (SessionInfo) session.getAttribute(GlobalConstants.USER_SESSION);
 		if (excludeUrls.contains(requestPath)) {
