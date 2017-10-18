@@ -4,10 +4,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
+
 import com.cdeledu.dao.BaseDaoSupport;
 import com.cdeledu.model.system.SysIcon;
 import com.cdeledu.service.sys.SysIconService;
 
+@Service
 public class SysIconServiceImpl implements SysIconService {
 	@Resource
 	private BaseDaoSupport<?> baseDao;
