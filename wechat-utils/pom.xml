@@ -74,5 +74,10 @@
 			<artifactId>jedis</artifactId>
 			<version>${jedis.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId><!-- 包含对Spring对JDBC数据访问进行封装的所有类 -->
+			<version>${org.springframework.version}</version>
+		</dependency>
 	</dependencies>
 </project>

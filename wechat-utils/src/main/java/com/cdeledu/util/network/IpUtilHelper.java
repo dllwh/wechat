@@ -64,8 +64,15 @@ public class IpUtilHelper {
 	 */
 	public static String getClientIP(HttpServletRequest request) {
 		String ip = null;
+		/**
+		 * Cdn-Src-Ip : 网宿cdn的真实ip
+		 * HTTP_CLIENT_IP : 蓝讯cdn的真实ip
+		 * X-Forwarded-For : 获取代理ip
+		 * Proxy-Client-IP : 获取代理ip
+		 * WL-Proxy-Client-IP : 获取代理ip 
+		 */
 		if (null != request) {
-			String proxs[] = { "X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP",
+			String proxs[] = { "Cdn-Src-Ip","X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP",
 					"HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "x-real-ip" };
 			for (String prox : proxs) {
 				ip = request.getHeader(prox);
@@ -77,7 +84,7 @@ public class IpUtilHelper {
 			}
 
 			if (StringUtils.isBlank(ip)) {
-				ip = request.getRemoteAddr();
+				ip = request.getRemoteAddr();// 获取真实ip
 			}
 			if (ip.equals("0:0:0:0:0:0:0:1")) {
 				try {

@@ -23,8 +23,7 @@ public class ListUtilHelper extends ListUtils {
 	 * @return：int 返回类型
 	 */
 	public static <E> int indexOf(List<E> list, String predicate) {
-		if (CollectionHelper.isNotEmpty(list)
-				&& StringUtils.isNoneBlank(predicate)) {
+		if (CollectionHelper.isNotEmpty(list) && StringUtils.isNoneBlank(predicate)) {
 			for (int i = 0; i < list.size(); i++) {
 				String item = (String) list.get(i);
 				if (predicate.equalsIgnoreCase(item)) {
@@ -45,8 +44,7 @@ public class ListUtilHelper extends ListUtils {
 	 * @return
 	 */
 	public static <V> boolean addDistinctEntry(List<V> sourceList, V entry) {
-		return (sourceList != null && !sourceList.contains(entry)) ? sourceList
-				.add(entry) : false;
+		return (sourceList != null && !sourceList.contains(entry)) ? sourceList.add(entry) : false;
 	}
 
 	/**
@@ -117,6 +115,28 @@ public class ListUtilHelper extends ListUtils {
 			}
 		}
 		return sourceCount - sourceList.size();
+	}
+
+	/**
+	 * @方法描述: 拼接字符串
+	 * @param list
+	 *            列表
+	 * @param split
+	 *            分隔符
+	 * @return
+	 */
+	public static String join(List<String> list, String split) {
+		if (list == null)
+			return null;
+		String[] array = list.toArray(new String[] {});
+		StringBuilder s = new StringBuilder(128);
+		for (int i = 0; i < array.length; i++) {
+			if (i > 0) {
+				s.append(split);
+			}
+			s.append(array[i]);
+		}
+		return s.toString();
 	}
 	/*--------------------------公有方法 end   -------------------------------*/
 }
