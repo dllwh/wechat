@@ -16,7 +16,7 @@ import com.google.common.collect.Lists;
  * @版本: V1.2
  * @since: JDK 1.7
  */
-public class ManagerUser extends DataEntity<ManagerUser> {
+public class SysUser extends DataEntity<SysUser> {
 	private static final long serialVersionUID = 1L;
 	// 用户名(数字与字母组成)
 	@NotBlank(message = "登陆账号不能为空")
@@ -50,8 +50,8 @@ public class ManagerUser extends DataEntity<ManagerUser> {
 	private String imageCaptcha;
 	// 是否允许登陆;1:允许,默认值;0:不允许
 	private Integer loginFlag;
-	private Role role; // 根据角色查询用户条件
-	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
+	private SysRole role; // 根据角色查询用户条件
+	private List<SysRole> roleList = Lists.newArrayList(); // 拥有角色列表
 
 	public String getUserName() {
 		return userName;
@@ -173,19 +173,19 @@ public class ManagerUser extends DataEntity<ManagerUser> {
 		this.loginFlag = loginFlag;
 	}
 
-	public Role getRole() {
+	public SysRole getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(SysRole role) {
 		this.role = role;
 	}
 
-	public List<Role> getRoleList() {
+	public List<SysRole> getRoleList() {
 		return roleList;
 	}
 
-	public void setRoleList(List<Role> roleList) {
+	public void setRoleList(List<SysRole> roleList) {
 		this.roleList = roleList;
 	}
 

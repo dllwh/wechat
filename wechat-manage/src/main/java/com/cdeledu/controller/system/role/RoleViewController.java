@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.Role;
+import com.cdeledu.model.rbac.SysRole;
 
 /**
  * @类描述: 角色数据
@@ -44,7 +44,7 @@ public class RoleViewController extends BaseController {
 	 */
 	@RequestMapping(params = "getList")
 	@ResponseBody
-	public void getList(Role role, HttpServletRequest request) {
+	public void getList(SysRole role, HttpServletRequest request) {
 
 	}
 }

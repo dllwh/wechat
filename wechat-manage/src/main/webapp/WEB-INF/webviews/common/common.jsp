@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 	
-<%@ include file="/WEB-INF/webViews/common/context/taglib.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/context/taglib.jsp"%>
 
 <%-- 这3句每个页面必须添加 --%>
 <meta http-equiv="content-type" content="text/html;chartset=UTF-8">

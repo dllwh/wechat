@@ -7,7 +7,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import com.cdeledu.common.base.BaseClass;
-import com.cdeledu.model.system.Dict;
+import com.cdeledu.model.system.SysDict;
 import com.google.common.collect.Lists;
 
 /**
@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 public class DictListener extends BaseClass implements ServletContextListener {
 
 	private static final long serialVersionUID = 1L;
-	public static List<Dict> dictsList = null;
+	public static List<SysDict> dictsList = null;
 
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */

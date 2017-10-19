@@ -9,7 +9,7 @@ import com.cdeledu.common.base.DataEntity;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class Menu extends DataEntity<Menu> {
+public class SysMenu extends DataEntity<SysMenu> {
 
 	private static final long serialVersionUID = 1L;
 	// 菜单名称

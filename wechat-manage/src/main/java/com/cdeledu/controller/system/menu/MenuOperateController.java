@@ -1,5 +1,7 @@
 package com.cdeledu.controller.system.menu;
 
+import java.awt.Menu;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.Menu;
+import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.service.sys.SystemService;
 
 /**
@@ -43,7 +45,7 @@ public class MenuOperateController extends BaseController {
 	@RequestMapping(params = "createMenu")
 	@ResponseBody
 	public AjaxJson createMenu(HttpServletRequest request, HttpServletResponse response,
-			Menu menu) {
+			SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		return ajaxJson;
 	}
@@ -71,7 +73,7 @@ public class MenuOperateController extends BaseController {
 	 */
 	@RequestMapping(params = "del")
 	@ResponseBody
-	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response, Menu menu) {
+	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response, SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		message = "权限: " + menu.getMenuName() + "被删除成功";
 		// 删除权限菜单时先删除权限菜单与角色之间关联表信息

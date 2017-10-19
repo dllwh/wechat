@@ -2,17 +2,17 @@ package com.cdeledu.model;
 
 import java.io.Serializable;
 
-import com.cdeledu.model.rbac.ManagerUser;
+import com.cdeledu.model.rbac.SysUser;
 
 public class SessionInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private ManagerUser managerUser;
+	private SysUser managerUser;
 
-	public ManagerUser getManagerUser() {
+	public SysUser getManagerUser() {
 		return managerUser;
 	}
 
-	public void setManagerUser(ManagerUser managerUser) {
+	public void setManagerUser(SysUser managerUser) {
 		this.managerUser = managerUser;
 	}
 

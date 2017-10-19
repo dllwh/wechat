@@ -9,7 +9,7 @@ import com.cdeledu.common.base.DataEntity;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class Dict extends DataEntity<Dict> {
+public class SysDict extends DataEntity<SysDict> {
 	private static final long serialVersionUID = 1L;
 	/** 父ID */
 	private Integer parentId;

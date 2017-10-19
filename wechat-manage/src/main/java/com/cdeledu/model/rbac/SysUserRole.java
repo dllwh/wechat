@@ -9,7 +9,7 @@ import com.cdeledu.common.base.BaseEntity;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class ManagerUserRole extends BaseEntity<ManagerUserRole> {
+public class SysUserRole extends BaseEntity<SysUserRole> {
 	private static final long serialVersionUID = 1L;
 	// 管理员id
 	private Integer userId;

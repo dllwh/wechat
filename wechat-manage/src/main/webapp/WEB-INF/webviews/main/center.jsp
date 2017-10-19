@@ -4,10 +4,10 @@
 <html>
 <head  lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%@ include file="/WEB-INF/webViews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 
 <title>${_currProject}</title>
-<%@ include file="/WEB-INF/webViews/common/include/assets.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
 <script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
 <script type="text/javascript">	
 
