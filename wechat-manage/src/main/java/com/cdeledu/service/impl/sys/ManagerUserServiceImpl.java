@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.dao.BaseDaoSupport;
-import com.cdeledu.model.rbac.ManagerUser;
-import com.cdeledu.model.rbac.ManagerUserRole;
+import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.util.security.PasswordUtil;
 
@@ -35,7 +35,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 保存用户基本信息
 	 */
 	@Transactional(readOnly = false)
-	public Integer insert(ManagerUser record) throws Exception {
+	public Integer insert(SysUser record) throws Exception {
 		logger.info("保存用户基本信息");
 		String newPassWord = PasswordUtil.encrypt(record.getUserName(), record.getPassword());
 		record.setPassword(newPassWord);
@@ -46,7 +46,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 批量保存
 	 */
 	@Transactional(readOnly = false)
-	public Integer batchInsert(List<ManagerUser> record) throws Exception {
+	public Integer batchInsert(List<SysUser> record) throws Exception {
 		return null;
 	}
 
@@ -59,7 +59,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	}
 
 	@Transactional(readOnly = false)
-	public Integer batchDelete(List<ManagerUser> parameter) throws Exception {
+	public Integer batchDelete(List<SysUser> parameter) throws Exception {
 		return null;
 	}
 
@@ -67,12 +67,12 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 更新用户信息
 	 */
 	@Transactional(readOnly = false)
-	public Integer update(ManagerUser record) throws Exception {
+	public Integer update(SysUser record) throws Exception {
 		return null;
 	}
 
 	@Transactional(readOnly = false)
-	public Integer batchUpdate(List<ManagerUser> parameter) throws Exception {
+	public Integer batchUpdate(List<SysUser> parameter) throws Exception {
 		return null;
 	}
 
@@ -80,7 +80,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 返回用户列表
 	 */
 	@Transactional(readOnly = true)
-	public List<ManagerUser> findForJdbc(ManagerUser record) throws Exception {
+	public List<SysUser> findForJdbc(SysUser record) throws Exception {
 		return null;
 	}
 
@@ -88,7 +88,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 获取用户列表的个数
 	 */
 	@Transactional(readOnly = true)
-	public Integer getCountForJdbcParam(ManagerUser record) throws Exception {
+	public Integer getCountForJdbcParam(SysUser record) throws Exception {
 		return null;
 	}
 
@@ -96,7 +96,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 获取用户信息(单独一个)
 	 */
 	@Transactional(readOnly = true)
-	public ManagerUser findOneForJdbc(ManagerUser record) throws Exception {
+	public SysUser findOneForJdbc(SysUser record) throws Exception {
 		return null;
 	}
 
@@ -104,20 +104,20 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 检查用户是否存在
 	 */
 	@Transactional(readOnly = true)
-	public ManagerUser checkUserExits(ManagerUser user) throws Exception {
+	public SysUser checkUserExits(SysUser user) throws Exception {
 		// 密码加密
 		String password = PasswordUtil.encrypt(user.getUserName(), user.getPassword());
-		ManagerUser managerUser = new ManagerUser();
+		SysUser managerUser = new SysUser();
 		managerUser.setUserName(user.getUserName());
 		managerUser.setPassword(password);
-		return (ManagerUser) baseDao.findOneForJdbcParam(prefix + "checkUserExits", managerUser);
+		return (SysUser) baseDao.findOneForJdbcParam(prefix + "checkUserExits", managerUser);
 	}
 
 	/**
 	 * 获取用户的角色
 	 */
 	@Transactional(readOnly = true)
-	public ManagerUserRole getUserRole(ManagerUser managerUser) throws Exception {
+	public SysUserRole getUserRole(SysUser managerUser) throws Exception {
 		return null;
 	}
 
@@ -125,7 +125,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 保存管理员登录信息
 	 */
 	@Transactional(readOnly = false)
-	public void saveLoginInfo(ManagerUser managerUser) {
+	public void saveLoginInfo(SysUser managerUser) {
 
 	}
 
@@ -133,14 +133,14 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * admin账户初始化
 	 */
 	@Transactional(readOnly = false)
-	public void pwdInit(ManagerUser managerUser) {
+	public void pwdInit(SysUser managerUser) {
 	}
 
 	/**
 	 * 保存用户-角色关联关系
 	 */
 	@Transactional(readOnly = false)
-	public void saveRoleUser(ManagerUserRole managerUserRole) {
+	public void saveRoleUser(SysUserRole managerUserRole) {
 	}
 
 }

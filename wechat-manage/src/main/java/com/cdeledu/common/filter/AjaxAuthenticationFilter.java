@@ -27,7 +27,7 @@ import com.cdeledu.util.WebUtilHelper;
  * @版本: V2.0
  * @since: JDK 1.7
  */
-@WebFilter(filterName = "LoginFilter", urlPatterns = { "*.shtml" })
+//@WebFilter(filterName = "LoginFilter", urlPatterns = { "*.shtml" })
 public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;

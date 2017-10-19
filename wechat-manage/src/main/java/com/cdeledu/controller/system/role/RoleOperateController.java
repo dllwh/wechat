@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.ManagerUser;
-import com.cdeledu.model.rbac.Role;
+import com.cdeledu.model.rbac.SysRole;
+import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.WebUtilHelper;
 
@@ -45,7 +45,7 @@ public class RoleOperateController extends BaseController {
 	 * @创建人:独泪了无痕
 	 * @param role
 	 */
-	protected void delRoleFunction(Role role) {
+	protected void delRoleFunction(SysRole role) {
 
 	}
 
@@ -59,7 +59,7 @@ public class RoleOperateController extends BaseController {
 	 */
 	@RequestMapping(params = "saveRole")
 	@ResponseBody
-	public AjaxJson saveRole(HttpServletRequest request, HttpServletResponse response, Role role) {
+	public AjaxJson saveRole(HttpServletRequest request, HttpServletResponse response, SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
 			if (null != role) {
@@ -92,9 +92,9 @@ public class RoleOperateController extends BaseController {
 	 */
 	@RequestMapping(params = "delRole")
 	@ResponseBody
-	public AjaxJson delRole(Role role) {
+	public AjaxJson delRole(SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
-		ManagerUser managerUser = WebUtilHelper.getCurrenLoginUser();
+		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		try {
 			// 删除角色之前先删除角色权限关系
 			delRoleFunction(role);

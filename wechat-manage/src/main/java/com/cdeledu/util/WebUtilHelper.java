@@ -13,9 +13,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.model.SessionInfo;
-import com.cdeledu.model.rbac.ManagerUser;
-import com.cdeledu.model.rbac.Menu;
-import com.cdeledu.model.rbac.Role;
+import com.cdeledu.model.rbac.SysMenu;
+import com.cdeledu.model.rbac.SysRole;
+import com.cdeledu.model.rbac.SysUser;
 import com.google.common.collect.Lists;
 
 /**
@@ -78,7 +78,7 @@ public class WebUtilHelper {
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	public static final ManagerUser getCurrenLoginUser() {
+	public static final SysUser getCurrenLoginUser() {
 		HttpSession session = getSession();
 		session.setMaxInactiveInterval(-1);
 		SessionInfo sessionInfo = null;
@@ -98,7 +98,7 @@ public class WebUtilHelper {
 	 * @param user
 	 * @return 当前登录的用户
 	 */
-	public static ManagerUser setCurrentLoginUser(ManagerUser user) {
+	public static SysUser setCurrentLoginUser(SysUser user) {
 		HttpSession session = getSession();
 		SessionInfo sessionInfo = new SessionInfo();
 		sessionInfo.setManagerUser(user);
@@ -121,16 +121,16 @@ public class WebUtilHelper {
 	/**
 	 * 获取当前用户角色列表
 	 */
-	public static List<Role> getRoleList() {
-		List<Role> roleList = Lists.newArrayList();
+	public static List<SysRole> getRoleList() {
+		List<SysRole> roleList = Lists.newArrayList();
 		return roleList;
 	}
 
 	/**
 	 * 获取当前用户授权菜单
 	 */
-	public static List<Menu> getMenuList() {
-		List<Menu> menuList = Lists.newArrayList();
+	public static List<SysMenu> getMenuList() {
+		List<SysMenu> menuList = Lists.newArrayList();
 		return menuList;
 	}
 	

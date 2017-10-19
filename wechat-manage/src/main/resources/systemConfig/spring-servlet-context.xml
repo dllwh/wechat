@@ -53,14 +53,14 @@
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:viewClass="org.springframework.web.servlet.view.JstlView" p:cache="false"
-		p:contentType="text/html;charset=UTF-8" p:prefix="/WEB-INF/webViews/"
+		p:contentType="text/html;charset=UTF-8" p:prefix="/WEB-INF/webviews/"
 		p:suffix=".jsp" />
 
 	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
 	<bean id="defaultViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:order="3" p:viewClass="org.springframework.web.servlet.view.JstlView"
-		p:contentType="text/html" p:prefix="/WEB-INF/webViews/" p:suffix=".jsp" />
+		p:contentType="text/html" p:prefix="/WEB-INF/webviews/" p:suffix=".jsp" />
 
 	<!-- ====================================================================== 
 		直接跳转:对模型视图名称的解析，即定义JSP文件的位置，在模型视图名称添加前后缀 -->

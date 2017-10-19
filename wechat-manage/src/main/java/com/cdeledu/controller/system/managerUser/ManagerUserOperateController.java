@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.ManagerUser;
-import com.cdeledu.model.rbac.ManagerUserRole;
+import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
 
 /**
@@ -45,7 +45,7 @@ public class ManagerUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(params = "singUp")
-	public AjaxJson singUp(ManagerUser managerUser, HttpServletRequest request) {
+	public AjaxJson singUp(SysUser managerUser, HttpServletRequest request) {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "用户: " + managerUser.getUserName();
 		try {
@@ -71,14 +71,14 @@ public class ManagerUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(params = "saveRoleUser")
-	public AjaxJson saveRoleUser(ManagerUser managerUser, HttpServletRequest request,
+	public AjaxJson saveRoleUser(SysUser managerUser, HttpServletRequest request,
 			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
 		AjaxJson resultMsg = new AjaxJson();
-		ManagerUser user = new ManagerUser();
+		SysUser user = new SysUser();
 		user.setUserName(managerUser.getUserName());
 		logMsg = "用户: " + managerUser.getUserName();
 		try {
-			ManagerUser TSUser = manageruserService.findOneForJdbc(user);
+			SysUser TSUser = manageruserService.findOneForJdbc(user);
 			if (null != TSUser) {
 				logMsg += " 不存在";
 				resultMsg.setSuccess(false);
@@ -87,7 +87,7 @@ public class ManagerUserOperateController extends BaseController {
 				logMsg += " 添加成功";
 
 				if (StringUtils.isNotEmpty(String.valueOf(roleID))) {
-					ManagerUserRole managerUserRole = new ManagerUserRole();
+					SysUserRole managerUserRole = new SysUserRole();
 					managerUserRole.setUserId(userId);
 					managerUserRole.setRoleId(roleID);
 					manageruserService.saveRoleUser(managerUserRole);
@@ -112,7 +112,7 @@ public class ManagerUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(params = "updateUser")
-	public AjaxJson updateUser(ManagerUser managerUser, HttpServletRequest request) {
+	public AjaxJson updateUser(SysUser managerUser, HttpServletRequest request) {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "用户: " + managerUser.getUserName();
 		try {
@@ -142,7 +142,7 @@ public class ManagerUserOperateController extends BaseController {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "删除用户ID: " + id + " 的用户";
 		try {
-			ManagerUser managerUser = new ManagerUser();
+			SysUser managerUser = new SysUser();
 			managerUser.setId(id);
 			manageruserService.delete(managerUser);
 			logMsg += ",删除成功";

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.common.listener.DictListener;
 import com.cdeledu.common.mapper.JsonMapper;
-import com.cdeledu.model.system.Dict;
+import com.cdeledu.model.system.SysDict;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -37,7 +37,7 @@ public class DictUtils {
 	 */
 	public static String getDictValue(String code, String defaultValue) {
 		if (StringUtils.isNotBlank(code)) {
-			for (Dict dict : DictListener.dictsList) {
+			for (SysDict dict : DictListener.dictsList) {
 				if (code.equals(dict.getItemCode())) {
 					return dict.getItemName();
 				}
@@ -51,12 +51,12 @@ public class DictUtils {
 	 * @param type
 	 * @return
 	 */
-	public static List<Dict> getDictList(String type) {
-		Map<String, List<Dict>> dictMap = null;
+	public static List<SysDict> getDictList(String type) {
+		Map<String, List<SysDict>> dictMap = null;
 		if (dictMap == null) {
 			dictMap = Maps.newHashMap();
 		}
-		List<Dict> dictList = dictMap.get(type);
+		List<SysDict> dictList = dictMap.get(type);
 		if (dictList == null) {
 			dictList = Lists.newArrayList();
 

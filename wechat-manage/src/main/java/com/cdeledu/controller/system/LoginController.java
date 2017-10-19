@@ -17,7 +17,7 @@ import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.common.constants.UserReturnCode;
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.ManagerUser;
+import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.system.LoginLog;
 import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.service.sys.SystemService;
@@ -54,7 +54,7 @@ public class LoginController extends BaseController {
 	@RequestMapping(params = "checkuser")
 	@ResponseBody
 	public AjaxJson checkuser(HttpServletRequest request, HttpServletResponse response,
-			ManagerUser user) {
+			SysUser user) {
 		AjaxJson reslutMsg = new AjaxJson();
 		HttpSession session = WebUtilHelper.getSession();
 		String imageCaptcha = (String) session.getAttribute(GlobalConstants.IMAGECAPTCHA);
@@ -62,7 +62,7 @@ public class LoginController extends BaseController {
 		int loginStatus = 0;
 		int logLeavel = 0;
 		LoginLog loginLog = new LoginLog();
-		ManagerUser managerUser = null;
+		SysUser managerUser = null;
 
 		if (StringUtils.isEmpty(imageCaptcha) 
 				|| !imageCaptcha.equalsIgnoreCase(user.getImageCaptcha())) {
@@ -121,7 +121,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "doLogin")
 	public String doLogin(HttpServletRequest request, HttpServletResponse response) {
-		ManagerUser managerUser = WebUtilHelper.getCurrenLoginUser();
+		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		try {
 			if (null != managerUser) {
 				// String roleName
@@ -148,7 +148,7 @@ public class LoginController extends BaseController {
 	public ModelAndView doLogout(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mv = this.getModelAndView();
 		HttpSession session = WebUtilHelper.getSession();
-		ManagerUser managerUser = WebUtilHelper.getCurrenLoginUser();
+		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		// 判断用户是否为空,不为空,则清空session中的用户object
 		if (null != managerUser) {
 			// 注销该操作用户
@@ -180,7 +180,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "left")
 	public ModelAndView left(HttpServletRequest request, HttpServletResponse response) {
-		ManagerUser managerUser = WebUtilHelper.getCurrenLoginUser();
+		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		HttpSession session = WebUtilHelper.getSession();
 		// 登陆者的权限
 		if (null == managerUser) {
