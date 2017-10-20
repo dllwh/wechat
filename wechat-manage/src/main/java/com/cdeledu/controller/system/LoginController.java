@@ -1,7 +1,6 @@
 package com.cdeledu.controller.system;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,15 +45,12 @@ public class LoginController extends BaseController {
 	/**
 	 * @方法:登陆验证
 	 * @创建人:独泪了无痕
-	 * @param request
-	 * @param response
 	 * @param user
 	 * @return
 	 */
 	@RequestMapping(params = "checkuser")
 	@ResponseBody
-	public AjaxJson checkuser(HttpServletRequest request, HttpServletResponse response,
-			SysUser user) {
+	public AjaxJson checkuser(HttpServletRequest request, SysUser user) {
 		AjaxJson reslutMsg = new AjaxJson();
 		HttpSession session = WebUtilHelper.getSession();
 		String imageCaptcha = (String) session.getAttribute(GlobalConstants.IMAGECAPTCHA);
@@ -64,12 +60,13 @@ public class LoginController extends BaseController {
 		LoginLog loginLog = new LoginLog();
 		SysUser managerUser = null;
 
-		if (StringUtils.isEmpty(imageCaptcha) 
+		if (StringUtils.isEmpty(imageCaptcha)
 				|| !imageCaptcha.equalsIgnoreCase(user.getImageCaptcha())) {
 			logMsg = UserReturnCode.register_code_error.getMessage();
 			suc = false;
 		} else {
 			try {
+				
 				managerUser = manageruserService.checkUserExits(user);
 				if (null != managerUser && null != managerUser.getIsEnabled()) {
 					if (managerUser.getIsEnabled() == 1) {
@@ -116,11 +113,10 @@ public class LoginController extends BaseController {
 	 * @方法:用户登录
 	 * @创建人:独泪了无痕
 	 * @param request
-	 * @param response
 	 * @return
 	 */
 	@RequestMapping(params = "doLogin")
-	public String doLogin(HttpServletRequest request, HttpServletResponse response) {
+	public String doLogin(HttpServletRequest request) {
 		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		try {
 			if (null != managerUser) {
@@ -140,12 +136,10 @@ public class LoginController extends BaseController {
 	/**
 	 * @方法:退出系统
 	 * @创建人:独泪了无痕
-	 * @param request
-	 * @param response
 	 * @return
 	 */
 	@RequestMapping(params = "doLogout")
-	public ModelAndView doLogout(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView doLogout() {
 		ModelAndView mv = this.getModelAndView();
 		HttpSession session = WebUtilHelper.getSession();
 		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
@@ -174,12 +168,10 @@ public class LoginController extends BaseController {
 	/**
 	 * @方法:菜单跳转
 	 * @创建人:独泪了无痕
-	 * @param request
-	 * @param response
 	 * @return
 	 */
 	@RequestMapping(params = "left")
-	public ModelAndView left(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView left() {
 		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		HttpSession session = WebUtilHelper.getSession();
 		// 登陆者的权限
@@ -197,34 +189,31 @@ public class LoginController extends BaseController {
 	/**
 	 * @方法:首页跳转
 	 * @创建人:独泪了无痕
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(params = "home")
-	public ModelAndView home(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView home() {
 		return new ModelAndView("main/home");
 	}
 
 	/**
 	 * @方法:首页跳转
 	 * @创建人:独泪了无痕
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(params = "maintabs")
-	public ModelAndView maintabs(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView maintabs() {
 		return new ModelAndView("main/mainTabs");
 	}
 
 	/**
 	 * @方法: 菜单权限控制:无权限页面提示跳转
 	 * @创建人:独泪了无痕
-	 * @param request
 	 * @return
 	 */
 	@RequestMapping(params = "noAuth")
 	@ResponseBody
-	public ModelAndView noAuth(HttpServletRequest request,
+	public ModelAndView noAuth(
 			@RequestParam(value = "requestPath", required = false) String requestPath) {
 		AjaxJson reslutMsg = new AjaxJson();
 		reslutMsg.setMsg("您没有【" + requestPath + "】权限，请联系管理员给您赋予相应权限！");

@@ -4,11 +4,16 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 						http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
+
+	<!-- Web容器加载顺序ServletContext->context-param->listener->filter->servlet -->
+
 	<display-name>Archetype Created Web Application</display-name>
-	<!-- 配置session时时间,单位是分钟 -->
+
+	<!-- 配置session时时间,单位是分钟 ,零或负数表示会话永不超时 -->
 	<session-config>
 		<session-timeout>120</session-timeout>
 	</session-config>
+
 	<!-- 起始欢迎界面 -->
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
@@ -24,6 +29,7 @@
 		<param-name>webAppRootKey</param-name>
 		<param-value>wechat-manage</param-value>
 	</context-param>
+
 	<!-- ====================================================================== 
 		日志记录配置 -->
 	<context-param>
@@ -41,12 +47,11 @@
 	</context-param>
 
 	<!-- ====================================================================== 
-		设置Spring容器加载所有的配置文件的路径 -->
+		设置Spring容器加载所有的配置文件的路径,否则Spring会默认从WEB-INF下寻找配置文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:systemConfig/spring-applicationContext.xml,
-			classpath:systemConfig/dataSource-config.xml
+			classpath:systemConfig/spring-applicationContext.xml
 		</param-value>
 	</context-param>
 
@@ -87,6 +92,29 @@
 		<description>request监听器</description>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
+
+	<!-- ====================================================================== 
+		shiro配置 -->
+	<!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
+	<!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
+	<!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
+	<!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
+	<!-- 
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	-->
 
 	<!-- ====================================================================== 
 		过滤器配置 -->
@@ -151,16 +179,16 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>druidStatView</servlet-name>
-		<url-pattern>/webViews/system/druid/*</url-pattern>
+		<url-pattern>/webviews/system/druid/*</url-pattern>
 	</servlet-mapping>
 
 	<!-- 错误跳转页面 -->
 	<error-page>
 		<!-- 路径不正确 -->
-	<error-code>404</error-code>
+		<error-code>404</error-code>
 		<location>/WEB-INF/webViews/common/errorpage/404.jsp</location>
 	</error-page>
-	<error-page> 
+	<error-page>
 		<!-- 没有访问权限，访问被禁止 -->
 		<error-code>405</error-code>
 		<location>/WEB-INF/webViews/common/errorpage/405.jsp</location>
@@ -168,6 +196,10 @@
 	<error-page>
 		<!-- 内部错误 -->
 		<error-code>500</error-code>
+		<location>/WEB-INF/webViews/common/errorpage/500.jsp</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
 		<location>/WEB-INF/webViews/common/errorpage/500.jsp</location>
 	</error-page>
 

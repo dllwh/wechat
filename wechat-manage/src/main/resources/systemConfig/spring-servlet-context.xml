@@ -64,7 +64,7 @@
 
 	<!-- ====================================================================== 
 		直接跳转:对模型视图名称的解析，即定义JSP文件的位置，在模型视图名称添加前后缀 -->
-	<!-- <mvc:view-controller path="/index" view-name="index" /> -->
+	<mvc:view-controller path="/" view-name="forward:/webviews/login/login.jsp" />
 
 	<!-- ====================================================================== 
 		静态资源访问 -->
@@ -78,5 +78,6 @@
 	<mvc:resources location="/front/" mapping="/front/**" />
 	<mvc:resources location="/html/" mapping="/html/**" />
 	<mvc:resources location="/json/" mapping="/json/**" />
+	<mvc:resources mapping="/WEB-INF/**" location="/WEB-INF/"/>  
 	<!-- 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理 -->
 </beans>

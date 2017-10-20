@@ -20,7 +20,15 @@
 	<!-- 拦截器 -->
 	<context:component-scan base-package="com.cdeledu.interceptors" />
 	<!-- 数据库配置 -->
-	<import resource="dataSource-config.xml" />
+	<import resource="applicationContext-dataSource.xml" />
+	<!-- redis配置 -->
+	<!-- 
+		<import resource="applicationContext-redis.xml" />
+	-->
+	<!-- shiro配置 -->
+	<!-- 
+		<import resource="applicationContext-shiro.xml" />
+	-->
 
 
 	<!-- 配置文件上传:如果没有使用文件上传可以不用配置,当然如果不配,那么配置文件中也不必引入上传组件包 -->
@@ -30,6 +38,22 @@
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
 		p:defaultEncoding="UTF-8" p:maxUploadSize="104857600"
 		p:maxInMemorySize="4096" />
+
+	<!-- SpringMVC在超出上传文件限制时，会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->  
+	<!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的，而且此时还没有进入到Controller方法中 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">
+					/WEB-INF/webViews/common/errorpage/fileUpload
+				</prop>
+				<!-- 处理其它异常(包括Controller抛出的) -->  
+				<prop key="java.lang.Throwable">
+					/WEB-INF/webViews/common/errorpage/500
+				</prop>
+			</props>
+		</property>
+	</bean>
 
 	<!-- 国际化的消息资源文件 -->
 	<bean id="messageSource"
@@ -45,18 +69,6 @@
 		<!-- 刷新资源文件的周期，以秒为单位 -->
 		<property name="cacheSeconds" value="60" />
 	</bean>
-	
-	<!-- 国际化配置 -->
-	<!--
-	<bean id="localeResolver"
-		class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
-	-->
-	<!-- 国际化拦截器配置 -->
-	<!--
-	<mvc:interceptors>
-		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
-	</mvc:interceptors>
-	-->
 
 	<!-- servlet适配器，这里必须明确声明，因为spring默认没有初始化该适配器 -->
 	<bean id="servletHandlerAdapter"
@@ -77,21 +89,6 @@
 	<!-- ====================================================================== 
 		配置自定义Spring 拦截器 -->
 	<!-- 菜单权限:设置拦截的路径,例如：后台目录:如果不配置或/*,将拦截所有的Controller -->
-	<!-- 
-	<bean id="authInterceptor" class="com.cdeledu.common.interceptors.AuthInterceptor">-->
-		<!-- 不被拦截范围（路径）；例如：后台登录页面 -->
-		<!-- 
-		<property name="excludeUrls">
-			<list>
-				<value>loginController.shtml?doLogin</value>
-				<value>loginController.shtml?checkuser</value>
-				<value>loginController.shtml?noAuth</value>
-				<value>iconController.shtml?saveIcon</value>
-				<value>system.shtml?checkBrowser</value>
-			</list>
-		</property>
-		-->
-	<!--</bean>-->
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
@@ -99,14 +96,12 @@
 		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
+			<!-- 不被拦截范围（路径）；例如：后台登录页面 -->
 			<mvc:exclude-mapping path="loginController.shtml?doLogin"/>
 			<mvc:exclude-mapping path="loginController.shtml?checkuser"/>
 			<mvc:exclude-mapping path="loginController.shtml?noAuth"/>
 			<mvc:exclude-mapping path="system.shtml?checkBrowser"/>
 			<bean class="com.cdeledu.common.interceptors.AuthInterceptor" />
-			<!-- 
-			<ref bean="authInterceptor" />
-			-->
 		</mvc:interceptor>
 	</mvc:interceptors>
 </beans>
