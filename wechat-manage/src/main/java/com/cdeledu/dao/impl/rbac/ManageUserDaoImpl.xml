@@ -6,7 +6,7 @@
 	<!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getUser，id属性值必须是唯一的，不能够重复.
 		使用parameterType属性指明查询时使用的参数类型，
 		resultType属性指明查询返回的结果集类型 
-		resultType="com.cdeledu.model.rbac.ManagerUser"就表示将查询结果封装成一个ManagerUser类的对象返回 
+		resultType="com.cdeledu.model.rbac.SysUser"就表示将查询结果封装成一个ManagerUser类的对象返回 
 		ManagerUser类就是sys_manageruser表所对应的实体类 -->
 	<sql id="findForJdbc_body">
 		SELECT * from sys_manageruser
@@ -47,35 +47,35 @@
 		</where>
 	</sql>
 	
-	<select id="findForJdbc"  parameterType="com.cdeledu.model.rbac.ManagerUser"
-		resultType="com.cdeledu.model.rbac.ManagerUser">
+	<select id="findForJdbc"  parameterType="com.cdeledu.model.rbac.SysUser"
+		resultType="com.cdeledu.model.rbac.SysUser">
 		select * from(
 			<include refid="findForJdbc_body"/>
 		) as myTable LIMIT #{startRow},#{rows}
 	</select>
 	
-	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.rbac.ManagerUser"
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.rbac.SysUser"
 		resultType="java.lang.Integer">
 		select count(*) from(
 			<include refid="findForJdbc_body"/>
 		) as myTable
 	</select>
 	
-	<select id="findOneForJdbc" parameterType="com.cdeledu.model.rbac.ManagerUser"
-		resultType="com.cdeledu.model.rbac.ManagerUser">
+	<select id="findOneForJdbc" parameterType="com.cdeledu.model.rbac.SysUser"
+		resultType="com.cdeledu.model.rbac.SysUser">
 		select * from(
 			<include refid="findForJdbc_body"/>
 		) as myTable LIMIT 1
 	</select>
 	
 	<!-- 验证用户是否存在 -->
-	<select id="checkUserExits" parameterType="com.cdeledu.model.rbac.ManagerUser"
-		resultType="com.cdeledu.model.rbac.ManagerUser">
+	<select id="checkUserExits" parameterType="com.cdeledu.model.rbac.SysUser"
+		resultType="com.cdeledu.model.rbac.SysUser">
 			SELECT * from sys_manageruser WHERE userName =#{userName} AND `password` = #{password} and isEnabled =1
 	</select>
 	
 	<!-- 创建新的用户 -->
-	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.ManagerUser" 
+	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.SysUser" 
 		useGeneratedKeys="true" keyProperty="id" >
 		insert into sys_manageruser
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -110,7 +110,7 @@
 	</insert>
 	
 	<!-- 更新 -->
-	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.ManagerUser" >
+	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.SysUser" >
 		update sys_manageruser
 		<trim prefix="SET" suffix="" suffixOverrides=",">
 			<if test="userName != null and userName != " > 
@@ -165,7 +165,7 @@
 	</delete>
 	
 	<!-- 一旦参数没有传，会删除所有 -->
-	<delete id="delete" parameterType="com.cdeledu.model.rbac.ManagerUser"  >
+	<delete id="delete" parameterType="com.cdeledu.model.rbac.SysUser"  >
 		delete from sys_manageruser
 		<where>
 			<if test="realname != null and realname != '' ">  
@@ -193,8 +193,8 @@
 	</delete>
 	
 	<!-- 获取用户的角色  -->
-	<select id="getUserRole" parameterType="com.cdeledu.model.rbac.ManagerUser"
-		resultType="com.cdeledu.model.rbac.ManagerUserRole">
+	<select id="getUserRole" parameterType="com.cdeledu.model.rbac.SysUser"
+		resultType="com.cdeledu.model.rbac.SysUserRole">
 		SELECT 	
 			smur.userId,smur.roleId,smr.roleName 
 		FROM 
@@ -204,7 +204,7 @@
 	</select>
 	
 	<!-- 保存用户-角色关联关系 -->
-	<insert id="saveRoleUser" parameterType="com.cdeledu.model.rbac.ManagerUserRole" 
+	<insert id="saveRoleUser" parameterType="com.cdeledu.model.rbac.SysUserRole" 
 		useGeneratedKeys="true" keyProperty="id" >
 		insert  into sys_user_role (roleId, userId) 
 		values
@@ -212,18 +212,18 @@
 	</insert>
 	
 	<!-- 保存管理员登录信息 -->
-	<insert id="saveLoginInfo" parameterType="com.cdeledu.model.rbac.ManagerUserRole" 
+	<insert id="saveLoginInfo" parameterType="com.cdeledu.model.rbac.SysUserRole" 
 		useGeneratedKeys="true" keyProperty="id" >
 		
 	</insert>
 	
 	<!-- 删除用户角色关联数据 -->
-	<delete id="deleteUserRole" parameterType="com.cdeledu.model.rbac.ManagerUser">
+	<delete id="deleteUserRole" parameterType="com.cdeledu.model.rbac.SysUser">
 	
 	</delete>
 	
 	<!-- 更新登录信息，如：登录IP、登录时间 -->
-	<update id="updateLoginInfo" parameterType="com.cdeledu.model.rbac.ManagerUser" >
+	<update id="updateLoginInfo" parameterType="com.cdeledu.model.rbac.SysUser" >
 	
 	</update>
 </mapper>

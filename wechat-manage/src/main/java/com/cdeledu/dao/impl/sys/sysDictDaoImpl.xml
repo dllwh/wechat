@@ -16,29 +16,29 @@
 		</where>
 			ORDER BY sequence
 	</sql>
-	<select id="findForJdbc"  parameterType="com.cdeledu.model.system.Dict"
-		resultType="com.cdeledu.model.system.Dict">
+	<select id="findForJdbc"  parameterType="com.cdeledu.model.system.SysDict"
+		resultType="com.cdeledu.model.system.SysDict">
 		select * from(
 			<include refid="findForJdbc_body"/>
 		) as myTable LIMIT #{startRow},#{rows}
 	</select>
 
-	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.system.Dict"
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.system.SysDict"
 		resultType="java.lang.Integer">
 		select count(*) from(
 			<include refid="findForJdbc_body"/>
 		) as myTable
 	</select>
 	
-	<select id="findOneForJdbc" parameterType="com.cdeledu.model.system.Dict"
-		resultType="com.cdeledu.model.system.Dict">
+	<select id="findOneForJdbc" parameterType="com.cdeledu.model.system.SysDict"
+		resultType="com.cdeledu.model.system.SysDict">
 		select * from(
 			<include refid="findForJdbc_body"/>
 		) as myTable LIMIT 1
 	</select>
 	
-	<select id="findAllList"  parameterType="com.cdeledu.model.system.Dict"
-		resultType="com.cdeledu.model.system.Dict">
+	<select id="findAllList"  parameterType="com.cdeledu.model.system.SysDict"
+		resultType="com.cdeledu.model.system.SysDict">
 		select * from(
 			<include refid="findForJdbc_body"/>
 		) as myTable
@@ -48,7 +48,7 @@
 		delete from sys_dict where id = #{id,jdbcType=INTEGER}
 	</delete>
 
-	<insert id="insertSelective" parameterType="com.cdeledu.model.system.Dict">
+	<insert id="insertSelective" parameterType="com.cdeledu.model.system.SysDict">
 		insert into sys_dict
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="itemname != null">
@@ -128,7 +128,7 @@
 		</trim>
 	</insert>
 	
-	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.system.Dict">
+	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.system.SysDict">
 		update sys_dict
 		<set>
 			<if test="itemname != null">
