@@ -30,4 +30,12 @@ public class SystemController extends BaseController {
 		mv.setViewName("system/browser/checkBrowser");
 		return mv;
 	}
+	
+	@RequestMapping(params = "info")
+	@ResponseBody
+	public ModelAndView info(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/system/info");
+		return mv;
+	}
 }

@@ -258,35 +258,35 @@
 					</div><!-- #sidebar-shortcuts -->
 					<ul class="nav nav-list" id="nav_list">
 						<li class="home"><%-- <li class="home"> --%>
-							<a href="javascript:void(0)" name="loginController.shtml?home" class="iframeurl">
+							<a name="loginController.shtml?home" class="iframeurl">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 系统首页 </span>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:void(0)" class="dropdown-toggle">
+							<a class="dropdown-toggle">
 								<i class="icon-cogs"></i>
 								<span class="menu-text"> 系统管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
 							<ul class="submenu">
 								<li class="home">
-									<a href="javascript:void(0);" name="" title="系统设置" class="iframeurl">
+									<a name="" title="系统设置" class="iframeurl">
 										<i class="icon-double-angle-right"></i>系统设置
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="menuView.shtml?init" title="菜单管理" class="iframeurl">
+									<a name="menuView.shtml?init" title="菜单管理" class="iframeurl">
 										<i class="icon-double-angle-right"></i>菜单管理
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="用户管理" class="iframeurl">
+									<a name="" title="用户管理" class="iframeurl">
 										<i class="icon-double-angle-right"></i>用户管理
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="roleView.shtml?init" title="角色管理" class="iframeurl">
+									<a name="roleView.shtml?init" title="角色管理" class="iframeurl">
 										<i class="icon-double-angle-right"></i>角色管理
 									</a>
 								</li>
@@ -300,17 +300,17 @@
 								</a>
 							<ul class="submenu">
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="权限管理"  class="iframeurl">
+									<a name="" title="权限管理"  class="iframeurl">
 										<i class="icon-double-angle-right"></i>权限管理
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="managerUserView.shtml?init" title="管理员列表" class="iframeurl">
+									<a name="managerUserView.shtml?init" title="管理员列表" class="iframeurl">
 										<i class="icon-double-angle-right"></i>管理员列表
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="managerUserView.shtml?adminInfo" title="个人信息" class="iframeurl">
+									<a name="managerUserView.shtml?adminInfo" title="个人信息" class="iframeurl">
 										<i class="icon-double-angle-right"></i>个人信息
 									</a>
 								</li>
@@ -324,27 +324,27 @@
 								</a>
 							<ul class="submenu">
 								<li class="home">
-									<a href="javascript:void(0)" name="#" title="数据库维护"  class="iframeurl">
+									<a name="#" title="数据库维护"  class="iframeurl">
 										<i class="icon-double-angle-right"></i>数据库维护
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="数据源" class="iframeurl">
+									<a name="" title="数据源" class="iframeurl">
 										<i class="icon-double-angle-right"></i>数据源
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="行政区划管理" class="iframeurl">
+									<a name="" title="行政区划管理" class="iframeurl">
 										<i class="icon-double-angle-right"></i>行政区划管理
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="字典管理" class="iframeurl">
+									<a name="" title="字典管理" class="iframeurl">
 										<i class="icon-double-angle-right"></i>字典管理
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="机构管理" class="iframeurl">
+									<a name="" title="机构管理" class="iframeurl">
 										<i class="icon-double-angle-right"></i>机构管理
 									</a>
 								</li>
@@ -358,23 +358,28 @@
 								</a>
 							<ul class="submenu">
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="系统监控"  class="iframeurl">
+									<a name="" title="系统监控"  class="iframeurl">
 										<i class="icon-double-angle-right"></i>系统监控
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="缓存监控" class="iframeurl">
+									<a name="" title="缓存监控" class="iframeurl">
 										<i class="icon-double-angle-right"></i>缓存监控
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="定时任务" class="iframeurl">
+									<a name="" title="定时任务" class="iframeurl">
 										<i class="icon-double-angle-right"></i>定时任务
 									</a>
 								</li>
 								<li class="home">
-									<a href="javascript:void(0)" name="" title="数据日志"  class="iframeurl">
+									<a name="" title="数据日志"  class="iframeurl">
 										<i class="icon-double-angle-right"></i>数据日志
+									</a>
+								</li>
+								<li class="home">
+									<a name="system.shtml?info" title="服务器信息"  class="iframeurl">
+										<i class="icon-double-angle-right"></i>服务器信息
 									</a>
 								</li>
 							</ul>

@@ -13,8 +13,9 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <meta http-equiv="expires" content="wed, 26 feb 1997 08:21:57 gmt">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 
 <%@ taglib tagdir="/WEB-INF/tags/utilHelper" prefix="utilHelper"%>
 <%
