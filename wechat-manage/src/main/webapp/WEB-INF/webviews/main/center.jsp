@@ -305,12 +305,12 @@
 									</a>
 								</li>
 								<li class="home">
-									<a name="managerUserView.shtml?init" title="管理员列表" class="iframeurl">
+									<a name="sysUserView.shtml?sysUserInit" title="管理员列表" class="iframeurl">
 										<i class="icon-double-angle-right"></i>管理员列表
 									</a>
 								</li>
 								<li class="home">
-									<a name="managerUserView.shtml?adminInfo" title="个人信息" class="iframeurl">
+									<a name="sysUserView.shtml?adminInfo" title="个人信息" class="iframeurl">
 										<i class="icon-double-angle-right"></i>个人信息
 									</a>
 								</li>
@@ -373,7 +373,7 @@
 									</a>
 								</li>
 								<li class="home">
-									<a name="" title="数据日志"  class="iframeurl">
+									<a name="logController.shtml?init" title="数据日志"  class="iframeurl">
 										<i class="icon-double-angle-right"></i>数据日志
 									</a>
 								</li>
