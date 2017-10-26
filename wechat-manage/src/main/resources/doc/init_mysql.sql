@@ -10,87 +10,10 @@ Target Server Type    : MYSQL
 Target Server Version : 50622
 File Encoding         : 65001
 
-Date: 2017-10-22 16:51:18
+Date: 2017-10-26 17:44:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for cms_access
--- ----------------------------
-DROP TABLE IF EXISTS `cms_access`;
-CREATE TABLE `cms_access` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
-
--- ----------------------------
--- Records of cms_access
--- ----------------------------
-
--- ----------------------------
--- Table structure for cms_auth_rule
--- ----------------------------
-DROP TABLE IF EXISTS `cms_auth_rule`;
-CREATE TABLE `cms_auth_rule` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员权限规则表';
-
--- ----------------------------
--- Records of cms_auth_rule
--- ----------------------------
-
--- ----------------------------
--- Table structure for cms_office
--- ----------------------------
-DROP TABLE IF EXISTS `cms_office`;
-CREATE TABLE `cms_office` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `parentId` int(11) NOT NULL COMMENT '父级编号',
-  `name` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '名称',
-  `sequence` int(11) NOT NULL COMMENT '排序',
-  `areaId` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '归属区域',
-  `code` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '区域编码',
-  `type` tinyint(1) NOT NULL COMMENT '机构类型',
-  `grade` tinyint(1) NOT NULL COMMENT '机构等级',
-  `address` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '联系地址',
-  `zipCode` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '邮政编码',
-  `master` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '负责人',
-  `phone` varchar(200) COLLATE utf8_bin DEFAULT NULL COMMENT '电话',
-  `fax` varchar(200) COLLATE utf8_bin DEFAULT NULL COMMENT '传真',
-  `email` varchar(200) COLLATE utf8_bin DEFAULT NULL COMMENT '邮箱',
-  `isEnabled` tinyint(1) DEFAULT NULL,
-  `isVisible` tinyint(1) DEFAULT NULL COMMENT '是否启用',
-  `primary_person` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '主负责人',
-  `deputy_person` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '副负责人',
-  `create` int(11) NOT NULL COMMENT '创建者',
-  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` int(11) NOT NULL COMMENT '更新者',
-  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注信息',
-  PRIMARY KEY (`id`),
-  KEY `parentId` (`parentId`),
-  KEY `isEnabled` (`isEnabled`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='机构表';
-
--- ----------------------------
--- Records of cms_office
--- ----------------------------
-
--- ----------------------------
--- Table structure for cms_role_office
--- ----------------------------
-DROP TABLE IF EXISTS `cms_role_office`;
-CREATE TABLE `cms_role_office` (
-  `roleId` int(11) NOT NULL COMMENT '角色编号',
-  `officeId` int(11) NOT NULL COMMENT '机构编号',
-  PRIMARY KEY (`roleId`,`officeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色-机构';
-
--- ----------------------------
--- Records of cms_role_office
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for crap_api
@@ -182,49 +105,6 @@ CREATE TABLE `crawler_image` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for os_api_parameter
--- ----------------------------
-DROP TABLE IF EXISTS `os_api_parameter`;
-CREATE TABLE `os_api_parameter` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) DEFAULT NULL COMMENT '参数名',
-  `value` varchar(64) DEFAULT NULL COMMENT '参数值',
-  `create` int(11) DEFAULT NULL COMMENT '创建者',
-  `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modifier` int(11) DEFAULT NULL COMMENT '更新者',
-  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='接口参数表';
-
--- ----------------------------
--- Records of os_api_parameter
--- ----------------------------
-
--- ----------------------------
--- Table structure for os_email_records
--- ----------------------------
-DROP TABLE IF EXISTS `os_email_records`;
-CREATE TABLE `os_email_records` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tomail` int(11) DEFAULT NULL COMMENT '收件人',
-  `frommail` int(11) DEFAULT NULL COMMENT '发件人',
-  `subject` varchar(128) DEFAULT NULL COMMENT '邮件标题',
-  `message` text COMMENT '邮件内容',
-  `charset` int(11) DEFAULT NULL COMMENT '邮件编码（字典表）',
-  `emailType` tinyint(4) DEFAULT NULL COMMENT '邮箱类型：0.找回密码；1.注册；2.改变邮箱；3.通知',
-  `level` int(11) DEFAULT NULL COMMENT '邮件紧急级别',
-  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录插入时间',
-  `appid` int(11) DEFAULT NULL COMMENT '来源应用id',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '链接是否已失效：0.失效；1.未失效；',
-  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='邮件发送记录';
-
--- ----------------------------
--- Records of os_email_records
--- ----------------------------
-
--- ----------------------------
 -- Table structure for sys_datasource
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_datasource`;
@@ -236,7 +116,8 @@ CREATE TABLE `sys_datasource` (
   `dbPassword` varchar(64) NOT NULL COMMENT '数据库登陆密码',
   `jdbcName` varchar(128) NOT NULL COMMENT ' 数据库连接驱动',
   `databaseType` varchar(64) NOT NULL COMMENT '数据库类型',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `databaseType` (`databaseType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据源配置';
 
 -- ----------------------------
@@ -248,11 +129,11 @@ CREATE TABLE `sys_datasource` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict`;
 CREATE TABLE `sys_dict` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `itemName` varchar(128) NOT NULL COMMENT '字典类型的中文名称:同种类型下唯一性',
   `itemCode` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '字典类型的编码:同种类型下唯一性',
   `sequence` int(11) NOT NULL COMMENT '排顺字段：越大越靠前',
-  `parentId` int(11) NOT NULL,
+  `parentId` int(11) NOT NULL COMMENT '父节点',
   `isEnabled` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;-1:删除;0:不可用,默认值;1:可用',
   `allowEdit` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否允许编辑;1:允许,默认值;0:不允许',
   `allowDelete` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否允许删除;1:允许删除,默认值,0:不允许删除',
@@ -260,11 +141,13 @@ CREATE TABLE `sys_dict` (
   `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
   `modifier` int(11) NOT NULL COMMENT '最后修改人',
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据最后更新时间',
-  `remark` text,
+  `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `itemCode` (`itemCode`,`isEnabled`) USING BTREE,
-  KEY `isEnabled` (`isEnabled`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COMMENT='数据字典';
+  KEY `isEnabled` (`isEnabled`),
+  KEY `allowEdit` (`allowEdit`),
+  KEY `allowDelete` (`allowDelete`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据字典';
 
 -- ----------------------------
 -- Records of sys_dict
@@ -350,8 +233,9 @@ CREATE TABLE `sys_dict_china_city` (
   `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `areaCode` (`areaCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=3239 DEFAULT CHARSET=utf8 COMMENT='行政区域：省-市-县-镇-村';
+  UNIQUE KEY `areaCode` (`areaCode`),
+  KEY `areaType` (`areaType`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='行政区域：省-市-县-镇-村';
 
 -- ----------------------------
 -- Records of sys_dict_china_city
@@ -3605,8 +3489,9 @@ CREATE TABLE `sys_icon` (
   `className` varchar(255) NOT NULL COMMENT 'class 名字',
   `sourceType` varchar(255) NOT NULL COMMENT '来源',
   `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1129 DEFAULT CHARSET=utf8 COMMENT='图标资源';
+  PRIMARY KEY (`id`),
+  KEY `sourceType` (`sourceType`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图标资源';
 
 -- ----------------------------
 -- Records of sys_icon
@@ -4752,7 +4637,7 @@ CREATE TABLE `sys_log_login` (
   `browser` varchar(255) DEFAULT NULL COMMENT '登录浏览器',
   `logLeavel` int(11) DEFAULT NULL COMMENT '日志级别',
   `opType` int(11) DEFAULT NULL COMMENT '日志类型',
-  `logContent` text COMMENT '日志内容',
+  `logContent` varchar(255) DEFAULT NULL COMMENT '日志内容',
   `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录产生时间',
   PRIMARY KEY (`id`),
   KEY `sys_log_login_ibfk_1` (`userCode`)
@@ -4824,7 +4709,7 @@ CREATE TABLE `sys_proxy_info` (
   `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url` (`url`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COMMENT='代理IP网站';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='代理IP网站';
 
 -- ----------------------------
 -- Records of sys_proxy_info
@@ -4884,8 +4769,9 @@ CREATE TABLE `sys_role` (
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改日期',
   `remark` varchar(255) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `roleCode` (`roleCode`,`isEnabled`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='角色表';
+  UNIQUE KEY `roleCode` (`roleCode`,`isEnabled`),
+  KEY `categoryCode` (`categoryCode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
@@ -4915,26 +4801,12 @@ CREATE TABLE `sys_role_menu` (
   `roleId` int(11) NOT NULL COMMENT '角色编号',
   `menuId` int(11) NOT NULL COMMENT '菜单编号',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `roleID` (`roleId`,`menuId`) USING BTREE
+  UNIQUE KEY `roleID` (`roleId`,`menuId`) USING BTREE,
+  KEY `roleId_2` (`roleId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色-菜单';
 
 -- ----------------------------
 -- Records of sys_role_menu
--- ----------------------------
-
--- ----------------------------
--- Table structure for sys_role_org
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_org`;
-CREATE TABLE `sys_role_org` (
-  `id` int(11) NOT NULL COMMENT '编号',
-  `role` int(11) NOT NULL COMMENT '角色编号',
-  `org_id` int(11) NOT NULL COMMENT '机构编号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色-机构';
-
--- ----------------------------
--- Records of sys_role_org
 -- ----------------------------
 
 -- ----------------------------
@@ -4960,37 +4832,42 @@ INSERT INTO `sys_sysconfig` VALUES ('lang', 'zh-cn');
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `userName` varchar(50) NOT NULL COMMENT '登录名，用户名',
   `password` varchar(128) NOT NULL COMMENT '密码(真正的密码与用户名MD5加密)',
-  `userType` int(11) DEFAULT NULL COMMENT '用户类型(字典表)',
+  `userType` int(11) NOT NULL COMMENT '用户类型(字典表)',
   `realName` varchar(50) DEFAULT NULL COMMENT '姓名',
   `email` varchar(100) DEFAULT NULL COMMENT '用户邮箱',
-  `emailstatus` tinyint(1) DEFAULT '0' COMMENT 'email是否经过验证',
-  `userSex` tinyint(2) DEFAULT NULL COMMENT '性别',
-  `mobile` varchar(50) DEFAULT NULL COMMENT '用户手机号码',
+  `emailstatus` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'email是否经过验证(0:未认证；1：已认证)',
+  `userSex` tinyint(2) NOT NULL DEFAULT '0' COMMENT '性别(1=男；2=女；0=对外不可见,默认值)',
+  `mobile` varchar(20) DEFAULT NULL COMMENT '用户手机号码',
   `telephone` varchar(50) DEFAULT NULL COMMENT '用户电话号码',
-  `signature` varchar(200) DEFAULT NULL COMMENT '个性签名',
+  `signature` varchar(255) DEFAULT NULL COMMENT '个性签名',
   `isLocked` tinyint(2) NOT NULL DEFAULT '1' COMMENT '是否锁定(1:不锁定;0：锁定)',
-  `isVisible` tinyint(2) NOT NULL DEFAULT '1' COMMENT '是否有效(是否审核);1:可见;0:不可见,默认值',
+  `isVisible` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否可见(是否审核);1:可见;0:不可见,默认值',
   `loginFlag` tinyint(2) NOT NULL DEFAULT '1' COMMENT '是否允许登陆;1:允许,默认值;0:不允许',
-  `isEnabled` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否有效;-1:删除;0:不可用,默认值;1:可用',
+  `isEnabled` tinyint(2) NOT NULL DEFAULT '1' COMMENT '是否有效;0:不可用,已删除;1:可用,默认值',
   `remark` varchar(255) DEFAULT NULL COMMENT '描述',
-  `create` int(11) DEFAULT NULL COMMENT '最初创建者',
+  `create` int(11) NOT NULL COMMENT '最初创建者',
   `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `modifier` int(11) DEFAULT NULL COMMENT '最后修改人',
+  `modifier` int(11) NOT NULL COMMENT '最后修改人',
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改日期',
   `prevVisit` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
-  `lastVisit` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '最后登陆时间',
-  `loginIP` varchar(100) DEFAULT NULL COMMENT '最后登陆IP',
+  `lastVisit` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后登陆时间',
+  `loginIP` varchar(100) NOT NULL COMMENT '最后登陆IP',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `userName` (`userName`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户权限管理系统：系统管理员用户表';
+  UNIQUE KEY `userName` (`userName`) USING BTREE,
+  KEY `userType` (`userType`),
+  KEY `isLocked` (`isLocked`),
+  KEY `loginFlag` (`loginFlag`),
+  KEY `isEnabled` (`isEnabled`),
+  KEY `emailstatus` (`emailstatus`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户权限管理系统：系统管理员用户表';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', '7d733c1c53ab1729', '1', '独泪了无痕', 'duleilewuhen@sina.com', '0', null, null, null, null, '1', '1', '1', '1', null, null, '2017-10-19 16:20:29', null, '2017-10-19 18:16:18', '2017-10-19 18:15:39', '2017-10-19 18:15:47', null);
+INSERT INTO `sys_user` VALUES ('1', 'admin', '7d733c1c53ab1729', '1', '独泪了无痕', 'duleilewuhen@sina.com', '0', '0', null, null, null, '1', '1', '1', '1', null, '1', '2017-10-19 16:20:29', '1', '2017-10-26 15:43:19', '2017-10-19 18:15:39', '2017-10-19 18:15:47', '218.247.17.100');
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -5002,7 +4879,7 @@ CREATE TABLE `sys_user_role` (
   `roleId` int(11) NOT NULL COMMENT '角色主键',
   PRIMARY KEY (`id`),
   UNIQUE KEY `RoleInfo` (`userId`,`roleId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户权限管理系统：用户-角色关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户权限管理系统：用户-角色关联表';
 
 -- ----------------------------
 -- Records of sys_user_role
