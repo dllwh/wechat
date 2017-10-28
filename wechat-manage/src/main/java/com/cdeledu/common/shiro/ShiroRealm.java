@@ -2,16 +2,26 @@ package com.cdeledu.common.shiro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.rbac.SysUserRole;
+import com.cdeledu.service.sys.ManagerUserService;
+import com.cdeledu.util.ShiroHelper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -25,6 +35,8 @@ import org.apache.shiro.subject.PrincipalCollection;
  * @since: JDK 1.7
  */
 public class ShiroRealm extends AuthorizingRealm {
+	@Autowired
+	private ManagerUserService userService;
 
 	/**
 	 * @方法描述: 为当前登录的Subject授予角色和权限
@@ -34,22 +46,36 @@ public class ShiroRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		// ① 获取当前登录的用户名
-		String currentUsername = (String) principals.fromRealm(getName()).iterator().next();
-		// ② 从数据库中获取当前登录用户的详细信息
-		// ③ 获取当前登录用户的角色
-		// ④ 获取权限
-		// ⑤ 为当前用户设置角色和权限
+		try {
+			// ① 获取当前登录的用户名
+			String currentUsername = (String) principals.fromRealm(getName()).iterator().next();
+			if (StringUtils.isBlank(currentUsername)) {
+				return null;// 自动跳转到unauthorizedUrl指定的地址
+			}
+			// ② 从数据库中获取当前登录用户的详细信息
+			SysUser sysUser = new SysUser();
+			sysUser.setUserName(currentUsername);
+			// ③ 获取当前登录用户的角色
+			Set<String> roleList = Sets.newConcurrentHashSet();
+			Set<String> permissionList = Sets.newConcurrentHashSet();
+			List<SysUserRole> sysUserRolelist = userService.getUserRole(sysUser);
+			for (SysUserRole role : sysUserRolelist) {
+				if(role != null){
+					roleList.add(role.getRoleCode());
+				}
+			}
+			// ④ 获取权限
 
-		if (StringUtils.isNotBlank(currentUsername)) {
-			List<String> roleList = new ArrayList<String>();
-			List<String> permissionList = new ArrayList<String>();
+			
 			SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
+			// ⑤ 1.为当前用户设置角色
 			simpleAuthorInfo.addRoles(roleList);
+			// ⑤ 2.为当前用户设置权限
 			simpleAuthorInfo.addStringPermissions(permissionList);
 			return simpleAuthorInfo;
-		} else {
-			// 自动跳转到unauthorizedUrl指定的地址
+
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -66,8 +92,17 @@ public class ShiroRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authtoken;
 		// ① 获取当前登录的用户名
 		String currentUsername = token.getUsername();
-		if (StringUtils.isNotBlank(currentUsername)) {
-			AuthenticationInfo authcInfo = null;
+		String passWord = String.valueOf(token.getPassword());
+		SysUser sysUser = null;
+		try {
+			sysUser = userService.checkUserExits(currentUsername, passWord);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (sysUser != null) {
+			ShiroHelper.initSession(sysUser);
+			SimpleAuthenticationInfo authcInfo = new SimpleAuthenticationInfo(sysUser.getUserName(),
+					sysUser.getPassword(), sysUser.getUserName());
 			return authcInfo;
 		} else {
 			return null;
