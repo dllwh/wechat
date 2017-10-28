@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +56,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 */
 	@Transactional(readOnly = false)
 	public Integer delete(Object record) throws Exception {
-		return baseDao.delete(prefix + "delete", record);
+		return null;
 	}
 
 	@Transactional(readOnly = false)
@@ -67,8 +68,8 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * 更新用户信息
 	 */
 	@Transactional(readOnly = false)
-	public Integer update(SysUser record) throws Exception {
-		return null;
+	public Integer update(SysUser sysUser) throws Exception {
+		return baseDao.update(prefix+"updateByPrimaryKey", sysUser);
 	}
 
 	@Transactional(readOnly = false)
@@ -81,7 +82,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 */
 	@Transactional(readOnly = true)
 	public List<SysUser> findForJdbc(SysUser record) throws Exception {
-		return null;
+		return ( List<SysUser>)baseDao.findListForJdbcParam(prefix+"findForJdbc", record);
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 */
 	@Transactional(readOnly = true)
 	public Integer getCountForJdbcParam(SysUser record) throws Exception {
-		return null;
+		return baseDao.getCountForJdbcParam(prefix+"getCountForJdbcParam", record);
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 */
 	@Transactional(readOnly = true)
 	public SysUser findOneForJdbc(SysUser record) throws Exception {
-		return null;
+		return (SysUser)baseDao.findOneForJdbcParam(prefix+"findOneForJdbc", record);
 	}
 
 	/**
@@ -112,20 +113,30 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 		managerUser.setPassword(password);
 		return (SysUser) baseDao.findOneForJdbcParam(prefix + "checkUserExits", managerUser);
 	}
+	/**
+	 * 检查用户是否存在
+	 */
+	@Transactional(readOnly = true)
+	public SysUser checkUserExits(String userName, String passWord) throws Exception {
+		SysUser managerUser = new SysUser();
+		managerUser.setUserName(userName);
+		managerUser.setPassword(passWord);
+		return checkUserExits(managerUser);
+	}
 
 	/**
 	 * 获取用户的角色
 	 */
 	@Transactional(readOnly = true)
-	public SysUserRole getUserRole(SysUser managerUser) throws Exception {
-		return null;
+	public List<SysUserRole> getUserRole(SysUser sysUser) throws Exception {
+		return (List<SysUserRole>)baseDao.findListForJdbcParam(prefix+"getUserRole", sysUser);
 	}
 
 	/**
 	 * 保存管理员登录信息
 	 */
 	@Transactional(readOnly = false)
-	public void saveLoginInfo(SysUser managerUser) {
+	public void saveLoginInfo(SysUser sysUser) {
 
 	}
 
@@ -133,14 +144,25 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 * admin账户初始化
 	 */
 	@Transactional(readOnly = false)
-	public void pwdInit(SysUser managerUser) {
+	public void pwdInit(SysUser sysUser) {
 	}
 
 	/**
 	 * 保存用户-角色关联关系
 	 */
 	@Transactional(readOnly = false)
-	public void saveRoleUser(SysUserRole managerUserRole) {
+	public void saveRoleUser(SysUserRole userRole) throws Exception{
+		baseDao.insert(prefix+"saveRoleUser", userRole);
 	}
 
+	@Transactional(readOnly = true)
+	public SysUser getUser(String userName) throws Exception {
+		if (StringUtils.isNotBlank(userName)) {
+			SysUser user = new SysUser();
+			user.setUserName(userName);
+			return (SysUser) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", user);
+		} else {
+			return null;
+		}
+	}
 }

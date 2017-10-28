@@ -14,36 +14,20 @@
 			<if test="userName != null and userName != '' ">  
 				and userName  LIKE CONCAT(CONCAT('%', #{userName}),'%') 
 			</if>
-			<if test="password != null and password != '' ">  
-				and password =#{password} 
-			</if>
-			<if test="usertype != null and usertype != ''">
-				and usertype=#{usertype}
-			</if>
-			<if test="realname != null and realname != '' ">  
-				and realname=#{realname}
-			</if>
+			<if test="password != null and password != '' ">  and password =#{password}  </if>
+			<if test="usertype != null "> and usertype=#{usertype} </if>
+			<if test="realname != null and realname != '' ">  and realname=#{realname} </if>
 			<if test="email != null and email != '' "> 
 				and email  LIKE CONCAT(CONCAT('%', #{email}),'%')
 			</if>
-			<if test="emailstatus != null and emailstatus != '' ">
-				and emailstatus=#{emailstatus} 
-			</if>
-			<if test="usersex != null and usersex != '' ">
-				and usersex=#{usersex}
-			</if>
-			<if test="mobile != null and mobile != '' ">
-				and mobile like '%${mobile}$%'
-			</if>
-			<if test="telephone != null and telephone != '' ">
-				and telephone like '%${telephone}$%'
-			</if>
-			<if test="isVisible != null and isVisible != '' ">
-				and isVisible=#isVisible#
-			</if>
-			<if test="isEnabled != null and isEnabled != '' ">
-				and isEnabled=#isEnabled#
-			</if>
+			<if test="emailstatus != null "> and emailstatus=#{emailstatus} </if>
+			<if test="usersex != null "> and usersex=#{usersex} </if>
+			<if test="mobile != null and mobile != '' "> and mobile like '%${mobile}$%' </if>
+			<if test="telephone != null "> and telephone like '%${telephone}$%' </if>
+			<if test="isLocked != null "> and isLocked=#{isVisible} </if>
+			<if test="isVisible != null "> and isVisible=#{isVisible} </if>
+			<if test="loginFlag != null "> and loginFlag=#{loginFlag} </if>
+			<if test="isEnabled != null "> and isEnabled=#{isEnabled} </if>
 		</where>
 	</sql>
 	
@@ -71,7 +55,7 @@
 	<!-- 验证用户是否存在 -->
 	<select id="checkUserExits" parameterType="com.cdeledu.model.rbac.SysUser"
 		resultType="com.cdeledu.model.rbac.SysUser">
-			SELECT * from sys_user WHERE userName =#{userName} AND `password` = #{password} and isEnabled =1
+			SELECT * from sys_user WHERE userName =#{userName} AND password = #{password} and isEnabled =1
 	</select>
 	
 	<!-- 创建新的用户 -->
@@ -90,7 +74,6 @@
 			<if test="telephone != null">telephone,</if>
 			<if test="signature != null">signature,</if>
 			<if test="remark != null">remark,</if>
-			<if test="createtime != null">createTime,</if>
 		</trim>
 		values 
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -105,7 +88,6 @@
 			<if test="telephone != null">#{telephone},</if>
 			<if test="signature != null">#{signature},</if>
 			<if test="remark != null">#{remark},</if>
-			<if test="createtime != null">#{createtime},</if>
 		</trim>
 	</insert>
 	
@@ -113,45 +95,22 @@
 	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.SysUser" >
 		update sys_user
 		<trim prefix="SET" suffix="" suffixOverrides=",">
-			<if test="userName != null and userName != " > 
-				userName = #{username},
-			</if>
-			<if test="password != null and password != '' " >
-				password = #{password},
-			</if>
-			<if test="usertype != null and usertype != ''" >
-				userType = #{usertype},
-			</if>
-			<if test="realname != null and realname != '' ">
-				realName = #{realname},
-			</if>
-			<if test="email != null and email != '' " >
-				email = #{email},
-			</if>
-			<if test="emailstatus != null and emailstatus != '' " >
-				emailstatus = #{emailstatus},
-			</if>
-			<if test="usersex != null and usersex != '' ">
-				userSex = #{usersex},
-			</if>
-			<if test="mobile != null and mobile != '' ">
-				mobile = #{mobile},
-			</if>
-			<if test="telephone != null and telephone != '' ">
-				telephone = #{telephone},
-			</if>
-			<if test="signature != null and signature != '' " > 
-				signature = #{signature},
-			</if>
-			<if test="isVisible != null and isVisible != '' " > 
-				isVisible = #{isVisible},
-			</if>
-			<if test="isEnabled != null and isEnabled != '' " >
-				isEnabled = #{isEnabled},
-			</if>
-			<if test="remark != null AND remark != '' " > 
-				remark = #{remark},
-			</if>
+			<if test="userName != null and userName != " > userName = #{username}, </if>
+			<if test="password != null and password != '' " > password = #{password}, </if>
+			<if test="usertype != null " > userType = #{usertype}, </if>
+			<if test="realname != null and realname != '' "> realName = #{realname}, </if>
+			<if test="email != null and email != '' " > email = #{email}, </if>
+			<if test="emailstatus != null " > emailstatus = #{emailstatus}, </if>
+			<if test="usersex != null "> userSex = #{usersex}, </if>
+			<if test="mobile != null and mobile != '' "> mobile = #{mobile}, </if>
+			<if test="telephone != null and telephone != '' "> telephone = #{telephone}, </if>
+			<if test="signature != null and signature != '' " > signature = #{signature}, </if>
+			<if test="isLocked != null " >  isLocked = #{isLocked}, </if>
+			<if test="isVisible != null " > isVisible = #{isVisible}, </if>
+			<if test="loginFlag != null " >loginFlag = #{loginFlag}, </if>
+			<if test="isEnabled != null " > isEnabled = #{isEnabled}, </if>
+			<if test="modifier != null " > modifier = #{modifier}, </if>
+			<if test="remark != null AND remark != '' " >  remark = #{remark}, </if>
 		</trim>
 		where id = #{id}
 	</update>
@@ -164,51 +123,31 @@
 		</foreach>
 	</delete>
 	
-	<!-- 一旦参数没有传，会删除所有 -->
-	<delete id="delete" parameterType="com.cdeledu.model.rbac.SysUser"  >
-		delete from sys_user
-		<where>
-			<if test="realname != null and realname != '' ">  
-				and realname=#{realname}
-			</if>
-			<if test="email != null and email != '' "> 
-				and email =#{email}
-			</if>
-			<if test="emailstatus != null and emailstatus != '' ">
-				and emailstatus=#{emailstatus} 
-			</if>
-			<if test="usersex != null and usersex != '' ">
-				and usersex=#{usersex}
-			</if>
-			<if test="mobile != null and mobile != '' ">
-				and mobile #{mobile}
-			</if>
-			<if test="telephone != null and telephone != '' ">
-				and telephone #{telephone}
-			</if>
-			<if test="isEnabled != null and isEnabled != '' ">
-				and isEnabled=#isEnabled#
-			</if>
-		</where>
+	<delete id="delete" parameterType="java.lang.Object"  >
+		delete from sys_user where id = #{id}
 	</delete>
 	
 	<!-- 获取用户的角色  -->
 	<select id="getUserRole" parameterType="com.cdeledu.model.rbac.SysUser"
 		resultType="com.cdeledu.model.rbac.SysUserRole">
-		SELECT 	
-			smur.userId,smur.roleId,smr.roleName 
-		FROM 
-			sys_user_role smur
-		INNER JOIN sys_role smr ON smr.id = smur.roleId AND smr.isEnabled = 1
-		WHERE smur.userId =#{id} 
+		SELECT
+			sur.userId,su.userName,sur.roleId,sr.roleCode,sr.roleName
+		FROM
+			sys_user_role sur 
+		INNER JOIN sys_role sr ON sur.roleId = sr.id
+		INNER JOIN sys_user su ON su.id = sur.userId
+		WHERE
+			sr.isVisible =1 AND sr.isEnabled=1 AND su.isVisible =1
+		AND  su.userName =#{userName} 
+		<if test="id != null">
+			and su.id=#{id}
+		</if>
 	</select>
 	
 	<!-- 保存用户-角色关联关系 -->
 	<insert id="saveRoleUser" parameterType="com.cdeledu.model.rbac.SysUserRole" 
 		useGeneratedKeys="true" keyProperty="id" >
-		insert  into sys_user_role (roleId, userId) 
-		values
-			(#{roleid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER} 
+		insert into sys_user_role(roleId, userId) values(#{roleid}, #{userId}) 
 	</insert>
 	
 	<!-- 保存管理员登录信息 -->
@@ -219,7 +158,7 @@
 	
 	<!-- 删除用户角色关联数据 -->
 	<delete id="deleteUserRole" parameterType="com.cdeledu.model.rbac.SysUser">
-	
+		DELETE sys_user_role where userId=#{id}
 	</delete>
 	
 	<!-- 更新登录信息，如：登录IP、登录时间 -->
