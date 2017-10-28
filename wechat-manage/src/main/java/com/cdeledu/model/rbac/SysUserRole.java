@@ -11,12 +11,16 @@ import com.cdeledu.common.base.BaseEntity;
  */
 public class SysUserRole extends BaseEntity<SysUserRole> {
 	private static final long serialVersionUID = 1L;
-	// 管理员id
+	/** 管理员id */
 	private Integer userId;
-	// 角色id
+	/** 登录名 */
+	private String userName;
+	/** 角色id */
 	private Integer roleId;
-	// 角色名称
+	/** 角色名称 */
 	private String roleName;
+	/** 角色编码 */
+	private String roleCode;
 
 	public Integer getUserId() {
 		return userId;
@@ -24,6 +28,14 @@ public class SysUserRole extends BaseEntity<SysUserRole> {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public Integer getRoleId() {
@@ -40,5 +52,13 @@ public class SysUserRole extends BaseEntity<SysUserRole> {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	public String getRoleCode() {
+		return roleCode;
+	}
+
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
 	}
 }
