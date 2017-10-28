@@ -103,7 +103,7 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
-	<!-- 用注解来实现事务管理(配置事务规则) -->
+	<!-- 用注解来实现事务管理(配置事务规则),需要在Service类上标注@Transactional -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<!-- 配置事务特性 -->
