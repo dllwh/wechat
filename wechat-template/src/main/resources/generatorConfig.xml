@@ -3,53 +3,103 @@
 	PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
 	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-	<!--targetRuntime 此属性用于指定生成的代码的运行目标。 -->
+	<!--targetRuntime 此属性用于指定生成的代码的运行时环境  -->
 	<context id="testTables" targetRuntime="MyBatis3">
+		<!-- 表名或者字段名为SQL关键字的时候,自动给表名或字段名添加**分隔符** -->
+		<property name="autoDelimitKeywords" value="true"/>
+		<!-- 生成的Java文件的编码 -->
+		<property name="javaFileEncoding" value="UTF-8"/>
+		<!-- 格式化java代码 -->
+		<property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+		<!-- 格式化XML代码 -->
+		<property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+		<!--  指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
+		<property name="beginningDelimiter" value="`"/>
+		<property name="endingDelimiter" value="`"/> 
+		
+	
+		<!-- 
+			生成表或字段的备注信息, 该元素最多可以配置1个.
+			生成的注释信息没有任何价值, 因而一般情况下都会屏蔽注释信息.
+		-->
 		<commentGenerator>
+			<!-- 阻止**生成的注释包含时间戳  true:是 ;false:否 --> 
 			<property name="suppressDate" value="true" />
 			<!-- 是否去除自动生成的注释 true:是 ; false:否 -->
 			<property name="suppressAllComments" value="true" />
 		</commentGenerator>
 
 		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
-<!-- 	<jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver" connectionURL="" userId="" password="" /> -->
-		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="" userId="" password=""/>
-
-
-		<javaTypeResolver>
-			<!-- false:把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer; -->
-			<!-- true:把JDBC DECIMAL和NUMERIC类型解析为java.math.BigDecimal -->
-			<property name="forceBigDecimals" value="false" />
-		</javaTypeResolver>
+		<!--
+			driverClass:访问数据库的JDBC驱动程序的完全限定类名
+			connectionURL:访问数据库的JDBC连接URL
+			userId:访问数据库的用户ID
+			password:访问数据库的密码
+		-->
+		<!-- 	
+		<jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
+			connectionURL="" userId="" password="" /> 
+		-->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" 
+			connectionURL="你的数据库连接" 
+			userId="你的用户名" password="你的密码"/>
 
 		<!-- targetProject:生成PO类的位置,重要！！ -->
-		<javaModelGenerator targetPackage="com.cdeledu.model"
-			targetProject=".\src">
-			<!-- enableSubPackages:是否让schema作为包的后缀 -->
-			<property name="enableSubPackages" value="false" />
+		<!-- 
+			targetPackage:生成实体类存放的包名,一般就是放在该包下
+			targetProject:指定目标项目路径,可以是绝对路径或相对路径(如 targetProject="src/main/java")
+		-->
+		<javaModelGenerator targetPackage="com.cdeledu.model" targetProject=".\src">
+			<!--  如果设置了这个根对象，那么生成的keyClass或者recordClass会继承这个类 -->
+			<!-- <property name="rootClass" value="" /> -->
 			<!-- 从数据库返回的值被清理前后的空格 -->
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
 		<!-- targetProject:mapper映射文件生成的位置，重要！！ -->
-		<sqlMapGenerator targetPackage="com.cdeledu.dao.impl"
-			targetProject=".\src">
-			<property name="enableSubPackages" value="false" />
-		</sqlMapGenerator>
+		<!-- 
+			targetPackage:生成实体类存放的包名,一般就是放在该包下
+			targetProject:指定目标项目路径,可以是绝对路径或相对路径(如 targetProject="src/main/resources")
+		-->
+		<sqlMapGenerator targetPackage="com.cdeledu.dao.impl" targetProject=".\src"/>
 
-		<!-- targetPackage：mapper接口生成的位置,重要！！ -->
-		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.cdeledu.dao" targetProject=".\src">
-			<property name="enableSubPackages" value="false" />
+		<!-- targetPackage：mapper接口生成的位置,重要！！ 如果不配置该元素，就不会生成Mapper接口-->
+		<!-- 
+			type:该属性用于选择一个预定义的客户端代码(可以理解为Mapper接口)生成器,用户可以自定义实现
+			targetPackage:生成实体类存放的包名,一般就是放在该包下
+			targetProject:指定目标项目路径,可以是绝对路径或相对路径(如 targetProject="src/main/java")
+		-->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.cdeledu.dao" 
+			targetProject=".\src">
+			<!-- 可以为所有生成的接口添加一个父接口，但是只负责生成，不负责检查 -->
+			<!-- <property name="rootInterface" value=""/> -->
 		</javaClientGenerator>
 
 		<!-- 指定数据库表，要生成哪些表，就写哪些表，要和数据库中对应，不能写错！ -->
-		<!-- table其他属性 schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 
-			enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
-			enableSelectByExample="false" selectByExampleQueryId="false" -->
-		<table tableName="chat_client" enableCountByExample="false"
-			enableUpdateByExample="false" enableDeleteByExample="false"
-			enableSelectByExample="false" selectByExampleQueryId="false">
+		<!-- 
+			tableName 指定要生成的表名，可以使用SQL通配符匹配多个表
+			domainObjectName : 生成对象的基本名称。如果没有指定，MBG会自动根据表名来生成名称
+			enableInsert(默认true)：指定是否生成insert语句
+			enableSelectByPrimaryKey(默认true):指定是否生成按照主键查询对象的语句（就是getById或get）
+			enableSelectByExample(默认true):指定是否生成动态查询语句
+			enableUpdateByPrimaryKey(默认true):指定是否生成按照主键update对象的语句
+			enableDeleteByPrimaryKey(默认true):指定是否生成按照主键delete对象的语句
+			enableDeleteByExample(默认true):指定是否生成动态delete语句
+			enableCountByExample(默认true):指定是否生成动态查询总条数语句（用于分页的总条数查询）
+			enableUpdateByExample(默认true):指定是否生成动态修改语句（只修改对象中不为空的属性）
+			delimitAllColumns:设置是否所有生成的SQL中的列名都使用标识符引起来
+		-->
+		<table tableName="sys_user" enableCountByExample="false" enableUpdateByExample="false" 
+			enableDeleteByExample="false" enableSelectByExample="false">
+			<!-- 指定是否只生成domain类,如果设置为true,只生成domain类  -->
+			<property name="modelOnly" value="false"/>
+			<!-- 可以为生成的类会继承这个类 -->
+			<!-- <property name="rootClass" value=""/> -->
+			<!-- 可以为生成的类添加一个父接口 -->
+			<!-- <property name="rootInterface" value=""/> -->
+			<!-- 如果设置为true,生成的model类会直接使用column本身的名字,而不会再使用驼峰命名方法 -->
+			<property name="useActualColumnNames" value="false"/>
+			<!--  -->
 		</table>
 	</context>
 </generatorConfiguration>
