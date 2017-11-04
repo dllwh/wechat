@@ -2,6 +2,8 @@ package com.cdeledu.common.base;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * @类描述: 数据Entity类
  * @创建者: 皇族灬战狼
@@ -14,10 +16,12 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	// 最初创建者
 	private Integer create;
 	// 数据创建时间
+	@DateTimeFormat(pattern= "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	// 最后修改人
 	private Integer modifier;
 	// 数据最后更新时间
+	@DateTimeFormat(pattern= "yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
 
 	public Integer getCreate() {
