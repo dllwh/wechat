@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 
+<%@ taglib prefix="fns" uri="/WEB-INF/tlds/fns.tld" %>
+
 <title>${_currProject}</title>
 <%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
 <script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
@@ -126,8 +128,7 @@
 					btn : [ '是', '否' ],//按钮
 					icon : 2,
 				}, function() {
-					//  location.href="login.html";
-	
+					location.href="loginController.shtml?doLogout";
 				});
 			});
 			
@@ -147,35 +148,45 @@
 			
 		}
 	</script>
-	<div class="navbar-container" id="navbar-container">
-		<div class="navbar-header pull-left">
-			<a href="javascript:void();" class="navbar-brand">
-				<small>					
-					<img src="static/images/logo.png">
-				</small>
-			</a><!-- /.brand -->
-			</div><!-- /.navbar-header -->
-			<div class="navbar-header pull-right" role="navigation">
-				<ul class="nav ace-nav">	
-					<li class="light-blue">
-						<a data-toggle="dropdown" class="dropdown-toggle">
-							<span  class="time">
-								<em id="time"></em>
-							</span>
-							<span class="user-info">
-								<small>欢迎光临,</small>独泪了无痕
-							</span>
-							<i class="icon-caret-down"></i>
-						</a>
-						<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-							<li>
-								<a href="javascript:void(0)">
-									<i class="icon-cog"></i>设置
-								</a>
-							</li>
-							<li>
-								<a href="javascript:void(0)">
-									<i class="icon-user"></i>个人资料</a></li>
+		<div class="navbar-container" id="navbar-container">
+			<div class="navbar-header pull-left">
+				<a href="javascript:void();" class="navbar-brand">
+					<small>					
+						<img src="static/images/logo.png">
+					</small>
+				</a><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+				<div class="navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">	
+						<li class="light-blue">
+							<a data-toggle="dropdown" class="dropdown-toggle">
+								<span  class="time">
+									<em id="time"></em>
+								</span>
+								<span class="user-info">
+									<c:choose>
+										<c:when test="${not empty fns:getCurrenLoginUser().nickName}">
+											<small>欢迎光临,</small>${fns:getCurrenLoginUser().nickName}
+										</c:when>
+										<c:when test="${not empty fns:getCurrenLoginUser().realName}">
+											<small>欢迎光临,</small>${fns:getCurrenLoginUser().realName}
+										</c:when>
+										<c:otherwise>
+											${fns:getCurrenLoginUser().userName}
+										</c:otherwise>
+									</c:choose>
+								</span>
+								<i class="icon-caret-down"></i>
+							</a>
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="javascript:void(0)">
+										<i class="icon-cog"></i>设置
+									</a>
+								</li>
+								<li>
+									<a href="javascript:void(0)">
+										<i class="icon-user"></i>个人资料</a></li>
 								<li class="divider"></li>
 								<li>
 									<a href="javascript:ovid(0)" id="Exit_system">
@@ -201,26 +212,7 @@
 								</li>
 							</ul>
 						</li>
-						<%--
-						<li class="am-hide-sm-only">
-							<a href="javascript:void(0);" id="admin-fullscreen" class="tpl-header-list-link">
-								<span class="am-icon-arrows-alt"></span>
-								<span class="admin-fullText">开启全屏</span>
-							</a>
-						</li>
-						 --%>
 					</ul>
-					<%--
-					<div class="right_info">
-						<div class="get_time" >
-							<span id="time" class="time"></span>欢迎光临,管理员
-						</div>
-						<ul class="nav ace-nav">	
-						<li><a href="javascript:ovid(0)" class="change_Password">修改密码</a></li>
-						<li><a href="javascript:ovid(0)" id="Exit_system">退出系统</a></li>
-						</ul>
-					</div>
-					 --%>
 				</div>
 			</div>
 		</div>
@@ -228,7 +220,7 @@
 		<div class="main-container" id="main-container">
 			<script type="text/javascript">
 				try{
-						ace.settings.check('main-container' , 'fixed');
+					ace.settings.check('main-container' , 'fixed');
 				} catch (e){
 					
 				}
@@ -240,7 +232,7 @@
 				<div class="sidebar" id="sidebar">
 					<script type="text/javascript">
 						try{
-								ace.settings.check('sidebar' , 'fixed');
+							ace.settings.check('sidebar' , 'fixed');
 						} catch(e){
 							
 						}	
@@ -257,7 +249,7 @@
 						</div>
 					</div><!-- #sidebar-shortcuts -->
 					<ul class="nav nav-list" id="nav_list">
-						<li class="home"><%-- <li class="home"> --%>
+						<li class="home">
 							<a name="loginController.shtml?home" class="iframeurl">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 系统首页 </span>
