@@ -26,7 +26,7 @@ public class RequestHelper {
 	 */
 	public String removeParam(HttpServletRequest request, String paramName) {
 		String queryString = "";
-		Enumeration keys = request.getParameterNames();
+		Enumeration<String> keys = request.getParameterNames();
 		while (keys.hasMoreElements()) {
 			String key = (String) keys.nextElement();
 			if (key.equals(paramName)) {
