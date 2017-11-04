@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance http://www.springmodules.org/schema/cache/springmodules-cache.xsd http://www.springmodules.org/schema/cache/springmodules-ehcache.xs"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.4">
+
+	<description>JSTL 1.2 functions library</description>
+	<display-name>JSTL functions sys</display-name>
+	<tlib-version>1.2</tlib-version>
+	<short-name>fns</short-name>
+	<uri>http://java.sun.com/jsp/jstl/functionss</uri>
+	
+	<function>
+		<description>获取当前用户</description>
+		<name>getCurrenLoginUser</name>
+		<function-class>com.cdeledu.util.WebUtilHelper</function-class>
+		<function-signature>com.cdeledu.model.rbac.SysUser getCurrenLoginUser()</function-signature>
+		<example>${fns:getCurrenLoginUser()}</example>
+	</function>
+	
+	<function>
+		<description>获取授权用户信息</description>
+		<name>getPrincipal</name>
+		<function-class>com.cdeledu.util.ShiroHelper</function-class>
+		<function-signature>com.cdeledu.model.rbac.SysUser getPrincipal()</function-signature>
+		<example>${fns:getPrincipal()}</example>
+	</function>
+	
+	<function>
+		<description>获取当前用户角色列表</description>
+		<name>getRoleList</name>
+		<function-class>com.cdeledu.util.WebUtilHelper</function-class>
+		<function-signature>java.util.List getRoleList()</function-signature>
+		<example>${fns:getRoleList()}</example>
+	</function>
+	
+</taglib>
