@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.SysMenuMapper">
+
+	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.SysMenu"
+		useGeneratedKeys="true" keyProperty="id" >
+		insert into sys_menu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="menuName != null"> menuName, </if>
+			<if test="menuUrl != null"> menuUrl, </if>
+			<if test="type != null"> `type`, </if>
+			<if test="parentCode != null"> parentCode, </if>
+			<if test="isVisible != null"> isVisible, </if>
+			<if test="isEnabled != null"> isEnabled, </if>
+			<if test="allowEdit != null"> allowEdit, </if>
+			<if test="allowDelete != null"> allowDelete,</if>
+			<if test="iconClass != null"> iconClass, </if>
+			<if test="sequence != null"> `sequence`, </if>
+			<if test="creater != null"> creater, </if>
+			<if test="modifier != null"> modifier, </if>
+			<if test="remark != null"> remark, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="menuName != null"> #{menuName},  </if>
+			<if test="menuUrl != null"> #{menuUrl}, </if>
+			<if test="type != null"> #{type}, </if>
+			<if test="parentCode != null"> #{parentCode},  </if>
+			<if test="isVisible != null"> #{isVisible}, </if>
+			<if test="isEnabled != null"> #{isEnabled}, </if>
+			<if test="allowEdit != null"> #{allowedit}, </if>
+			<if test="allowDelete != null"> #{allowdelete}, </if>
+			<if test="iconClass != null"> #{iconClass}, </if>
+			<if test="sequence != null"> #{sequence}, </if>
+			<if test="creater != null"> #{creater},</if>
+			<if test="modifier != null"> #{modifier}, </if>
+			<if test="remark != null"> #{remark}, </if>
+		</trim>
+	</insert>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_menu where id = #{id}
+	</delete>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.cdeledu.model.rbac.SysMenu">
+		update sys_menu
+		<set>
+			<if test="menuname != null"> menuName = #{menuName},</if>
+			<if test="menuurl != null"> menuUrl = #{menuUrl}, </if>
+			<if test="type != null"> `type` = #{type}, </if>
+			<if test="parentcode != null"> parentCode = #{parentCode}, </if>
+			<if test="isvisible != null"> isVisible = #{isVisible},</if>
+			<if test="isenabled != null"> isEnabled = #{isEnabled}, </if>
+			<if test="allowedit != null"> allowEdit = #{allowEdit},</if>
+			<if test="allowdelete != null"> allowDelete = #{allowDelete}, </if>
+			<if test="iconclass != null">iconClass = #{iconClass},</if>
+			<if test="sequence != null"> `sequence` = #{sequence},</if>
+			<if test="modifier != null">modifier = #{modifier},</if>
+			<if test="remark != null">remark = #{remark},</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<sql id="findForJdbc_body">
+		SELECT * from sys_menu
+		<where>
+			<if test="menuname != null"> menuName = #{menuName},</if>
+			<if test="menuurl != null"> menuUrl = #{menuUrl}, </if>
+			<if test="type != null"> `type` = #{type}, </if>
+			<if test="parentcode != null"> parentCode = #{parentCode}, </if>
+			<if test="isvisible != null"> isVisible = #{isVisible},</if>
+			<if test="isenabled != null"> isEnabled = #{isEnabled}, </if>
+			<if test="allowedit != null"> allowEdit = #{allowEdit},</if>
+			<if test="allowdelete != null"> allowDelete = #{allowDelete}, </if>
+			<if test="iconclass != null">iconClass = #{iconClass},</if>
+			<if test="sequence != null"> `sequence` = #{sequence},</if>
+			<if test="modifier != null">modifier = #{modifier},</if>
+		</where>
+	</sql>
+	<select id="findForJdbc" parameterType="com.cdeledu.model.rbac.SysMenu"
+		resultType="com.cdeledu.model.rbac.SysMenu">
+		select * from (
+			<include refid="findForJdbc_body"/>
+		) as myTable LIMIT #{startRow},#{rows}
+	</select>
+
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.rbac.SysMenu"
+		resultType="java.lang.Integer">
+		select count(*) from (
+			<include refid="findForJdbc_body"/>
+		) as myTable
+	</select>
+	
+	<select id="findOneForJdbc" parameterType="com.cdeledu.model.rbac.SysMenu"
+		resultType="com.cdeledu.model.rbac.SysMenu">
+		select * from(
+			<include refid="findForJdbc_body"/>
+		) as myTable LIMIT 1
+	</select>
+</mapper>
