@@ -36,8 +36,8 @@ public class SysUserViewController extends BaseController {
 	 * @创建时间: 2016年9月27日 下午4:43:12
 	 * @return
 	 */
-	@RequestMapping(params = "init")
-	public ModelAndView init() {
+	@RequestMapping(params = "sysUserInit")
+	public ModelAndView sysUserInit() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysUser/sysUserInit");
 		return mv;
@@ -52,7 +52,7 @@ public class SysUserViewController extends BaseController {
 	@RequestMapping(params = "adminInfo")
 	public ModelAndView adminInfo() {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/sysmanUser/adminInfo");
+		mv.setViewName("system/sysUser/adminInfo");
 		return mv;
 	}
 

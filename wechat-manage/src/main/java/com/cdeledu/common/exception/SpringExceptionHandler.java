@@ -36,7 +36,7 @@ public class SpringExceptionHandler implements HandlerExceptionResolver {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("exceptionMessage", exceptionMessage);
 		model.put("ex", exception);
-		return new ModelAndView("common/errorpage", model);
+		return new ModelAndView("common/errorPage/error", model);
 	}
 
 }

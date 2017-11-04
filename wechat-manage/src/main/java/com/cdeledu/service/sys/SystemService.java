@@ -2,7 +2,7 @@ package com.cdeledu.service.sys;
 
 import java.util.Set;
 
-import com.cdeledu.model.system.LoginLog;
+import com.cdeledu.model.system.SysLoginLog;
 
 /**
  * @类描述: 系统业务处理接口
@@ -22,7 +22,7 @@ public interface SystemService {
 	 * @param operatetype
 	 *            类型
 	 */
-	public void addLog(String LogContent, Integer loglevel, Integer operatetype);
+	public void addLog(String LogContent, Integer loglevel, Integer operatetype) throws Exception;
 	/**
 	 * @方法: 登录\退出日志
 	 * @创建人:独泪了无痕
@@ -33,7 +33,7 @@ public interface SystemService {
 	 * @param operatetype
 	 *            类型
 	 */
-	public void addLoginLog(LoginLog loginLog);
+	public void addLoginLog(SysLoginLog loginLog) throws Exception;
 
 	/**
 	 * @方法:根据用户ID 和 菜单Id 获取 具有操作权限的按钮Codes

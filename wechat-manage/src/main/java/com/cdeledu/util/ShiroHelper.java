@@ -7,86 +7,78 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
-import com.cdeledu.common.constants.GlobalConstants;
+import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.UserReturnCode;
 import com.cdeledu.model.rbac.SysUser;
 
 public class ShiroHelper {
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */
 
-	public void login(String userName, String passWord) {
+	public static AjaxJson login(String userName, String passWord) {
 		// 用户名密码令牌
 		UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
-		token.setRememberMe(true);
+		token.setRememberMe(false);
+		String logMsg = "", resultMsg = "";
+		AjaxJson ajaxJson = new AjaxJson();
+		boolean suc = false;
+
 		// 获得当前登录用户对象Subject，现在状态为 “未认证”
 		Subject subject = SecurityUtils.getSubject();
 		try {
 			subject.login(token);
 		} catch (UnknownAccountException uae) {
-			System.out.println("对用户[" + userName + "]进行登录验证..验证未通过,未知账户");
+			uae.printStackTrace();
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,未知账户";
+			resultMsg = UserReturnCode.user_not_exist.getMessage();
 		} catch (IncorrectCredentialsException ice) {
-			System.out.println("对用户[" + userName + "]进行登录验证..验证未通过,错误的凭证");
+			ice.printStackTrace();
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,错误的凭证";
+			resultMsg = UserReturnCode.wrong_password.getMessage();
 		} catch (LockedAccountException lae) {
-			System.out.println("对用户[" + userName + "]进行登录验证..验证未通过,账户已锁定");
+			lae.printStackTrace();
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,账户已锁定";
+			resultMsg = UserReturnCode.user_suspend.getMessage();
 		} catch (ExcessiveAttemptsException eae) {
-			System.out.println("对用户[" + userName + "]进行登录验证..验证未通过,用户名或密码错误次数过多");
+			eae.printStackTrace();
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,用户名或密码错误次数过多";
+			resultMsg = UserReturnCode.account_lock.getMessage();
 		} catch (AuthenticationException ae) {
+			ae.printStackTrace();
 			// 通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
-			System.out.println("对用户[" + userName + "]进行登录验证..验证未通过," + ae.getMessage());
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过," + ae.getMessage();
+			resultMsg = ae.getMessage();
 		}
 
 		if (subject.isAuthenticated()) {
-			System.out.println("对用户[" + userName + "]进行登录验证..验证通过");
+			logMsg = "对用户[" + userName + "]进行登录验证..验证通过";
+			suc = true;
 		} else {
 			token.clear();
 		}
-	}
 
-	public void logout() {
-		SecurityUtils.getSubject().logout();
+		ajaxJson.setSuccess(suc);
+		ajaxJson.setMsg(resultMsg);
+		ajaxJson.setObj(logMsg);
+		return ajaxJson;
 	}
 
 	/**
-	 * @方法描述: 获取当前用户session
+	 * @方法描述: 获取当前获取授权用户信息
 	 * @return
 	 */
-	public static Session getSession() {
-		Session session = SecurityUtils.getSubject().getSession();
-		return session;
+	public static SysUser getPrincipal() {
+		return (SysUser) SecurityUtils.getSubject().getPrincipal();
 	}
 
 	/**
-	 * @方法描述: 初始化用户session
-	 * @param sysUser
-	 */
-	public static void initSession(SysUser sysUser) {
-		Session session = getSession();
-		session.setTimeout(1000 * 60 * 30); // timeout:-1000ms 永不超时
-		session.setAttribute(GlobalConstants.USER_SESSION, sysUser);
-	}
-
-	/**
-	 * @方法描述: 获取当前用户对象
-	 * @return
-	 */
-	public static SysUser getCurrentUser() {
-		Session session = SecurityUtils.getSubject().getSession();
-		if (session != null) {
-			return (SysUser) session.getAttribute(GlobalConstants.USER_SESSION);
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * @方法描述: 获取当前登录用户id.
+	 * @方法描述: 获取当前获取授权用户id.
 	 * @return
 	 */
 	public static Integer getCurrentUserId() {
-		SysUser user = getCurrentUser();
+		SysUser user = getPrincipal();
 		if (user != null) {
 			return user.getId();
 		} else {
@@ -95,15 +87,60 @@ public class ShiroHelper {
 	}
 
 	/**
-	 * @方法描述: 获取当前登录用户名
+	 * @方法描述: 获取当前获取授权用户用户名
 	 * @return
 	 */
 	public static String getCurrentUserName() {
-		SysUser user = getCurrentUser();
+		SysUser user = getPrincipal();
 		if (user != null) {
 			return user.getUserName();
 		} else {
 			return "";
+		}
+	}
+
+	/**
+	 * @方法描述: 获取当前获取授权用户真实姓名
+	 * @return
+	 */
+	public static String getCurrentRealName() {
+		SysUser user = getPrincipal();
+		if (user != null) {
+			return user.getRealName();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @方法描述: 获取当前获取授权用户昵称
+	 * @return
+	 */
+	public static String getCurrentNickName() {
+		SysUser user = getPrincipal();
+		if (user != null) {
+			return user.getNickName();
+		} else {
+			return "";
+		}
+	}
+	
+	/**
+	 * 判断是否登录
+	 * 
+	 * @return
+	 */
+	public static boolean isLogin() {
+		return null != SecurityUtils.getSubject().getPrincipal();
+	}
+
+	/**
+	 * 退出登录
+	 */
+	public static void logout() {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated()) {
+			subject.logout();
 		}
 	}
 }

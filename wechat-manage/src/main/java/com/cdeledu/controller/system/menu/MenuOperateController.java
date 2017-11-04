@@ -83,8 +83,11 @@ public class MenuOperateController extends BaseController {
 		} else {
 			// 删除
 			// 操作日志
-			systemService.addLog(message, GlobalConstants.Log_Type_DEL,
-					GlobalConstants.Log_Leavel_INFO);
+			try {
+				systemService.addLog(message, GlobalConstants.Log_Type_DEL,
+						GlobalConstants.Log_Leavel_INFO);
+			} catch (Exception e) {
+			}
 		}
 		return ajaxJson;
 	}

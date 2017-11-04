@@ -15,7 +15,7 @@ import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SystemService;
-import com.cdeledu.util.WebUtilHelper;
+import com.cdeledu.util.ShiroHelper;
 
 /**
  * @类描述: 角色处理类
@@ -94,7 +94,7 @@ public class RoleOperateController extends BaseController {
 	@ResponseBody
 	public AjaxJson delRole(SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
-		SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
+		SysUser managerUser = ShiroHelper.getPrincipal();
 		try {
 			// 删除角色之前先删除角色权限关系
 			delRoleFunction(role);

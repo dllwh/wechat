@@ -1,6 +1,5 @@
 package com.cdeledu.common.shiro;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -8,7 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -19,8 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
-import com.cdeledu.util.ShiroHelper;
-import com.google.common.collect.Lists;
+import com.cdeledu.util.WebUtilHelper;
 import com.google.common.collect.Sets;
 
 /**
@@ -60,13 +60,12 @@ public class ShiroRealm extends AuthorizingRealm {
 			Set<String> permissionList = Sets.newConcurrentHashSet();
 			List<SysUserRole> sysUserRolelist = userService.getUserRole(sysUser);
 			for (SysUserRole role : sysUserRolelist) {
-				if(role != null){
+				if (role != null) {
 					roleList.add(role.getRoleCode());
 				}
 			}
 			// ④ 获取权限
 
-			
 			SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
 			// ⑤ 1.为当前用户设置角色
 			simpleAuthorInfo.addRoles(roleList);
@@ -93,20 +92,44 @@ public class ShiroRealm extends AuthorizingRealm {
 		// ① 获取当前登录的用户名
 		String currentUsername = token.getUsername();
 		String passWord = String.valueOf(token.getPassword());
-		SysUser sysUser = null;
+		SysUser sysUser = new SysUser();
+		SysUser currentUser = null;
+		SimpleAuthenticationInfo authcInfo = null;
 		try {
-			sysUser = userService.checkUserExits(currentUsername, passWord);
+			sysUser.setUserName(currentUsername);
+			int userCount = userService.getCountForJdbcParam(sysUser);
+			if (userCount <= 0) {
+				throw new UnknownAccountException();
+			}
+			currentUser = userService.checkUserExits(currentUsername, passWord);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (sysUser != null) {
-			ShiroHelper.initSession(sysUser);
-			SimpleAuthenticationInfo authcInfo = new SimpleAuthenticationInfo(sysUser.getUserName(),
-					sysUser.getPassword(), sysUser.getUserName());
-			return authcInfo;
-		} else {
-			return null;
-		}
-	}
+		if (currentUser != null) {
+			// 账号未通过审核
+			if (currentUser.getIsEnabled() != 1) {
+				throw new UnknownAccountException();
+			}
+			// 账号未通过审核
+			if (currentUser.getIsVisible() != 1) {
+				throw new AuthenticationException("账号未通过审核");
+			}
+			// 账号不允许登录
+			if (currentUser.getLoginFlag() != 1) {
+				throw new AuthenticationException("账号不允许登录");
+			}
 
+			// 账号被锁定
+			if (currentUser.getIsLocked() != 1) {
+				throw new LockedAccountException("账号被锁定");
+			}
+
+			WebUtilHelper.setCurrentLoginUser(currentUser);
+			
+			authcInfo = new SimpleAuthenticationInfo(currentUser,currentUser.getPassword(), getName());
+		} else {
+			throw new LockedAccountException("用户名或密码错误");
+		}
+		return authcInfo;
+	}
 }

@@ -33,7 +33,7 @@ public class LogViewController  extends BaseController{
 	@RequestMapping(params = "init")
 	public ModelAndView log() {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/log/logInit");
+		mv.setViewName("system/sysLog/logInit");
 		return mv;
 	}
 

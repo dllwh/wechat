@@ -6,16 +6,13 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.model.SessionInfo;
 import com.cdeledu.model.rbac.SysMenu;
-import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.rbac.SysUserRole;
 import com.google.common.collect.Lists;
 
 /**
@@ -27,15 +24,9 @@ import com.google.common.collect.Lists;
  */
 public class WebUtilHelper {
 	/** ----------------------------------------------------- Fields start */
-	private static Logger logger = LoggerFactory.getLogger(WebUtilHelper.class);
 	private static final ResourceBundle sysConfig = ResourceBundle.getBundle("properties/sysConfig");
-	// private static final ResourceBundle dbConfig = ResourceBundle.getBundle("properties/dbConfig");
-	
-	// private static ManagerUserDao userDao = SpringContextHolder.getBean(ManagerUserDao.class);
-	// private static RoleDao roleDao = SpringContextHolder.getBean(RoleDao.class);
-	public static final String USER_CACHE = "userCache";
-	public static final String USER_CACHE_ID_ = "id_";
-	private static HttpSession session = null;
+	// private static ManagerUserServiceImpl userService = SpringContextUtil.getBean(ManagerUserServiceImpl.class.getName());
+
 	/** ----------------------------------------------------- Fields end */
 
 	/**
@@ -47,6 +38,7 @@ public class WebUtilHelper {
 	public static final String getConfigByName(String name) {
 		return sysConfig.getString(name);
 	}
+
 	/**
 	 * @方法:SpringMvc下获取request,尝试获取当前请求的HttpServletRequest实例
 	 * @创建人:独泪了无痕
@@ -57,6 +49,7 @@ public class WebUtilHelper {
 			return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 					.getRequest();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -67,10 +60,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static HttpSession getSession() {
-		if (null == session) {
-			session = getHttpServletRequest().getSession();
-		}
-		return session;
+		return getHttpServletRequest().getSession();
 	}
 
 	/**
@@ -80,17 +70,14 @@ public class WebUtilHelper {
 	 */
 	public static final SysUser getCurrenLoginUser() {
 		HttpSession session = getSession();
-		session.setMaxInactiveInterval(-1);
-		SessionInfo sessionInfo = null;
+		SysUser sysUser = null;
 		if (session.getAttributeNames().hasMoreElements()) {
-			sessionInfo = (SessionInfo) session.getAttribute(GlobalConstants.USER_SESSION);
-			if (null != sessionInfo) {
-				if (null != sessionInfo.getManagerUser()) {
-					return sessionInfo.getManagerUser();
-				}
+			sysUser = (SysUser) session.getAttribute(GlobalConstants.USER_SESSION);
+			if (sysUser != null) {
+				return sysUser;
 			}
 		}
-		return null;
+		return sysUser;
 	}
 
 	/**
@@ -98,31 +85,17 @@ public class WebUtilHelper {
 	 * @param user
 	 * @return 当前登录的用户
 	 */
-	public static SysUser setCurrentLoginUser(SysUser user) {
+	public static void setCurrentLoginUser(SysUser user) {
 		HttpSession session = getSession();
-		SessionInfo sessionInfo = new SessionInfo();
-		sessionInfo.setManagerUser(user);
 		session.setMaxInactiveInterval(60 * 30);
-		session.setAttribute(GlobalConstants.USER_SESSION, sessionInfo);
-		return user;
-	}
-
-	/**
-	 * @方法描述: 在HttpSession中移除当前登录的用户
-	 * @param user
-	 * @return
-	 */
-	public static void removeCurrentLoginUser() {
-		if(logger.isDebugEnabled()){
-			
-		}
+		session.setAttribute(GlobalConstants.USER_SESSION, user);
 	}
 
 	/**
 	 * 获取当前用户角色列表
 	 */
-	public static List<SysRole> getRoleList() {
-		List<SysRole> roleList = Lists.newArrayList();
+	public static List<SysUserRole> getRoleList() {
+		List<SysUserRole> roleList = Lists.newArrayList();
 		return roleList;
 	}
 
@@ -133,16 +106,16 @@ public class WebUtilHelper {
 		List<SysMenu> menuList = Lists.newArrayList();
 		return menuList;
 	}
-	
+
 	/**
 	 * @方法描述:
 	 * 
-	 * <pre>
+	 *        <pre>
 	 * 访问权限及初始化按钮权限(控制按钮的显示)
 	 * 判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
 	 * 根据点击的菜单的xxx.do去菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
 	 * 根据按钮权限，授权按钮(当前点的菜单和角色中各按钮的权限匹对)
-	 * </pre>
+	 *        </pre>
 	 * 
 	 * @param menuUrl
 	 *            菜单路径
@@ -151,18 +124,22 @@ public class WebUtilHelper {
 	public static boolean hasJurisdiction(String menuUrl) {
 		return false;
 	}
+
 	/**
-	 * @方法描述: <pre>
+	 * @方法描述:
+	 * 
+	 *        <pre>
 	 *  按钮权限(方法中校验)
 	 *  判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
 	 *  根据点击的菜单的xxx.do去菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
 	 *  根据按钮权限，授权按钮(当前点的菜单和角色中各按钮的权限匹对)
-	 * </pre>
+	 *        </pre>
+	 * 
 	 * @param menuUrl
 	 * @param type
 	 * @return
 	 */
-	public static boolean buttonJurisdiction(String menuUrl, String type){
-		return true;	
+	public static boolean buttonJurisdiction(String menuUrl, String type) {
+		return true;
 	}
 }

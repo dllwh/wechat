@@ -12,16 +12,16 @@ import com.cdeledu.common.base.DataEntity;
 public class SysMenu extends DataEntity<SysMenu> {
 
 	private static final long serialVersionUID = 1L;
-	// 菜单名称
+	/** 菜单名称 */
 	private String menuName;
 	// 菜单链接地址
 	private String menuUrl;
-	// 父菜单编号
+	/** 类型。1:目录，默认值；2：菜单；3：按钮； */
+	private Integer type;
+	/** 父菜单编号 */
 	private Integer parentCode;
-	// 菜单图标样式
+	/** 菜单图标样式 */
 	private String iconClass;
-	// 级别
-	private Integer level;
 
 	public String getMenuName() {
 		return menuName;
@@ -37,6 +37,14 @@ public class SysMenu extends DataEntity<SysMenu> {
 
 	public void setMenuUrl(String menuUrl) {
 		this.menuUrl = menuUrl;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public Integer getParentCode() {
@@ -55,11 +63,11 @@ public class SysMenu extends DataEntity<SysMenu> {
 		this.iconClass = iconClass;
 	}
 
-	public Integer getLevel() {
-		return level;
+	@Override
+	public String toString() {
+		return super.toString() + "SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl
+				+ ", type=" + type + ", parentCode=" + parentCode + ", iconClass=" + iconClass
+				+ "]";
 	}
 
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
 }

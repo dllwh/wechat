@@ -8,7 +8,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -17,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.model.SessionInfo;
 import com.cdeledu.util.WebUtilHelper;
 
 /**
@@ -53,9 +51,8 @@ public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 
 			HttpSession session = WebUtilHelper.getSession();
-			SessionInfo sessioninfo = (SessionInfo) session
-					.getAttribute(GlobalConstants.USER_SESSION);
-			if ((null == sessioninfo || null == sessioninfo.getManagerUser())
+			
+			if ((null == session || null == WebUtilHelper.getCurrenLoginUser())
 					&& FilterHelper.isURILogin( httpRequest)) {
 				// ②-4将用户的请求URL保存在session中，用于登录成功之后，跳到目标URL
 				String toUrl = httpRequest.getRequestURL().toString();
@@ -64,7 +61,7 @@ public class AjaxAuthenticationFilter extends BaseClass implements Filter {
 				}
 				logger.info("登录跳转页面" + toUrl);
 				// ②-5转发到登录页面
-				request.getRequestDispatcher(httpRequest.getContextPath() + GlobalConstants.LOGIN).forward(request,
+				request.getRequestDispatcher(httpRequest.getContextPath() + FilterHelper.LOGIN).forward(request,
 						response);
 				return;
 			}

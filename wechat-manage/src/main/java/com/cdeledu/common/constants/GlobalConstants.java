@@ -45,9 +45,7 @@ public class GlobalConstants {
 
 	/** 该值会在web容器启动时由WebContextListener初始化 */
 	public static ApplicationContext WEB_APP_CONTEXT = null; 
-	public static final String LOGIN_SHORT = "/login/login";								// 登录地址
-	public static final String LOGIN = "/webviews/login/login.jsp";								// 登录地址
-	public static final String LOGIN_ACTION = "/loginController.shtml?checkuser";				// 登录地址
+	
 	
 	/**
 	 * 上传图片大小限制，单位byte

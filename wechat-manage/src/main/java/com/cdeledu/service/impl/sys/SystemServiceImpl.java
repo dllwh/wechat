@@ -2,11 +2,14 @@ package com.cdeledu.service.impl.sys;
 
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cdeledu.common.base.BaseClass;
-import com.cdeledu.model.system.LoginLog;
+import com.cdeledu.dao.BaseDaoSupport;
+import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.sys.SystemService;
 
 @Service("systemService")
@@ -14,15 +17,17 @@ import com.cdeledu.service.sys.SystemService;
 public class SystemServiceImpl extends BaseClass implements SystemService {
 
 	private static final long serialVersionUID = 1L;
-
+	@Resource
+	private BaseDaoSupport<?> baseDao;
+	
 	@Override
-	public void addLog(String LogContent, Integer loglevel, Integer operatetype) {
+	public void addLog(String LogContent, Integer loglevel, Integer operatetype) throws Exception{
 
 	}
 
 	@Override
-	public void addLoginLog(LoginLog loginLog) {
-
+	public void addLoginLog(SysLoginLog loginLog) throws Exception{
+		baseDao.insert("manageUserDaoImpl.saveLoginInfo", loginLog);
 	}
 
 	@Override

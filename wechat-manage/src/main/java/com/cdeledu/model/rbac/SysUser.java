@@ -1,6 +1,5 @@
 package com.cdeledu.model.rbac;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
@@ -18,40 +17,40 @@ import com.google.common.collect.Lists;
  */
 public class SysUser extends DataEntity<SysUser> {
 	private static final long serialVersionUID = 1L;
-	// 用户名(数字与字母组成)
+	/** 用户名(数字与字母组成) */
 	@NotBlank(message = "登陆账号不能为空")
 	private String userName;
-	// 密码(真正的密码与用户名加密之后的结果)
+	/** 密码(真正的密码与用户名加密之后的结果) */
 	@NotBlank(message = "登陆密码不能为空")
 	private String password;
-	// 用户类型(超级管理员、系统管理员、管理员)
+	/** 用户类型(超级管理员、系统管理员、管理员) */
 	private Integer UserType;
-	// 真实姓名
+	/** 昵称 */
+	private String nickName;
+	/** 真实姓名 */
 	private String realName;
-	// 用户邮箱
+	/** 用户邮箱 */
 	private String email;
-	// email是否经过验证
+	/** email是否经过验证 */
 	private Integer emailstatus;
-	// 性别
+	/** 性别 */
 	private Integer userSex;
-	// 用户手机号码
+	/** 用户手机号码 */
 	private String mobile;
-	// 用户电话号码
+	/** 用户电话号码 */
 	private String telephone;
-	// 个性签名
+	/** 个性签名 */
 	private String signature;
-	// 最后登录时间
-	private Date last_login_time;
-	// 最后登录ip
-	private String last_login_ip;
-	// 登录次数(查询操作日志的结果数据)
-	private Integer login_count;
 	@NotBlank(message = "验证码")
 	private String imageCaptcha;
-	// 是否允许登陆;1:允许,默认值;0:不允许
+	/** 是否锁定(1:不锁定;0：锁定) */
+	private Integer isLocked;
+	/** 是否允许登陆;1:允许,默认值;0:不允许 */
 	private Integer loginFlag;
-	private SysRole role; // 根据角色查询用户条件
-	private List<SysRole> roleList = Lists.newArrayList(); // 拥有角色列表
+	/** 根据角色查询用户条件 */
+	private SysRole role;
+	/** 拥有角色列表 */
+	private List<SysRole> roleList = Lists.newArrayList();
 
 	public String getUserName() {
 		return userName;
@@ -75,6 +74,14 @@ public class SysUser extends DataEntity<SysUser> {
 
 	public void setUserType(Integer userType) {
 		UserType = userType;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getRealName() {
@@ -133,36 +140,20 @@ public class SysUser extends DataEntity<SysUser> {
 		this.signature = signature;
 	}
 
-	public Date getLast_login_time() {
-		return last_login_time;
-	}
-
-	public void setLast_login_time(Date last_login_time) {
-		this.last_login_time = last_login_time;
-	}
-
-	public String getLast_login_ip() {
-		return last_login_ip;
-	}
-
-	public void setLast_login_ip(String last_login_ip) {
-		this.last_login_ip = last_login_ip;
-	}
-
-	public Integer getLogin_count() {
-		return login_count;
-	}
-
-	public void setLogin_count(Integer login_count) {
-		this.login_count = login_count;
-	}
-
 	public String getImageCaptcha() {
 		return imageCaptcha;
 	}
 
 	public void setImageCaptcha(String imageCaptcha) {
 		this.imageCaptcha = imageCaptcha;
+	}
+
+	public Integer getIsLocked() {
+		return isLocked;
+	}
+
+	public void setIsLocked(Integer isLocked) {
+		this.isLocked = isLocked;
 	}
 
 	public Integer getLoginFlag() {
@@ -191,13 +182,12 @@ public class SysUser extends DataEntity<SysUser> {
 
 	@Override
 	public String toString() {
-		return "ManagerUser [userName=" + userName + ", password=" + password + ", UserType="
-				+ UserType + ", realName=" + realName + ", email=" + email + ", emailstatus="
-				+ emailstatus + ", userSex=" + userSex + ", mobile=" + mobile + ", telephone="
-				+ telephone + ", signature=" + signature + ", last_login_time=" + last_login_time
-				+ ", last_login_ip=" + last_login_ip + ", login_count=" + login_count
-				+ ", imageCaptcha=" + imageCaptcha + ", loginFlag=" + loginFlag + ", role=" + role
-				+ ", roleList=" + roleList + "]";
+		return super.toString() + "\n SysUser [userName=" + userName + ", password=" + password
+				+ ", UserType=" + UserType + ", nickName=" + nickName + ", realName=" + realName
+				+ ", email=" + email + ", emailstatus=" + emailstatus + ", userSex=" + userSex
+				+ ", mobile=" + mobile + ", telephone=" + telephone + ", signature=" + signature
+				+ ", imageCaptcha=" + imageCaptcha + ", isLocked=" + isLocked + ", loginFlag="
+				+ loginFlag + ", role=" + role + ", roleList=" + roleList + "]";
 	}
-	
+
 }

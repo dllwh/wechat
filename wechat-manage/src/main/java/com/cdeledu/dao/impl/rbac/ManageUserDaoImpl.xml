@@ -15,16 +15,21 @@
 				and userName  LIKE CONCAT(CONCAT('%', #{userName}),'%') 
 			</if>
 			<if test="password != null and password != '' ">  and password =#{password}  </if>
-			<if test="usertype != null "> and usertype=#{usertype} </if>
-			<if test="realname != null and realname != '' ">  and realname=#{realname} </if>
+			<if test="userType != null "> and userType=#{userType} </if>
+			<if test="nickName != null and nickName != '' ">  
+				and nickName  LIKE CONCAT(CONCAT('%', #{nickName}),'%')
+			</if>
+			<if test="realName != null and realName != '' ">  
+				and realName  LIKE CONCAT(CONCAT('%', #{realName}),'%')
+			</if>
 			<if test="email != null and email != '' "> 
 				and email  LIKE CONCAT(CONCAT('%', #{email}),'%')
 			</if>
 			<if test="emailstatus != null "> and emailstatus=#{emailstatus} </if>
-			<if test="usersex != null "> and usersex=#{usersex} </if>
+			<if test="userSex != null "> and usersex=#{userSex} </if>
 			<if test="mobile != null and mobile != '' "> and mobile like '%${mobile}$%' </if>
 			<if test="telephone != null "> and telephone like '%${telephone}$%' </if>
-			<if test="isLocked != null "> and isLocked=#{isVisible} </if>
+			<if test="isLocked != null "> and isLocked=#{isLocked} </if>
 			<if test="isVisible != null "> and isVisible=#{isVisible} </if>
 			<if test="loginFlag != null "> and loginFlag=#{loginFlag} </if>
 			<if test="isEnabled != null "> and isEnabled=#{isEnabled} </if>
@@ -66,28 +71,32 @@
 			<if test="username != null">userName,</if>
 			<if test="password != null">password,</if>
 			<if test="usertype != null">userType,</if>
-			<if test="realname != null">realName,</if>
+			<if test="nickName != null">nickName,</if>
+			<if test="realName != null">realName,</if>
 			<if test="email != null">email,</if>
 			<if test="emailstatus != null">emailstatus,</if>
-			<if test="usersex != null">userSex,</if>
+			<if test="userSex != null">userSex,</if>
 			<if test="mobile != null">mobile,</if>
 			<if test="telephone != null">telephone,</if>
 			<if test="signature != null">signature,</if>
 			<if test="remark != null">remark,</if>
+			<if test="create != null">create,</if>
 		</trim>
 		values 
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="username != null">#{username},</if>
 			<if test="password != null">#{password},</if>
 			<if test="usertype != null">#{usertype},</if>
-			<if test="realname != null">#{realname},</if>
+			<if test="nickName != null">#{nickName},</if>
+			<if test="realName != null">#{realName},</if>
 			<if test="email != null">#{email},</if>
 			<if test="emailstatus != null">#{emailstatus},</if>
-			<if test="usersex != null">#{usersex},</if>
+			<if test="userSex != null">#{userSex},</if>
 			<if test="mobile != null">#{mobile},</if>
 			<if test="telephone != null">#{telephone},</if>
 			<if test="signature != null">#{signature},</if>
 			<if test="remark != null">#{remark},</if>
+			<if test="create != null">#{create},</if>
 		</trim>
 	</insert>
 	
@@ -98,10 +107,11 @@
 			<if test="userName != null and userName != " > userName = #{username}, </if>
 			<if test="password != null and password != '' " > password = #{password}, </if>
 			<if test="usertype != null " > userType = #{usertype}, </if>
-			<if test="realname != null and realname != '' "> realName = #{realname}, </if>
+			<if test="nickName != null and nickName != '' "> nickName = #{nickName}, </if>
+			<if test="realName != null and realName != '' "> realName = #{realName}, </if>
 			<if test="email != null and email != '' " > email = #{email}, </if>
 			<if test="emailstatus != null " > emailstatus = #{emailstatus}, </if>
-			<if test="usersex != null "> userSex = #{usersex}, </if>
+			<if test="userSex != null "> userSex = #{userSex}, </if>
 			<if test="mobile != null and mobile != '' "> mobile = #{mobile}, </if>
 			<if test="telephone != null and telephone != '' "> telephone = #{telephone}, </if>
 			<if test="signature != null and signature != '' " > signature = #{signature}, </if>
@@ -147,13 +157,31 @@
 	<!-- 保存用户-角色关联关系 -->
 	<insert id="saveRoleUser" parameterType="com.cdeledu.model.rbac.SysUserRole" 
 		useGeneratedKeys="true" keyProperty="id" >
-		insert into sys_user_role(roleId, userId) values(#{roleid}, #{userId}) 
+		insert into sys_user_role(roleId, userId) values(#{roleId}, #{userId}) 
 	</insert>
 	
 	<!-- 保存管理员登录信息 -->
-	<insert id="saveLoginInfo" parameterType="com.cdeledu.model.rbac.SysUserRole" 
+	<insert id="saveLoginInfo" parameterType="com.cdeledu.model.system.SysLoginLog" 
 		useGeneratedKeys="true" keyProperty="id" >
-		
+		insert into sys_log_login
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userCode != null"> userCode, </if>
+			<if test="ipAddress != null"> ipAddress, </if>
+			<if test="loginStatus != null"> loginStatus, </if>
+			<if test="browser != null and browser !='' "> browser, </if>
+			<if test="logLeavel != null"> logLeavel, </if>
+			<if test="opType != null"> opType, </if>
+			<if test="logContent != null"> logContent, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userCode != null"> #{userCode}, </if>
+			<if test="ipAddress != null"> #{ipAddress}, </if>
+			<if test="loginStatus != null"> #{loginStatus}, </if>
+			<if test="browser != null and browser != '' "> #{browser}, </if>
+			<if test="logLeavel != null"> #{logLeavel}, </if>
+			<if test="opType != null"> #{opType}, </if>
+			<if test="logContent != null"> #{logContent}, </if>
+		</trim>
 	</insert>
 	
 	<!-- 删除用户角色关联数据 -->
