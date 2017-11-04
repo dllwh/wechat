@@ -11,8 +11,9 @@
 		ignore-unresolvable="true" location="classpath:properties/redis.properties" />
 
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<property name="maxIdle" value="${redis.maxIdle}" />
-		<property name="maxWaitMillis" value="${redis.maxWait}" />
+		<property name="maxTotal" value="${redis.maxActive}" /><!-- 最大连接数 -->
+		<property name="maxIdle" value="${redis.maxIdle}" /><!-- 最大闲置 -->
+		<property name="maxWaitMillis" value="${redis.maxWait}" /><!-- 最大等待 -->
 		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
 		<property name="testOnReturn" value="${redis.testOnReturn}" />
 		<property name="testWhileIdle" value="${redis.testWhileIdle}" />
