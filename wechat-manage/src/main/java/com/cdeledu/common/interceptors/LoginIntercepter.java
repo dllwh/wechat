@@ -9,8 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.cdeledu.common.constants.FilterHelper;
-import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.model.SessionInfo;
+import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.util.WebUtilHelper;
 
 /**
@@ -39,10 +38,9 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 
 		HttpSession session = WebUtilHelper.getSession();
-		SessionInfo sessioninfo = (SessionInfo) session.getAttribute(GlobalConstants.USER_SESSION);
-		if ((null == sessioninfo || null == sessioninfo.getManagerUser())
-				&& FilterHelper.isURILogin(httpRequest)) {
-			request.getRequestDispatcher(request.getContextPath() + GlobalConstants.LOGIN)
+		SysUser sysUser = WebUtilHelper.getCurrenLoginUser();
+		if ((null == session || null == sysUser) && FilterHelper.isURILogin(httpRequest)) {
+			request.getRequestDispatcher(request.getContextPath() + FilterHelper.LOGIN)
 					.forward(request, response);
 			return false;
 		} else {

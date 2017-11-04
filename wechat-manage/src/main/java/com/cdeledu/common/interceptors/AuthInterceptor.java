@@ -11,9 +11,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.BaseClass;
-import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.model.SessionInfo;
+import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SystemService;
+import com.cdeledu.util.ShiroHelper;
 import com.cdeledu.util.WebUtilHelper;
 import com.cdeledu.util.webpage.RequestHelper;
 
@@ -55,9 +55,8 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 		if (requestPath.indexOf("loginController.shtml") != -1) {
 			return true;
 		}
-		SessionInfo sessioninfo = (SessionInfo) WebUtilHelper.getSession()
-				.getAttribute(GlobalConstants.USER_SESSION);
-		Integer userId = sessioninfo.getManagerUser().getId();
+		
+		Integer userId = ShiroHelper.getCurrentUserId();
 		if (logger.isDebugEnabled()) {
 			logger.info("查询当前登录用户是否具有当前访问地址");
 		}
@@ -100,14 +99,14 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 		// 用户访问的资源地址
 		String requestPath = RequestHelper.getRequestPath(request);// 用户访问的资源地址
 		HttpSession session = WebUtilHelper.getSession();
-		SessionInfo sessioninfo = (SessionInfo) session.getAttribute(GlobalConstants.USER_SESSION);
+		SysUser sysUser = WebUtilHelper.getCurrenLoginUser();
 		if (excludeUrls.contains(requestPath)) {
 			return true;
 		} else {
 			// ----------------------------------------------------------------
 			// 菜单权限控制
 			// ----------------------------------------------------------------
-			if (null != sessioninfo && null != sessioninfo.getManagerUser()) {
+			if (null != session && null != sysUser) {
 				// 验证当前用户是否有权限访问此资源
 				if (!hasMenuAuth(request)) {
 					// "您没有【" + requestPath + "】权限，请联系管理员给您赋予相应权限！
