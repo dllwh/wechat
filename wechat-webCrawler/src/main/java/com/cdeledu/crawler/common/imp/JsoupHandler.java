@@ -3,10 +3,8 @@ package com.cdeledu.crawler.common.imp;
 import org.apache.log4j.Logger;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.parser.Parser;
 import org.jsoup.safety.Whitelist;
 
 import com.cdeledu.crawler.common.bean.CrawlParameter;
