@@ -1,3 +1,5 @@
+<%@page import="com.cdeledu.util.WebUtilHelper"%>
+<%@page import="com.cdeledu.util.webpage.WebHelper"%>
 <%@ page import="com.cdeledu.common.constants.GlobalConstants"%>
 <%@ page import="java.awt.*"%>
 <%@ page import="java.awt.image.*"%>
@@ -51,8 +53,9 @@
 		g.drawString(rand, 18 * i + 10, 16);
 	}
 	// 将验证码存入SESSION 
-	session.removeAttribute(GlobalConstants.IMAGECAPTCHA);
-	session.setAttribute(GlobalConstants.IMAGECAPTCHA, sRand.toLowerCase());
+	HttpSession  imageSession = WebUtilHelper.getSession();
+	imageSession.removeAttribute(GlobalConstants.IMAGECAPTCHA);
+	imageSession.setAttribute(GlobalConstants.IMAGECAPTCHA, sRand.toLowerCase());
 	g.dispose();
 	ImageIO.write(image, "JPEG", response.getOutputStream());
 %>
