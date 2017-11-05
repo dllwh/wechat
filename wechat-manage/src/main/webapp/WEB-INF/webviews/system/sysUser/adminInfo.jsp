@@ -11,7 +11,7 @@
 <%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
 <title>个人信息管理</title>
 </head>
-<c:set var="currentUser" value="${USER_SESSION.managerUser }" />
+<c:set var="currentUser" value="${fns:getCurrenLoginUser() }" />
 <body>
 	<div class="clearfix">
 		<div class="admin_info_style">
@@ -29,7 +29,7 @@
 								<c:set var="userName" value="${currentUser.userName }" />
 							</c:if>
 							<input type="text" name="用户名" id="website-title"
-								value="${userName}" class="col-xs-7 text_info"
+								value="${userName}" class="col-xs-6 text_info"
 								disabled="disabled" />&nbsp;&nbsp;&nbsp;&nbsp; <a
 								href="javascript:void(0)" onclick="change_Password()"
 								class="btn btn-warning btn-xs">修改密码</a>
@@ -111,7 +111,42 @@
 			</div>
 			<div class="recording_style">
 				<div class="type_title">管理员登陆记录</div>
-				<div class="recording_list"></div>
+				<div class="recording_list">
+					<table class="table table-border table-bordered table-bg table-hover table-sort" id="sample-table">
+						<thead>
+							<tr class="text-c">
+								<th width="25">
+									<label>
+										<input type="checkbox" class="ace"/>
+										<span class="lbl"></span>
+									</label>
+								</th>
+								<th width="80">ID</th>
+								<th width="100">类型</th>
+								<th>内容</th>
+								<th width="17%">登陆地点</th>
+								<th width="120">客户端IP</th>
+								<th width="150">时间</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<label>
+										<input type="checkbox" class="ace"/>
+										<span class="lbl"></span>
+									</label>
+								</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
