@@ -4,6 +4,8 @@ import java.beans.PropertyEditorSupport;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -29,7 +31,7 @@ import com.cdeledu.common.interceptors.DateConvertEditor;
 public class BaseController extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
-
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法:将前台传递过来的日期格式的字符串,自动转化为Date类型
