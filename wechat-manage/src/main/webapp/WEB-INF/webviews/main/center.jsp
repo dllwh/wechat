@@ -285,6 +285,44 @@
 							</ul>
 						</li>
 						<li>
+							<a class="dropdown-toggle">
+								<i class="icon-user"></i>
+								<span class="menu-text"> 用户中心 </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							<ul class="submenu">
+								<li class="home">
+									<a href="javascript:void(0)" name="" title="会员列表" class="iframeurl">
+										<i class="icon-double-angle-right"></i>用户列表
+									</a>
+								</li>
+								<li class="home">
+									<a href="javascript:void(0)" name="" title="等级管理" class="iframeurl">
+										<i class="icon-double-angle-right"></i>等级管理
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a class="dropdown-toggle">
+								<i class="icon-edit"></i>
+								<span class="menu-text"> 消息管理 </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							<ul class="submenu">
+								<li class="home">
+									<a href="javascript:void(0)" name="" title="留言列表" class="iframeurl">
+										<i class="icon-double-angle-right"></i>留言列表
+									</a>
+								</li>
+								<li class="home">
+									<a href="javascript:void(0)" name="" title="意见反馈" class="iframeurl">
+										<i class="icon-double-angle-right"></i>意见反馈
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
 							<a href="javascript:void(0)" class="dropdown-toggle">
 								<i class="icon-group"></i>
 								<span class="menu-text"> 管理员管理 </span>
@@ -316,7 +354,7 @@
 								</a>
 							<ul class="submenu">
 								<li class="home">
-									<a name="#" title="数据库维护"  class="iframeurl">
+									<a name="" title="数据库维护"  class="iframeurl">
 										<i class="icon-double-angle-right"></i>数据库维护
 									</a>
 								</li>
