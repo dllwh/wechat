@@ -412,7 +412,7 @@ public class HttpURLConnHelper {
 	 */
 	public String FileUpload(String url, File file) {
 		if (!file.exists())
-			return null;
+			return "";
 		BufferedReader br = null; // 请求后的返回信息的读取对象。
 		OutputStream out = null;
 		DataInputStream datain = null;
