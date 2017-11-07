@@ -74,69 +74,16 @@
 		setInterval(function() {
 			$('#time').html(dllwh.currentTime)
 		}, 1000);
-		
-		//修改密码
-		$('.change_Password').on('click',function() {
-			layer.open({
-			type : 1,
-			title : '修改密码',
-			area : [ '300px', '300px' ],
-			shadeClose : true,
-			content : $('#change_Pass'),
-			btn : [ '确认修改' ],
-			yes : function(index, layero) {
-				if ($("#password").val() == "") {
-					layer.alert('原密码不能为空!', {
-						title : '提示框',
-						icon : 0,
-					});
-					return false;
-				}
-				if ($("#Nes_pas").val() == "") {
-					layer.alert('新密码不能为空!', {
-						title : '提示框',
-						icon : 0,
-					});
-					return false;
-				}
-				if ($("#c_mew_pas").val() == "") {
-					layer.alert('确认新密码不能为空!', {
-						title : '提示框',
-						icon : 0,
-					});
-					return false;
-				}
-				if (!$("#c_mew_pas").val
-						|| $("#c_mew_pas").val() != $(
-								"#Nes_pas").val()) {
-					layer.alert('密码不一致!', {
-						title : '提示框',
-						icon : 0,
-					});
-					return false;
-				} else {
-					layer.alert('修改成功！', {
-						title : '提示框',
-						icon : 1,
-					});
-					layer.close(index);
-				}}
-			});});
 
-			$('#Exit_system').on('click', function() {
-				layer.confirm('是否确定退出系统？', {
-					btn : [ '是', '否' ],//按钮
-					icon : 2,
-				}, function() {
-					location.href="loginController.shtml?doLogout";
-				});
+		$('#Exit_system').on('click', function() {
+			layer.confirm('是否确定退出系统？', {
+				btn : [ '是', '否' ],//按钮
+				icon : 2,
+			}, function() {
+				location.href="loginController.shtml?doLogout";
 			});
-			
-			var $fullText = $('.admin-fullText');
-			$('#admin-fullscreen').on('click', function() {
-				
-			});
-		})
+		});
+	})
 </script>	
 </head>
 <body>
@@ -179,15 +126,6 @@
 								<i class="icon-caret-down"></i>
 							</a>
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-								<li>
-									<a href="javascript:void(0)">
-										<i class="icon-cog"></i>设置
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)">
-										<i class="icon-user"></i>个人资料</a></li>
-								<li class="divider"></li>
 								<li>
 									<a href="javascript:ovid(0)" id="Exit_system">
 										<i class="icon-off"></i>退出
@@ -250,7 +188,7 @@
 					</div><!-- #sidebar-shortcuts -->
 					<ul class="nav nav-list" id="nav_list">
 						<li class="home">
-							<a name="loginController.shtml?home" class="iframeurl">
+							<a name="homeController.shtml?home" class="iframeurl">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 系统首页 </span>
 							</a>
@@ -491,27 +429,5 @@
 		<p class="l_f">版权所有：独泪了无痕</p>
 		<p class="r_f">地址：北京市海淀区知春路1号学院国际大厦   技术支持：XXXX</p>
 	</div>
-	<!--修改密码样式-->
-	<div class="change_Pass_style" id="change_Pass">
-		<ul class="xg_style">
-			<li>
-				<label class="label_name">原&nbsp;&nbsp;密&nbsp;码</label>
-				<input name="原密码" type="password" class="" id="password">
-			</li>
-			<li>
-				<label class="label_name">新&nbsp;&nbsp;密&nbsp;码</label>
-				<input name="新密码" type="password" class="" id="Nes_pas">
-			</li>
-			<li>
-				<label class="label_name">确认密码</label>
-				<input name="再次确认密码" type="password" class="" id="c_mew_pas">
-			</li>
-		</ul>
-		<div class="center">
-			<button class="btn btn-primary" type="button" id="submit">确认修改</button>
-		</div>
-	</div>
-	<!-- /.main-container -->
-	<!-- basic scripts -->
 </body>
 </html>
