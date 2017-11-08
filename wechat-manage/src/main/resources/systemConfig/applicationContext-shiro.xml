@@ -28,13 +28,14 @@
 	</bean>
 
 	<!-- 登录判断 -->
-	<bean id="login" class="com.cdeledu.common.filter.shiro.LoginFilter"/>
+	<bean id="login" class="com.cdeledu.common.shiro.LoginFilter"/>
 	<!-- 角色判断校验 -->
-	<bean id="role" class="com.cdeledu.common.filter.shiro.RoleFilter"/>
+	<bean id="role" class="com.cdeledu.common.shiro.RoleFilter"/>
 	<!-- 权限校验 -->
-	<bean id="permission" class="com.cdeledu.common.filter.shiro.PermissionFilter"/>
-	<!-- 判断是否踢出  -->
-	<bean id="simple" class="com.cdeledu.common.filter.shiro.kickedOutFilter"/>
+	<bean id="permission" class="com.cdeledu.common.shiro.PermissionFilter"/>
+	<!-- 判断是否踢出  
+		<bean id="simple" class="com.cdeledu.common.filter.shiro.kickedOutFilter"/>
+	-->
 
 	<!-- ================================================================================== 
 		Shiro验证URL时,URL匹配成功便不再继续匹配查找(所以要注意配置文件中的URL顺序,尤其在使用通配符时),
