@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdeledu.dao.SysMenuMapper">
 
@@ -95,5 +96,32 @@
 		select * from(
 			<include refid="findForJdbc_body"/>
 		) as myTable LIMIT 1
+	</select>
+	
+	<select id="getAllMenuIdByUser" parameterType="com.cdeledu.model.rbac.SysUser" 
+		resultType="java.lang.Integer">
+		SELECT 
+			DISTINCT srm.menuId 
+		FROM sys_role_menu srm
+		INNER JOIN sys_user_role sur on sur.roleId = srm.roleId
+		where sur.userId = #{id}
+	</select>
+	
+	<select id="getMenuByParentCode" resultType="com.cdeledu.model.rbac.SysMenu">
+		SELECT * FROM sys_menu WHERE isEnabled =1 and isVisible = 1 AND type != 2 AND parentCode = #{parentCode}
+	</select>
+	
+	<select id="getPermissionByUserId" parameterType="com.cdeledu.model.rbac.SysUser" 
+		resultType="java.lang.String">
+		SELECT 
+			DISTINCT sm.menuUrl from sys_menu sm 
+		INNER JOIN sys_role_menu srm on srm.menuId =sm.id
+		INNER JOIN sys_user_role sur ON sur.roleId = srm.roleId
+		WHERE 
+				sm.isEnabled = 1 
+			AND sm.isVisible = 1 
+			AND sm.type !=0  
+			AND sm.menuUrl != ''
+			AND sur.userId=#{id}
 	</select>
 </mapper>

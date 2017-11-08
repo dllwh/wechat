@@ -1,5 +1,7 @@
 package com.cdeledu.model.rbac;
 
+import java.util.List;
+
 import com.cdeledu.common.base.DataEntity;
 
 /**
@@ -20,8 +22,13 @@ public class SysMenu extends DataEntity<SysMenu> {
 	private Integer type;
 	/** 父菜单编号 */
 	private Integer parentCode;
+	/** 父级菜单名称 */
+	private String parentName;
 	/** 菜单图标样式 */
 	private String iconClass;
+	/** tree属性 */
+	private Boolean open = false;
+	private List<?> childrenList;
 
 	public String getMenuName() {
 		return menuName;
@@ -55,6 +62,14 @@ public class SysMenu extends DataEntity<SysMenu> {
 		this.parentCode = parentCode;
 	}
 
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
 	public String getIconClass() {
 		return iconClass;
 	}
@@ -63,11 +78,26 @@ public class SysMenu extends DataEntity<SysMenu> {
 		this.iconClass = iconClass;
 	}
 
-	@Override
-	public String toString() {
-		return super.toString() + "SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl
-				+ ", type=" + type + ", parentCode=" + parentCode + ", iconClass=" + iconClass
-				+ "]";
+	public Boolean getOpen() {
+		return open;
 	}
 
+	public void setOpen(Boolean open) {
+		this.open = open;
+	}
+
+	public List<?> getChildrenList() {
+		return childrenList;
+	}
+
+	public void setChildrenList(List<?> childrenList) {
+		this.childrenList = childrenList;
+	}
+
+	@Override
+	public String toString() {
+		return "SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl + ", type=" + type
+				+ ", parentCode=" + parentCode + ", parentName=" + parentName + ", iconClass="
+				+ iconClass + ", open=" + open + ", childrenList=" + childrenList + "]";
+	}
 }
