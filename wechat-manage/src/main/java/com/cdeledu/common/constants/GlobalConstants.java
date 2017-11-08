@@ -20,12 +20,8 @@ public class GlobalConstants {
 	public static final String FILTERED_REQUEST = "@@session_context_filtered_request";
 	/** 保存用户到SESSION */
 	public static final String USER_SESSION = "USER_SESSION";
-	/** 将登录前的URL放到Session中的键名称 */
-	public static final String LOGIN_TO_URL = "toUrl";
-	/** 不对匹配该值的访问路径拦截（正则） */
-	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(logout)|(code)|(app)|(weixin)|(static)|(main)|(websocket)).*";
-	/** 需要登录即可访问的URI资源 */
-	public static final String INHERENT_PATH = ".*/((select)|(find)|(get)|(add)|(save)|(insert)|(edit)|(update)|(delete)||(bathDel)).*";
+	/** session status */
+	public static final String SESSION_STATUS ="sojson-online-status";
 	/** 人员类型 */
 	public static final Short User_Normal = 1;// 正常
 	public static final Short User_Forbidden = 0;// 禁用
@@ -44,9 +40,7 @@ public class GlobalConstants {
 	public static final Integer Log_Type_OTHER = 7; // 其他
 
 	/** 该值会在web容器启动时由WebContextListener初始化 */
-	public static ApplicationContext WEB_APP_CONTEXT = null; 
-	
-	
+	public static ApplicationContext WEB_APP_CONTEXT = null;
 	/**
 	 * 上传图片大小限制，单位byte
 	 */
@@ -111,5 +105,13 @@ public class GlobalConstants {
 	public static Boolean isDemoMode() {
 		String dm = WebUtilHelper.getConfigByName("demoMode");
 		return "true".equals(dm) || "1".equals(dm);
+	}
+	/** 系统登录后默认首页地址 */
+	public static String getHomePageUrl() {
+		return "homeController/home.shtml";
+	}
+	
+	public static String getloginPageUrl() {
+		return FilterHelper.LOGIN_ACTION;
 	}
 }
