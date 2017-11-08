@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 <title>错误提示</title>
 </head>
 <body>

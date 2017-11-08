@@ -23,7 +23,7 @@ div#mother {
 }
 
 div#errorBox {
-	background: url(static/image/404_bg.png) no-repeat top left;
+	background: url(${_currConText}/static/image/404_bg.png) no-repeat top left;
 	width: 943px; height : 572px;
 	margin: auto;
 	height: 572px;
