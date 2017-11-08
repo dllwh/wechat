@@ -3,7 +3,6 @@ package com.cdeledu.common.shiro;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
+import com.cdeledu.service.sys.SysMenuService;
 import com.cdeledu.util.WebUtilHelper;
 import com.google.common.collect.Sets;
 
@@ -37,6 +37,8 @@ import com.google.common.collect.Sets;
 public class ShiroRealm extends AuthorizingRealm {
 	@Autowired
 	private ManagerUserService userService;
+	@Autowired
+	private SysMenuService sysMenuService;
 
 	/**
 	 * @方法描述: 为当前登录的Subject授予角色和权限
@@ -48,17 +50,15 @@ public class ShiroRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		try {
 			// ① 获取当前登录的用户名
-			String currentUsername = (String) principals.fromRealm(getName()).iterator().next();
-			if (StringUtils.isBlank(currentUsername)) {
+			SysUser currentUser = (SysUser) principals.fromRealm(getName()).iterator().next();
+			if (currentUser == null) {
 				return null;// 自动跳转到unauthorizedUrl指定的地址
 			}
 			// ② 从数据库中获取当前登录用户的详细信息
-			SysUser sysUser = new SysUser();
-			sysUser.setUserName(currentUsername);
 			// ③ 获取当前登录用户的角色
+			/** 角色名的集合 */
 			Set<String> roleList = Sets.newConcurrentHashSet();
-			Set<String> permissionList = Sets.newConcurrentHashSet();
-			List<SysUserRole> sysUserRolelist = userService.getUserRole(sysUser);
+			List<SysUserRole> sysUserRolelist = userService.getUserRole(currentUser);
 			for (SysUserRole role : sysUserRolelist) {
 				if (role != null) {
 					roleList.add(role.getRoleCode());
@@ -70,7 +70,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			// ⑤ 1.为当前用户设置角色
 			simpleAuthorInfo.addRoles(roleList);
 			// ⑤ 2.为当前用户设置权限
-			simpleAuthorInfo.addStringPermissions(permissionList);
+			simpleAuthorInfo.addStringPermissions(sysMenuService.getPermissionByUserId(currentUser));
 			return simpleAuthorInfo;
 
 		} catch (Exception e) {
