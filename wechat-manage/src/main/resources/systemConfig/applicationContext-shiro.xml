@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<description>Shiro Configuration</description>
 
 	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
 	<bean id="shiroRealm" class="com.cdeledu.common.shiro.ShiroRealm" />
@@ -11,45 +27,55 @@
 		<property name="realm" ref="shiroRealm" />
 	</bean>
 
+	<!-- 登录判断 -->
+	<bean id="login" class="com.cdeledu.common.filter.shiro.LoginFilter"/>
+	<!-- 角色判断校验 -->
+	<bean id="role" class="com.cdeledu.common.filter.shiro.RoleFilter"/>
+	<!-- 权限校验 -->
+	<bean id="permission" class="com.cdeledu.common.filter.shiro.PermissionFilter"/>
+	<!-- 判断是否踢出  -->
+	<bean id="simple" class="com.cdeledu.common.filter.shiro.kickedOutFilter"/>
+
+	<!-- ================================================================================== 
+		Shiro验证URL时,URL匹配成功便不再继续匹配查找(所以要注意配置文件中的URL顺序,尤其在使用通配符时),
+		故filterChainDefinitions的配置顺序为自上而下,以最上面的为准
+	-->
+	
+	<bean name="shiroFilterChainDefinitions" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				/loginController** = anon
+				/globalController/** = anon
+				/homeController/** = authc
+				/** = authc,login,permission
+			</value>
+		</constructor-arg>
+	</bean>
+
 	<!-- Shiro主过滤器本身功能十分强大,其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行 -->
 	<!-- Web应用中,Shiro可控制的Web请求必须经过Shiro主过滤器的拦截,Shiro对基于Spring的Web应用提供了完美的支持 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<!-- Shiro的核心安全接口,这个属性是必须的 -->
 		<property name="securityManager" ref="securityManager" />
 		<!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
-		<property name="loginUrl" value="/" />
-		<!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后的处理逻辑在LoginController里硬编码为main.jsp了) -->
+		<property name="loginUrl" value="/loginController.shtml?doLogin" />
+		<!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后的处理逻辑在LoginController里硬编码为center.jsp了) -->
 		<!-- <property name="successUrl" value="/system/main"/> -->
 		<!-- 用户访问未对其授权的资源时,所显示的连接 -->
-		<property name="unauthorizedUrl" value="/loginController.shtml?noAuth" />
+		<property name="unauthorizedUrl" value="/globalController/unauthorized.shtml" />
+		<!-- 自定义filter，可用来更改默认的表单名称配置 -->
+		<property name="filters">
+			<util:map>
+				<entry key="login" value-ref="login"/>
+				<entry key="role" value-ref="role"/>
+				<entry key="permission" value-ref="permission"/>
+			</util:map>
+		</property>
 		<!-- Shiro连接约束配置,即过滤链的定义 -->
 		<!-- 下面value值的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的 -->
-		<!-- anon：它对应的过滤器里面是空的,什么都没做,这里.do和.jsp后面的*表示参数,比方说login.jsp?main这种 -->
-		<!-- authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter -->
-		<property name="filterChainDefinitions">
-			<value>
-				/loginController.shtml**=anon
-				/**=authc
-			</value>
-		</property>
+		<property name="filterChainDefinitions" ref="shiroFilterChainDefinitions"/>
 	</bean>
 
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
-
-	<!-- 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证 -->
-	<bean
-		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-		depends-on="lifecycleBeanPostProcessor" />
-	<!-- 配置shiro框架提供的切面类，用于创建代理对象 -->
-	<bean
-		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-		<property name="securityManager" ref="securityManager" />
-	</bean>
-	
-	<!-- AOP式方法级权限检查  -->
-	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
-		depends-on="lifecycleBeanPostProcessor">
-		<property name="proxyTargetClass" value="true"/>
-	</bean>	
 </beans>
