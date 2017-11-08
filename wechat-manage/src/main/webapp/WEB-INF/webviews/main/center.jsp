@@ -3,10 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head  lang="en">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
-
-<%@ taglib prefix="fns" uri="/WEB-INF/tlds/fns.tld" %>
 
 <title>${_currProject}</title>
 <%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
@@ -187,172 +184,38 @@
 						</div>
 					</div><!-- #sidebar-shortcuts -->
 					<ul class="nav nav-list" id="nav_list">
-						<li class="home">
-							<a name="homeController.shtml?home" class="iframeurl">
-								<i class="icon-dashboard"></i>
-								<span class="menu-text"> 系统首页 </span>
-							</a>
-						</li>
-						<li>
-							<a class="dropdown-toggle">
-								<i class="icon-cogs"></i>
-								<span class="menu-text"> 系统管理 </span>
-								<b class="arrow icon-angle-down"></b>
-							</a>
-							<ul class="submenu">
-								<li class="home">
-									<a name="" title="系统设置" class="iframeurl">
-										<i class="icon-double-angle-right"></i>系统设置
-									</a>
-								</li>
-								<li class="home">
-									<a name="menuView.shtml?init" title="菜单管理" class="iframeurl">
-										<i class="icon-double-angle-right"></i>菜单管理
-									</a>
-								</li>
-								<li class="home">
-									<a name="" title="用户管理" class="iframeurl">
-										<i class="icon-double-angle-right"></i>用户管理
-									</a>
-								</li>
-								<li class="home">
-									<a name="roleView.shtml?init" title="角色管理" class="iframeurl">
-										<i class="icon-double-angle-right"></i>角色管理
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a class="dropdown-toggle">
-								<i class="icon-user"></i>
-								<span class="menu-text"> 用户中心 </span>
-								<b class="arrow icon-angle-down"></b>
-							</a>
-							<ul class="submenu">
-								<li class="home">
-									<a href="javascript:void(0)" name="" title="会员列表" class="iframeurl">
-										<i class="icon-double-angle-right"></i>用户列表
-									</a>
-								</li>
-								<li class="home">
-									<a href="javascript:void(0)" name="" title="等级管理" class="iframeurl">
-										<i class="icon-double-angle-right"></i>等级管理
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a class="dropdown-toggle">
-								<i class="icon-edit"></i>
-								<span class="menu-text"> 消息管理 </span>
-								<b class="arrow icon-angle-down"></b>
-							</a>
-							<ul class="submenu">
-								<li class="home">
-									<a href="javascript:void(0)" name="" title="留言列表" class="iframeurl">
-										<i class="icon-double-angle-right"></i>留言列表
-									</a>
-								</li>
-								<li class="home">
-									<a href="javascript:void(0)" name="" title="意见反馈" class="iframeurl">
-										<i class="icon-double-angle-right"></i>意见反馈
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="javascript:void(0)" class="dropdown-toggle">
-								<i class="icon-group"></i>
-								<span class="menu-text"> 管理员管理 </span>
-								<b class="arrow icon-angle-down"></b>
-								</a>
-							<ul class="submenu">
-								<li class="home">
-									<a name="" title="权限管理"  class="iframeurl">
-										<i class="icon-double-angle-right"></i>权限管理
-									</a>
-								</li>
-								<li class="home">
-									<a name="sysUserView.shtml?sysUserInit" title="管理员列表" class="iframeurl">
-										<i class="icon-double-angle-right"></i>管理员列表
-									</a>
-								</li>
-								<li class="home">
-									<a name="sysUserView.shtml?adminInfo" title="个人信息" class="iframeurl">
-										<i class="icon-double-angle-right"></i>个人信息
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="javascript:void(0)" class="dropdown-toggle">
-								<i class="icon-group"></i>
-								<span class="menu-text"> 系统开发 </span>
-								<b class="arrow icon-angle-down"></b>
-								</a>
-							<ul class="submenu">
-								<li class="home">
-									<a name="" title="数据库维护"  class="iframeurl">
-										<i class="icon-double-angle-right"></i>数据库维护
-									</a>
-								</li>
-								<li class="home">
-									<a name="" title="数据源" class="iframeurl">
-										<i class="icon-double-angle-right"></i>数据源
-									</a>
-								</li>
-								<li class="home">
-									<a name="" title="行政区划管理" class="iframeurl">
-										<i class="icon-double-angle-right"></i>行政区划管理
-									</a>
-								</li>
-								<li class="home">
-									<a name="" title="字典管理" class="iframeurl">
-										<i class="icon-double-angle-right"></i>字典管理
-									</a>
-								</li>
-								<li class="home">
-									<a name="" title="机构管理" class="iframeurl">
-										<i class="icon-double-angle-right"></i>机构管理
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="javascript:void(0)" class="dropdown-toggle">
-								<i class="icon-group"></i>
-								<span class="menu-text"> 系统维护 </span>
-								<b class="arrow icon-angle-down"></b>
-								</a>
-							<ul class="submenu">
-								<li class="home">
-									<a name="" title="系统监控"  class="iframeurl">
-										<i class="icon-double-angle-right"></i>系统监控
-									</a>
-								</li>
-								<li class="home">
-									<a name="" title="缓存监控" class="iframeurl">
-										<i class="icon-double-angle-right"></i>缓存监控
-									</a>
-								</li>
-								<li class="home">
-									<a name="" title="定时任务" class="iframeurl">
-										<i class="icon-double-angle-right"></i>定时任务
-									</a>
-								</li>
-								<li class="home">
-									<a name="logController.shtml?init" title="数据日志"  class="iframeurl">
-										<i class="icon-double-angle-right"></i>数据日志
-									</a>
-								</li>
-								<li class="home">
-									<a name="system.shtml?info" title="服务器信息"  class="iframeurl">
-										<i class="icon-double-angle-right"></i>服务器信息
-									</a>
-								</li>
-							</ul>
-						</li>
-					</ul><%-- /.nav-list --%>
+						<c:forEach items="${fns:getMenuList()}" var="menu">
+							<c:choose>
+								<c:when test="${menu.open}">
+									<li>
+										<a class="dropdown-toggle">
+											<i class="${menu.iconClass }"></i>
+											<span class="menu-text">${menu.menuName} </span>
+											<b class="arrow icon-angle-down"></b>
+										</a>
+										<ul class="submenu">
+											<c:forEach items="${menu.childrenList }" var="childrenMenu">
+												<li class="home">
+													<a name="${childrenMenu.menuUrl }" title="${childrenMenu.menuName }" class="iframeurl">
+														<i class="${childrenMenu.iconClass }"></i>${childrenMenu.menuName }
+													</a>
+												</li>
+											</c:forEach>
+										</ul>
+									</li>
+								</c:when>
+								<c:otherwise>
+									<li class="home">
+										<a name="${menu.menuUrl }" class="iframeurl">
+											<i class="${menu.iconClass }"></i>
+											<span class="menu-text"> ${menu.menuName} </span>
+										</a>
+									</li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</ul>
+					<%-- /.nav-list --%>
 					<div class="sidebar-collapse" id="sidebar-collapse">
 						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" 
 							data-icon2="icon-double-angle-right">
@@ -377,7 +240,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="icon-home home-icon"></i>
-								<a href="loginController.shtml?doLogin">首页</a>
+								<a href="${fns:getloginPageUrl()}">首页</a>
 							</li>
 							<li class="active">
 								<span class="Current_page iframeurl"></span>
@@ -391,7 +254,7 @@
 						</ul>
 					</div>
 					<iframe id="iframe" style="border:0; width:100%; background-color:#FFF;"
-						name="iframe" frameborder="0" src="loginController.shtml?home"></iframe>
+						name="iframe" frameborder="0" src="${fns:getHomePageUrl()}"></iframe>
 					<!-- /.page-content -->
 				</div><!-- /.main-content -->	
 					<div class="ace-settings-container" id="ace-settings-container">

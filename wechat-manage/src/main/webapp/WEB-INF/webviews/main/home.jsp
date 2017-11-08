@@ -4,26 +4,26 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" ></meta>
-	<link rel="stylesheet" href="plug-in/assets/css/bootstrap.min.css"></link>
-	<link rel="stylesheet" href="static/style/style.css"></link>
-	<link rel="stylesheet" href="plug-in/assets/css/font-awesome.min.css" ></link>
-	<link href="plug-in/assets/css/codemirror.css" rel="stylesheet"></link>
+	<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"></link>
+	<link rel="stylesheet" href="${_currConText }/static/style/style.css"></link>
+	<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/font-awesome.min.css" ></link>
+	<link href="${_currConText }/plug-in/assets/css/codemirror.css" rel="stylesheet"></link>
 	<!--[if IE 7]>
-		<link rel="stylesheet" href="plug-in/assets/css/font-awesome-ie7.min.css" />
+		<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/font-awesome-ie7.min.css" />
 	<![endif]-->
 	<!--[if lte IE 8]>
-		<link rel="stylesheet" href="plug-in/assets/css/ace-ie.min.css" />
+		<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/ace-ie.min.css" />
 	<![endif]-->
-	<script src="plug-in/assets/js/ace-extra.min.js"></script>
+	<script src="${_currConText }/plug-in/assets/js/ace-extra.min.js"></script>
 	<!--[if lt IE 9]>
-		<script src="plug-in/assets/js/html5shiv.js"></script>
-		<script src="plug-in/assets/js/respond.min.js"></script>
+		<script src="${_currConText }/plug-in/assets/js/html5shiv.js"></script>
+		<script src="${_currConText }/plug-in/assets/js/respond.min.js"></script>
 	<![endif]-->
 	<!--[if !IE]> -->
-		<script src="plug-in/assets/js/jquery.min.js"></script>        
+		<script src="${_currConText }/plug-in/assets/js/jquery.min.js"></script>        
 	<!-- <![endif]-->
-	<script src="plug-in/assets/dist/echarts.js"></script>
-	<script src="plug-in/assets/js/bootstrap.min.js"></script>
+	<script src="${_currConText }/plug-in/assets/dist/echarts.js"></script>
+	<script src="${_currConText }/plug-in/assets/js/bootstrap.min.js"></script>
 	<title>${_currProject}</title>
 	<script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
 </head>
@@ -147,7 +147,7 @@ $(function(){
 
 	require.config({
 		paths : {
-			echarts : './plug-in/assets/dist'
+			echarts : '${_currConText }/plug-in/assets/dist'
 		}
 	});
 	require([ 'echarts', 'echarts/theme/macarons', 'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表

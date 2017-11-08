@@ -20,6 +20,13 @@
 <script type="text/javascript" src="${_currConText }/plug-in/jquery/jquery.form.js"></script>
 <script type="text/javascript" src="${_currConText }/plug-in/login/js/tooltips.js"></script>
 <script type="text/javascript" src="${_currConText }/plug-in/login/js/login.js"></script>
+<script type="text/javascript">
+	// 判断如果当前页面不为主框架，则将主框架进行跳转
+	var tagert_URL = "<%=request.getContextPath()%>/loginController.shtml?doLogin";
+	if (self != top) {
+		top.location.href = tagert_URL;
+	}
+</script>
 </head>
 <body>
 <div class="page-container">
