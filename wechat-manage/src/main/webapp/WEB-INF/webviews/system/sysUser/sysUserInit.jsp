@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 <head>
@@ -22,11 +22,11 @@
 					<ul class="search_content clearfix">
 						<li>
 							<label class="l_f">管理员名称</label>
-							<input type="text" class="text_add" placeholder=""  style="width:400px"/>
+							<input type="text" class="text_add" placeholder="管理员名称"  style="width:400px"/>
 						</li>
 						<li>
 							<label class="l_f">添加时间</label>
-							<input class="inline" id="start" style="margin-left:10px;">
+							<input class="inline laydate-icon" id="start" style="margin-left:10px;">
 						</li>
 						<li style="width:90px;">
 							<button type="button" class="btn_search">
@@ -118,7 +118,7 @@
 											<span class="label label-success radius">已启用</span>
 										</td>
 										<td class="td-status">
-											<span class="label label-success radius">已审核</span>
+											<span class="label label-danger radius">未审核</span>
 										</td>
 										<td class="td-status">
 											<span class="label label-success radius">允许</span>
@@ -129,7 +129,7 @@
 										<td class="td-manage">
 											<a style="text-decoration:none" class="btn btn-xs " 
 												title="启用" onclick="sysUsereEnable()">
-												<i class="fa fa-close bigger-120"></i></a>
+												<i class="fa fa-close bigger-120"></i>
 											</a>   
 											<a title="停用" onclick="sysUsereDisable()" 
 												class="btn btn-xs btn-success">

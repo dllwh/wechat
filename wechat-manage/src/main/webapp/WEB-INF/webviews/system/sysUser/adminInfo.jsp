@@ -19,8 +19,9 @@
 				<div class="type_title">管理员信息</div>
 				<div class="xinxi">
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right"
-							for="form-field-1">用户名： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							用户名：
+						</label>
 						<div class="col-sm-9">
 							<c:if test="${not empty currentUser.realName }">
 								<c:set var="userName" value="${currentUser.realName }" />
@@ -28,69 +29,81 @@
 							<c:if test="${empty currentUser.realName }">
 								<c:set var="userName" value="${currentUser.userName }" />
 							</c:if>
-							<input type="text" name="用户名" id="website-title"
-								value="${userName}" class="col-xs-6 text_info"
-								disabled="disabled" />&nbsp;&nbsp;&nbsp;&nbsp; <a
-								href="javascript:void(0)" onclick="change_Password()"
+							<input type="text" name="用户名" id="website-title" value="${userName}" 
+								class="col-xs-6 text_info" disabled="disabled" />
+								&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="change_Password()" 
 								class="btn btn-warning btn-xs">修改密码</a>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right"
-							for="form-field-1">性别： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							性别：
+						</label>
 						<div class="col-sm-9">
 							<span class="sex">男</span>
 							<div class="add_sex">
-								<label> <input name="form-field-radio" type="radio"
-									class="ace" checked="checked" /> <span class="lbl">保密</span></label>&nbsp;&nbsp;
-								<label><input name="form-field-radio" type="radio"
-									class="ace" /> <span class="lbl">男</span></label>&nbsp;&nbsp; <label>
-									<input name="form-field-radio" type="radio" class="ace" /> <span
-									class="lbl">女</span>
+								<label>
+									<input name="form-field-radio" type="radio" class="ace" 
+										checked="checked" /> 
+									<span class="lbl">保密</span>
+								</label>
+								&nbsp;&nbsp;
+								<label>
+									<input name="form-field-radio" type="radio" class="ace" /> 
+									<span class="lbl">男</span>
+								</label>
+								&nbsp;&nbsp; 
+								<label>
+									<input name="form-field-radio" type="radio" class="ace" /> 
+									<span class="lbl">女</span>
 								</label>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right"
-							for="form-field-1">年龄： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							年龄： 
+						</label>
 						<div class="col-sm-9">
 							<input type="text" name="年龄" id="website-title" value="24"
 								class="col-xs-7 text_info" disabled="disabled" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right"
-							for="form-field-1">移动电话： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							移动电话： 
+						</label>
 						<div class="col-sm-9">
-							<input type="text" name="移动电话" id="website-title"
-								value="${currentUser.mobile }" class="col-xs-7 text_info"
-								disabled="disabled" />
+							<input type="text" name="移动电话" id="website-title" disabled="disabled"
+								value="${currentUser.mobile }" class="col-xs-7 text_info"/>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right"
-							for="form-field-1">电子邮箱： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							电子邮箱：
+						</label>
 						<div class="col-sm-9">
-							<input type="text" name="电子邮箱" id="website-title"
-								disabled="disabled" value="${currentUser.email }"
-								class="col-xs-7 text_info" />
+							<input type="text" name="电子邮箱" id="website-title" disabled="disabled" 
+								value="${currentUser.email }" class="col-xs-7 text_info" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right"
-							for="form-field-1">QQ： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							QQ： 
+						</label>
 						<div class="col-sm-9">
-							<input type="text" name="QQ" id="website-title"
-								value="1349310440" class="col-xs-7 text_info"
-								disabled="disabled" />
+							<input type="text" name="QQ" id="website-title" disabled="disabled"
+								value="1349310440" class="col-xs-7 text_info" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label no-padding-right"
-							for="form-field-1">权限： </label>
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+							权限： 
+						</label>
 						<div class="col-sm-9">
-							<span>超级管理员</span>
+							<c:forEach items="${fns:getRoleList()}" var="userRole">
+								<span>${userRole.roleName }</span>
+							</c:forEach>
 						</div>
 					</div>
 					<div class="form-group">
@@ -153,12 +166,18 @@
 	<!--修改密码样式-->
 	<div class="change_Pass_style" id="change_Pass">
 		<ul class="xg_style">
-			<li><label class="label_name">原&nbsp;&nbsp;密&nbsp;码</label> <input
-				name="原密码" type="password" class="" id="password" /></li>
-			<li><label class="label_name">新&nbsp;&nbsp;密&nbsp;码</label> <input
-				name="新密码" type="password" class="" id="Nes_pas" /></li>
-			<li><label class="label_name">确认密码</label> <input name="再次确认密码"
-				type="password" class="" id="c_mew_pas" /></li>
+			<li>
+				<label class="label_name">原&nbsp;&nbsp;密&nbsp;码</label>
+				<input name="原密码" type="password" class="" id="password" />
+			</li>
+			<li>
+				<label class="label_name">新&nbsp;&nbsp;密&nbsp;码</label>
+				<input name="新密码" type="password" class="" id="Nes_pas" />
+			</li>
+			<li>
+				<label class="label_name">确认密码</label>
+				<input name="再次确认密码" type="password" class="" id="c_mew_pas" />
+			</li>
 		</ul>
 	</div>
 	<script type="text/javascript">
@@ -194,8 +213,7 @@
 					icon : 1,
 				});
 				$('#Personal').find('.xinxi').removeClass("hover");
-				$('#Personal').find('.text_info').removeClass("add").attr(
-						"disabled", true);
+				$('#Personal').find('.text_info').removeClass("add").attr("disabled", true);
 				$('#Personal').find('.btn-success').css({
 					'display' : 'none'
 				});
