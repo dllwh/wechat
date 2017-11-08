@@ -57,7 +57,7 @@ public class RoleOperateController extends BaseController {
 	 * @param role
 	 * @return
 	 */
-	@RequestMapping(params = "saveRole")
+	@RequestMapping(value = "saveRole")
 	@ResponseBody
 	public AjaxJson saveRole(HttpServletRequest request, HttpServletResponse response, SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
@@ -90,7 +90,7 @@ public class RoleOperateController extends BaseController {
 	 * @param role
 	 * @return
 	 */
-	@RequestMapping(params = "delRole")
+	@RequestMapping(value = "delRole")
 	@ResponseBody
 	public AjaxJson delRole(SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();

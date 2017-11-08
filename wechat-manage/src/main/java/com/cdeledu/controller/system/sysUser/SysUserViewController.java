@@ -36,7 +36,7 @@ public class SysUserViewController extends BaseController {
 	 * @创建时间: 2016年9月27日 下午4:43:12
 	 * @return
 	 */
-	@RequestMapping(params = "sysUserInit")
+	@RequestMapping(value = "sysUserInit")
 	public ModelAndView sysUserInit() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysUser/sysUserInit");
@@ -49,7 +49,7 @@ public class SysUserViewController extends BaseController {
 	 * @创建时间: 2016年9月27日 下午4:43:12
 	 * @return
 	 */
-	@RequestMapping(params = "adminInfo")
+	@RequestMapping(value= "adminInfo")
 	public ModelAndView adminInfo() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysUser/adminInfo");
@@ -64,7 +64,7 @@ public class SysUserViewController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(params = "getList")
+	@RequestMapping(value = "getList")
 	public void getList(HttpServletRequest request, HttpServletResponse response, ModelMap model,
 			@RequestBody SysUser managerUser) {
 

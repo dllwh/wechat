@@ -2,7 +2,6 @@ package com.cdeledu.controller.system.menu;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
@@ -16,7 +15,6 @@ import com.cdeledu.controller.BaseController;
  */
 @Controller
 @RequestMapping("/menuView")
-@SessionAttributes("managerUser")
 public class MenuViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
@@ -27,14 +25,14 @@ public class MenuViewController extends BaseController {
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	@RequestMapping(params = "init")
+	@RequestMapping(value = "init")
 	public ModelAndView init() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysmanMenu/menuInit");
 		return mv;
 	}
 
-	@RequestMapping(params = "menuList")
+	@RequestMapping(value = "menuList")
 	public ModelAndView menuList() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysmanMenu/menuInit");

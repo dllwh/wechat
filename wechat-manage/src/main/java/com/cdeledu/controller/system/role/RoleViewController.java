@@ -27,7 +27,7 @@ public class RoleViewController extends BaseController {
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	@RequestMapping(params = "init")
+	@RequestMapping(value = "init")
 	public ModelAndView role() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysRole/roleInit");
@@ -42,7 +42,7 @@ public class RoleViewController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(params = "getList")
+	@RequestMapping(value = "getList")
 	@ResponseBody
 	public void getList(SysRole role, HttpServletRequest request) {
 

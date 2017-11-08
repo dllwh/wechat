@@ -46,7 +46,7 @@ public class SysUserOperateController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(params = "singUp")
+	@RequestMapping(value = "singUp")
 	public AjaxJson singUp(SysUser managerUser, HttpServletRequest request) {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "用户: " + managerUser.getUserName();
@@ -72,7 +72,7 @@ public class SysUserOperateController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(params = "saveRoleUser")
+	@RequestMapping(value = "saveRoleUser")
 	public AjaxJson saveRoleUser(SysUser managerUser, HttpServletRequest request,
 			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
 		AjaxJson resultMsg = new AjaxJson();
@@ -113,7 +113,7 @@ public class SysUserOperateController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(params = "updateUser")
+	@RequestMapping(value = "updateUser")
 	public AjaxJson updateUser(SysUser managerUser, HttpServletRequest request) {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "用户: " + managerUser.getUserName();
@@ -139,7 +139,7 @@ public class SysUserOperateController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(params = "deleteUser")
+	@RequestMapping(value = "deleteUser")
 	public AjaxJson delUser(@RequestParam(value = "id", required = true) Integer id) {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "删除用户ID: " + id + " 的用户";
@@ -164,7 +164,7 @@ public class SysUserOperateController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(params = "bathDelUser")
+	@RequestMapping(value = "bathDelUser")
 	public AjaxJson BathDelUser(@RequestParam(value = "delIds", required = true) String delIds) {
 		AjaxJson reslutMsg = new AjaxJson();
 		if (StringUtils.isNotBlank(delIds)) {

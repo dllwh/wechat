@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.GlobalConstants;
@@ -25,8 +24,7 @@ import com.cdeledu.service.sys.SystemService;
  * @since: JDK 1.7
  */
 @Controller
-@RequestMapping("/MenuOperate")
-@SessionAttributes("managerUser")
+@RequestMapping("/menuOperate")
 public class MenuOperateController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
@@ -42,7 +40,7 @@ public class MenuOperateController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(params = "createMenu")
+	@RequestMapping(value = "createMenu")
 	@ResponseBody
 	public AjaxJson createMenu(HttpServletRequest request, HttpServletResponse response,
 			SysMenu menu) {
@@ -57,7 +55,7 @@ public class MenuOperateController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(params = "saveMenu")
+	@RequestMapping(value = "saveMenu")
 	@ResponseBody
 	public AjaxJson saveMenu(HttpServletRequest request, HttpServletResponse response, Menu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -71,7 +69,7 @@ public class MenuOperateController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(params = "del")
+	@RequestMapping(value = "del")
 	@ResponseBody
 	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response, SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
