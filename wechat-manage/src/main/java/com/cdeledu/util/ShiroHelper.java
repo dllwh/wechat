@@ -2,11 +2,14 @@ package com.cdeledu.util;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 
 import com.cdeledu.common.base.AjaxJson;
@@ -30,24 +33,26 @@ public class ShiroHelper {
 		try {
 			subject.login(token);
 		} catch (UnknownAccountException uae) {
-			uae.printStackTrace();
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,未知账户";
 			resultMsg = UserReturnCode.user_not_exist.getMessage();
 		} catch (IncorrectCredentialsException ice) {
-			ice.printStackTrace();
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,错误的凭证";
 			resultMsg = UserReturnCode.wrong_password.getMessage();
 		} catch (LockedAccountException lae) {
-			lae.printStackTrace();
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,账户已锁定";
-			resultMsg = UserReturnCode.user_suspend.getMessage();
+			resultMsg = UserReturnCode.user_locked.getMessage();
+		} catch (DisabledAccountException dae) {
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,帐号已被禁用";
+		} catch (ExpiredCredentialsException ece) {
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,帐号已过期";
+			resultMsg = UserReturnCode.user_overdue.getMessage();
 		} catch (ExcessiveAttemptsException eae) {
-			eae.printStackTrace();
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,用户名或密码错误次数过多";
-			resultMsg = UserReturnCode.account_lock.getMessage();
+			resultMsg = UserReturnCode.Logon_fail_account_lock.getMessage();
+		} catch (UnauthorizedException e) {
+			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,您没有得到相应的授权！";
+			resultMsg = UserReturnCode.Unauthorized.getMessage();
 		} catch (AuthenticationException ae) {
-			ae.printStackTrace();
-			// 通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过," + ae.getMessage();
 			resultMsg = ae.getMessage();
 		}
@@ -124,7 +129,7 @@ public class ShiroHelper {
 			return "";
 		}
 	}
-	
+
 	/**
 	 * 判断是否登录
 	 * 

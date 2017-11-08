@@ -13,7 +13,8 @@ import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
-import com.google.common.collect.Lists;
+import com.cdeledu.service.sys.ManagerUserService;
+import com.cdeledu.service.sys.SysMenuService;
 
 /**
  * @类描述: 上下文工具类:Web常用工具集，用于获取当前登录用户，请求信息等
@@ -25,8 +26,8 @@ import com.google.common.collect.Lists;
 public class WebUtilHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static final ResourceBundle sysConfig = ResourceBundle.getBundle("properties/sysConfig");
-	// private static ManagerUserServiceImpl userService = SpringContextUtil.getBean(ManagerUserServiceImpl.class.getName());
-
+	private static ManagerUserService userService = SpringContextUtil.getBean("managerUserService");
+	private static SysMenuService sysMenuService = SpringContextUtil.getBean("sysMenuService");
 	/** ----------------------------------------------------- Fields end */
 
 	/**
@@ -95,7 +96,12 @@ public class WebUtilHelper {
 	 * 获取当前用户角色列表
 	 */
 	public static List<SysUserRole> getRoleList() {
-		List<SysUserRole> roleList = Lists.newArrayList();
+		List<SysUserRole> roleList =null;
+		try {
+			roleList = userService.getUserRole(getCurrenLoginUser());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return roleList;
 	}
 
@@ -103,10 +109,25 @@ public class WebUtilHelper {
 	 * 获取当前用户授权菜单
 	 */
 	public static List<SysMenu> getMenuList() {
-		List<SysMenu> menuList = Lists.newArrayList();
+		List<SysMenu> menuList = null;
+		try {
+			menuList = sysMenuService.getUserMenu(getCurrenLoginUser());
+		} catch (Exception e) {
+			
+		}
 		return menuList;
 	}
 
+	/**
+	 * @方法描述: 获取菜单名称路径（如：用户中心-用户管理-编辑）
+	 * @param requestUri
+	 * @param permission
+	 * @return
+	 */
+	public static String getMenuNamePath(String requestUri, String permission){
+		String menuNamePath = "";
+		return menuNamePath;
+	}
 	/**
 	 * @方法描述:
 	 * 

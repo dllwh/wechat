@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationContextAware;
  *
  * Today the best performance as tomorrow newest starter!
  *
- * @类描述: 静态获取Bean
+ * @类描述: 以静态变量保存Spring ApplicationContext, 可在任何代码任何地方任何时候取出ApplicaitonContext
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年10月31日 下午4:47:30
  * @版本: V1.0
@@ -31,6 +31,10 @@ public class SpringContextUtil implements ApplicationContextAware, DisposableBea
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		if (SpringContextUtil.applicationContext != null) {
+			logger.warn("SpringContextHolder中的ApplicationContext被覆盖, 原有ApplicationContext为:"
+					+ SpringContextUtil.applicationContext);
+		}
 		SpringContextUtil.applicationContext = applicationContext;
 	}
 
@@ -50,6 +54,7 @@ public class SpringContextUtil implements ApplicationContextAware, DisposableBea
 		if (logger.isDebugEnabled()) {
 			logger.debug("清除SpringContextUtil中的ApplicationContext:" + applicationContext);
 		}
+		applicationContext = null;
 	}
 
 	/**
@@ -60,11 +65,8 @@ public class SpringContextUtil implements ApplicationContextAware, DisposableBea
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getBean(String name) throws BeansException {
-		try {
-			return (T) applicationContext.getBean(name);
-		} catch (Exception e) {
-			throw new RuntimeException("获取的Bean不存在！");
-		}
+		assertContextInjected();
+		return (T) applicationContext.getBean(name);
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class SpringContextUtil implements ApplicationContextAware, DisposableBea
 	 */
 	@Override
 	public void destroy() throws Exception {
-		SpringContextUtil.clearHolder();
+		// SpringContextUtil.clearHolder();
 	}
 
 	/**
