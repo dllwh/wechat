@@ -7,9 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
@@ -148,50 +146,5 @@ public class LoginController extends BaseController {
 		}
 		// mv.setViewName(FilterHelper.LOGIN_SHORT);
 		return FilterHelper.LOGIN_SHORT;
-	}
-
-	/**
-	 * @方法:菜单跳转
-	 * @创建人:独泪了无痕
-	 * @return
-	 */
-	@RequestMapping(params = "left")
-	public ModelAndView left() {
-		return new ModelAndView("main/left");
-	}
-
-	/**
-	 * @方法:首页跳转
-	 * @创建人:独泪了无痕
-	 * @return
-	 */
-	@RequestMapping(params = "home")
-	public ModelAndView home() {
-		return new ModelAndView("main/home");
-	}
-
-	/**
-	 * @方法:首页跳转
-	 * @创建人:独泪了无痕
-	 * @return
-	 */
-	@RequestMapping(params = "maintabs")
-	public ModelAndView maintabs() {
-		return new ModelAndView("main/mainTabs");
-	}
-
-	/**
-	 * @方法: 菜单权限控制:无权限页面提示跳转
-	 * @创建人:独泪了无痕
-	 * @return
-	 */
-	@RequestMapping(params = "noAuth")
-	@ResponseBody
-	public ModelAndView noAuth(
-			@RequestParam(value = "requestPath", required = false) String requestPath) {
-		AjaxJson reslutMsg = new AjaxJson();
-		reslutMsg.setMsg("您没有【" + requestPath + "】权限，请联系管理员给您赋予相应权限！");
-		reslutMsg.setSuccess(false);
-		return new ModelAndView("common/no/noAuth");
 	}
 }
