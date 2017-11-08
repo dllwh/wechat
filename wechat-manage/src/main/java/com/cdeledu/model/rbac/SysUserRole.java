@@ -61,4 +61,11 @@ public class SysUserRole extends BaseEntity<SysUserRole> {
 	public void setRoleCode(String roleCode) {
 		this.roleCode = roleCode;
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "\n SysUserRole [userId=" + userId + ", userName=" + userName
+				+ ", roleId=" + roleId + ", roleName=" + roleName + ", roleCode=" + roleCode + "]";
+	}
+
 }

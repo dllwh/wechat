@@ -1,11 +1,8 @@
 package com.cdeledu.model.rbac;
 
-import java.util.List;
-
 import org.springmodules.validation.bean.conf.loader.annotation.handler.NotBlank;
 
 import com.cdeledu.common.base.DataEntity;
-import com.google.common.collect.Lists;
 
 /**
  * 
@@ -47,10 +44,6 @@ public class SysUser extends DataEntity<SysUser> {
 	private Integer isLocked;
 	/** 是否允许登陆;1:允许,默认值;0:不允许 */
 	private Integer loginFlag;
-	/** 根据角色查询用户条件 */
-	private SysRole role;
-	/** 拥有角色列表 */
-	private List<SysRole> roleList = Lists.newArrayList();
 
 	public String getUserName() {
 		return userName;
@@ -164,22 +157,6 @@ public class SysUser extends DataEntity<SysUser> {
 		this.loginFlag = loginFlag;
 	}
 
-	public SysRole getRole() {
-		return role;
-	}
-
-	public void setRole(SysRole role) {
-		this.role = role;
-	}
-
-	public List<SysRole> getRoleList() {
-		return roleList;
-	}
-
-	public void setRoleList(List<SysRole> roleList) {
-		this.roleList = roleList;
-	}
-
 	@Override
 	public String toString() {
 		return super.toString() + "\n SysUser [userName=" + userName + ", password=" + password
@@ -187,7 +164,7 @@ public class SysUser extends DataEntity<SysUser> {
 				+ ", email=" + email + ", emailstatus=" + emailstatus + ", userSex=" + userSex
 				+ ", mobile=" + mobile + ", telephone=" + telephone + ", signature=" + signature
 				+ ", imageCaptcha=" + imageCaptcha + ", isLocked=" + isLocked + ", loginFlag="
-				+ loginFlag + ", role=" + role + ", roleList=" + roleList + "]";
+				+ loginFlag + "]";
 	}
 
 }
