@@ -45,6 +45,31 @@
 		<param-name>log4jRefreshInterval</param-name>
 		<param-value>6000</param-value>
 	</context-param>
+	
+	<!-- ====================================================================== 
+		加载Spring容器配置:监听器配置 -->
+
+	<listener>
+		<description>log4j监听器</description>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<listener>
+		<description>Introspector缓存清除监听器:防止spring内存溢出监听器</description>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	<listener>
+		<description>request监听器</description>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<listener>
+		<description> Spring监听器</description>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- 压入项目路径 -->
+	<listener>
+		<listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+	</listener>  
+
 
 	<!-- ====================================================================== 
 		设置Spring容器加载所有的配置文件的路径,否则Spring会默认从WEB-INF下寻找配置文件 -->
@@ -54,6 +79,27 @@
 			classpath:systemConfig/spring-applicationContext.xml
 		</param-value>
 	</context-param>
+
+		<!-- ====================================================================== 
+		shiro配置 -->
+	<!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
+	<!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
+	<!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
+	<!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>*.shtml</url-pattern>
+	</filter-mapping>
 
 	<!-- ====================================================================== 
 		配置SpringMVC核心控制器 -->
@@ -76,43 +122,6 @@
 		<servlet-name>springDispatcherServlet</servlet-name>
 		<url-pattern>*.shtml</url-pattern>
 	</servlet-mapping>
-
-	<!-- ====================================================================== 
-		加载Spring容器配置:监听器配置 -->
-
-	<listener>
-		<description>log4j监听器</description>
-		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener>
-	<listener>
-		<description>Introspector缓存清除监听器:防止spring内存溢出监听器</description>
-		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
-	</listener>
-	<listener>
-		<description>request监听器</description>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
-
-	<!-- ====================================================================== 
-		shiro配置 -->
-	<!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
-	<!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
-	<!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
-	<!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
-	<filter>
-		<filter-name>shiroFilter</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-		<init-param>
-			<!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->
-			<param-name>targetFilterLifecycle</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>shiroFilter</filter-name>
-		<url-pattern>*.shtml</url-pattern>
-	</filter-mapping>
 
 	<!-- ====================================================================== 
 		过滤器配置 -->
@@ -144,7 +153,7 @@
 		<init-param>
 			<description>经常需要排除一些不必要的url</description>
 			<param-name>exclusions</param-name>
-			<param-value>/css/*,/context/*,/plug-in/*,*.js,*.css,*/druid*,/attached/*,*.jsp</param-value>
+			<param-value>/css/*,/context/*,/plug-in/*,*.js,*.css,*/druid/*,/attached/*,*.jsp</param-value>
 		</init-param>
 		<!-- 缺省sessionStatMaxCount是1000个。你可以按需要进行配置 -->
 		<init-param>
@@ -182,22 +191,23 @@
 
 	<!-- 错误跳转页面 -->
 	<error-page>
-		<!-- 路径不正确 -->
+		<error-code>400</error-code>
+		<location>/WEB-INF/webviews/common/errorPage/404.jsp</location>
+	</error-page>
+	<error-page>
 		<error-code>404</error-code>
-		<location>/WEB-INF/webViews/common/errorpage/404.jsp</location>
+		<location>/WEB-INF/webviews/common/errorPage/404.jsp</location>
 	</error-page>
 	<error-page>
-		<!-- 没有访问权限，访问被禁止 -->
 		<error-code>405</error-code>
-		<location>/WEB-INF/webViews/common/errorpage/405.jsp</location>
+		<location>/WEB-INF/webviews/common/errorPage/405.jsp</location>
 	</error-page>
 	<error-page>
-		<!-- 内部错误 -->
 		<error-code>500</error-code>
-		<location>/WEB-INF/webViews/common/errorpage/500.jsp</location>
+		<location>/WEB-INF/webViews/common/errorPage/500.jsp</location>
 	</error-page>
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
-		<location>/WEB-INF/webViews/common/errorpage/500.jsp</location>
+		<location>/WEB-INF/webviews/common/errorPage/500.jsp</location>
 	</error-page>
 </web-app>
