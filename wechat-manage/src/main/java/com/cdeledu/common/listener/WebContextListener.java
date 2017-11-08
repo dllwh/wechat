@@ -1,10 +1,10 @@
 package com.cdeledu.common.listener;
 
-import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.cdeledu.common.constants.GlobalConstants;
@@ -24,13 +24,17 @@ import com.cdeledu.common.constants.GlobalConstants;
  * @since: JDK 1.7
  */
 @WebListener
-public class WebContextListener extends ContextLoaderListener {
+public class WebContextListener extends ContextLoaderListener implements ServletContextListener {
+
 	@Override
-	public WebApplicationContext initWebApplicationContext(ServletContext servletContext) {
-		GlobalConstants.WEB_APP_CONTEXT = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	public void contextInitialized(ServletContextEvent event) {
+		GlobalConstants.WEB_APP_CONTEXT = WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
 		if (!GlobalConstants.printKeyLoadMessage()) {
-			return null;
 		}
-		return super.initWebApplicationContext(servletContext);
+	}
+
+	@Override
+	public void contextDestroyed(ServletContextEvent event) {
+
 	}
 }
