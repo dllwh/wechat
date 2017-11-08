@@ -6,11 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.BaseClass;
+import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.ShiroHelper;
@@ -24,9 +27,10 @@ import com.cdeledu.util.webpage.RequestHelper;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
+public class AuthInterceptor extends BaseClass implements HandlerInterceptor {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
+	private final Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
 	@Autowired
 	private SystemService systemService;
 	private List<String> excludeUrls;
@@ -55,7 +59,7 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 		if (requestPath.indexOf("loginController.shtml") != -1) {
 			return true;
 		}
-		
+
 		Integer userId = ShiroHelper.getCurrentUserId();
 		if (logger.isDebugEnabled()) {
 			logger.info("查询当前登录用户是否具有当前访问地址");
@@ -80,12 +84,12 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 	 */
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
 			Object object, Exception exception) throws Exception {
-
+		log.info("==============执行顺序: 3、afterCompletion================");
 	}
 
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object object,
 			ModelAndView modelAndView) throws Exception {
-
+		log.info("==============执行顺序: 2、postHandle================");
 	}
 
 	/**
@@ -96,6 +100,7 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 		// String requestUri = request.getRequestURI();
 		// String contextPath = request.getContextPath();
 		// String url = requestUri.substring(contextPath.length());
+		log.info("==============执行顺序: 1、preHandle================");
 		// 用户访问的资源地址
 		String requestPath = RequestHelper.getRequestPath(request);// 用户访问的资源地址
 		HttpSession session = WebUtilHelper.getSession();
@@ -111,7 +116,7 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 				if (!hasMenuAuth(request)) {
 					// "您没有【" + requestPath + "】权限，请联系管理员给您赋予相应权限！
 					response.sendRedirect(
-							"loginController.shtml?noAuth&requestPath=" + requestPath);
+							FilterHelper.UNAUTHORIZED + "?requestPath=" + requestPath);
 					return false;
 				}
 				return true;
@@ -120,7 +125,7 @@ public class AuthInterceptor  extends BaseClass implements HandlerInterceptor {
 				// ----------------------------------------------------------------
 			} else {
 				// 没有登录系统，或登录超时 forward("您没有登录或登录超时，请重新登录！", request, response);
-				request.getRequestDispatcher("/webViews/login/timeout.jsp").forward(request,
+				request.getRequestDispatcher("/webviews/login/timeout.jsp").forward(request,
 						response);
 				return false;
 			}
