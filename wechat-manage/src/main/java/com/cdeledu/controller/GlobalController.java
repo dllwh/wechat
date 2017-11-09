@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 
+
 /**
  * @类描述: 全局的控制器
  * @创建者: 皇族灬战狼
@@ -57,8 +58,8 @@ public class GlobalController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "unauthorized")
 	@ResponseBody
+	@RequestMapping(value = "unauthorized")
 	public ModelAndView unauthorized(
 			@RequestParam(value = "requestPath", required = false) String requestPath) {
 		ModelAndView view = this.getModelAndView();

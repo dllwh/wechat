@@ -1,8 +1,6 @@
 package com.cdeledu.common.filter;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
 
 import com.cdeledu.common.base.BaseClass;
 
@@ -37,14 +34,6 @@ public class WebOperateFilter extends BaseClass implements Filter {
 			throws IOException, ServletException {
 		logger.debug("Access Auth Interceptor - 进入过滤器");
 		try {
-			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			// String operaterUrl = httpRequest.getRequestURI();
-
-			StringBuffer params = new StringBuffer();
-			Map<String, String[]> parameterMap = httpRequest.getParameterMap();
-			for (Entry<String, String[]> parameter : parameterMap.entrySet()) {
-				params.append(parameter.getKey() + "=" + parameter.getValue()[0].toString() + "&");
-			}
 
 			// BasicDBObject dbb = new BasicDBObject();
 			// dbb.put("url", operaterUrl);
