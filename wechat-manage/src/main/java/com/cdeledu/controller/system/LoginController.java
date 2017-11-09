@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.common.constants.UserReturnCode;
+import com.cdeledu.common.constants.SystemConstant.SyslogType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.system.SysLoginLog;
@@ -56,7 +56,7 @@ public class LoginController extends BaseController {
 
 		if (StringUtils.isEmpty(imageCaptcha)
 				|| !imageCaptcha.equalsIgnoreCase(user.getImageCaptcha())) {
-			logMsg = UserReturnCode.register_code_error.getMessage();
+			logMsg = "验证码错误，请重新输入";
 			suc = false;
 		} else {
 			try {
@@ -64,18 +64,18 @@ public class LoginController extends BaseController {
 				AjaxJson loginResult = ShiroHelper.login(user.getUserName(), password);
 				String userCode = user.getUserName();
 				String logContent = String.valueOf(loginResult.getObj());
-				int loginStatus = 0,logLeavel = 0,OpType =0;
-				String ipAdd="",browser = "";
+				int loginStatus = 0,logLeavel = 0;
+				String ipAdd="",browser = "",OpType ="";
 				if(loginResult.isSuccess()){
 					loginStatus = 1;
 					logLeavel = GlobalConstants.Log_Leavel_INFO;
-					OpType = GlobalConstants.Log_Type_LOGIN;
+					OpType = SyslogType.Log_Type_LOGIN.getValue();
 					session.removeAttribute(GlobalConstants.IMAGECAPTCHA);
 				} else {
 					
 					loginStatus = 0;
-					logLeavel = GlobalConstants.Log_Leavel_WARRING;
-					OpType = GlobalConstants.Log_Type_LOGIN;
+				logLeavel = GlobalConstants.Log_Leavel_WARRING;
+					OpType = SyslogType.Log_Type_LOGIN.getValue();
 					
 					logMsg = loginResult.getMsg();
 					suc = false;
@@ -95,7 +95,7 @@ public class LoginController extends BaseController {
 				}
 				
 			} catch (Exception e) {
-				logMsg = UserReturnCode.wrong_password.getMessage();
+				logMsg = "用户名或密码错误,请重新登录!";
 				suc = false;
 			}
 		}
