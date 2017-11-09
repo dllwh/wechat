@@ -20,7 +20,7 @@ public interface BaseService<T> {
 	/**
 	 * @方法描述: 批量插入
 	 */
-	public Integer batchInsert(List<T> parameter) throws Exception;
+	Integer batchInsert(List<T> parameter) throws Exception;
 
 	/**
 	 * 根据实体类中字段不为null的条件进行删除,条件全部使用=号and条件
@@ -28,9 +28,9 @@ public interface BaseService<T> {
 	Integer delete(Object record) throws Exception;
 
 	/**
-	 * @方法描述: 批量更新
+	 * @方法描述: 批量删除
 	 */
-	public Integer batchUpdate(List<T> parameter) throws Exception;
+	Integer batchDelete(List<T> parameter) throws Exception;
 
 	/**
 	 * 根据主键进行更新,这里最多只会更新一条数据 <br/>
@@ -39,14 +39,14 @@ public interface BaseService<T> {
 	Integer update(T record) throws Exception;
 
 	/**
-	 * @方法描述: 批量删除
+	 * @方法描述: 批量更新
 	 */
-	public Integer batchDelete(List<T> parameter) throws Exception;
+	Integer batchUpdate(List<T> parameter) throws Exception;
 
 	/**
 	 * 根据实体类不为null的字段进行查询,条件全部使用=号and条件
 	 */
-	List<T> findForJdbc(T record) throws Exception;
+	List<T> findForJdbcParam(T record) throws Exception;
 
 	/**
 	 * 根据实体类不为null的字段查询总数,条件全部使用=号and条件
