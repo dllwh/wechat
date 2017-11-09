@@ -13,7 +13,6 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 
 import com.cdeledu.common.base.AjaxJson;
-import com.cdeledu.common.constants.UserReturnCode;
 import com.cdeledu.model.rbac.SysUser;
 
 public class ShiroHelper {
@@ -34,27 +33,28 @@ public class ShiroHelper {
 			subject.login(token);
 		} catch (UnknownAccountException uae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,未知账户";
-			resultMsg = UserReturnCode.user_not_exist.getMessage();
+			resultMsg = "该账号不存在!";
 		} catch (IncorrectCredentialsException ice) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,错误的凭证";
-			resultMsg = UserReturnCode.wrong_password.getMessage();
+			resultMsg = "用户名或密码错误,请重新登录!";
 		} catch (LockedAccountException lae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,账户已锁定";
-			resultMsg = UserReturnCode.user_locked.getMessage();
+			resultMsg = "验证未通过,账户已锁定";
 		} catch (DisabledAccountException dae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,帐号已被禁用";
+			resultMsg = ".验证未通过,帐号已被禁用";
 		} catch (ExpiredCredentialsException ece) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,帐号已过期";
-			resultMsg = UserReturnCode.user_overdue.getMessage();
+			resultMsg = "验证未通过,帐号已过期";
 		} catch (ExcessiveAttemptsException eae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,用户名或密码错误次数过多";
-			resultMsg = UserReturnCode.Logon_fail_account_lock.getMessage();
+			resultMsg = "验证未通过,用户名或密码错误次数过多";
 		} catch (UnauthorizedException e) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,您没有得到相应的授权！";
-			resultMsg = UserReturnCode.Unauthorized.getMessage();
+			resultMsg = "验证未通过,您没有得到相应的授权！";
 		} catch (AuthenticationException ae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过," + ae.getMessage();
-			resultMsg = ae.getMessage();
+			resultMsg = "进行登录验证..验证未通过";
 		}
 
 		if (subject.isAuthenticated()) {
@@ -147,5 +147,25 @@ public class ShiroHelper {
 		if (subject.isAuthenticated()) {
 			subject.logout();
 		}
+	}
+	
+	/**
+	 * @方法描述: 是否拥有该角色
+	 * @param roleCode
+	 * @return
+	 */
+	public static boolean hasRole(String roleCode){
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.hasRole(roleCode);
+	} 
+	
+	/**
+	 * 是否拥有该权限
+	 * @param permission  权限标识
+	 * @return
+	 */
+	public boolean hasPermission(String permission) {
+		Subject subject = SecurityUtils.getSubject();
+		return subject != null && subject.isPermitted(permission);
 	}
 }
