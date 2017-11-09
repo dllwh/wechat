@@ -87,16 +87,34 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	/**
-	 * @方法描述: 根据用户ID查询权限（permission）
+	 * @方法描述: 根据用户ID查询菜单权限（permission）
 	 * @param sysUser
 	 * @return
 	 */
-	public List<String> getPermissionByUserId(SysUser sysUser) throws Exception {
-		return  (List<String>)baseDao.findListForJdbcParam(prefix + "getPermissionByUserId", sysUser);
+	public List<String> getMenuPermsByUserId(SysUser sysUser) throws Exception {
+		return (List<String>) baseDao.findListForJdbcParam(prefix + "getPermissionByUserId",
+				sysUser);
 	}
 
-	
-	/** ----------------------------------------------------- Fields start */
+	/**
+	 * @方法描述: 是否有子菜单
+	 * @return
+	 */
+	public boolean hasChildren(int id) throws Exception {
+		return baseDao.getCountForJdbcParam(prefix + "countMenuChildren", id) > 0 ? true : false;
+	}
+
+	/**
+	 * @方法描述: 根据用户ID查询操作按钮权限
+	 * @return
+	 */
+	public List<String> getButtonPermsByUserId(SysUser sysUser) throws Exception {
+		return null;
+	}
+
+	/**
+	 * ----------------------------------------------------- privateMethod start
+	 */
 	/**
 	 * @方法描述: 获取所有菜单列表
 	 * @param menuIdList
@@ -164,5 +182,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 		}
 		return subMenuList;
 	}
-	/** ----------------------------------------------------- Fields end */
+	/**
+	 * ----------------------------------------------------- privateMethod end
+	 */
 }
