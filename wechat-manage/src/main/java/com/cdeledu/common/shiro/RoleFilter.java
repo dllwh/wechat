@@ -42,13 +42,11 @@ public class RoleFilter extends AccessControlFilter {
 		String[] arra = (String[]) mappedValue;
 		Subject subject = getSubject(request, response);
 
-			for (String role : arra) {
-				System.out.println(role);
-				if (subject.hasRole(role)) {
-					System.out.println("我才有希望了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-					return Boolean.TRUE;
-				}
+		for (String role : arra) {
+			if (subject.hasRole(role)) {
+				return Boolean.TRUE;
 			}
+		}
 		return Boolean.FALSE;
 	}
 
