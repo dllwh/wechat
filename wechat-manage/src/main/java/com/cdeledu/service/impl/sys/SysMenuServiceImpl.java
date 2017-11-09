@@ -54,7 +54,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	@Override
-	public List<SysMenu> findForJdbc(SysMenu record) throws Exception {
+	public List<SysMenu> findForJdbcParam(SysMenu record) throws Exception {
 		return (List<SysMenu>) baseDao.findListForJdbcParam(prefix + "findForJdbc", record);
 	}
 

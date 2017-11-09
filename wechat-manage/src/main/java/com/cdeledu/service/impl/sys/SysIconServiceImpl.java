@@ -47,7 +47,7 @@ public class SysIconServiceImpl implements SysIconService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<SysIcon> findForJdbc(SysIcon record) throws Exception {
+	public List<SysIcon> findForJdbcParam(SysIcon record) throws Exception {
 		return (List<SysIcon>) baseDao.findListForJdbcParam(prefix + "findForJdbc", record);
 	}
 

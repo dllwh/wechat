@@ -82,7 +82,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	 */
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-	public List<SysUser> findForJdbc(SysUser record) throws Exception {
+	public List<SysUser> findForJdbcParam(SysUser record) throws Exception {
 		return ( List<SysUser>)baseDao.findListForJdbcParam(prefix+"findForJdbc", record);
 	}
 

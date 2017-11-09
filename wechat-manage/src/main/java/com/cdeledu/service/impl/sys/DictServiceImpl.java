@@ -53,7 +53,7 @@ public class DictServiceImpl implements DictService {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-	public List<SysDict> findForJdbc(SysDict record) throws Exception {
+	public List<SysDict> findForJdbcParam(SysDict record) throws Exception {
 		return (List<SysDict>) baseDao.findListForJdbcParam(prefix + "findOneForJdbc", record);
 	}
 
