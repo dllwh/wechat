@@ -30,14 +30,6 @@ public class GlobalConstants {
 	public static final Integer Log_Leavel_INFO = 1;
 	public static final Integer Log_Leavel_WARRING = 2;
 	public static final Integer Log_Leavel_ERROR = 3;
-	/** 日志类型 */
-	public static final Integer Log_Type_LOGIN = 1; // 登陆
-	public static final Integer Log_Type_EXIT = 2; // 退出
-	public static final Integer Log_Type_INSERT = 3; // 插入
-	public static final Integer Log_Type_DEL = 4; // 删除
-	public static final Integer Log_Type_UPDATE = 5; // 更新
-	public static final Integer Log_Type_UPLOAD = 6; // 上传
-	public static final Integer Log_Type_OTHER = 7; // 其他
 
 	/** 该值会在web容器启动时由WebContextListener初始化 */
 	public static ApplicationContext WEB_APP_CONTEXT = null;

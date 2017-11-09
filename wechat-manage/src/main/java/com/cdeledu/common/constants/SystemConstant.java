@@ -126,6 +126,38 @@ public class SystemConstant {
 		public int getValue() {
 			return value;
 		}
+	}
+	
+	/**
+	 * 
+	 * 把今天最好的表现当作明天最新的起点．．～
+	 *
+	 * Today the best performance as tomorrow newest starter!
+	 *
+	 * @类描述: 日志类型
+	 * @创建者: 皇族灬战狼
+	 * @创建时间: 2017年11月9日 下午5:33:11
+	 * @版本: V1.0
+	 * @since: JDK 1.7
+	 */
+	public enum SyslogType {
+		Log_Type_LOGIN("login"),
+		Log_Type_EXIT("exit"),
+		Log_Type_INSERT("insert"),
+		Log_Type_DEL("delete"),
+		Log_Type_UPDATE("update"),
+		Log_Type_UPLOAD("upload"),
+		LOG_TYPE_SELECT("select"),
+		LOG_TYPE_DOWNLOAD("download"),
+		Log_Type_OTHER("other");
+		private String value;
 
+		private SyslogType(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
 	}
 }
