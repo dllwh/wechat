@@ -42,7 +42,7 @@
 <body>
 	<div class="container">
 		<div>
-			<img src="${_currConText }/static/image/3.22.gif">
+			<img src="${_currConText }/static/image/noAuth.gif">
 		</div>
 		<div class="tip">
 			<div>
