@@ -8,9 +8,8 @@ import com.cdeledu.common.base.BaseEntity;
  * @类描述: 登录日志表
  * @创建者: 皇族灬战狼
  * @创建时间: 2016年4月15日 上午11:55:37
- * @版本: V1.2
+ * @版本: V1.3
  * @since: JDK 1.7
- * @see <a href=""></a>
  */
 public class SysLoginLog extends BaseEntity<SysLoginLog> {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +26,7 @@ public class SysLoginLog extends BaseEntity<SysLoginLog> {
 	// 日志级别
 	private Integer logLeavel;
 	// 日志类型
-	private Integer opType;
+	private String opType;
 	// 日志内容
 	private String logContent;
 
@@ -79,11 +78,11 @@ public class SysLoginLog extends BaseEntity<SysLoginLog> {
 		this.logLeavel = logLeavel;
 	}
 
-	public Integer getOpType() {
+	public String getOpType() {
 		return opType;
 	}
 
-	public void setOpType(Integer opType) {
+	public void setOpType(String opType) {
 		this.opType = opType;
 	}
 
