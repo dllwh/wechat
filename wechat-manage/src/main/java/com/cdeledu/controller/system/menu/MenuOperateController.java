@@ -5,16 +5,15 @@ import java.awt.Menu;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cdeledu.common.annotation.SysLog;
 import com.cdeledu.common.base.AjaxJson;
-import com.cdeledu.common.constants.GlobalConstants;
+import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysMenu;
-import com.cdeledu.service.sys.SystemService;
 
 /**
  * @类描述: 菜单操作控制类
@@ -27,10 +26,8 @@ import com.cdeledu.service.sys.SystemService;
 @RequestMapping("/menuOperate")
 public class MenuOperateController extends BaseController {
 	private static final long serialVersionUID = 1L;
+
 	/** ----------------------------------------------------- Fields start */
-	@Autowired
-	private SystemService systemService;
-	private String message = null;
 
 	/** ----------------------------------------------------- Fields end */
 	/**
@@ -71,21 +68,16 @@ public class MenuOperateController extends BaseController {
 	 */
 	@RequestMapping(value = "del")
 	@ResponseBody
-	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response, SysMenu menu) {
+	@SysLog(operationType = "del", tableName = "sys_role_menu", value = "删除权限菜单")
+	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response,
+			SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
-		message = "权限: " + menu.getMenuName() + "被删除成功";
 		// 删除权限菜单时先删除权限菜单与角色之间关联表信息
 		Integer roleMenuCount = 0;
 		if (roleMenuCount > 0) {
-			ajaxJson.setMsg("菜单已分配无法删除");
+			ajaxJson.setMsg(MessageConstant.MSG_HAS_CHILD);
 		} else {
-			// 删除
-			// 操作日志
-			try {
-				systemService.addLog(message, GlobalConstants.Log_Type_DEL,
-						GlobalConstants.Log_Leavel_INFO);
-			} catch (Exception e) {
-			}
+			ajaxJson.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		}
 		return ajaxJson;
 	}
