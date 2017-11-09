@@ -97,9 +97,9 @@ public abstract class BaseEntity<T> extends PageEntity<T> {
 
 	@Override
 	public String toString() {
-		return "BaseEntity [id=" + id + ", isVisible=" + isVisible + ", isEnabled=" + isEnabled
-				+ ", allowEdit=" + allowEdit + ", allowDelete=" + allowDelete + ", sequence="
-				+ sequence + ", remark=" + remark + "]";
+		return super.toString() + "\n BaseEntity [id=" + id + ", isVisible=" + isVisible
+				+ ", isEnabled=" + isEnabled + ", allowEdit=" + allowEdit + ", allowDelete="
+				+ allowDelete + ", sequence=" + sequence + ", remark=" + remark + "]";
 	}
 
 }

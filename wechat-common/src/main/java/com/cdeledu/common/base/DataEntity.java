@@ -55,4 +55,12 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
+	@Override
+	public String toString() {
+		return super.toString()+ "\n DataEntity [create=" + create + ", createTime=" + createTime + ", modifier="
+				+ modifier + ", updateTime=" + updateTime + "]";
+	}
+	
+	
 }
