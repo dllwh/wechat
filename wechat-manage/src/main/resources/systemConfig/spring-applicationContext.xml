@@ -102,14 +102,5 @@
 			<mvc:mapping path="/**" />
 			<bean class="com.cdeledu.common.interceptors.EncodingInterceptor" />
 		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<!-- 不被拦截范围（路径）；例如：后台登录页面 -->
-			<mvc:exclude-mapping path="loginController.shtml?doLogin"/>
-			<mvc:exclude-mapping path="loginController.shtml?checkuser"/>
-			<mvc:exclude-mapping path="globalController/unauthorized.shtml"/>
-			<mvc:exclude-mapping path="system.shtml?checkBrowser"/>
-			<bean class="com.cdeledu.common.interceptors.AuthInterceptor" />
-		</mvc:interceptor>
 	</mvc:interceptors>
 </beans>
