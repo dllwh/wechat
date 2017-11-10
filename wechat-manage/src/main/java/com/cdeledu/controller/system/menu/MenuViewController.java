@@ -38,13 +38,6 @@ public class MenuViewController extends BaseController {
 		return mv;
 	}
 
-	@RequestMapping(value = "list")
-	public ModelAndView list(ModelMap modelMap) {
-		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/sysmanMenu/menuInit");
-		return mv;
-	}
-
 	
 	/**
 	 * @方法描述: 根据角色ID查询权限
