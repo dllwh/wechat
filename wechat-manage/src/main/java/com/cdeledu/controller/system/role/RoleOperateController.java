@@ -4,14 +4,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.service.sys.RoleService;
 import com.cdeledu.util.ShiroHelper;
 
 /**
@@ -27,8 +30,29 @@ public class RoleOperateController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	private String msg = null;
+	@Autowired
+	RoleService roleService;
 
 	/** ----------------------------------------------------- Fields end */
+
+	/**
+	 * @方法描述: 角色添加
+	 * @param role
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "addRole", method = RequestMethod.POST)
+	public AjaxJson addRole(SysRole role) {
+		AjaxJson resultMsg = new AjaxJson();
+		try {
+			roleService.insert(role);
+			resultMsg.setSuccess(true);
+		} catch (Exception e) {
+			resultMsg.setSuccess(false);
+			resultMsg.setMsg("添加失败，请刷新后再试！");
+		}
+		return resultMsg;
+	}
 
 	/**
 	 * @方法:删除角色权限
@@ -74,15 +98,12 @@ public class RoleOperateController extends BaseController {
 	}
 
 	/**
-	 * @方法:删除角色
-	 * @创建人:独泪了无痕
-	 * @param request
-	 * @param response
+	 * @方法描述: 删除角色，根据ID，但是删除角色的时候，需要查询是否有赋予给用户，如果有用户在使用，那么就不能删除
 	 * @param role
 	 * @return
 	 */
-	@RequestMapping(value = "delRole")
 	@ResponseBody
+	@RequestMapping(value = "delRole")
 	public AjaxJson delRole(SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
 		SysUser managerUser = ShiroHelper.getPrincipal();
@@ -96,30 +117,6 @@ public class RoleOperateController extends BaseController {
 			resultMsg.setSuccess(false);
 			msg = "角色: " + role.getRoleName() + "被【" + managerUser.getId() + "】删除事出现异常,其异常原因是" + e;
 		}
-		resultMsg.setMsg(msg);
-		return resultMsg;
-	}
-
-	/**
-	 * @方法描述: 操作权限
-	 * @return
-	 */
-	@RequestMapping("/authorize/opt")
-	@ResponseBody
-	public AjaxJson operateAuthorize() {
-		AjaxJson resultMsg = new AjaxJson();
-		resultMsg.setMsg(msg);
-		return resultMsg;
-	}
-
-	/**
-	 * @方法描述: 数据权限
-	 * @return
-	 */
-	@RequestMapping("/authorize/data")
-	@ResponseBody
-	public AjaxJson dataAuthorize() {
-		AjaxJson resultMsg = new AjaxJson();
 		resultMsg.setMsg(msg);
 		return resultMsg;
 	}

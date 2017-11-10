@@ -1,14 +1,20 @@
 package com.cdeledu.controller.system.role;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysRole;
+import com.cdeledu.service.sys.RoleService;
+import com.google.common.collect.Lists;
 
 /**
  * @类描述: 角色数据
@@ -21,14 +27,15 @@ import com.cdeledu.model.rbac.SysRole;
 @RequestMapping("/roleView")
 public class RoleViewController extends BaseController {
 	private static final long serialVersionUID = 1L;
-
+	@Autowired
+	RoleService roleService;
 	/**
 	 * @方法:角色列表页面跳转
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	@RequestMapping(value = "init")
-	public ModelAndView role() {
+	@RequestMapping(value = "index")
+	public ModelAndView index(ModelMap modelMap) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysRole/roleInit");
 		return mv;
@@ -44,7 +51,29 @@ public class RoleViewController extends BaseController {
 	 */
 	@RequestMapping(value = "getList")
 	@ResponseBody
-	public void getList(SysRole role, HttpServletRequest request) {
+	public void getList(SysRole role,ModelMap modelMap) {
 
+	}
+
+	/**
+	 * @方法描述: 我的权限页面
+	 * @return
+	 */
+	@RequestMapping(value = "mypermission", method = RequestMethod.GET)
+	public ModelAndView mypermission() {
+		return new ModelAndView("permission/mypermission");
+	}
+
+	/**
+	 * @方法描述: 我的权限 bootstrap tree data
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getPermissionTree", method = RequestMethod.POST)
+	public List<Map<String, Object>> getPermissionTree() {
+		List<Map<String, Object>> resultList = Lists.newArrayList();
+		// 查询我所有的角色 ---> 权限
+		// 把查询出来的roles 转换成bootstarp 的 tree数据
+		return resultList;
 	}
 }
