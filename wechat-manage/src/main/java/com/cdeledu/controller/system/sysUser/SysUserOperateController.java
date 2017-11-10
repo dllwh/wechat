@@ -3,16 +3,14 @@ package com.cdeledu.controller.system.sysUser;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.annotation.SysLog;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysUser;
@@ -48,7 +46,7 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "singUp")
-	public AjaxJson singUp(SysUser managerUser, HttpServletRequest request) {
+	public AjaxJson singUp(SysUser managerUser) {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "用户: " + managerUser.getUserName();
 		try {
@@ -74,7 +72,7 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "saveRoleUser")
-	public AjaxJson saveRoleUser(SysUser managerUser, HttpServletRequest request,
+	public AjaxJson saveRoleUser(SysUser managerUser,
 			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
 		AjaxJson resultMsg = new AjaxJson();
 		SysUser user = new SysUser();
@@ -115,7 +113,7 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "updateUser")
-	public AjaxJson updateUser(SysUser managerUser, HttpServletRequest request) {
+	public AjaxJson updateUser(SysUser managerUser) {
 		AjaxJson resultMsg = new AjaxJson();
 		logMsg = "用户: " + managerUser.getUserName();
 		try {
@@ -194,7 +192,7 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("enable")
-	public AjaxJson updateUserEnable() {
+	public AjaxJson updateUserEnable(int userId) {
 		AjaxJson resultMsg = new AjaxJson();
 		return resultMsg;
 	}
@@ -206,16 +204,82 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("disable")
-	public AjaxJson updateUserDisable() {
+	public AjaxJson updateUserDisable(int userId) {
 		AjaxJson resultMsg = new AjaxJson();
 		return resultMsg;
 	}
 
-	@SysLog(value="重置密码",tableName="sys_user")
+	/**
+	 * 
+	 * @方法描述: 禁止登录
+	 * @param status
+	 *            1:有效，0:禁止登录
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "forbidUserById", method = RequestMethod.POST)
+	public AjaxJson forbidUserById(int userId, boolean status) {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+
+	/**
+	 * @方法描述: 重置密码
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("reset")
-	public AjaxJson updatePswd() {
+	public AjaxJson updatePswd(int userId,String pswd,String newPswd) {
 		AjaxJson resultMsg = new AjaxJson();
+		//根据当前登录的用户帐号 + 老密码，查询。
+		
+		// 管理员不准修改密码
+		return resultMsg;
+	}
+
+	/**
+	 * @方法描述: 操作用户的角色
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "addRoleByUser")
+	public AjaxJson addRoleByUser(int userId, String ids) {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+
+	/**
+	 * @方法描述: 根据用户id清空角色
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "clearRoleByUserIds")
+	public AjaxJson clearRoleByUserIds(String userIds) {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+
+	/**
+	 * @方法描述: 改变Session状态
+	 * @param userIds
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "changeSessionStatus", method = RequestMethod.POST)
+	public AjaxJson changeSessionStatus(Boolean status, String sessionIds) {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+	
+	/**
+	 * @方法描述: 个人资料修改
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("reset")
+	public AjaxJson updateSelf(SysUser sysUser) {
+		AjaxJson resultMsg = new AjaxJson();
+		
 		return resultMsg;
 	}
 }

@@ -1,16 +1,20 @@
 package com.cdeledu.controller.system.sysUser;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
+import com.google.common.collect.Lists;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -36,8 +40,8 @@ public class SysUserViewController extends BaseController {
 	 * @创建时间: 2016年9月27日 下午4:43:12
 	 * @return
 	 */
-	@RequestMapping(value = "sysUserInit")
-	public ModelAndView sysUserInit() {
+	@RequestMapping(value = "index")
+	public ModelAndView index(ModelMap modelMap) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysUser/sysUserInit");
 		return mv;
@@ -49,8 +53,8 @@ public class SysUserViewController extends BaseController {
 	 * @创建时间: 2016年9月27日 下午4:43:12
 	 * @return
 	 */
-	@RequestMapping(value= "adminInfo")
-	public ModelAndView adminInfo() {
+	@RequestMapping(value = "adminInfo")
+	public ModelAndView adminInfo(ModelMap modelMap) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysUser/adminInfo");
 		return mv;
@@ -65,8 +69,51 @@ public class SysUserViewController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "getList")
-	public void getList(HttpServletRequest request, HttpServletResponse response, ModelMap model,
-			@RequestBody SysUser managerUser) {
+	public void getList(ModelMap modelMap, @RequestBody SysUser managerUser) {
 
+	}
+
+	/**
+	 * @方法描述: 在线用户管理
+	 * @return
+	 */
+	@RequestMapping(value = "online")
+	public ModelAndView online(ModelMap modelMap) {
+		ModelAndView mv = this.getModelAndView();
+		return mv;
+	}
+
+	/**
+	 * 在线用户详情
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "onlineDetails/{sessionId}", method = RequestMethod.GET)
+	public ModelAndView onlineDetails(@PathVariable("sessionId") String sessionId) {
+		ModelAndView mv = this.getModelAndView();
+		return mv;
+	}
+
+	/**
+	 * @方法描述: 用户角色权限分配
+	 * @return
+	 */
+	@RequestMapping(value = "allocation")
+	public ModelAndView allocation() {
+		ModelAndView mv = this.getModelAndView();
+		return mv;
+	}
+
+	/**
+	 * 
+	 * 根据用户ID查询权限
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "selectRoleByUserId")
+	public List<SysRole> selectRoleByUserId() {
+		List<SysRole> resultList = Lists.newArrayList();
+		return resultList;
 	}
 }
