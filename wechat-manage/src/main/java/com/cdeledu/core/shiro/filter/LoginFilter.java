@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cdeledu.common.constants.FilterHelper;
+import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
-import com.cdeledu.util.ShiroHelper;
 /**
  * 把今天最好的表现当作明天最新的起点．．～
  *
