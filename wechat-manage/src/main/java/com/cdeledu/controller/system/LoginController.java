@@ -7,7 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
@@ -64,23 +66,23 @@ public class LoginController extends BaseController {
 				AjaxJson loginResult = ShiroHelper.login(user.getUserName(), password);
 				String userCode = user.getUserName();
 				String logContent = String.valueOf(loginResult.getObj());
-				int loginStatus = 0,logLeavel = 0;
-				String ipAdd="",browser = "",OpType ="";
-				if(loginResult.isSuccess()){
+				int loginStatus = 0, logLeavel = 0;
+				String ipAdd = "", browser = "", OpType = "";
+				if (loginResult.isSuccess()) {
 					loginStatus = 1;
 					logLeavel = GlobalConstants.Log_Leavel_INFO;
 					OpType = SyslogType.Log_Type_LOGIN.getValue();
 					session.removeAttribute(GlobalConstants.IMAGECAPTCHA);
 				} else {
-					
+
 					loginStatus = 0;
-				logLeavel = GlobalConstants.Log_Leavel_WARRING;
+					logLeavel = GlobalConstants.Log_Leavel_WARRING;
 					OpType = SyslogType.Log_Type_LOGIN.getValue();
-					
+
 					logMsg = loginResult.getMsg();
 					suc = false;
 				}
-				
+
 				try {
 					loginLog.setUserCode(userCode);
 					loginLog.setLogContent(logContent);
@@ -93,7 +95,6 @@ public class LoginController extends BaseController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
 			} catch (Exception e) {
 				logMsg = "用户名或密码错误,请重新登录!";
 				suc = false;
@@ -123,6 +124,18 @@ public class LoginController extends BaseController {
 		} catch (Exception e) {
 			return FilterHelper.LOGIN_SHORT;
 		}
+	}
+
+	/**
+	 * 注册跳转
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "register", method = RequestMethod.GET)
+	public ModelAndView register() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("login/register");
+		return mv;
 	}
 
 	/**
