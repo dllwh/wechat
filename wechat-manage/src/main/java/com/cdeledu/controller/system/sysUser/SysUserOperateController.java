@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cdeledu.annotation.SysLog;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysUser;
@@ -184,5 +185,37 @@ public class SysUserOperateController extends BaseController {
 
 		}
 		return reslutMsg;
+	}
+
+	/**
+	 * 
+	 * @方法描述: 启用账户
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("enable")
+	public AjaxJson updateUserEnable() {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+
+	/**
+	 * 
+	 * @方法描述: 禁用账户
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("disable")
+	public AjaxJson updateUserDisable() {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+
+	@SysLog(value="重置密码",tableName="sys_user")
+	@ResponseBody
+	@RequestMapping("reset")
+	public AjaxJson updatePswd() {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
 	}
 }
