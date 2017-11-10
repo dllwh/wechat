@@ -1,7 +1,9 @@
 package com.cdeledu.controller.system.sysConfig;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
 
@@ -24,6 +26,18 @@ public class SysAreaViewController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields end */
 
+	/**
+	 * @方法:菜单权限列表页面跳转
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@RequestMapping(value = "index")
+	public ModelAndView index(ModelMap map) {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/area/index");
+		return mv;
+	}
+	
 	/** ----------------------------------------------- [私有方法] */
 	/** ----------------------------------------------- [私有方法] */
 
