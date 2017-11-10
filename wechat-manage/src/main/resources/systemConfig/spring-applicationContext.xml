@@ -21,12 +21,11 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
+
 	<!-- 配置注解扫描 -->
 	<context:annotation-config />
 	<!-- 激活自动代理功能 -->
 	<aop:aspectj-autoproxy />
-	<!-- 拦截器 -->
-	<context:component-scan base-package="com.cdeledu.interceptors" />
 	<!-- 数据库配置 -->
 	<import resource="applicationContext-dataSource.xml" />
 	<!-- redis配置 -->
@@ -93,14 +92,4 @@
 
 	<!-- 异常处理类 -->
 	<bean id="handlerExceptionResolver" class="com.cdeledu.common.exception.SpringExceptionHandler" />
-
-	<!-- ====================================================================== 
-		配置自定义Spring 拦截器 -->
-	<!-- 菜单权限:设置拦截的路径,例如：后台目录:如果不配置或/*,将拦截所有的Controller -->
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="com.cdeledu.common.interceptors.EncodingInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
 </beans>
