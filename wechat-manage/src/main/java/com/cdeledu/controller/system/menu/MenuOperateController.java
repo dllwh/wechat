@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.annotation.SysLog;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.controller.BaseController;
@@ -68,7 +67,6 @@ public class MenuOperateController extends BaseController {
 	 */
 	@RequestMapping(value = "del")
 	@ResponseBody
-	@SysLog(operationType = "del", tableName = "sys_role_menu", value = "删除权限菜单")
 	public AjaxJson delMenu(HttpServletRequest request, HttpServletResponse response,
 			SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
