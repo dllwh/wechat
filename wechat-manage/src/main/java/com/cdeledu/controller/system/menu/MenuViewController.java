@@ -1,10 +1,16 @@
 package com.cdeledu.controller.system.menu;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.rbac.SysMenu;
+import com.google.common.collect.Lists;
 
 /**
  * @类描述: 菜单数据控制类
@@ -25,17 +31,31 @@ public class MenuViewController extends BaseController {
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	@RequestMapping(value = "init")
-	public ModelAndView init() {
+	@RequestMapping(value = "index")
+	public ModelAndView index(ModelMap map) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysmanMenu/menuInit");
 		return mv;
 	}
 
-	@RequestMapping(value = "menuList")
-	public ModelAndView menuList() {
+	@RequestMapping(value = "list")
+	public ModelAndView list(ModelMap modelMap) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysmanMenu/menuInit");
 		return mv;
 	}
+
+	
+	/**
+	 * @方法描述: 根据角色ID查询权限
+	 * @param roleId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="selectPermissionById")
+	public List<SysMenu> selectPermissionById(int roleId){
+		List<SysMenu> sysMenuList = Lists.newArrayList();
+		return sysMenuList;
+	}
+
 }
