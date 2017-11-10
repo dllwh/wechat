@@ -16,10 +16,10 @@ import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.common.constants.SystemConstant.SyslogType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.sys.SystemService;
-import com.cdeledu.util.ShiroHelper;
 import com.cdeledu.util.WebUtilHelper;
 import com.cdeledu.util.security.PasswordUtil;
 

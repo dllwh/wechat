@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.RoleService;
-import com.cdeledu.util.ShiroHelper;
 
 /**
  * @类描述: 角色处理类
