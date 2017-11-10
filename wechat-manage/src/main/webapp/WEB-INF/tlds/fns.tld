@@ -26,7 +26,7 @@
 	<function>
 		<description>获取授权用户信息</description>
 		<name>getPrincipal</name>
-		<function-class>com.cdeledu.util.ShiroHelper</function-class>
+		<function-class>com.cdeledu.core.shiro.token.ShiroHelper</function-class>
 		<function-signature>com.cdeledu.model.rbac.SysUser getPrincipal()</function-signature>
 		<example>${fns:getPrincipal()}</example>
 	</function>
