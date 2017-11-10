@@ -29,10 +29,10 @@ public class DictViewController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(params = "init")
-	public ModelAndView druid(HttpServletRequest request) {
+	@RequestMapping(params = "index")
+	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/dict/dictInit");
+		mv.setViewName("system/dict/index");
 		return mv;
 	}
 }
