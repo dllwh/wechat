@@ -20,19 +20,20 @@
 	<description>Shiro Configuration</description>
 
 	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
-	<bean id="shiroRealm" class="com.cdeledu.common.shiro.ShiroRealm" />
+	<bean id="shiroRealm" class="com.cdeledu.core.shiro.ShiroRealm" />
 
 	<!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session --> 
 		<property name="realm" ref="shiroRealm" />
 	</bean>
 
 	<!-- 登录判断 -->
-	<bean id="login" class="com.cdeledu.common.shiro.LoginFilter"/>
+	<bean id="login" class="com.cdeledu.core.shiro.filter.LoginFilter"/>
 	<!-- 角色判断校验 -->
-	<bean id="role" class="com.cdeledu.common.shiro.RoleFilter"/>
+	<bean id="role" class="com.cdeledu.core.shiro.filter.RoleFilter"/>
 	<!-- 权限校验 -->
-	<bean id="permission" class="com.cdeledu.common.shiro.PermissionFilter"/>
+	<bean id="permission" class="com.cdeledu.core.shiro.filter.PermissionFilter"/>
 	<!-- 判断是否踢出  
 		<bean id="simple" class="com.cdeledu.common.filter.shiro.kickedOutFilter"/>
 	-->
