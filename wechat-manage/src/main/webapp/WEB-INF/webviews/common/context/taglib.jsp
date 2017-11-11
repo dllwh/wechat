@@ -7,9 +7,7 @@
 <%-- <%@ taglib prefix="dict" tagdir="/WEB-INF/tags/dict" %> --%>
 <%-- 自定义标签：登录信息 --%>
 <%@ taglib prefix="login" tagdir="/WEB-INF/tags/login" %>
-<%-- 自定义标签：系统 --%>
-<%@ taglib prefix="shiroHelper" tagdir="/WEB-INF/tags/shiroHelper" %>
 <%-- 自定义标签：常用工具类 --%>
 <%@ taglib  prefix="utilHelper" tagdir="/WEB-INF/tags/utilHelper" %>
-
+<%-- 自定义标签：页面工具类 --%>
 <%@ taglib prefix="fns" uri="/WEB-INF/tlds/fns.tld" %>

@@ -30,6 +30,22 @@
 		<function-signature>com.cdeledu.model.rbac.SysUser getPrincipal()</function-signature>
 		<example>${fns:getPrincipal()}</example>
 	</function>
+	
+	<function>
+		<description>获取授权用户信息</description>
+		<name>getCurrentUserId</name>
+		<function-class>com.cdeledu.core.shiro.token.ShiroHelper</function-class>
+		<function-signature>com.cdeledu.model.rbac.SysUser getCurrentUserId()</function-signature>
+		<example>${fns:getCurrentUserId()}</example>
+	</function>
+	
+	<function>
+		<description>获取授权用户信息</description>
+		<name>getCurrentUserName</name>
+		<function-class>com.cdeledu.core.shiro.token.ShiroHelper</function-class>
+		<function-signature>com.cdeledu.model.rbac.SysUser getCurrentUserName()</function-signature>
+		<example>${fns:getCurrentUserName()}</example>
+	</function>
 
 	<function>
 		<description>获取当前用户角色列表</description>
