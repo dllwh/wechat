@@ -89,8 +89,16 @@
 			enableUpdateByExample(默认true):指定是否生成动态修改语句（只修改对象中不为空的属性）
 			delimitAllColumns:设置是否所有生成的SQL中的列名都使用标识符引起来
 		-->
-		<table tableName="sys_user" enableCountByExample="false" enableUpdateByExample="false" 
-			enableDeleteByExample="false" enableSelectByExample="false">
+		<table tableName="sys_menu" 
+			enableInsert="true"
+			enableSelectByPrimaryKey="true"
+			enableSelectByExample="false"
+			enableUpdateByPrimaryKey="true"
+			enableDeleteByPrimaryKey="true"
+			enableDeleteByExample="false" 
+			enableCountByExample="false" 
+			enableUpdateByExample="false" 
+			>
 			<!-- 指定是否只生成domain类,如果设置为true,只生成domain类  -->
 			<property name="modelOnly" value="false"/>
 			<!-- 可以为生成的类会继承这个类 -->
