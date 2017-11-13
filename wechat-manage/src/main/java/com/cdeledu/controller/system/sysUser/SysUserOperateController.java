@@ -276,7 +276,7 @@ public class SysUserOperateController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("reset")
+	@RequestMapping("updateSelf")
 	public AjaxJson updateSelf(SysUser sysUser) {
 		AjaxJson resultMsg = new AjaxJson();
 		
