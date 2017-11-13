@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 
-
 /**
  * @类描述: 全局的控制器
  * @创建者: 皇族灬战狼
@@ -28,6 +27,30 @@ public class GlobalController extends BaseController {
 	/** ----------------------------------------------- [私有方法] */
 	/** ----------------------------------------------- [私有方法] */
 	/**
+	 * @方法描述: 401 请求出错
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("401")
+	public ModelAndView _401(HttpServletRequest request) {
+		ModelAndView view = this.getModelAndView();
+		view.setViewName("common/no/noAuth");
+		return view;
+	}
+
+	/**
+	 * @方法描述: 403 请求出错
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("403")
+	public ModelAndView _403(HttpServletRequest request) {
+		ModelAndView view = this.getModelAndView();
+		view.setViewName("common/errorPage/403");
+		return view;
+	}
+
+	/**
 	 * 404错误
 	 * 
 	 * @param request
@@ -41,8 +64,20 @@ public class GlobalController extends BaseController {
 	}
 
 	/**
-	 * 404错误
+	 * 405错误
 	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("405")
+	public ModelAndView _405(HttpServletRequest request) {
+		ModelAndView view = this.getModelAndView();
+		view.setViewName("common/errorPage/405");
+		return view;
+	}
+
+	/**
+	 * @方法描述: 500
 	 * @param request
 	 * @return
 	 */
@@ -50,6 +85,18 @@ public class GlobalController extends BaseController {
 	public ModelAndView _500(HttpServletRequest request) {
 		ModelAndView view = this.getModelAndView();
 		view.setViewName("common/errorPage/500");
+		return view;
+	}
+
+	/**
+	 * @方法描述: 503
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("503")
+	public ModelAndView _503(HttpServletRequest request) {
+		ModelAndView view = this.getModelAndView();
+		view.setViewName("common/errorPage/503");
 		return view;
 	}
 

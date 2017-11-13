@@ -191,8 +191,12 @@
 
 	<!-- 错误跳转页面 -->
 	<error-page>
-		<error-code>400</error-code>
-		<location>/WEB-INF/webviews/common/errorPage/404.jsp</location>
+		<error-code>401</error-code>
+		<location>/WEB-INF/webviews/common/no/noAuth.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/webviews/common/errorPage/403.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
@@ -205,6 +209,10 @@
 	<error-page>
 		<error-code>500</error-code>
 		<location>/WEB-INF/webViews/common/errorPage/500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>503</error-code>
+		<location>/WEB-INF/webViews/common/errorPage/503.jsp</location>
 	</error-page>
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>

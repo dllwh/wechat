@@ -116,15 +116,18 @@ body {
 </head>
 <body>
 	<div class="header">
-			<h1>forbidden error page</h1>
+		<h1>forbidden error page</h1>
+	</div>
+	<div class="w3-main">
+		<div class="agile-info">
+			<h2>403</h2>
+			<h3>SORRY</h3>
+			<p>The Page You're Looking for Was forbidden</p>
+			<a href="${_currConText}/${fns:getloginPageUrl()}">
+				<i class="fa fa-angle-double-left" aria-hidden="true"></i>
+				回到首页
+			</a>
 		</div>
-		<div class="w3-main">
-			<div class="agile-info">
-				<h2>403</h2>
-				<h3>SORRY</h3>
-				<p>The Page You're Looking for Was forbidden</p>
-				<a href="#"><i class="fa fa-angle-double-left" aria-hidden="true"></i>回到首页</a>
-			</div>
-		</div>
+	</div>
 </body>
 </html>
