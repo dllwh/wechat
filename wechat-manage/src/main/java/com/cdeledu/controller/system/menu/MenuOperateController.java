@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.annotation.SysLog;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.controller.BaseController;
@@ -70,7 +69,6 @@ public class MenuOperateController extends BaseController {
 	 */
 	@RequestMapping(value = "del")
 	@ResponseBody
-	@SysLog(operationType = "del", tableName = "sys_user", value = "删除权限菜单")
 	public AjaxJson delMenu(SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		// 删除权限菜单时先删除权限菜单与角色之间关联表信息
