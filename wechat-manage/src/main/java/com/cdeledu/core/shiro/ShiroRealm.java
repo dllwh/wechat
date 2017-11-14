@@ -6,6 +6,8 @@ import java.util.Set;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -108,16 +110,16 @@ public class ShiroRealm extends AuthorizingRealm {
 			}
 			currentUser = userService.checkUserExits(currentUsername, passWord);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new UnknownAccountException();
 		}
 		if (currentUser != null) {
 			// 账号未通过审核
 			if (currentUser.getIsEnabled() != 1) {
-				throw new UnknownAccountException();
+				throw new DisabledAccountException();
 			}
 			// 账号未通过审核
 			if (currentUser.getIsVisible() != 1) {
-				throw new AuthenticationException("账号未通过审核");
+				throw new DisabledAccountException("账号未通过审核");
 			}
 			// 账号不允许登录
 			if (currentUser.getLoginFlag() != 1) {
@@ -126,7 +128,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
 			// 账号被锁定
 			if (currentUser.getIsLocked() != 1) {
-				throw new LockedAccountException("账号被锁定");
+				throw new ExcessiveAttemptsException("账号被锁定");
 			}
 
 			WebUtilHelper.setCurrentLoginUser(currentUser);
