@@ -170,6 +170,7 @@
 			<if test="ipAddress != null"> ipAddress, </if>
 			<if test="loginStatus != null"> loginStatus, </if>
 			<if test="browser != null and browser !='' "> browser, </if>
+			<if test="browserType != null and browserType !='' "> browserType, </if>
 			<if test="logLeavel != null"> logLeavel, </if>
 			<if test="opType != null"> opType, </if>
 			<if test="logContent != null"> logContent, </if>
@@ -179,6 +180,7 @@
 			<if test="ipAddress != null"> #{ipAddress}, </if>
 			<if test="loginStatus != null"> #{loginStatus}, </if>
 			<if test="browser != null and browser != '' "> #{browser}, </if>
+			<if test="browserType != null and browserType != '' "> #{browserType}, </if>
 			<if test="logLeavel != null"> #{logLeavel}, </if>
 			<if test="opType != null"> #{opType}, </if>
 			<if test="logContent != null"> #{logContent}, </if>
