@@ -5,10 +5,10 @@
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 <head>
 <%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
-<link rel="stylesheet" href="plug-in/font/css/font-awesome.min.css" />
+<link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
 
 
-<script src="plug-in/tools/lrtk.js"></script>
+<script src="${_currConText }/plug-in/tools/lrtk.js"></script>
 
 <title>管理员用户管理</title>
 </head>
