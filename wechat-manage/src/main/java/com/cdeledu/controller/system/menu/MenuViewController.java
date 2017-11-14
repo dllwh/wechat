@@ -34,7 +34,7 @@ public class MenuViewController extends BaseController {
 	@RequestMapping(value = "index")
 	public ModelAndView index(ModelMap map) {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/sysmanMenu/menuInit");
+		mv.setViewName("system/sysMenu/menuInit");
 		return mv;
 	}
 
