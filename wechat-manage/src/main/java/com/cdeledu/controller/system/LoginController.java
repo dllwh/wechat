@@ -21,7 +21,10 @@ import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.WebUtilHelper;
+import com.cdeledu.util.network.IpUtilHelper;
 import com.cdeledu.util.security.PasswordUtil;
+
+import nl.bitwalker.useragentutils.UserAgent;
 
 /**
  * @类描述: 登陆初始化控制器
@@ -67,7 +70,7 @@ public class LoginController extends BaseController {
 				String userCode = user.getUserName();
 				String logContent = String.valueOf(loginResult.getObj());
 				int loginStatus = 0, logLeavel = 0;
-				String ipAdd = "", browser = "", OpType = "";
+				String OpType = "";
 				if (loginResult.isSuccess()) {
 					loginStatus = 1;
 					logLeavel = GlobalConstants.Log_Leavel_INFO;
@@ -89,8 +92,10 @@ public class LoginController extends BaseController {
 					loginLog.setLoginStatus(loginStatus);
 					loginLog.setLogLeavel(logLeavel);
 					loginLog.setOpType(OpType);
-					loginLog.setIpAddress(ipAdd); // 登录的IP地址
-					loginLog.setBrowser(browser); // 登录的浏览器
+					loginLog.setIpAddress(IpUtilHelper.getClientIP(request)); // 登录的IP地址
+					String userAgent = request.getHeader("User-Agent");
+					loginLog.setBrowser( userAgent); // 登录的浏览器
+					loginLog.setBrowserType(UserAgent.parseUserAgentString(userAgent).getBrowser().getName());
 					systemService.addLoginLog(loginLog);
 				} catch (Exception e) {
 					e.printStackTrace();
