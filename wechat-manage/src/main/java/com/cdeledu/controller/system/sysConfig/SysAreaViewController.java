@@ -1,8 +1,12 @@
 package com.cdeledu.controller.system.sysConfig;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
@@ -24,6 +28,7 @@ import com.cdeledu.controller.BaseController;
 public class SysAreaViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
+
 	/** ----------------------------------------------------- Fields end */
 
 	/**
@@ -37,7 +42,25 @@ public class SysAreaViewController extends BaseController {
 		mv.setViewName("system/area/index");
 		return mv;
 	}
-	
+
+	/**
+	 * @方法描述: 根据父级code查询子节点，子区域列表
+	 * @param areaCode
+	 * @return
+	 */
+	@RequestMapping("list")
+	public void list() {
+	}
+
+	/**
+	 * @方法描述: 根据父级code查询子节点，树形目录
+	 * @param areaCode
+	 * @return
+	 */
+	@RequestMapping("select")
+	public List<Map<String, Object>> select(@RequestParam String areaCode) {
+		return null;
+	}
 	/** ----------------------------------------------- [私有方法] */
 	/** ----------------------------------------------- [私有方法] */
 
