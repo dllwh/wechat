@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdeledu.dao.SysMenuMapper">
 
 	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.SysMenu"
@@ -130,7 +130,7 @@
 	</select>
 	
 	<select id="getButtonPermsByUserId" parameterType="com.cdeledu.model.rbac.SysUser" 
-		resultType="com.cdeledu.model.rbac.SysMenu">
+		resultType="java.lang.String">
 		SELECT 
 			DISTINCT sm.perms FROM sys_menu sm 
 		INNER JOIN sys_role_menu srm ON srm.menuId = sm.id
@@ -138,6 +138,7 @@
 		WHERE 
 				sm.isEnabled = 1 
 			AND sm.isVisible = 1
+			AND sm.perms != ''
 			AND sur.userId = #{id}
 	</select>
 </mapper>
