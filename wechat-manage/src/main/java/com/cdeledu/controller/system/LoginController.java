@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
-import com.cdeledu.common.constants.SystemConstant.SyslogType;
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
@@ -69,18 +69,18 @@ public class LoginController extends BaseController {
 				AjaxJson loginResult = ShiroHelper.login(user.getUserName(), password);
 				String userCode = user.getUserName();
 				String logContent = String.valueOf(loginResult.getObj());
-				int loginStatus = 0, logLeavel = 0;
-				String OpType = "";
+				int loginStatus = 0;
+				String OpType = "",logLeavel = "";
 				if (loginResult.isSuccess()) {
 					loginStatus = 1;
 					logLeavel = GlobalConstants.Log_Leavel_INFO;
-					OpType = SyslogType.Log_Type_LOGIN.getValue();
+					OpType = SysOpType.LOGIN.getValue();
 					session.removeAttribute(GlobalConstants.IMAGECAPTCHA);
 				} else {
 
 					loginStatus = 0;
 					logLeavel = GlobalConstants.Log_Leavel_WARRING;
-					OpType = SyslogType.Log_Type_LOGIN.getValue();
+					OpType = SysOpType.LOGIN.getValue();
 
 					logMsg = loginResult.getMsg();
 					suc = false;
@@ -92,10 +92,9 @@ public class LoginController extends BaseController {
 					loginLog.setLoginStatus(loginStatus);
 					loginLog.setLogLeavel(logLeavel);
 					loginLog.setOpType(OpType);
-					loginLog.setIpAddress(IpUtilHelper.getClientIP(request)); // 登录的IP地址
+					loginLog.setIpAddress(IpUtilHelper.getClientIP(request));
 					String userAgent = request.getHeader("User-Agent");
-					loginLog.setBrowser( userAgent); // 登录的浏览器
-					loginLog.setBrowserType(UserAgent.parseUserAgentString(userAgent).getBrowser().getName());
+					loginLog.setBrowser(UserAgent.parseUserAgentString(userAgent).getBrowser().getName());
 					systemService.addLoginLog(loginLog);
 				} catch (Exception e) {
 					e.printStackTrace();
