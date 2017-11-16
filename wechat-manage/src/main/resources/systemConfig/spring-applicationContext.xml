@@ -21,11 +21,6 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
-
-	<!-- 配置注解扫描 -->
-	<context:annotation-config />
-	<!-- 激活自动代理功能 -->
-	<aop:aspectj-autoproxy />
 	<!-- 数据库配置 -->
 	<import resource="applicationContext-dataSource.xml" />
 	<!-- redis配置 -->
@@ -35,8 +30,14 @@
 	<!-- shiro配置 -->
 	<import resource="applicationContext-shiro.xml" />
 
+
+	<!-- 异常处理类 -->
+	<bean id="handlerExceptionResolver" class="com.cdeledu.common.exception.SpringExceptionHandler" />
+	
 	<!-- 获取bean工具注入 --> 
 	<bean name="springContextUtil" class="com.cdeledu.util.SpringContextUtil" lazy-init="false"/>
+	<!-- <bean name="springContextUtil" class="com.cdeledu.util.SpringContextUtil" scope="singleton"/> -->
+	<bean name="systemLogAspect" class="com.cdeledu.core.aspect.SystemLogAspect"/>
 
 	<!-- 配置文件上传:如果没有使用文件上传可以不用配置,当然如果不配,那么配置文件中也不必引入上传组件包 -->
 	<!-- maxUploadSize:设置允许上传的最大文件大小,以字节为单位计算,当设为-1时表示无限制.默认是-1.注意属性的限制是所有文件的容量之和 -->
@@ -80,16 +81,4 @@
 	<!-- servlet适配器，这里必须明确声明，因为spring默认没有初始化该适配器 -->
 	<bean id="servletHandlerAdapter"
 		class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter" />
-
-
-	<!-- Spring任务调度器之:定时任务配置 -->
-	<!-- <context:component-scan base-package="com.cdeledu.timertask" /> -->
-	<!-- 配置任务线性池 -->
-	<!-- <task:executor id="executor" pool-size="5" /> -->
-	<!-- <task:scheduler id="scheduler" pool-size="10" /> -->
-	<!-- 启用annotation方式 -->
-	<!-- <task:annotation-driven executor="executor" scheduler="scheduler" /> -->
-
-	<!-- 异常处理类 -->
-	<bean id="handlerExceptionResolver" class="com.cdeledu.common.exception.SpringExceptionHandler" />
 </beans>

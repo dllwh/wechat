@@ -19,8 +19,11 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	
-	<bean name="springContextUtil" class="com.cdeledu.util.SpringContextUtil" scope="singleton"/>
-
+	<!-- 配置注解扫描 -->
+	<context:annotation-config />
+	<!-- 激活自动代理功能 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
 	<!-- ====================================================================== 
 		注解映射的支持 -->
 	<!-- 通过注解，把URL映射到Controller上，该标签默认注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter -->
@@ -66,7 +69,8 @@
 
 	<!-- ====================================================================== 
 		直接跳转:对模型视图名称的解析，即定义JSP文件的位置，在模型视图名称添加前后缀 -->
-	<mvc:view-controller path="/" view-name="forward:/webviews/login/login.jsp" />
+	<!-- <mvc:view-controller path="/" view-name="forward:/webviews/login/login.jsp" /> -->
+	<mvc:view-controller path="/" view-name="forward:/loginController.shtml?doLogin" />
 
 	<!-- ====================================================================== 
 		静态资源访问 -->
