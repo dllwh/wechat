@@ -99,38 +99,29 @@
 	<!-- ====================================================================== 
 		JDBC 事务管理:在*ServiceImpl里写@Transactional就可以启用事物管理 -->
 	<!-- 声明式事务管理器 -->
-	<bean id="transactionManager" name="transactionManager"
+	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
-	<!-- 用注解来实现事务管理(配置事务规则),需要在Service类上标注@Transactional -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
-
-	<!-- 配置事务特性 -->
-	<!-- AOP切面的事务管理 (开启注解事务 只对当前配置文件有效 ) -->
-	<!-- REQUIRED:支持当前事务，如果当前没有事务，就新建一个事务。这是最常见的选择 -->
-	<!-- SUPPORTS:支持当前事务，如果当前没有事务，就以非事务方式执行。 -->
-	<!-- MANDATORY:支持当前事务，如果当前没有事务，就抛出异常。 -->
-	<!-- REQUIRES_NEW:新建事务，如果当前存在事务，把当前事务挂起。 -->
-	<!-- NOT_SUPPORTED:以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。 -->
-	<!-- NEVER:以非事务方式执行，如果当前存在事务，则抛出异常。 -->
+	<!-- 事务管理 通知 -->
+	<!-- 对insert,update,remove 操作的方法进行事务管理,只要有异常就回滚 -->
+	<!-- 对select,count 操作的方法,开启只读,提高数据库访问性能 -->
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-			<!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
 			<!-- 数据增加 -->
-			<tx:method name="save*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="add*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="create*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="insert*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="append*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="create*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="append*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
 			<!-- 数据删除 -->
-			<tx:method name="delete*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="remove*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
 			<!-- 数据修改 -->
-			<tx:method name="update*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="merge*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="modify*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
-			<tx:method name="edit*" propagation="REQUIRED" isolation="REPEATABLE_READ" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="merge*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="modify*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+			<tx:method name="edit*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
 			<!-- 数据查询 -->
 			<tx:method name="get*" read-only="true" propagation="SUPPORTS" />
 			<tx:method name="count*" read-only="true" propagation="SUPPORTS" />
@@ -139,50 +130,21 @@
 			<tx:method name="find*" read-only="true" propagation="SUPPORTS" />
 			<tx:method name="load*" read-only="true" propagation="SUPPORTS" />
 			<tx:method name="search*" read-only="true" propagation="SUPPORTS" />
-<!-- 			<tx:method name="*" read-only="true" /> -->
+			<!-- 对其他方法 使用默认的事务管理 -->
+			<tx:method name="*"/>
 		</tx:attributes>
 	</tx:advice>
 
-	<!-- 配置事务代理拦截器 -->
-	<!-- PROPAGATION_REQUIRED:如果存在一个事务,则支持当前事务;如果没有事务则开启 -->
-	<!-- PROPAGATION_SUPPORTS:如果存在一个事务,支持当前事务.如果没有事务.则非事务的执行 -->
-	<!-- PROPAGATION_MANDATORY:如果已经存在一个事务,支持当前事务;如果没有一个活动的事务,则抛出异常 -->
-	<!-- PROPAGATION_REQUIRES_NEW:总是开启一个新的事务.如果一个事务存在,则将这个存在的事务挂起 -->
-	<!-- PROPAGATION_NOT_SUPPORTED:总是非事务地执行,并挂起任何存在的事务 -->
-	<!-- PROPAGATION_NEVER:总是非事务地执行,如果存在一个活动事务,则抛出异常 -->
-	<!-- PROPAGATION_NESTED:如果一个活动的事务存在,则运行在一个嵌套的事务中，如果没有活动事务,则按PROPAGATION_REQUIRED属性执行 -->
-	<bean id="baseTransactionProxy" abstract="true"
-		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref bean="transactionManager" />
-		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="save*">PROPAGATION_REQUIRED</prop>
-				<prop key="add*">PROPAGATION_REQUIRED</prop>
-				<prop key="create*">PROPAGATION_REQUIRED</prop>
-				<prop key="insert*">PROPAGATION_REQUIRED</prop>
-				<prop key="append*">PROPAGATION_REQUIRED</prop>
-				
-				<prop key="update*">PROPAGATION_REQUIRED</prop>
-				<prop key="merge*">PROPAGATION_REQUIRED</prop>
-				<prop key="modify*">PROPAGATION_REQUIRED</prop>
-				<prop key="edit*">PROPAGATION_REQUIRED</prop>
-				
-				<prop key="delete*">PROPAGATION_REQUIRED</prop>
-				<prop key="remove*">PROPAGATION_REQUIRED</prop>
-<!-- 				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop> -->
-			</props>
-		</property>
-	</bean>
-
 	<!-- 配置哪些类的方法需要进行事务管理 -->
-	<aop:config>
+	<!-- <aop:config>
 		<aop:pointcut id="baseServiceMethods"
 			expression="execution(* com.cdeledu..service..*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="baseServiceMethods" />
-	</aop:config>
-
-	<!-- 开启AOP监听 只对当前配置文件有效 -->
-	<aop:aspectj-autoproxy />
+	</aop:config> -->
+	
+	<!-- 配置使Spring采用CGLIB代理 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<!-- 用注解来实现事务管理(配置事务规则),需要在Service类上标注@Transactional -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
 </beans>
