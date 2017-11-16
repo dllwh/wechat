@@ -27,9 +27,9 @@ public class GlobalConstants {
 	public static final Short User_Forbidden = 0;// 禁用
 	public static final Short User_ADMIN = -1;// 超级管理员
 	/** 日志级别定义 */
-	public static final Integer Log_Leavel_INFO = 1;
-	public static final Integer Log_Leavel_WARRING = 2;
-	public static final Integer Log_Leavel_ERROR = 3;
+	public static final String Log_Leavel_INFO = "info";
+	public static final String Log_Leavel_WARRING = "warn";
+	public static final String Log_Leavel_ERROR = "error";
 
 	/** 该值会在web容器启动时由WebContextListener初始化 */
 	public static ApplicationContext WEB_APP_CONTEXT = null;

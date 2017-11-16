@@ -140,19 +140,19 @@ public class SystemConstant {
 	 * @版本: V1.0
 	 * @since: JDK 1.7
 	 */
-	public enum SyslogType {
-		Log_Type_LOGIN("login"),
-		Log_Type_EXIT("exit"),
-		Log_Type_INSERT("insert"),
-		Log_Type_DEL("delete"),
-		Log_Type_UPDATE("update"),
-		Log_Type_UPLOAD("upload"),
-		LOG_TYPE_SELECT("select"),
-		LOG_TYPE_DOWNLOAD("download"),
-		Log_Type_OTHER("other");
+	public enum SysOpType {
+		LOGIN("login"),//登录
+		EXIT("exit"),//退出
+		INSERT("insert"),//插入
+		DEL("delete"),// 删除
+		UPDATE("update"),// 更新
+		UPLOAD("upload"), // 上传
+		SELECT("select"),// 选择、查询
+		DOWNLOAD("download"),// 下载
+		OTHER("other");// 其他
 		private String value;
 
-		private SyslogType(String value) {
+		private SysOpType(String value) {
 			this.value = value;
 		}
 
