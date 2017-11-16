@@ -50,12 +50,12 @@
 		sRand += rand;
 		g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110),
 				20 + random.nextInt(110)));
-		g.drawString(rand, 18 * i + 10, 16);
+		g.drawString(rand.toUpperCase(), 18 * i + 10, 16);
 	}
 	// 将验证码存入SESSION 
 	HttpSession  imageSession = WebUtilHelper.getSession();
 	imageSession.removeAttribute(GlobalConstants.IMAGECAPTCHA);
-	imageSession.setAttribute(GlobalConstants.IMAGECAPTCHA, sRand.toLowerCase());
+	imageSession.setAttribute(GlobalConstants.IMAGECAPTCHA, sRand);
 	g.dispose();
 	ImageIO.write(image, "JPEG", response.getOutputStream());
 %>
