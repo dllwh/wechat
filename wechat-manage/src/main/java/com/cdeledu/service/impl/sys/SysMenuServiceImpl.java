@@ -109,7 +109,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * @return
 	 */
 	public List<String> getButtonPermsByUserId(SysUser sysUser) throws Exception {
-		return null;
+		return (List<String>)baseDao.findListForJdbcParam(prefix+"getButtonPermsByUserId", sysUser);
 	}
 
 	/**

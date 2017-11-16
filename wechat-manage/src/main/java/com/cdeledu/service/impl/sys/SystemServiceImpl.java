@@ -21,7 +21,7 @@ public class SystemServiceImpl extends BaseClass implements SystemService {
 
 	@Override
 	public void addLog(SysLogEntity syslog) throws Exception {
-
+		baseDao.insert("com.cdeledu.dao.impl.sys.systemMapper.insertSelective", syslog);
 	}
 
 	@Override
