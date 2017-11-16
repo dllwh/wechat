@@ -22,8 +22,6 @@ public class SysLogEntity implements Serializable {
 	private int id;
 	/** 操作人的信息 */
 	private int userCode;
-	/** 操作人的信息 */
-	private String userName;
 	/** IP地址 */
 	private String ipAddress;
 	/** Mac地址 */
@@ -31,19 +29,23 @@ public class SysLogEntity implements Serializable {
 	/** 日志描述类型(操作代码) */
 	private String opType;
 	/** 响应时间 */
-	private int time;
+	private Long time;
 	/** 请求方法 */
 	private String method;
 	/** 浏览器信息 */
 	private String broswer;
-	/** 浏览器 */
-	private String broswerType;
 	/** 请求参数 */
 	private String params;
 	/** 日志操作表 */
 	private String tableName;
 	/** 备注信息，一些其他的需要说明的信息 */
 	private String remark;
+	/** 异常码 */
+	private String exceptionCode;
+	/** 异常原因 */
+	private String exceptionDetail;
+	/** 操作日志:0:正常操作日志,默认值;1:异常日志 */
+	private Integer logType = 0;
 	private Date createTime;
 
 	public int getId() {
@@ -60,14 +62,6 @@ public class SysLogEntity implements Serializable {
 
 	public void setUserCode(int userCode) {
 		this.userCode = userCode;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public String getIpAddress() {
@@ -94,11 +88,11 @@ public class SysLogEntity implements Serializable {
 		this.opType = opType;
 	}
 
-	public int getTime() {
+	public Long getTime() {
 		return time;
 	}
 
-	public void setTime(int time) {
+	public void setTime(Long time) {
 		this.time = time;
 	}
 
@@ -116,14 +110,6 @@ public class SysLogEntity implements Serializable {
 
 	public void setBroswer(String broswer) {
 		this.broswer = broswer;
-	}
-
-	public String getBroswerType() {
-		return broswerType;
-	}
-
-	public void setBroswerType(String broswerType) {
-		this.broswerType = broswerType;
 	}
 
 	public String getParams() {
@@ -150,6 +136,30 @@ public class SysLogEntity implements Serializable {
 		this.remark = remark;
 	}
 
+	public String getExceptionCode() {
+		return exceptionCode;
+	}
+
+	public void setExceptionCode(String exceptionCode) {
+		this.exceptionCode = exceptionCode;
+	}
+
+	public String getExceptionDetail() {
+		return exceptionDetail;
+	}
+
+	public void setExceptionDetail(String exceptionDetail) {
+		this.exceptionDetail = exceptionDetail;
+	}
+
+	public Integer getLogType() {
+		return logType;
+	}
+
+	public void setLogType(Integer logType) {
+		this.logType = logType;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -160,11 +170,11 @@ public class SysLogEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SysLogEntity [id=" + id + ", userCode=" + userCode + ", userName=" + userName
-				+ ", ipAddress=" + ipAddress + ", macAddress=" + macAddress + ", opType=" + opType
-				+ ", time=" + time + ", method=" + method + ", broswer=" + broswer
-				+ ", broswerType=" + broswerType + ", params=" + params + ", tableName=" + tableName
-				+ ", remark=" + remark + ", createTime=" + createTime + "]";
+		return "SysLogEntity [id=" + id + ", userCode=" + userCode + ", ipAddress=" + ipAddress
+				+ ", macAddress=" + macAddress + ", opType=" + opType + ", time=" + time
+				+ ", method=" + method + ", broswer=" + broswer + ", params=" + params
+				+ ", tableName=" + tableName + ", remark=" + remark + ", exceptionCode="
+				+ exceptionCode + ", exceptionDetail=" + exceptionDetail + ", logType=" + logType
+				+ ", createTime=" + createTime + "]";
 	}
-
 }

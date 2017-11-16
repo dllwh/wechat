@@ -23,10 +23,8 @@ public class SysLoginLog extends BaseEntity<SysLoginLog> {
 	private Integer loginStatus;
 	// 登录浏览器
 	private String browser;
-	// 登录浏览器
-	private String browserType;
 	// 日志级别
-	private Integer logLeavel;
+	private String logLeavel;
 	// 日志类型
 	private String opType;
 	// 日志内容
@@ -72,19 +70,11 @@ public class SysLoginLog extends BaseEntity<SysLoginLog> {
 		this.browser = browser;
 	}
 	
-	public String getBrowserType() {
-		return browserType;
-	}
-
-	public void setBrowserType(String browserType) {
-		this.browserType = browserType;
-	}
-
-	public Integer getLogLeavel() {
+	public String getLogLeavel() {
 		return logLeavel;
 	}
 
-	public void setLogLeavel(Integer logLeavel) {
+	public void setLogLeavel(String logLeavel) {
 		this.logLeavel = logLeavel;
 	}
 
