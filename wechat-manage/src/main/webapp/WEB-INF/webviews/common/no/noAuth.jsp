@@ -5,11 +5,12 @@
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 <style type="text/css">
 	body {
-		background-image: url(${_currConText }/static/image/cloud.jpg);
-		background-position: center !important; font-family : "微软雅黑";
-		font-weight:;
+		background: url(${_currConText }/static/image/cloud.jpg) no-repeat;
+		background-position: center !important; 
+		font-family : "微软雅黑";
 		font: normal 100% Helvetica, Arial, sans-serif 900;
 		font-family: "微软雅黑";
+		background-attachment: fixed;
 	}
 	
 	* {
