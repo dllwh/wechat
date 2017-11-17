@@ -1,7 +1,10 @@
 package com.cdeledu.service.impl.monitor;
 
+import org.springframework.stereotype.Service;
+
 import com.cdeledu.service.monitor.MongodbService;
 
+@Service("mongodbService")
 public class MongodbServiceImpl implements MongodbService {
 
 	@Override

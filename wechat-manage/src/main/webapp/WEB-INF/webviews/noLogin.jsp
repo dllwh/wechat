@@ -8,7 +8,7 @@
 <title>${_currProject }</title>
 </head>
 <script type="text/javascript"> 
-var t=500;//设定跳转的时间 
+var t=10;//设定跳转的时间 
 setInterval("refer()",1000); //启动1秒定时 
 function refer(){  
     if(t==0){ 

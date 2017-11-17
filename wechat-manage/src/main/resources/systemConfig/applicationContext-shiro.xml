@@ -47,7 +47,6 @@
 		<constructor-arg>
 			<value>
 				/loginController** = anon
-				/globalController/** = anon
 				/sysPage/** = anon
 				/homeController/** = authc
 				/** = authc,login,permission
@@ -65,7 +64,7 @@
 		<!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后的处理逻辑在LoginController里硬编码为center.jsp了) -->
 		<!-- <property name="successUrl" value="/system/main"/> -->
 		<!-- 用户访问未对其授权的资源时,所显示的连接 -->
-		<property name="unauthorizedUrl" value="/globalController/unauthorized.shtml" />
+		<property name="unauthorizedUrl" value="/sysPage/unauthorized.shtml" />
 		<!-- 自定义filter，可用来更改默认的表单名称配置 -->
 		<property name="filters">
 			<util:map>

@@ -23,7 +23,7 @@ public class FilterHelper {
 	/** 踢出登录提示 */
 	public final static String KICKED_OUT = "/loginController/kickedOut.shtml";
 	/** 没有权限提醒 */
-	public final static String UNAUTHORIZED = "/globalController/unauthorized.shtml";
+	public final static String UNAUTHORIZED = "/sysPage/unauthorized.shtml";
 	/** 将登录前的URL放到Session中的键名称 */
 	public static final String LOGIN_TO_URL = "toUrl";
 
