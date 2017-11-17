@@ -53,11 +53,11 @@
 		<property name="exceptionMappings">
 			<props>
 				<prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">
-					/WEB-INF/webviews/common/errorPage/fileUpload
+					/WEB-INF/webviews/errorPage/fileUpload
 				</prop>
 				<!-- 处理其它异常(包括Controller抛出的) -->  
 				<prop key="java.lang.Throwable">
-					/WEB-INF/webviews/common/errorPage/500
+					/WEB-INF/webviews/errorPage/500
 				</prop>
 			</props>
 		</property>
