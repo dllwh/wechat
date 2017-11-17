@@ -48,6 +48,7 @@
 			<value>
 				/loginController** = anon
 				/globalController/** = anon
+				/sysPage/** = anon
 				/homeController/** = authc
 				/** = authc,login,permission
 			</value>
