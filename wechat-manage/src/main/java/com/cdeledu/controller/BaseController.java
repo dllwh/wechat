@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.BaseClass;
-import com.cdeledu.common.interceptors.DateConvertEditor;
+import com.cdeledu.core.interceptors.DateConvertEditor;
 
 /**
  * @类描述:

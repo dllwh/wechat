@@ -1,4 +1,4 @@
-package com.cdeledu.common.listener;
+package com.cdeledu.core.listener;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;

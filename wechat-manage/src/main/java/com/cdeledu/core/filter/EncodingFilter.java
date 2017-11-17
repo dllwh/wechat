@@ -1,4 +1,4 @@
-package com.cdeledu.common.filter;
+package com.cdeledu.core.filter;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.cdeledu.common.interceptors;
+package com.cdeledu.core.interceptors;
 
 import java.beans.PropertyEditorSupport;
 import java.text.ParseException;

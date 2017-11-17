@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cdeledu.common.listener.DictListener;
 import com.cdeledu.common.mapper.JsonMapper;
+import com.cdeledu.core.listener.DictListener;
 import com.cdeledu.model.system.SysDict;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

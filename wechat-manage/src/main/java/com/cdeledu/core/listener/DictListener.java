@@ -1,4 +1,4 @@
-package com.cdeledu.common.listener;
+package com.cdeledu.core.listener;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.cdeledu.common.interceptors;
+package com.cdeledu.core.interceptors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

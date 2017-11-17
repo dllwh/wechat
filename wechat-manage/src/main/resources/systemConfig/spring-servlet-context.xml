@@ -94,7 +94,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<bean class="com.cdeledu.common.interceptors.EncodingInterceptor" />
+			<bean class="com.cdeledu.core.interceptors.EncodingInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 </beans>

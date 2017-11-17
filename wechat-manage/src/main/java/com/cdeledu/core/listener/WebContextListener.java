@@ -1,4 +1,4 @@
-package com.cdeledu.common.listener;
+package com.cdeledu.core.listener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
