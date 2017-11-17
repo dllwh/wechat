@@ -2,13 +2,14 @@ weinxin-manage
 ------------------------
 
 >##### 简介
-> 1. `weixin-manage`:采用了简洁强大的SpringMVC作为web主框架,数据库现在采用的是mysql,前端jquertEasyUI、bootstrap框架相结合。 
-> 2. 后台模块包含：回复管理、意见反馈、图片管理、视频管理、缓存更新、访问统计、组织机构管理、用户管理、角色管理、菜单管理、数据字典管理等功能
+
+> 1. `wechat-manage` 是基于SpringMVC框架的权限管理系统,支持操作权限和数据权限，后台管理采用的是Spring、Spring MVC、Apache Shiro、Mybatis等，数据库现在采用的是mysql,前端采用jquertEasyUI、bootstrap框架、bootstrap-table相结合。
+> 2. 后台模块包含：回复管理、意见反馈、图片管理、视频管理、缓存更新、访问统计、用户管理、角色管理、菜单管理、数据字典管理等功能
 > 3. 后端模板支持：bootstrap,Easyui默认样式
 
->##### 管理地址
-> 1. http://${ip:port}/${project_name}/
-> 2. http://${ip:port}/${project_name}/loginController.shtml?doLogin
+[技术选型](http://note.youdao.com/noteshare?id=233df4488c0cac1b719952432977ca74&sub=CD29D21A0EA0410F83F9447BB3D1F0B9)
+------------------------
+
 
 平台部署和配置说明
 ------------------------
@@ -21,6 +22,9 @@ weinxin-manage
 
 其他说明
 ------------------------
+
+>##### 应用分层（参考阿里巴巴Java开发手册）
+![image](https://raw.githubusercontent.com/dllwh/wechat/master/static/0.png)
 
 
 演示效果截图
