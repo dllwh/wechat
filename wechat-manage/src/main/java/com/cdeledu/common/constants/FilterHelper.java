@@ -39,26 +39,20 @@ public class FilterHelper {
 				.equalsIgnoreCase(((HttpServletRequest) request).getHeader("X-Requested-With"));
 	}
 
-	/**
-	 * 当前URI是否需要登录才能访问
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public static boolean isURILogin(HttpServletRequest request) {
-		// String requestPath = RequestHelper.getRequestPath(request);//
-		// 用户访问的资源地址
-		return true;
+	public static boolean isAjax(HttpServletRequest request) {
+		return request.getHeader("x-requested-with") != null && "XMLHttpRequest"
+				.equalsIgnoreCase(((HttpServletRequest) request).getHeader("X-Requested-With"));
 	}
-	
+
 	/**
 	 * response 输出JSON
+	 * 
 	 * @param hresponse
 	 * @param resultMap
 	 * @throws IOException
 	 */
-	public static void out(ServletResponse response, Map<String, String> resultMap){
-		
+	public static void out(ServletResponse response, Map<String, String> resultMap) {
+
 		PrintWriter out = null;
 		try {
 			response.setCharacterEncoding("UTF-8");
@@ -66,8 +60,8 @@ public class FilterHelper {
 			out.println(JSONObject.fromObject(resultMap).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
-			if(null != out){
+		} finally {
+			if (null != out) {
 				out.flush();
 				out.close();
 			}
