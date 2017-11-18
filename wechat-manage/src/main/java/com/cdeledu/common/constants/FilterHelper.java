@@ -27,6 +27,13 @@ public class FilterHelper {
 	/** 将登录前的URL放到Session中的键名称 */
 	public static final String LOGIN_TO_URL = "toUrl";
 
+	/** 非法字符:过滤掉的sql关键字，可以手动添加 */
+	public static String[] keywords = { "'", "*", "&", "%", ";", "or", "-", "+", "--", "#",
+			"master", "char", "mid", "char", "sitename", "declare", "like", "like'", "truncate",
+			"and", "exec", "execute", "net user", "insert", "create", "talbe", "from", "grant",
+			"use", "select", "count", "union", "where", "order", "by", "delete", "update", "drop",
+			"alert" };
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * 是否是Ajax请求
