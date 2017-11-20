@@ -2,6 +2,7 @@ package com.cdeledu.service.impl.sys;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,7 +155,14 @@ public class SysMenuServiceImpl implements SysMenuService {
 		List<SysMenu> userMenuList = Lists.newArrayList();
 		for (SysMenu menu : rootMenuList) {
 			if (menuIdList.contains(menu.getId())) {
-				userMenuList.add(menu);
+				if(menu.getType() == SysMenuType.MENU.getValue()){// 是菜单
+					if(StringUtils.isNotBlank(menu.getMenuUrl())){
+						userMenuList.add(menu);
+					}
+				} else {
+					userMenuList.add(menu);
+				}
+				// userMenuList.add(menu);
 			}
 		}
 		return userMenuList;
