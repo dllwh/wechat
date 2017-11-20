@@ -155,6 +155,11 @@
 			<param-name>exclusions</param-name>
 			<param-value>/css/*,/context/*,/plug-in/*,*.js,*.css,*/druid/*,/attached/*,*.jsp</param-value>
 		</init-param>
+		<init-param>
+			<!-- 是否允许重置 -->
+			<param-name>resetEnable</param-name>
+			<param-value>true</param-value>
+		</init-param>
 		<!-- 缺省sessionStatMaxCount是1000个。你可以按需要进行配置 -->
 		<init-param>
 			<param-name>sessionStatMaxCount</param-name>
@@ -163,7 +168,7 @@
 		<!-- 关闭session统计功能 -->
 		<init-param>
 			<param-name>sessionStatEnable</param-name>
-			<param-value>false</param-value>
+			<param-value>true</param-value>
 		</init-param>
 		<!-- 配置principalSessionName，使得druid能够知道当前的session的用户是谁 -->
 		<init-param>
