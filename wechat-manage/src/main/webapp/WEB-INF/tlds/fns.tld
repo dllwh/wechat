@@ -56,7 +56,7 @@
 	</function>
 
 	<function>
-		<description>获取当前用户角色列表</description>
+		<description>获取当前授权用户菜单列表</description>
 		<name>getMenuList</name>
 		<function-class>com.cdeledu.util.WebUtilHelper</function-class>
 		<function-signature>java.util.List getMenuList()</function-signature>
