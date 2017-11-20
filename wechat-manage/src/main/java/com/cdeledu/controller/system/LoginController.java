@@ -86,19 +86,16 @@ public class LoginController extends BaseController {
 					suc = false;
 				}
 
-				try {
-					loginLog.setUserCode(userCode);
-					loginLog.setLogContent(logContent);
-					loginLog.setLoginStatus(loginStatus);
-					loginLog.setLogLeavel(logLeavel);
-					loginLog.setOpType(OpType);
-					loginLog.setIpAddress(IpUtilHelper.getClientIP(request));
-					String userAgent = request.getHeader("User-Agent");
-					loginLog.setBrowser(UserAgent.parseUserAgentString(userAgent).getBrowser().getName());
-					systemService.addLoginLog(loginLog);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				loginLog.setUserCode(userCode);
+				loginLog.setLogContent(logContent);
+				loginLog.setLoginStatus(loginStatus);
+				loginLog.setLogLeavel(logLeavel);
+				loginLog.setOpType(OpType);
+				loginLog.setIpAddress(IpUtilHelper.getClientIP(request));
+				String userAgent = request.getHeader("User-Agent");
+				loginLog.setBrowser(UserAgent.parseUserAgentString(userAgent).getBrowser().getName());
+				systemService.addLoginLog(loginLog);
+				
 			} catch (Exception e) {
 				logMsg = "用户名或密码错误,请重新登录!";
 				suc = false;
@@ -149,17 +146,25 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "doLogout")
 	public String doLogout(HttpServletRequest request) {
-		// ModelAndView mv = this.getModelAndView();
 		HttpSession session = request.getSession();
-		// SysUser managerUser = WebUtilHelper.getCurrenLoginUser();
 		SysUser currenLoginUser = ShiroHelper.getPrincipal();
 		// 判断用户是否为空,不为空,则清空session中的用户object
 		if (null != session || currenLoginUser != null) {
 			// 注销该操作用户
 			session.removeAttribute(GlobalConstants.USER_SESSION);
+			logMsg = "用户[" + ShiroHelper.getCurrentUserName() + "]已退出";
 			ShiroHelper.logout();
-			logMsg = "用户" + ShiroHelper.getCurrentUserName() + "已退出";
 			// 添加登陆日志
+			SysLoginLog loginLog = new SysLoginLog();
+			loginLog.setUserCode(ShiroHelper.getCurrentUserName());
+			loginLog.setLogContent(logMsg);
+			loginLog.setLoginStatus(-1);
+			loginLog.setLogLeavel(GlobalConstants.Log_Leavel_INFO);
+			loginLog.setOpType(SysOpType.EXIT.getValue());
+			loginLog.setIpAddress(IpUtilHelper.getClientIP(request));
+			String userAgent = request.getHeader("User-Agent");
+			loginLog.setBrowser(UserAgent.parseUserAgentString(userAgent).getBrowser().getName());
+			systemService.addLoginLog(loginLog);
 		}
 		// mv.setViewName(FilterHelper.LOGIN_SHORT);
 		return FilterHelper.LOGIN_SHORT;
