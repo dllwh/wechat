@@ -1,7 +1,12 @@
 package com.cdeledu.controller.system.monitor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
 
@@ -19,6 +24,14 @@ public class MonitorViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */
 
+	@RequestMapping(value = "server/info")
+	@ResponseBody
+	public ModelAndView serverInfo(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("/system/info");
+		return mv;
+	}
+	
 	/** ----------------------------------------------- [私有方法] */
 	/** ----------------------------------------------- [私有方法] */
 }
