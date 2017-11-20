@@ -71,7 +71,7 @@ input[type="submit"], a {
 	font-weight: bold;
 }
 
-.agileinfo_404_main {
+.agileinfo_503_main {
 	position: absolute;
 	top: 5%;
 	left: 0;
@@ -119,7 +119,7 @@ input[type="submit"], a {
 <body>
 	<div class="main">
 		<canvas id="myCanvas"></canvas>
-		<div class="agileinfo_404_main">
+		<div class="agileinfo_503_main">
 			<h1>Service unavailable</h1>
 			<div class="w3_agile_main">
 				<h2>Service.... Could not find it</h2>
