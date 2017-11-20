@@ -1,9 +1,13 @@
 package com.cdeledu.controller.system.monitor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.controller.BaseController;
 
 /**
@@ -27,9 +31,7 @@ public class DataSourceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "goDruid")
-	public ModelAndView goDruid() {
-		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("/system/druid/index");
-		return mv;
+	public void goDruid(HttpServletRequest request,HttpServletResponse response) throws Exception{
+		WebUtils.issueRedirect(request, response, FilterHelper.Druid_Monitor);
 	}
 }
