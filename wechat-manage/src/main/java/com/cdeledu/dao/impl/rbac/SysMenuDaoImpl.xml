@@ -109,7 +109,15 @@
 	</select>
 	
 	<select id="getMenuByParentCode" resultType="com.cdeledu.model.rbac.SysMenu">
-		SELECT * FROM sys_menu WHERE isEnabled =1 and isVisible = 1 AND type != 2 AND parentCode = #{parentCode}
+		SELECT * 
+		FROM 
+			sys_menu 
+		WHERE 
+				isEnabled = 1 
+			AND isVisible = 1 
+			AND type != 2 
+			AND parentCode = #{parentCode}
+			ORDER BY sequence 
 	</select>
 	
 	<select id="getPermissionByUserId" parameterType="com.cdeledu.model.rbac.SysUser" 
