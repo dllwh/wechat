@@ -50,7 +50,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		if (StringUtils.isNotBlank(value)) {
 			return stripXSS(value);
 		}
-		return "";
+		return value;
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	private String stripXSS(String value) {
-		if (value != null) {
+		if (StringUtils.isNotBlank(value)) {
 
 			value = value.replaceAll("", "");
 			Pattern scriptPattern = Pattern.compile("(.*?)", Pattern.CASE_INSENSITIVE);

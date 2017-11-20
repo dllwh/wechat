@@ -43,7 +43,7 @@ public class SQLFilter extends BaseClass implements Filter {
 			}
 		}
 
-		if (!sqlValidate(sql)) {
+		if (sqlValidate(sql)) {
 			throw new IOException("您发送请求中的参数中含有非法字符");
 		}
 		chain.doFilter(request, response);
