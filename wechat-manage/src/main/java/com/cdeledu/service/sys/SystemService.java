@@ -20,7 +20,7 @@ public interface SystemService {
 	 * @方法: 日志添加
 	 * @创建人:独泪了无痕
 	 */
-	public void addLog(SysLogEntity syslog) throws Exception;
+	public void addLog(SysLogEntity syslog);
 
 	/**
 	 * @方法: 登录\退出日志
@@ -32,6 +32,6 @@ public interface SystemService {
 	 * @param operatetype
 	 *            类型
 	 */
-	public void addLoginLog(SysLoginLog loginLog) throws Exception;
+	public void addLoginLog(SysLoginLog loginLog);
 
 }

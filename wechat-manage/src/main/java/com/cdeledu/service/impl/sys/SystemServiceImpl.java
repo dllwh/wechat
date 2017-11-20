@@ -20,12 +20,20 @@ public class SystemServiceImpl extends BaseClass implements SystemService {
 	private BaseDaoSupport<?> baseDao;
 
 	@Override
-	public void addLog(SysLogEntity syslog) throws Exception {
-		baseDao.insert("com.cdeledu.dao.impl.sys.systemMapper.insertSelective", syslog);
+	public void addLog(SysLogEntity syslog) {
+		try {
+			baseDao.insert("com.cdeledu.dao.impl.sys.systemMapper.insertSelective", syslog);
+		} catch (Exception e) {
+			error(getClass(), "添加操作日志出现异常", e);
+		}
 	}
 
 	@Override
-	public void addLoginLog(SysLoginLog loginLog) throws Exception {
-		baseDao.insert("manageUserDaoImpl.saveLoginInfo", loginLog);
+	public void addLoginLog(SysLoginLog loginLog) {
+		try {
+			baseDao.insert("manageUserDaoImpl.saveLoginInfo", loginLog);
+		} catch (Exception e) {
+			error(getClass(), "添加登录/退出日志出现异常", e);
+		}
 	}
 }
