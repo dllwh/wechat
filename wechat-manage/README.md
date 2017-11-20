@@ -10,6 +10,9 @@ weinxin-manage
 [技术选型](http://note.youdao.com/noteshare?id=233df4488c0cac1b719952432977ca74&sub=CD29D21A0EA0410F83F9447BB3D1F0B9)
 ------------------------
 
+[命名规范](http://note.youdao.com/noteshare?id=edb0df577a78a28d3c44cc8778b74149&sub=5F205BB8938F437CB2CF7F02ED11AD71)
+------------------------
+
 
 平台部署和配置说明
 ------------------------
