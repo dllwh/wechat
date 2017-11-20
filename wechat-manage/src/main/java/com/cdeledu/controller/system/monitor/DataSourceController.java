@@ -1,7 +1,6 @@
 package com.cdeledu.controller.system.monitor;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,7 +15,6 @@ import com.cdeledu.controller.BaseController;
  */
 @Controller
 @RequestMapping("/dataSourceController")
-@Transactional(readOnly = true)
 public class DataSourceController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 
@@ -28,7 +26,6 @@ public class DataSourceController extends BaseController {
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	@Transactional
 	@RequestMapping(params = "goDruid")
 	public ModelAndView goDruid() {
 		ModelAndView mv = this.getModelAndView();
