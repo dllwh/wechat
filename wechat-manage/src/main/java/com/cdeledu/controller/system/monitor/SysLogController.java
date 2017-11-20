@@ -30,6 +30,14 @@ public class SysLogController extends BaseController {
 	 * @方法描述: 登录日志列表
 	 * @return
 	 */
+	@RequestMapping("/loginLog/index")
+	public String sysLoginLogIndex() {
+		return null;
+	}
+	/**
+	 * @方法描述: 登录日志列表
+	 * @return
+	 */
 	@RequestMapping("/loginLog/list")
 	public List<SysLoginLog> sysLoginLogList() {
 		return null;
@@ -44,6 +52,16 @@ public class SysLogController extends BaseController {
 		return null;
 	}
 
+	
+	/**
+	 * @方法描述: 操作日志列表
+	 * @return
+	 */
+	@RequestMapping("/opLog/index")
+	public List<SysLoginLog> sysOperateLogIndex() {
+		return null;
+	}
+	
 	/**
 	 * @方法描述: 操作日志列表
 	 * @return

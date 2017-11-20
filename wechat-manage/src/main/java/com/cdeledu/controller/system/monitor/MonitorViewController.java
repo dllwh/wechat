@@ -1,6 +1,7 @@
 package com.cdeledu.controller.system.monitor;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cdeledu.controller.BaseController;
 
@@ -12,6 +13,7 @@ import com.cdeledu.controller.BaseController;
  * @since: JDK 1.7
  */
 @Controller
+@RequestMapping("monitor")
 public class MonitorViewController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
