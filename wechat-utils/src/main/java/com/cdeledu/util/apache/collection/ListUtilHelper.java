@@ -138,5 +138,17 @@ public class ListUtilHelper extends ListUtils {
 		}
 		return s.toString();
 	}
+
+	public static <E> boolean isNotEmpty(List<E> list) {
+		return !isEmpty(list);
+	}
+
+	public static <E> boolean isEmpty(List<E> list) {
+		if (list != null && list.size() > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	/*--------------------------公有方法 end   -------------------------------*/
 }
