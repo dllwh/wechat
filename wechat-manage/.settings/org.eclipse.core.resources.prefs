@@ -1,7 +1,5 @@
 eclipse.preferences.version=1
-encoding//src/main/java=GBK
-encoding//src/main/resources=GBK
-encoding//src/main/resources/doc/db_wechat_20171028.sql=UTF-8
-encoding//src/main/resources/doc/init_mysql.sql=UTF-8
-encoding//src/main/webapp/WEB-INF/tlds/fns.tld=UTF-8
+encoding//src/main/java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding//src/main/webapp=UTF-8
 encoding/<project>=UTF-8
