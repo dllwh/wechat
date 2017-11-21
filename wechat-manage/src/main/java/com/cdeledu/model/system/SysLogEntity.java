@@ -24,8 +24,6 @@ public class SysLogEntity implements Serializable {
 	private int userCode;
 	/** IP地址 */
 	private String ipAddress;
-	/** Mac地址 */
-	private String macAddress;
 	/** 日志描述类型(操作代码) */
 	private String opType;
 	/** 响应时间 */
@@ -70,14 +68,6 @@ public class SysLogEntity implements Serializable {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
-	}
-
-	public String getMacAddress() {
-		return macAddress;
-	}
-
-	public void setMacAddress(String macAddress) {
-		this.macAddress = macAddress;
 	}
 
 	public String getOpType() {
@@ -171,10 +161,9 @@ public class SysLogEntity implements Serializable {
 	@Override
 	public String toString() {
 		return "SysLogEntity [id=" + id + ", userCode=" + userCode + ", ipAddress=" + ipAddress
-				+ ", macAddress=" + macAddress + ", opType=" + opType + ", time=" + time
-				+ ", method=" + method + ", broswer=" + broswer + ", params=" + params
-				+ ", tableName=" + tableName + ", remark=" + remark + ", exceptionCode="
-				+ exceptionCode + ", exceptionDetail=" + exceptionDetail + ", logType=" + logType
-				+ ", createTime=" + createTime + "]";
+				+ ", opType=" + opType + ", time=" + time + ", method=" + method + ", broswer="
+				+ broswer + ", params=" + params + ", tableName=" + tableName + ", remark=" + remark
+				+ ", exceptionCode=" + exceptionCode + ", exceptionDetail=" + exceptionDetail
+				+ ", logType=" + logType + ", createTime=" + createTime + "]";
 	}
 }
