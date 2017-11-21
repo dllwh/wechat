@@ -26,63 +26,89 @@ public class SysMenu extends DataEntity<SysMenu> {
 	private String parentName;
 	/** 菜单图标样式 */
 	private String iconClass;
-	/** 授权标识(多个用逗号分隔，如：user:list,user:create)*/
+	/** 授权标识(多个用逗号分隔，如：user:list,user:create) */
 	private String perms;
 	/** tree属性 */
 	private Boolean open = false;
 	private List<?> childrenList;
+
 	public String getMenuName() {
 		return menuName;
 	}
+
 	public void setMenuName(String menuName) {
 		this.menuName = menuName;
 	}
+
 	public String getMenuUrl() {
 		return menuUrl;
 	}
+
 	public void setMenuUrl(String menuUrl) {
 		this.menuUrl = menuUrl;
 	}
+
 	public Integer getType() {
 		return type;
 	}
+
 	public void setType(Integer type) {
 		this.type = type;
 	}
+
 	public Integer getParentCode() {
 		return parentCode;
 	}
+
 	public void setParentCode(Integer parentCode) {
 		this.parentCode = parentCode;
 	}
+
 	public String getParentName() {
 		return parentName;
 	}
+
 	public void setParentName(String parentName) {
 		this.parentName = parentName;
 	}
+
 	public String getIconClass() {
 		return iconClass;
 	}
+
 	public void setIconClass(String iconClass) {
 		this.iconClass = iconClass;
 	}
+
 	public String getPerms() {
 		return perms;
 	}
+
 	public void setPerms(String perms) {
 		this.perms = perms;
 	}
+
 	public Boolean getOpen() {
 		return open;
 	}
+
 	public void setOpen(Boolean open) {
 		this.open = open;
 	}
+
 	public List<?> getChildrenList() {
 		return childrenList;
 	}
+
 	public void setChildrenList(List<?> childrenList) {
 		this.childrenList = childrenList;
+	}
+
+	@Override
+	public String toString() {
+		return "SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl + ", type=" + type
+				+ ", parentCode=" + parentCode + ", parentName=" + parentName + ", iconClass="
+				+ iconClass + ", perms=" + perms + ", open=" + open + ", childrenList="
+				+ childrenList + "]";
 	}
 }
