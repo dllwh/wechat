@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
@@ -21,7 +23,7 @@ import com.cdeledu.service.sys.RoleService;
  * @类描述: 角色处理类
  * @创建者: 独泪了无痕--duleilewuhen@sina.com
  * @创建日期: 2016年4月4日 下午8:10:56
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 @Controller
@@ -118,6 +120,22 @@ public class RoleOperateController extends BaseController {
 			msg = "角色: " + role.getRoleName() + "被【" + managerUser.getId() + "】删除事出现异常,其异常原因是" + e;
 		}
 		resultMsg.setMsg(msg);
+		return resultMsg;
+	}
+
+	@ResponseBody
+	@RequestMapping(params = "setAuthority")
+	@SystemLog(desc = "设置权限", opType = SysOpType.INSERT, tableName = "sys_role_menu")
+	public AjaxJson setAuthority() {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+
+	@ResponseBody
+	@RequestMapping(params = "updateAuthority")
+	@SystemLog(desc = "更新权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
+	public AjaxJson updateAuthority(HttpServletRequest request) {
+		AjaxJson resultMsg = new AjaxJson();
 		return resultMsg;
 	}
 }

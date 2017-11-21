@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.service.sys.RoleService;
@@ -29,6 +30,7 @@ public class RoleViewController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	RoleService roleService;
+
 	/**
 	 * @方法:角色列表页面跳转
 	 * @创建人:独泪了无痕
@@ -51,8 +53,19 @@ public class RoleViewController extends BaseController {
 	 */
 	@RequestMapping(value = "getList")
 	@ResponseBody
-	public void getList(SysRole role,ModelMap modelMap) {
+	public void getList(SysRole role, ModelMap modelMap) {
 
+	}
+
+	/**
+	 * @方法描述: 检查角色
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(params = "checkRole")
+	public AjaxJson checkRole() {
+		AjaxJson ajaxJson = new AjaxJson();
+		return ajaxJson;
 	}
 
 	/**
