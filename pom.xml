@@ -780,7 +780,7 @@
 						</execution>
 					</executions>
 				</plugin>
-
+				<!-- Java编译插件 -->
 				<!-- eclipse中解决update maven之后jre的版本1.7 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -792,7 +792,7 @@
 						<encoding>${project.build.sourceEncoding}</encoding>
 					</configuration>
 				</plugin>
-
+				<!-- 资源文件拷贝插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
