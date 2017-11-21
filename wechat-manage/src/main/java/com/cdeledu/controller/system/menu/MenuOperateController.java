@@ -1,7 +1,5 @@
 package com.cdeledu.controller.system.menu;
 
-import java.awt.Menu;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -52,7 +50,7 @@ public class MenuOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "saveMenu")
 	@SystemLog(desc = "更新权限菜单", opType = SysOpType.INSERT, tableName = "sys_menu")
-	public AjaxJson saveMenu(Menu menu) {
+	public AjaxJson saveMenu(SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		return ajaxJson;
 	}
@@ -64,6 +62,7 @@ public class MenuOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "del")
+	@SystemLog(desc = "删除权限菜单", opType = SysOpType.DEL, tableName = "sys_menu,sys_role_menu")
 	public AjaxJson delMenu(SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		// 删除权限菜单时先删除权限菜单与角色之间关联表信息
