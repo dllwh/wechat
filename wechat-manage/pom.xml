@@ -161,6 +161,7 @@
 	<build>
 		<finalName>wechat-manage</finalName>
 		<plugins>
+			<!-- 配置Tomcat插件 -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
