@@ -38,15 +38,31 @@ public class MenuViewController extends BaseController {
 		return mv;
 	}
 
-	
+	@ResponseBody
+	@RequestMapping(value = "list")
+	public void list(ModelMap map) {
+
+	}
+
+	/**
+	 * @方法描述:easyuiAJAX请求数据
+	 * @param map
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "tree")
+	public void tree(ModelMap map) {
+
+	}
+
 	/**
 	 * @方法描述: 根据角色ID查询权限
 	 * @param roleId
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="selectPermissionById")
-	public List<SysMenu> selectPermissionById(int roleId){
+	@RequestMapping(value = "selectPermissionById")
+	public List<SysMenu> selectPermissionById(int roleId) {
 		List<SysMenu> sysMenuList = Lists.newArrayList();
 		return sysMenuList;
 	}
