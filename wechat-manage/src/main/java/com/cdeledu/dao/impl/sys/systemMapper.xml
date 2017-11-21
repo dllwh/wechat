@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdeledu.dao.impl.sys.systemMapper">
 
-	<insert id="insertSelective" parameterType="com.cdeledu.model.system.SysLogEntity">
+	<insert id="insertSelective" parameterType="com.cdeledu.model.system.SysLogEntity"
+		useGeneratedKeys="true" keyProperty="id">
 		insert into sys_log
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="userCode != null">
@@ -11,9 +11,6 @@
 			</if>
 			<if test="ipAddress != null">
 				ipAddress,
-			</if>
-			<if test="macAddress != null">
-				macAddress,
 			</if>
 			<if test="opType != null">
 				opType,
@@ -52,9 +49,6 @@
 			</if>
 			<if test="ipAddress != null">
 				#{ipAddress},
-			</if>
-			<if test="macAddress != null">
-				#{macAddress},
 			</if>
 			<if test="opType != null">
 				#{opType},
