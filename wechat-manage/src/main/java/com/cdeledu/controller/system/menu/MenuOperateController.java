@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.MessageConstant;
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.service.sys.SysMenuService;
 
@@ -19,7 +21,7 @@ import com.cdeledu.service.sys.SysMenuService;
  * @类描述: 菜单操作控制类
  * @创建者: 独泪了无痕--duleilewuhen@sina.com
  * @创建日期: 2016年4月24日 下午3:29:21
- * @版本: V1.0
+ * @版本: V2.2
  * @since: JDK 1.7
  */
 @Controller
@@ -31,14 +33,11 @@ public class MenuOperateController extends BaseController {
 	SysMenuService sysMenuService;
 
 	/** ----------------------------------------------------- Fields end */
-	/**
-	 * @方法:保存权限菜单
-	 * @创建人:独泪了无痕
-	 * @return
-	 */
+
 	@ResponseBody
 	@RequestMapping(value = "createMenu", method = RequestMethod.POST)
-	public AjaxJson createMenu(ModelMap map,SysMenu menu) {
+	@SystemLog(desc = "创建权限菜单", opType = SysOpType.INSERT, tableName = "sys_menu")
+	public AjaxJson createMenu(ModelMap map, SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		try {
 			sysMenuService.insert(menu);
@@ -50,13 +49,9 @@ public class MenuOperateController extends BaseController {
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法:保存权限菜单
-	 * @创建人:独泪了无痕
-	 * @return
-	 */
 	@ResponseBody
 	@RequestMapping(value = "saveMenu")
+	@SystemLog(desc = "更新权限菜单", opType = SysOpType.INSERT, tableName = "sys_menu")
 	public AjaxJson saveMenu(Menu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		return ajaxJson;
@@ -67,8 +62,8 @@ public class MenuOperateController extends BaseController {
 	 * @param menu
 	 * @return
 	 */
-	@RequestMapping(value = "del")
 	@ResponseBody
+	@RequestMapping(value = "del")
 	public AjaxJson delMenu(SysMenu menu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		// 删除权限菜单时先删除权限菜单与角色之间关联表信息
@@ -81,26 +76,25 @@ public class MenuOperateController extends BaseController {
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法描述: 操作角色的权限
-	 * @param roleId
-	 * @param ids
-	 * @return
-	 */
 	@ResponseBody
 	@RequestMapping(value = "addMenuByRole")
+	@SystemLog(desc = "创建角色的权限", opType = SysOpType.INSERT, tableName = "sys_role_menu")
 	public AjaxJson addMenuByRole(int roleId, String ids) {
 		AjaxJson ajaxJson = new AjaxJson();
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法描述: 根据角色id清空权限
-	 * @param roleIds
-	 * @return
-	 */
+	@ResponseBody
+	@RequestMapping(value = "updateMenuByRole")
+	@SystemLog(desc = "更新角色的权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
+	public AjaxJson updateMenuByRole(int roleId, String ids) {
+		AjaxJson ajaxJson = new AjaxJson();
+		return ajaxJson;
+	}
+
 	@ResponseBody
 	@RequestMapping(value = "clearMenuByRoleIds")
+	@SystemLog(desc = "根据角色id清空权限", opType = SysOpType.DEL, tableName = "sys_role_menu")
 	public AjaxJson clearPermissionByRoleIds(String roleIds) {
 		AjaxJson ajaxJson = new AjaxJson();
 		return ajaxJson;
