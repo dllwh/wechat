@@ -47,7 +47,7 @@
 				/loginController** = anon
 				/sysPage/** = anon
 				/homeController/** = authc
-				/dataSourceController** = anon
+				/dataSourceController** = authc,role[administrator]
 				/** = authc,permission
 			</value>
 		</constructor-arg>
