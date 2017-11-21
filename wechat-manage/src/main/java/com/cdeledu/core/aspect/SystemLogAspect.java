@@ -15,11 +15,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.common.mapper.JsonMapper;
 import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.core.shiro.token.ShiroHelper;
@@ -27,7 +26,6 @@ import com.cdeledu.model.system.SysLogEntity;
 import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.WebUtilHelper;
 import com.cdeledu.util.network.IpUtilHelper;
-import com.cdeledu.util.network.MacUtils;
 
 import nl.bitwalker.useragentutils.UserAgent;
 
@@ -45,9 +43,11 @@ import nl.bitwalker.useragentutils.UserAgent;
  */
 @Aspect
 @Component
-public class SystemLogAspect {
+public class SystemLogAspect extends BaseClass {
+
 	/** ----------------------------------------------------- Fields start */
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	private SystemService sysLogManager;
 
@@ -57,24 +57,28 @@ public class SystemLogAspect {
 	 * @方法描述: Controoler切入点
 	 */
 	@Pointcut("@annotation(com.cdeledu.core.annotation.SystemLog)")
-	public void logPointCut() {
+	public void controllerlogPointCut() {
 
 	}
 
 	/**
 	 * @方法描述: 前置通知，用于拦截记录用户的操作
 	 */
-	@Before("logPointCut()")
+	@Before("controllerlogPointCut()")
 	public void doBefore(JoinPoint joinPoint) {
-		logger.info("=========执行前置通知===============");
+		if (logger.isDebugEnabled()) {
+			logger.debug("=========执行前置通知===============");
+		}
 	}
 
 	/**
 	 * @方法描述: 配置环绕通知,使用在方法aspect()上注册的切入点
 	 */
-	@Around("logPointCut()")
+	@Around("controllerlogPointCut()")
 	public Object around(ProceedingJoinPoint point) throws Throwable {
-		logger.info("==========开始执行环绕通知===============");
+		if (logger.isDebugEnabled()) {
+			logger.debug("==========开始执行环绕通知===============");
+		}
 		long beginTime = System.currentTimeMillis();
 		// 执行方法
 		Object result = point.proceed();
@@ -82,9 +86,13 @@ public class SystemLogAspect {
 		long time = System.currentTimeMillis() - beginTime;
 		// 保存日志
 		try {
-			saveSysLog(point, time, null);
+			saveSysLog(point, time, null, result);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("==========结束执行环绕通知===============" + result);
 		}
 		return result;
 	}
@@ -92,17 +100,21 @@ public class SystemLogAspect {
 	/**
 	 * @方法描述: 后置通知 用于拦截层记录用户的操作
 	 */
-	@After("logPointCut()")
+	@After("controllerlogPointCut()")
 	public void after(JoinPoint joinPoint) {
-		logger.info("=========执行后置通知===============");
+		if (logger.isDebugEnabled()) {
+			logger.debug("=========执行后置通知===============");
+		}
 	}
 
 	/**
 	 * @方法描述: 标注该方法体为后置通知,当目标方法执行成功后执行该方法体,使用在方法aspect()上注册的切入点
 	 */
-	@AfterReturning("logPointCut()")
+	@AfterReturning("controllerlogPointCut()")
 	public void afterReturn(JoinPoint joinPoint) {
-		logger.info("=========执行后置返回通知===============");
+		if (logger.isDebugEnabled()) {
+			logger.debug("=========执行后置返回通知===============");
+		}
 	}
 
 	/**
@@ -111,17 +123,20 @@ public class SystemLogAspect {
 	 * @param joinPoint
 	 * @param e
 	 */
-	@AfterThrowing(pointcut = "logPointCut()", throwing = "e")
+	@AfterThrowing(pointcut = "controllerlogPointCut()", throwing = "e")
 	public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
-		logger.info("=========执行异常通知===============");
+		if (logger.isDebugEnabled()) {
+			logger.debug("=========执行异常通知===============");
+		}
 		try {
-			saveSysLog(joinPoint, 0L, e);
+			saveSysLog(joinPoint, -1L, e, null);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
 	}
 
-	private void saveSysLog(JoinPoint joinPoint, long time, Throwable throwable) throws Exception {
+	private void saveSysLog(JoinPoint joinPoint, long time, Throwable throwable, Object opResult)
+			throws Exception  {
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 		Method method = signature.getMethod();
 		SysLogEntity sysLog = new SysLogEntity();
@@ -131,14 +146,15 @@ public class SystemLogAspect {
 			sysLog.setTableName(StringUtils.join(systemLog.tableName(), ","));
 			sysLog.setOpType(systemLog.opType().getValue());
 		}
+		// 获取request
+		HttpServletRequest request = WebUtilHelper.getHttpServletRequest();
+
 		// 请求方法名
 		String targetName = joinPoint.getTarget().getClass().getName();// 获取目标类名
 		sysLog.setMethod(targetName + "." + signature.getName() + "()");
-		// 请求参数
-		String params = JsonMapper.toJsonString(joinPoint.getArgs());
-		sysLog.setParams(params);
-		// 获取request
-		HttpServletRequest request = WebUtilHelper.getHttpServletRequest();
+		//访问目标方法的参数：
+		sysLog.setParams(JsonMapper.toJsonString(joinPoint.getArgs()));
+
 		// 操作人的信息
 		int userId = -1;
 		if (ShiroHelper.isLogin()) {
@@ -147,10 +163,8 @@ public class SystemLogAspect {
 		sysLog.setUserCode(userId);
 		// 登录的IP地址
 		sysLog.setIpAddress(IpUtilHelper.getClientIP(request));
-		// Mac地址
-		sysLog.setMacAddress(MacUtils.getMac());
 		// 浏览器
-		String userAgent = null;
+		String userAgent = "";
 		try {
 			userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent")).getBrowser()
 					.getName();
@@ -158,6 +172,9 @@ public class SystemLogAspect {
 
 		}
 
+		if (opResult != null) {
+			sysLog.setOpResult(JsonMapper.toJsonString(opResult));
+		}
 		if (throwable != null) {
 			sysLog.setLogType(-1);
 			sysLog.setExceptionCode(sysLog.getClass().getName());
