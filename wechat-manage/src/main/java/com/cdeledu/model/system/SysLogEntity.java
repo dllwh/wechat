@@ -44,6 +44,8 @@ public class SysLogEntity implements Serializable {
 	private String exceptionDetail;
 	/** 操作日志:0:正常操作日志,默认值;1:异常日志 */
 	private Integer logType = 0;
+	/** 操作结果 */
+	private String opResult;
 	private Date createTime;
 
 	public int getId() {
@@ -150,6 +152,14 @@ public class SysLogEntity implements Serializable {
 		this.logType = logType;
 	}
 
+	public String getOpResult() {
+		return opResult;
+	}
+
+	public void setOpResult(String opResult) {
+		this.opResult = opResult;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -164,6 +174,8 @@ public class SysLogEntity implements Serializable {
 				+ ", opType=" + opType + ", time=" + time + ", method=" + method + ", broswer="
 				+ broswer + ", params=" + params + ", tableName=" + tableName + ", remark=" + remark
 				+ ", exceptionCode=" + exceptionCode + ", exceptionDetail=" + exceptionDetail
-				+ ", logType=" + logType + ", createTime=" + createTime + "]";
+				+ ", logType=" + logType + ", opResult=" + opResult + ", createTime=" + createTime
+				+ "]";
 	}
+
 }
