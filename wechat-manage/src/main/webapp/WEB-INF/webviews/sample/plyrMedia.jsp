@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HTML5 多媒体播放器</title>
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="${_currConText }/static/css/echarts/style.css" />
+<link rel="stylesheet" href="${_currConText }/static/css/sample/style.css" />
 <script type="text/javascript" src="${_currConText }/plug-in/jquery/jquery-1.10.2.min.js"></script>
 </head>
 <body>
