@@ -28,6 +28,8 @@
 		<property name="realm" ref="shiroRealm" />
 	</bean>
 
+	<!-- 登录校验 -->
+	<bean id="login" class="com.cdeledu.core.shiro.filter.LoginFilter"/>
 	<!-- 角色判断校验 -->
 	<bean id="role" class="com.cdeledu.core.shiro.filter.RoleFilter"/>
 	<!-- 权限校验 -->
@@ -45,10 +47,10 @@
 		<constructor-arg>
 			<value>
 				/loginController** = anon
-				/sysPage/** = anon
+				/sysPage/** = anon,kickout
 				/homeController/** = authc
 				/dataSourceController** = authc,role[administrator]
-				/** = authc,permission
+				/** = authc,permission,login,kickout
 			</value>
 		</constructor-arg>
 	</bean>
@@ -67,8 +69,10 @@
 		<!-- 自定义filter，可用来更改默认的表单名称配置 -->
 		<property name="filters">
 			<util:map>
+				<entry key="login" value-ref="login"/>
 				<entry key="role" value-ref="role"/>
 				<entry key="permission" value-ref="permission"/>
+				<entry key="kickout" value-ref="kickoutSessionFilter"/>
 			</util:map>
 		</property>
 		<!-- Shiro连接约束配置,即过滤链的定义 -->
@@ -76,6 +80,17 @@
 		<property name="filterChainDefinitions" ref="shiroFilterChainDefinitions"/>
 	</bean>
 
+	
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- session 校验单个用户是否多次登录 -->
+	<bean id="kickoutSessionFilter" class="com.cdeledu.core.shiro.filter.KickoutSessionFilter">
+		<property name="kickoutUrl" value="/loginController.shtml?doLogin"/>
+	</bean>
+
+	<!-- 用户缓存 -->
+	
+	<!-- redis 的缓存 -->
+
 </beans>
