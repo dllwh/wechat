@@ -115,6 +115,9 @@
 		<spring.mongodb.version>1.10.6.RELEASE</spring.mongodb.version>
 		
 		<velocity.version>1.7</velocity.version>
+		<!-- 引入echarts的jar -->
+		<eCharts.version>3.0.0</eCharts.version>
+		<gson.version>2.7</gson.version>
 	</properties>
 
 
