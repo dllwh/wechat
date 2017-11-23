@@ -40,8 +40,11 @@
 			<if test="exceptionDetail != null">
 				exceptionDetail,
 			</if>
-			<if test="remark != null">
+			<if test="remark != null and remark != '' ">
 				remark,
+			</if>
+			<if test="opResult != null and opResult != '' ">
+				opResult,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -78,8 +81,11 @@
 			<if test="exceptionDetail != null">
 				#{exceptionDetail},
 			</if>
-			<if test="remark != null">
+			<if test="remark != null and remark != '' ">
 				#{remark},
+			</if>
+			<if test="opResult != null and opResult != '' ">
+				#{opResult},
 			</if>
 		</trim>
 	</insert>
