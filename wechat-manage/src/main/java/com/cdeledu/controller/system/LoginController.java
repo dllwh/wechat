@@ -152,11 +152,11 @@ public class LoginController extends BaseController {
 		if (null != session || currenLoginUser != null) {
 			// 注销该操作用户
 			session.removeAttribute(GlobalConstants.USER_SESSION);
-			logMsg = "用户[" + ShiroHelper.getCurrentUserName() + "]已退出";
+			logMsg = "用户[" + currenLoginUser.getUserName() + "]已退出";
 			ShiroHelper.logout();
 			// 添加登陆日志
 			SysLoginLog loginLog = new SysLoginLog();
-			loginLog.setUserCode(ShiroHelper.getCurrentUserName());
+			loginLog.setUserCode(currenLoginUser.getUserName());
 			loginLog.setLogContent(logMsg);
 			loginLog.setLoginStatus(-1);
 			loginLog.setLogLeavel(GlobalConstants.Log_Leavel_INFO);
