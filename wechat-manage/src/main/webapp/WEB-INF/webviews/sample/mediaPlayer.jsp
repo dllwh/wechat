@@ -21,43 +21,17 @@
 						</h5>
 					</div>
 					<div class="ibox-content">
-						<p>Plyr 是一个使用 HTML5 开发的基于浏览器上的多媒体播放器。支持自定义的播放控制和&nbsp;WebVTT
-							字幕。</p>
+						<p>一个使用 HTML5 开发的基于浏览器上的多媒体播放器。</p>
 						<p>特性：</p>
 						<ul>
 							<li>
 								<p>
-									<strong>可访问性</strong> - 完全支持字幕和屏幕阅读器
-								</p>
-							</li>
-							<li>
-								<p>
-									<strong>轻量级</strong> - 压缩后只有 4.8Kb
-								</p>
-							</li>
-							<li>
-								<p>
-									<strong>可定制</strong> - 外观可以根据需要进行调整
+									<strong>可访问性</strong> - 完全支持字幕
 								</p>
 							</li>
 							<li>
 								<p>
 									<strong>语义化</strong> - 使用 HTML5 的输入框进行音量和进度的调整
-								</p>
-							</li>
-							<li>
-								<p>
-									<strong>快速响应</strong> - 就像你预期的那样
-								</p>
-							</li>
-							<li>
-								<p>
-									<strong>音频和视频</strong>- 支持视频和纯音频
-								</p>
-							</li>
-							<li>
-								<p>
-									<strong>API</strong>&nbsp;- 易用 API
 								</p>
 							</li>
 							<li>
@@ -68,11 +42,6 @@
 							<li>
 								<p>
 									<strong>全屏支持</strong> -支持原生全屏和退出全屏
-								</p>
-							</li>
-							<li>
-								<p>
-									<strong>无依赖</strong> - 使用原生 JS 编写，不需要jQuery
 								</p>
 							</li>
 						</ul>
