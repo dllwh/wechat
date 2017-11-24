@@ -4,9 +4,8 @@
 <html>
 <head  lang="en">
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
-
 <title>${_currProject}</title>
-<%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 <script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
 <script type="text/javascript">	
 

@@ -4,7 +4,7 @@
 <html>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 <head>
-<%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 <link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
 
 

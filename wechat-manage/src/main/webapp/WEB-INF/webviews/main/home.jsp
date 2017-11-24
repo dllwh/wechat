@@ -6,7 +6,7 @@
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 
 <title>${_currProject}</title>
-<%@ include file="/WEB-INF/webviews/common/include/assets.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 	<script src="${_currConText }/plug-in/assets/dist/echarts.js"></script>
 	<script src="${_currConText }/plug-in/assets/js/bootstrap.min.js"></script>
 	<title>${_currProject}</title>
