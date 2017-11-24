@@ -27,6 +27,9 @@
 			<p>
 				ECharts2官网：<a href="http://echarts.baidu.com/echarts2/" target="_blank">http://echarts.baidu.com/</a>
 			</p>
+			<p>
+				<echarts:getlineChart var="lineChart"/>
+			</p>
 		</div>
 	</div>
 	<%-- 示例 --%>
@@ -162,6 +165,17 @@
 <%-- 	<script type="text/javascript" src="${_currConText }/plug-in/echarts3/echarts.min.js"></script> --%>
 	<script type="text/javascript" src="${_currConText }/plug-in/echarts2/echarts-all.js"></script>
 	<!-- 示例 -->
-	<script type="text/javascript" src="${_currConText }/static/sample/echarts-demo.js"></script>
+<%-- 	<script type="text/javascript" src="${_currConText }/static/sample/echarts-demo.js"></script> --%>
+	<script type="text/javascript">
+		var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+		lineChart.showLoading({
+			text: '正在努力的读取数据中...'
+		});
+		var lineoption = ${lineChart};
+		lineChart.setOption(lineoption);
+		
+		lineChart.hideLoading();
+		$(window).resize(lineChart.resize);
+	</script>
 </body>
 </html>
