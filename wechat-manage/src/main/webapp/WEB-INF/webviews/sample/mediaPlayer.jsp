@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
@@ -74,7 +75,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-8">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h5>音频播放</h5>
