@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.cdeledu</groupId>
 		<artifactId>wechat</artifactId>
-		<version>${project.version}</version>
+		<version>0.0.8-SNAPSHO</version>
 	</parent>
 	<artifactId>wechat-common</artifactId>
 	<name>wechat-common</name>
