@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HTML5 多媒体播放器</title>
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
 <link rel="stylesheet" href="${_currConText }/static/css/sample/style.css" />
 <script type="text/javascript" src="${_currConText }/plug-in/jquery/jquery-1.10.2.min.js"></script>
 </head>
@@ -20,6 +21,14 @@
 						<h5>
 							HTML5 多媒体播放器 <a href="https://plyr.io/" target="_blank">https://plyr.io/</a>
 						</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link">
+								<i class="fa fa-chevron-up"></i>
+							</a> 
+							<a class="close-link">
+								<i class="fa fa-times"></i>
+							</a>
+						</div>
 					</div>
 					<div class="ibox-content">
 						<p>一个使用 HTML5 开发的基于浏览器上的多媒体播放器。</p>
@@ -53,6 +62,11 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h5>直播房间列表</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link">
+								<i class="fa fa-chevron-up"></i>
+							</a>
+						</div>
 					</div>
 					<div class="ibox-content">
 						<ul class="list-group">
@@ -104,4 +118,7 @@
 		</div>
 	</div>
 </body>
+<!-- 自定义js -->
+<script src="${_currConText }/plug-in/tools/ExtJavascript.js?v=1.0.0"></script>
+<script src="${_currConText }/plug-in/tools/content.js?v=1.0.0"></script>
 </html>

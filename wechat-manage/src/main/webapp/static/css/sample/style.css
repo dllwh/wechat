@@ -1,7 +1,3 @@
-a:focus {
-	outline: none;
-}
-
 body {
 	font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 13px;
@@ -13,6 +9,39 @@ html, body {
 	height: 100%;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 100;
+}
+
+h1 {
+	font-size: 30px;
+}
+
+h2 {
+	font-size: 24px;
+}
+
+h3 {
+	font-size: 16px;
+}
+
+h4 {
+	font-size: 14px;
+}
+
+h5 {
+	font-size: 12px;
+}
+
+h6 {
+	font-size: 10px;
+}
+
+h3, h4, h5 {
+	margin-top: 5px;
+	font-weight: 600;
+}
+
 video {
 	width: 100% !important;
 	height: auto !important;
@@ -22,8 +51,21 @@ a {
 	cursor: pointer;
 }
 
+a:focus {
+	outline: none;
+}
+
 a:hover, a:focus {
 	text-decoration: none;
+}
+
+code {
+	background-color: #F9F2F4;
+	border-radius: 4px;
+	color: #ca4440;
+	font-size: 90%;
+	padding: 2px 4px;
+	white-space: nowrap;
 }
 
 .dashboard-header {
@@ -123,6 +165,98 @@ a:hover, a:focus {
 .ibox-title .label {
 	float: left;
 	margin-left: 4px;
+}
+
+.ibox-tools {
+	display: inline-block;
+	float: right;
+	margin-top: 0;
+	position: relative;
+	padding: 0;
+}
+
+.ibox-tools a {
+	cursor: pointer;
+	margin-left: 5px;
+	color: #c4c4c4;
+}
+
+.ibox-tools a.btn-primary {
+	color: #fff;
+}
+
+.ibox-tools .dropdown-menu>li>a {
+	padding: 4px 10px;
+	font-size: 12px;
+}
+
+.ibox .open>.dropdown-menu {
+	left: auto;
+	right: 0;
+}
+
+/* TABLES */
+.table-bordered {
+	border: 1px solid #EBEBEB;
+}
+
+.table-bordered>thead>tr>th, .table-bordered>thead>tr>td {
+	background-color: #F5F5F6;
+	border-bottom-width: 1px;
+}
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>th,
+	.table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td,
+	.table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {
+	border: 1px solid #e7e7e7;
+}
+
+.table>thead>tr>th {
+	border-bottom: 1px solid #DDDDDD;
+	vertical-align: bottom;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td,
+	.table>tbody>tr>td, .table>tfoot>tr>td {
+	border-top: 1px solid #e7eaec;
+	line-height: 1.42857;
+	padding: 8px;
+	vertical-align: middle;
+}
+
+.show-grid [class^="col-"] {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border: 1px solid #ddd;
+	background-color: #eee !important;
+}
+
+.show-grid {
+	margin: 15px 0;
+}
+
+/*返回首页*/
+.gohome {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 100;
+}
+
+.gohome a {
+	height: 38px;
+	width: 38px;
+	display: block;
+	background: #2f4050;
+	padding: 9px 8px;
+	text-align: center;
+	color: #fff;
+	border-radius: 50%;
+	opacity: .5;
+}
+
+.gohome a:hover {
+	opacity: 1;
 }
 
 .echarts {
