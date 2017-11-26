@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<!DOCTYPE html>
 <html>
 <head>
 <!--[if lt IE 9]>
@@ -30,63 +31,7 @@
 			pattern="yyyy年MM月dd日  HH时mm分ss秒" />
 
 		<p>上次登录IP：${userIp} 上次登录时间：${currentTime }</p>
-		<table class="table table-border table-bordered table-bg">
-			<thead>
-				<tr>
-					<th colspan="7" scope="col">信息统计</th>
-				</tr>
-				<tr class="text-c">
-					<th>统计</th>
-					<th>资讯库</th>
-					<th>图片库</th>
-					<th>产品库</th>
-					<th>用户</th>
-					<th>管理员</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="text-c">
-					<td>总数</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr class="text-c">
-					<td>今日</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr class="text-c">
-					<td>昨日</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr class="text-c">
-					<td>本周</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr class="text-c">
-					<td>本月</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-			</tbody>
-		</table>
+
 		<table class="table table-border table-bordered table-bg mt-20">
 			<thead>
 				<tr>
