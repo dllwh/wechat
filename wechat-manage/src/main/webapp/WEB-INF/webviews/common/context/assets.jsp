@@ -23,7 +23,7 @@
 <script src="${_currConText }/plug-in/assets/js/jquery.min.js"></script>   
 <!-- <![endif]-->
 <!--[if IE]>
-<script type="text/javascript">window.jQuery || document.write("<script src='${_currConText }/plug-in/assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");</script>
+<script type="text/javascript">window.jQuery || document.write("<script src='${_currConText }/plug-in/jquery/jquery-1.10.2.min.js'>"+"<"+"script>");</script>
 <![endif]-->
 
 
