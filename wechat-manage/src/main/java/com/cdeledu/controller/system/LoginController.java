@@ -40,9 +40,6 @@ public class LoginController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	@Autowired
 	private SystemService systemService;
-
-	private String logMsg = null;
-
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法:登陆验证
@@ -57,6 +54,7 @@ public class LoginController extends BaseController {
 		HttpSession session = WebUtilHelper.getSession();
 		String imageCaptcha = (String) session.getAttribute(GlobalConstants.IMAGECAPTCHA);
 		boolean suc = true;
+		String logMsg ="";
 		SysLoginLog loginLog = new SysLoginLog();
 
 		if (StringUtils.isEmpty(imageCaptcha)
@@ -147,6 +145,7 @@ public class LoginController extends BaseController {
 	@RequestMapping(params = "doLogout")
 	public String doLogout(HttpServletRequest request) {
 		HttpSession session = request.getSession();
+		String logMsg ="";
 		SysUser currenLoginUser = ShiroHelper.getPrincipal();
 		// 判断用户是否为空,不为空,则清空session中的用户object
 		if (null != session || currenLoginUser != null) {
