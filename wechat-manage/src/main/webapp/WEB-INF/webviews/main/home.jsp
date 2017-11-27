@@ -7,7 +7,7 @@
 
 <title>${_currProject}</title>
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
-	<script src="${_currConText }/plug-in/assets/dist/echarts.js"></script>
+	<script src="${_currConText }/plug-in/echarts2/echarts.js"></script>
 	<script src="${_currConText }/plug-in/assets/js/bootstrap.min.js"></script>
 	<title>${_currProject}</title>
 	<script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
@@ -132,7 +132,7 @@ $(function(){
 
 	require.config({
 		paths : {
-			echarts : '${_currConText }/plug-in/assets/dist'
+			echarts : '${_currConText }/plug-in/echarts2'
 		}
 	});
 	require([ 'echarts', 'echarts/theme/macarons', 'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
