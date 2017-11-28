@@ -29,11 +29,11 @@
 	</bean>
 
 	<!-- 登录校验 -->
-	<bean id="login" class="com.cdeledu.core.shiro.filter.LoginFilter"/>
+	<bean id="loginFilter" class="com.cdeledu.core.shiro.filter.LoginFilter"/>
 	<!-- 角色判断校验 -->
-	<bean id="role" class="com.cdeledu.core.shiro.filter.RoleFilter"/>
+	<bean id="roleFilter" class="com.cdeledu.core.shiro.filter.RoleFilter"/>
 	<!-- 权限校验 -->
-	<bean id="permission" class="com.cdeledu.core.shiro.filter.PermissionFilter"/>
+	<bean id="permissionFilter" class="com.cdeledu.core.shiro.filter.PermissionFilter"/>
 	<!-- 判断是否踢出  
 		<bean id="simple" class="com.cdeledu.common.filter.shiro.kickedOutFilter"/>
 	-->
@@ -47,10 +47,10 @@
 		<constructor-arg>
 			<value>
 				/loginController** = anon
-				/sysPage/** = anon,kickout
-				/homeController/** = authc
-				/dataSourceController** = authc,role[administrator]
-				/** = authc,permission,login,kickout
+				/sysPage/** = anon,kickoutFilter
+				/homeController/** = loginFilter
+				/dataSourceController** = authc,roleFilter[administrator]
+				/** = authc,loginFilter,permissionFilter,kickoutFilter
 			</value>
 		</constructor-arg>
 	</bean>
@@ -63,16 +63,16 @@
 		<!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
 		<property name="loginUrl" value="/loginController.shtml?doLogin" />
 		<!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后的处理逻辑在LoginController里硬编码为center.jsp了) -->
-		<!-- <property name="successUrl" value="/system/main"/> -->
+		<property name="successUrl" value="/loginController.shtml?doLogin"/>
 		<!-- 用户访问未对其授权的资源时,所显示的连接 -->
 		<property name="unauthorizedUrl" value="/sysPage/unauthorized.shtml" />
 		<!-- 自定义filter，可用来更改默认的表单名称配置 -->
 		<property name="filters">
 			<util:map>
-				<entry key="login" value-ref="login"/>
-				<entry key="role" value-ref="role"/>
-				<entry key="permission" value-ref="permission"/>
-				<entry key="kickout" value-ref="kickoutSessionFilter"/>
+				<entry key="loginFilter" value-ref="loginFilter"/>
+				<entry key="roleFilter" value-ref="roleFilter"/>
+				<entry key="permissionFilter" value-ref="permissionFilter"/>
+				<entry key="kickoutFilter" value-ref="kickoutSessionFilter"/>
 			</util:map>
 		</property>
 		<!-- Shiro连接约束配置,即过滤链的定义 -->
