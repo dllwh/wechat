@@ -100,8 +100,6 @@
 		<org.apache.shiro.version>1.3.2</org.apache.shiro.version>
 		<!-- FreeMarker 版本号 -->
 		<org.freemarker.version>2.3.23</org.freemarker.version>
-		<!-- jetty 版本号 -->
-		<jetty.version>6.1.5</jetty.version>
 		<!-- 定时:Quartz -->
 		<quartz.version>2.2.3</quartz.version>
 		<!-- Java开源爬虫框架WebCollector 2.x -->
@@ -623,22 +621,6 @@
 		<!-- httpclient -->
 
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-util</artifactId>
-			<version>9.2.12.v20150709</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-io</artifactId>
-			<version>9.2.12.v20150709</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.nekohtml</groupId>
-			<artifactId>nekohtml</artifactId>
-			<version>1.9.21</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
 			<version>4.4.4</version>
@@ -741,14 +723,6 @@
 			<artifactId>UserAgentUtils</artifactId>
 			<version>1.2.4</version>
 		</dependency>
-
-		<!-- SFTP -->
-		<dependency>
-			<groupId>com.jcraft</groupId>
-			<artifactId>jsch</artifactId>
-			<version>0.1.53</version>
-		</dependency>
-		
 	</dependencies>
 
 	<!-- ====================================================================== 
