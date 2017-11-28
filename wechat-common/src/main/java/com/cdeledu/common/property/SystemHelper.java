@@ -9,8 +9,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import com.cdeledu.common.property.PropertyHelper;
-import com.cdeledu.common.property.SysProperty;
+import org.apache.commons.lang.StringUtils;
+
 import com.google.common.collect.Lists;
 
 /**
@@ -182,5 +182,57 @@ public class SystemHelper {
 
 	public final static boolean isWindowsXP() {
 		return getOSMatches("Windows", "5.1");
+	}
+
+	/**
+	 * @方法描述: 获取到classes目录
+	 * @return
+	 */
+	public static String getClassPath() {
+		String systemName = System.getProperty("os.name");
+
+		// 判断当前环境，如果是Windows 要截取路径的第一个 '/'
+		if (!StringUtils.isBlank(systemName) && systemName.indexOf("Windows") != -1) {
+			return SystemHelper.class.getResource("/").getFile().toString().substring(1);
+		} else {
+			return SystemHelper.class.getResource("/").getFile().toString();
+		}
+	}
+
+	/**
+	 * 获取当前对象的路径
+	 * 
+	 * @param object
+	 * @return path
+	 */
+	public static String getObjectPath(Object object) {
+		return object.getClass().getResource(".").getFile().toString();
+	}
+
+	/**
+	 * 获取到项目的路径
+	 * 
+	 * @return path
+	 */
+	public static String getProjectPath() {
+		return System.getProperty("user.dir");
+	}
+
+	/**
+	 * 获取 root目录
+	 * 
+	 * @return path
+	 */
+	public static String getRootPath() {
+		return getWEB_INF().replace("WEB-INF/", "");
+	}
+
+	/**
+	 * 获取 web-inf目录
+	 * 
+	 * @return path
+	 */
+	public static String getWEB_INF() {
+		return getClassPath().replace("classes/", "");
 	}
 }
