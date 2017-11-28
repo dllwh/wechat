@@ -15,7 +15,8 @@ weinxin-manage
 > > * 第三方登录模块、邮件服务器模块等
 > > * 以及结合Apache shiro的单点登录配置模块(预设想法)
 			
-
+[Apache Shiro 文档整理](./Shiro.md)
+----------------------
 
 [技术选型](http://note.youdao.com/noteshare?id=233df4488c0cac1b719952432977ca74&sub=CD29D21A0EA0410F83F9447BB3D1F0B9)
 ------------------------
