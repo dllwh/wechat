@@ -20,14 +20,27 @@
 		http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context.xsd">
+		
+	<!-- 定义个缺省的控制适配器 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 
-	<!-- 数据库配置 -->
+	<!-- ====================================================================== 
+		加载资源文件 其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载 -->
+	<!-- 适用于多个资源文件加载 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/dbConfig.properties</value>
+				<value>classpath:properties/redis.properties</value>
+			</list>
+		</property>
+	</bean>
+
 	<import resource="applicationContext-dataSource.xml" />
-	<!-- redis配置 -->
-	<!-- 
-		<import resource="applicationContext-redis.xml" />
-	-->
-	<!-- shiro配置 -->
+	<import resource="applicationContext-cache.xml" />
+	<import resource="applicationContext-redis.xml" />
 	<import resource="applicationContext-shiro.xml" />
 
 
