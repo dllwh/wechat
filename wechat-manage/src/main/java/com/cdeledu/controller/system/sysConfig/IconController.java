@@ -1,4 +1,4 @@
-package com.cdeledu.controller.system.resource;
+package com.cdeledu.controller.system.sysConfig;
 
 import java.util.List;
 import java.util.Map;

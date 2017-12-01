@@ -1,4 +1,4 @@
-package com.cdeledu.controller.system.menu;
+package com.cdeledu.controller.system.upms.sysMenu;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

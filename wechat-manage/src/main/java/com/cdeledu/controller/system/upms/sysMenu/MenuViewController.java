@@ -1,4 +1,4 @@
-package com.cdeledu.controller.system.menu;
+package com.cdeledu.controller.system.upms.sysMenu;
 
 import java.util.List;
 
