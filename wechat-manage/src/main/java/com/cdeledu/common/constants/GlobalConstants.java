@@ -20,8 +20,6 @@ public class GlobalConstants {
 	public static final String FILTERED_REQUEST = "@@session_context_filtered_request";
 	/** 保存用户到SESSION */
 	public static final String USER_SESSION = "USER_SESSION";
-	/** session status */
-	public static final String SESSION_STATUS ="sojson-online-status";
 	/** 人员类型 */
 	public static final Short User_Normal = 1;// 正常
 	public static final Short User_Forbidden = 0;// 禁用
