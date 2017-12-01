@@ -12,45 +12,33 @@ package com.cdeledu.common.constants;
  * @since: JDK 1.7
  */
 public class MessageConstant {
-	/**
-	 * 登录成功
-	 */
-	public static final String LOGIN_SUCCESS = "LOGIN_SUCCESS";
-	/**
-	 * 用户名或密码错误
-	 */
-	public static final String LOGIN_USER_REEOE = "LOGIN_USER_REEOE";
-	/**
-	 * 用户被锁定
-	 */
-	public static final String LOGIN_USER_LOCK = "LOGIN_USER_LOCK";
-	/**
-	 * 密码错误次数已达上限
-	 */
-	public static final String LOGIN_USER_MORE = "LOGIN_USER_MORE";
-	/**
-	 * 用户审核
-	 */
-	public static final String LOGIN_USER_NOCHECK = "LOGIN_USER_NOCHECK";
-
-	/**
-	 * 操作成功
-	 */
+	/** 登录成功 */
+	public static final String LOGIN_SUCCESS = "登录成功";
+	/** 用户名或密码错误 */
+	public static final String LOGIN_USER_REEOE = "用户名或密码错误";
+	/** 用户被锁定 */
+	public static final String LOGIN_USER_LOCK = "验证未通过,账户已锁定";
+	/** 该账号不存在! */
+	public static final String LOGIN_USER_UNKNOWN = "该账号不存在!";
+	/** 帐号已被禁用 */
+	public static final String LOGIN_USER_DISABLED = "验证未通过,帐号已被禁用";
+	/** 密码错误次数已达上限 */
+	public static final String LOGIN_USER_MORE = "验证未通过,用户名或密码错误次数过多";
+	/** 用户审核 */
+	public static final String LOGIN_USER_NOCHECK = "用户未通过审核";
+	/** 用户未授权 */
+	public static final String LOGIN_USER_UNAUTHORIZED = "验证未通过,您没有得到相应的授权！";
+	/** 帐号已过期 */
+	public static final String LOGIN_USER_EXPIRED = "验证未通过,帐号已过期";
+	/** 进行登录验证..验证未通过 */
+	public static final String LOGIN_ERROR = "进行登录验证..验证未通过";
+	/** 操作成功 */
 	public static final String MSG_OPERATION_SUCCESS = "操作成功！";
-
-	/**
-	 * 操作失败
-	 */
+	/** 操作失败 */
 	public static final String MSG_OPERATION_FAILED = "操作失败！";
-
-	/**
-	 * 删除时，提示有子节点无法删除
-	 */
+	/** 删除时，提示有子节点无法删除 */
 	public static final String MSG_HAS_CHILD = "操作失败，当前所选数据有子节点数据！";
-
-	/**
-	 * 加载表单数据错误提示
-	 */
+	/** 加载表单数据错误提示 */
 	public static final String MSG_INIT_FORM = "初始化表单数据失败，请重试！";
 
 	/**
