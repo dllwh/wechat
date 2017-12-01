@@ -2,6 +2,8 @@ package com.cdeledu.core.filter;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,10 +45,19 @@ public class SQLFilter extends BaseClass implements Filter {
 				sql = sql + string;
 			}
 		}
-
-		if (sqlValidate(sql)) {
-			throw new IOException("您发送请求中的参数中含有非法字符");
-		}
+		HttpServletRequest httpRequest = ((HttpServletRequest) request);
+		// 获取URI
+		String uri = httpRequest.getRequestURI();
+		
+		if(!uri.contains("loginController.shtml")){ // 登录请求
+			if (sqlValidate(sql)) {
+				Map<String,Object> resultMap = new HashMap<String, Object>();
+				resultMap.put("success", false);
+				resultMap.put("msg", "您发送请求中的参数中含有非法字符");
+				FilterHelper.out(response, resultMap);
+				return;
+			}
+		} 
 		chain.doFilter(request, response);
 	}
 
