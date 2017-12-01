@@ -13,10 +13,11 @@ import org.slf4j.LoggerFactory;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
+
 /**
  * 把今天最好的表现当作明天最新的起点．．～
  *
- * Today the best performance  as tomorrow newest starter!
+ * Today the best performance as tomorrow newest starter!
  *
  * @类描述: 登录判断
  * @创建者: 皇族灬战狼
@@ -26,30 +27,35 @@ import com.cdeledu.model.rbac.SysUser;
  */
 public class LoginFilter extends AccessControlFilter {
 	/** ----------------------------------------------------- Fields start */
-	/**  日志对象 */
+	/** 日志对象 */
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+
 	/** ----------------------------------------------------- Fields end */
 	@Override
-	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
-			throws Exception {
+	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
+			Object mappedValue) throws Exception {
 		SysUser token = ShiroHelper.getPrincipal();
-		if(token != null || isLoginRequest(request, response)){
+		if (token != null || isLoginRequest(request, response)) {
 			return Boolean.TRUE;
 		}
-		if(FilterHelper.isAjax(request)){
-			Map<String,String> resultMap = new HashMap<String, String>();
-			if(logger.isDebugEnabled()){
+		if (FilterHelper.isAjax(request)) {
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			if (logger.isDebugEnabled()) {
 				logger.debug("当前用户没有登录，并且是Ajax请求！");
 			}
-			resultMap.put("message", "当前用户没有登录，并且是Ajax请求！");
+			resultMap.put("success", false);
+			resultMap.put("msg", "当前用户没有登录，并且是Ajax请求！");
 			FilterHelper.out(response, resultMap);
+			return Boolean.FALSE;
+
 		}
 		return Boolean.FALSE;
 	}
 
 	@Override
-	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-		//保存Request和Response 到登录后的链接
+	protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
+			throws Exception {
+		// 保存Request和Response 到登录后的链接
 		logger.error("*************************************保存Request和Response 到登录后的链接");
 		saveRequestAndRedirectToLogin(request, response);
 		return true;
