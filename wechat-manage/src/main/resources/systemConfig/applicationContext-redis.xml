@@ -9,11 +9,8 @@
 
 	<!-- 连接池配置 -->
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<!-- 最大连接数 -->
 		<property name="maxTotal" value="${redis.maxActive}" />
-		<!-- 最大闲置 -->
 		<property name="maxIdle" value="${redis.maxIdle}" />
-		<!-- 最大等待 -->
 		<property name="maxWaitMillis" value="${redis.maxWait}" />
 		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
 		<property name="testOnReturn" value="${redis.testOnReturn}" />
@@ -22,12 +19,12 @@
 
 	<!-- Redis管理 -->
 	<!-- 
-		<bean id="redisManager" class="com.cdeledu.core.redis.JedisManager">
-			<property name="jedisPool"/>
-		</bean>
+	<bean id="redisManager" class="com.cdeledu.core.redis.JedisManager">
+		<property name="jedisPool" ref="jedisPoolConfig" />
+	</bean>
 	-->
 
-<!-- 	<bean id="jeidsConnectionFactory"></bean> -->
+	<!-- <bean id="jeidsConnectionFactory"></bean> -->
 
-<!-- 	<bean id="redisTemplate"></bean> -->
+	<!-- <bean id="redisTemplate"></bean> -->
 </beans>
