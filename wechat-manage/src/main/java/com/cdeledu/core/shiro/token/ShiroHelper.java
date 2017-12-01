@@ -10,9 +10,11 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.model.rbac.SysUser;
 
 public class ShiroHelper {
@@ -33,28 +35,28 @@ public class ShiroHelper {
 			subject.login(token);
 		} catch (UnknownAccountException uae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,未知账户";
-			resultMsg = "该账号不存在!";
+			resultMsg = MessageConstant.LOGIN_USER_UNKNOWN;
 		} catch (IncorrectCredentialsException ice) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,错误的凭证";
-			resultMsg = "用户名或密码错误,请重新登录!";
+			resultMsg = MessageConstant.LOGIN_USER_REEOE;
 		} catch (LockedAccountException lae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,账户已锁定";
-			resultMsg = "验证未通过,账户已锁定";
+			resultMsg = MessageConstant.LOGIN_USER_LOCK;
 		} catch (DisabledAccountException dae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,帐号已被禁用";
-			resultMsg = ".验证未通过,帐号已被禁用";
+			resultMsg = MessageConstant.LOGIN_USER_DISABLED;
 		} catch (ExpiredCredentialsException ece) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,帐号已过期";
-			resultMsg = "验证未通过,帐号已过期";
+			resultMsg = MessageConstant.LOGIN_USER_EXPIRED;
 		} catch (ExcessiveAttemptsException eae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,用户名或密码错误次数过多";
-			resultMsg = "验证未通过,用户名或密码错误次数过多";
+			resultMsg = MessageConstant.LOGIN_USER_MORE;
 		} catch (UnauthorizedException e) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过,您没有得到相应的授权！";
-			resultMsg = "验证未通过,您没有得到相应的授权！";
+			resultMsg = MessageConstant.LOGIN_USER_UNAUTHORIZED;
 		} catch (AuthenticationException ae) {
 			logMsg = "对用户[" + userName + "]进行登录验证..验证未通过," + ae.getMessage();
-			resultMsg = "进行登录验证..验证未通过";
+			resultMsg = MessageConstant.LOGIN_ERROR;
 		}
 
 		if (subject.isAuthenticated()) {
@@ -70,12 +72,20 @@ public class ShiroHelper {
 		return ajaxJson;
 	}
 
+	public static Subject getSubject() {
+		return SecurityUtils.getSubject();
+	}
+
+	public static Session getSession() {
+		return getSubject().getSession();
+	}
+
 	/**
 	 * @方法描述: 获取当前获取授权用户信息
 	 * @return
 	 */
 	public static SysUser getPrincipal() {
-		return (SysUser) SecurityUtils.getSubject().getPrincipal();
+		return (SysUser) getSubject().getPrincipal();
 	}
 
 	/**
@@ -136,36 +146,38 @@ public class ShiroHelper {
 	 * @return
 	 */
 	public static boolean isLogin() {
-		return null != SecurityUtils.getSubject().getPrincipal();
+		return null != getSubject().getPrincipal();
 	}
 
 	/**
 	 * 退出登录
 	 */
 	public static void logout() {
-		Subject subject = SecurityUtils.getSubject();
+		Subject subject = getSubject();
 		if (subject.isAuthenticated()) {
 			subject.logout();
 		}
 	}
-	
+
 	/**
 	 * @方法描述: 是否拥有该角色
 	 * @param roleCode
 	 * @return
 	 */
-	public static boolean hasRole(String roleCode){
-		Subject subject = SecurityUtils.getSubject();
+	public static boolean hasRole(String roleCode) {
+		Subject subject = getSubject();
 		return subject != null && subject.hasRole(roleCode);
-	} 
-	
+	}
+
 	/**
 	 * 是否拥有该权限
-	 * @param permission  权限标识
+	 * 
+	 * @param permission
+	 *            权限标识
 	 * @return
 	 */
 	public boolean hasPermission(String permission) {
-		Subject subject = SecurityUtils.getSubject();
+		Subject subject = getSubject();
 		return subject != null && subject.isPermitted(permission);
 	}
 }
