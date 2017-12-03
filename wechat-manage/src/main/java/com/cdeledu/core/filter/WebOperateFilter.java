@@ -32,17 +32,10 @@ public class WebOperateFilter extends BaseClass implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
-		logger.debug("Access Auth Interceptor - 进入过滤器");
-		try {
-
-			// BasicDBObject dbb = new BasicDBObject();
-			// dbb.put("url", operaterUrl);
-			// dbb.put("param", params.toString());
-			// MongoConstants.mongoQueue.add(dbb);
-		} finally {
-			filterChain.doFilter(request, response);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Access Auth Interceptor - 进入过滤器");
 		}
-
+		filterChain.doFilter(request, response);
 	}
 
 	@Override
