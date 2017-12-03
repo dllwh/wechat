@@ -1,4 +1,4 @@
-package com.cdeledu.service.impl.log;
+package com.cdeledu.service.log.impl;
 
 import org.springframework.stereotype.Service;
 

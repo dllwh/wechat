@@ -1,4 +1,4 @@
-package com.cdeledu.service.impl.sys;
+package com.cdeledu.service.sys.impl;
 
 import javax.annotation.Resource;
 

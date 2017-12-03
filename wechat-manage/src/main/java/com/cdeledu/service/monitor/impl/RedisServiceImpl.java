@@ -1,4 +1,4 @@
-package com.cdeledu.service.impl.monitor;
+package com.cdeledu.service.monitor.impl;
 
 import org.springframework.stereotype.Service;
 
