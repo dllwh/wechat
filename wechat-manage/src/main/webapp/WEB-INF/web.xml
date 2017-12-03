@@ -158,7 +158,7 @@
 		<init-param>
 			<!-- 是否允许重置 -->
 			<param-name>resetEnable</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 		<!-- 缺省sessionStatMaxCount是1000个。你可以按需要进行配置 -->
 		<init-param>
