@@ -6,10 +6,12 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.cdeledu.common.constants.GlobalConstants;
+import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
@@ -25,9 +27,11 @@ import com.cdeledu.service.sys.SysMenuService;
  */
 public class WebUtilHelper {
 	/** ----------------------------------------------------- Fields start */
-	private static final ResourceBundle sysConfig = ResourceBundle.getBundle("properties/sysConfig");
+	private static final ResourceBundle sysConfig = ResourceBundle
+			.getBundle("properties/sysConfig");
 	private static ManagerUserService userService = SpringContextUtil.getBean("managerUserService");
 	private static SysMenuService sysMenuService = SpringContextUtil.getBean("sysMenuService");
+
 	/** ----------------------------------------------------- Fields end */
 
 	/**
@@ -96,13 +100,87 @@ public class WebUtilHelper {
 	 * 获取当前用户角色列表
 	 */
 	public static List<SysUserRole> getRoleList() {
-		List<SysUserRole> roleList =null;
+		List<SysUserRole> roleList = null;
 		try {
 			roleList = userService.getUserRole(getCurrenLoginUser());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return roleList;
+	}
+
+	/**
+	 * @方法描述: 获取当前获取授权用户id.
+	 * @return
+	 */
+	public static Integer getCurrentUserId() {
+		SysUser user = ShiroHelper.getPrincipal();
+		if (user != null) {
+			return user.getId();
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * @方法描述: 获取当前获取授权用户用户名
+	 * @return
+	 */
+	public static String getCurrentUserName() {
+		SysUser user = ShiroHelper.getPrincipal();
+		if (user != null) {
+			return user.getUserName();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @方法描述: 获取当前获取授权用户真实姓名
+	 * @return
+	 */
+	public static String getCurrentRealName() {
+		SysUser user = ShiroHelper.getPrincipal();
+		if (user != null) {
+			return user.getRealName();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @方法描述: 获取当前获取授权用户昵称
+	 * @return
+	 */
+	public static String getCurrentNickName() {
+		SysUser user = ShiroHelper.getPrincipal();
+		if (user != null) {
+			return user.getNickName();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * @方法描述: 是否拥有该角色
+	 * @param roleCode
+	 * @return
+	 */
+	public static boolean hasRole(String roleCode) {
+		Subject subject = ShiroHelper.getSubject();
+		return subject != null && subject.hasRole(roleCode);
+	}
+
+	/**
+	 * 是否拥有该权限
+	 * 
+	 * @param permission
+	 *            权限标识
+	 * @return
+	 */
+	public boolean hasPermission(String permission) {
+		Subject subject = ShiroHelper.getSubject();
+		return subject != null && subject.isPermitted(permission);
 	}
 
 	/**
@@ -113,54 +191,8 @@ public class WebUtilHelper {
 		try {
 			menuList = sysMenuService.getUserMenu(getCurrenLoginUser());
 		} catch (Exception e) {
-			
+
 		}
 		return menuList;
-	}
-
-	/**
-	 * @方法描述: 获取菜单名称路径（如：用户中心-用户管理-编辑）
-	 * @param requestUri
-	 * @param permission
-	 * @return
-	 */
-	public static String getMenuNamePath(String requestUri, String permission){
-		String menuNamePath = "";
-		return menuNamePath;
-	}
-	/**
-	 * @方法描述:
-	 * 
-	 *        <pre>
-	 * 访问权限及初始化按钮权限(控制按钮的显示)
-	 * 判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
-	 * 根据点击的菜单的xxx.do去菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
-	 * 根据按钮权限，授权按钮(当前点的菜单和角色中各按钮的权限匹对)
-	 *        </pre>
-	 * 
-	 * @param menuUrl
-	 *            菜单路径
-	 * @return
-	 */
-	public static boolean hasJurisdiction(String menuUrl) {
-		return false;
-	}
-
-	/**
-	 * @方法描述:
-	 * 
-	 *        <pre>
-	 *  按钮权限(方法中校验)
-	 *  判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
-	 *  根据点击的菜单的xxx.do去菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
-	 *  根据按钮权限，授权按钮(当前点的菜单和角色中各按钮的权限匹对)
-	 *        </pre>
-	 * 
-	 * @param menuUrl
-	 * @param type
-	 * @return
-	 */
-	public static boolean buttonJurisdiction(String menuUrl, String type) {
-		return true;
 	}
 }
