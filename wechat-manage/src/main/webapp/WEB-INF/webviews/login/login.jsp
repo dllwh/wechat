@@ -49,6 +49,7 @@
 						<input id="password" value="" name="password" type="password" 
 						class="password form-control x319 in">
 					</div>
+					<%--
 					<div class="form-group">
 						<label for="captcha" class="t">验证码</label>
 						<input id="imageCaptcha" name="imageCaptcha" value="" type="text" 
@@ -57,6 +58,7 @@
 							src="${_currConText }/plug-in/login/images/imageCaptcha.jsp" 
 							onclick="javascript:loadimage();" class="m">
 					</div>
+					--%>
 					<div class="form-group space">
 						<label class="t"></label>　　　
 						<button type="button"  id="submit_btn" 

@@ -3,7 +3,7 @@ package com.cdeledu.controller.system.upms;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,6 @@ import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.sys.SystemService;
-import com.cdeledu.util.WebUtilHelper;
 import com.cdeledu.util.network.IpUtilHelper;
 import com.cdeledu.util.security.PasswordUtil;
 
@@ -51,17 +50,18 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	public AjaxJson checkuser(HttpServletRequest request, SysUser user) {
 		AjaxJson reslutMsg = new AjaxJson();
-		HttpSession session = WebUtilHelper.getSession();
-		String imageCaptcha = (String) session.getAttribute(GlobalConstants.IMAGECAPTCHA);
+		// HttpSession session = WebUtilHelper.getSession();
+		Session session = ShiroHelper.getSession();
+		// String imageCaptcha = (String) session.getAttribute(GlobalConstants.IMAGECAPTCHA);
 		boolean suc = true;
 		String logMsg ="";
 		SysLoginLog loginLog = new SysLoginLog();
 
-		if (StringUtils.isEmpty(imageCaptcha)
+		/* if (StringUtils.isEmpty(imageCaptcha)
 				|| !imageCaptcha.equalsIgnoreCase(user.getImageCaptcha())) {
 			logMsg = "验证码错误，请重新输入";
 			suc = false;
-		} else {
+		} else {*/
 			try {
 				String password = PasswordUtil.encrypt(user.getUserName(), user.getPassword());
 				AjaxJson loginResult = ShiroHelper.login(user.getUserName(), password);
@@ -98,7 +98,7 @@ public class LoginController extends BaseController {
 				logMsg = "用户名或密码错误,请重新登录!";
 				suc = false;
 			}
-		}
+		// }
 		reslutMsg.setMsg(logMsg);
 		reslutMsg.setSuccess(suc);
 		return reslutMsg;
@@ -148,7 +148,7 @@ public class LoginController extends BaseController {
 		String logMsg ="";
 		SysUser currenLoginUser = ShiroHelper.getPrincipal();
 		// 判断用户是否为空,不为空,则清空session中的用户object
-		if (null != session || currenLoginUser != null) {
+		if (null != session && currenLoginUser != null) {
 			// 注销该操作用户
 			session.removeAttribute(GlobalConstants.USER_SESSION);
 			logMsg = "用户[" + currenLoginUser.getUserName() + "]已退出";

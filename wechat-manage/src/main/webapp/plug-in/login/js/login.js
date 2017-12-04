@@ -25,11 +25,11 @@ $(function() {
 			show_err_msg('你还没有填写密码哦。');
 			jrumble();
 			$('#password').focus();
-		} else if ($('#imageCaptcha').val() == '') { // 如果验证码未输入，则提示输入验证码
+		} /*else if ($('#imageCaptcha').val() == '') { // 如果验证码未输入，则提示输入验证码
 			show_err_msg('你还没有填写验证码哦。');
 			jrumble();
 			$('#imageCaptcha').focus();
-		} else {
+		}*/ else {
 			// ajax提交表单，#login_form为表单的ID。
 			// 如：$('#login_form').ajaxSubmit(function(data) { ... });
 			show_msg('验证信息中,请稍候...', '/');
