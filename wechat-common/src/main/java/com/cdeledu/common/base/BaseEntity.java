@@ -17,27 +17,27 @@ public abstract class BaseEntity<T> extends PageEntity<T> {
 	/**
 	 * 是否可见;1:可见,默认值;0:不可见
 	 */
-	private Integer isVisible = 1;
+	protected Integer isVisible = 1;
 	/**
 	 * 是否有效;-1:删除;0:不可用,默认值;1:可用
 	 */
-	private Integer isEnabled = 1;
+	protected Integer isEnabled = 1;
 	/**
 	 * 是否允许编辑;1:允许,默认值;0:不允许
 	 */
-	private Integer allowEdit = 1;
+	protected Integer allowEdit = 1;
 	/**
 	 * 是否允许删除;1:允许删除,默认值,0:不允许删除
 	 */
-	private Integer allowDelete = 1;
+	protected Integer allowDelete = 1;
 	/**
 	 * 排序,默认从1开始
 	 */
-	private Integer sequence = 1;
+	protected Integer sequence = 1;
 	/**
 	 * 备注、说明
 	 */
-	private String remark;
+	protected String remark;
 
 	public Integer getId() {
 		return id;

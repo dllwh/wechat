@@ -14,15 +14,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 public abstract class DataEntity<T> extends BaseEntity<T> {
 	private static final long serialVersionUID = 1L;
 	// 最初创建者
-	private Integer create;
+	protected Integer create;
 	// 数据创建时间
 	@DateTimeFormat(pattern= "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+	protected Date createTime;
 	// 最后修改人
-	private Integer modifier;
+	protected Integer modifier;
 	// 数据最后更新时间
 	@DateTimeFormat(pattern= "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+	protected Date updateTime;
 
 	public Integer getCreate() {
 		return create;

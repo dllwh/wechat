@@ -12,15 +12,15 @@ import java.io.Serializable;
 public class PageEntity<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/** 当前页数:第几页 --pageNo */
-	private int page = 1;
+	protected int page = 1;
 	/** 每页记录数 :pageSize(设置为“-1”表示不进行分页（分页无效）) */
-	private int rows = 10;
+	protected int rows = 10;
 	/** 起始页 */
-	private int startRow;
+	protected int startRow;
 	/** 排序字段名 */
-	private String sort;
+	protected String sort;
 	/** 按什么排序(asc,desc) */
-	private String order;
+	protected String order;
 
 	public int getPage() {
 		return page;
