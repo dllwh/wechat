@@ -72,9 +72,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			// ④ 1.为当前用户设置角色
 			simpleAuthorInfo.addRoles(roleList);
 			// ④ 2.为当前用户设置访问权限
-			simpleAuthorInfo.addStringPermissions(sysMenuService.getMenuPermsByUserId(currentUser));
-			// ④ 3.为当前用户设置操作权限
-			List<String> opPerms = sysMenuService.getButtonPermsByUserId(currentUser);
+			List<String> opPerms = sysMenuService.getMenuPermsByUserId(currentUser);
 			if(ListUtilHelper.isNotEmpty(opPerms)){
 				simpleAuthorInfo.addStringPermissions(opPerms);
 			}
