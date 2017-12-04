@@ -21,7 +21,7 @@ public class SysUser extends DataEntity<SysUser> {
 	@NotBlank(message = "登陆密码不能为空")
 	private String password;
 	/** 用户类型(超级管理员、系统管理员、管理员) */
-	private Integer UserType;
+	private Integer userType;
 	/** 昵称 */
 	private String nickName;
 	/** 真实姓名 */
@@ -62,11 +62,11 @@ public class SysUser extends DataEntity<SysUser> {
 	}
 
 	public Integer getUserType() {
-		return UserType;
+		return userType;
 	}
 
 	public void setUserType(Integer userType) {
-		UserType = userType;
+		this.userType = userType;
 	}
 
 	public String getNickName() {
@@ -160,7 +160,7 @@ public class SysUser extends DataEntity<SysUser> {
 	@Override
 	public String toString() {
 		return super.toString() + "\n SysUser [userName=" + userName + ", password=" + password
-				+ ", UserType=" + UserType + ", nickName=" + nickName + ", realName=" + realName
+				+ ", UserType=" + userType + ", nickName=" + nickName + ", realName=" + realName
 				+ ", email=" + email + ", emailstatus=" + emailstatus + ", userSex=" + userSex
 				+ ", mobile=" + mobile + ", telephone=" + telephone + ", signature=" + signature
 				+ ", imageCaptcha=" + imageCaptcha + ", isLocked=" + isLocked + ", loginFlag="
