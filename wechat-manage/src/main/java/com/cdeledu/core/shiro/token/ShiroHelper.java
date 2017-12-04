@@ -72,6 +72,10 @@ public class ShiroHelper {
 		return ajaxJson;
 	}
 
+	/**
+	 * @方法描述:获取认证授权组件Subject,其为我们提供了当前用户、角色和授权的相关信息
+	 * @return
+	 */
 	public static Subject getSubject() {
 		return SecurityUtils.getSubject();
 	}
@@ -85,59 +89,7 @@ public class ShiroHelper {
 	 * @return
 	 */
 	public static SysUser getPrincipal() {
-		return (SysUser) getSubject().getPrincipal();
-	}
-
-	/**
-	 * @方法描述: 获取当前获取授权用户id.
-	 * @return
-	 */
-	public static Integer getCurrentUserId() {
-		SysUser user = getPrincipal();
-		if (user != null) {
-			return user.getId();
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * @方法描述: 获取当前获取授权用户用户名
-	 * @return
-	 */
-	public static String getCurrentUserName() {
-		SysUser user = getPrincipal();
-		if (user != null) {
-			return user.getUserName();
-		} else {
-			return "";
-		}
-	}
-
-	/**
-	 * @方法描述: 获取当前获取授权用户真实姓名
-	 * @return
-	 */
-	public static String getCurrentRealName() {
-		SysUser user = getPrincipal();
-		if (user != null) {
-			return user.getRealName();
-		} else {
-			return "";
-		}
-	}
-
-	/**
-	 * @方法描述: 获取当前获取授权用户昵称
-	 * @return
-	 */
-	public static String getCurrentNickName() {
-		SysUser user = getPrincipal();
-		if (user != null) {
-			return user.getNickName();
-		} else {
-			return "";
-		}
+		return (SysUser) ShiroHelper.getSubject().getPrincipal();
 	}
 
 	/**
@@ -159,25 +111,4 @@ public class ShiroHelper {
 		}
 	}
 
-	/**
-	 * @方法描述: 是否拥有该角色
-	 * @param roleCode
-	 * @return
-	 */
-	public static boolean hasRole(String roleCode) {
-		Subject subject = getSubject();
-		return subject != null && subject.hasRole(roleCode);
-	}
-
-	/**
-	 * 是否拥有该权限
-	 * 
-	 * @param permission
-	 *            权限标识
-	 * @return
-	 */
-	public boolean hasPermission(String permission) {
-		Subject subject = getSubject();
-		return subject != null && subject.isPermitted(permission);
-	}
 }
