@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.common.constants.GlobalConstants;
 
 /**
@@ -14,11 +15,11 @@ import com.cdeledu.common.constants.GlobalConstants;
  * @since: JDK 1.7
  */
 @WebListener
-public class MySessionListener implements HttpSessionListener {
-
+public class MySessionListener extends BaseClass implements HttpSessionListener {
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	// 全站在线人数
-	public static int userNumber;
+	public static int userNumber = 0;
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -30,6 +31,9 @@ public class MySessionListener implements HttpSessionListener {
 		userNumber++;
 		se.getSession().getServletContext().setAttribute(GlobalConstants.ONLINEUSERNUMBER,
 				userNumber);
+		if (logger.isDebugEnabled()) {
+			logger.info("-----------------创建session的时候----" + userNumber);
+		}
 	}
 
 	/** 销毁 session的时候-1 */
@@ -38,5 +42,8 @@ public class MySessionListener implements HttpSessionListener {
 		userNumber--;
 		se.getSession().getServletContext().setAttribute(GlobalConstants.ONLINEUSERNUMBER,
 				userNumber);
+		if (logger.isDebugEnabled()) {
+			logger.info("-----------------销毁session的时候----" + userNumber);
+		}
 	}
 }
