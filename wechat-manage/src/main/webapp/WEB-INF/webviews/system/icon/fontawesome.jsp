@@ -26,8 +26,8 @@
 						<h5>
 							所有图标 
 							<small class="m-l-sm">所有图标集合 - 
-								<a href="http://glyphicons.com/" target="_blank">
-									Glyphicons
+								<a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">
+									Font Awesome
 								</a>
 							</small>
 						</h5>
