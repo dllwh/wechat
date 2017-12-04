@@ -158,7 +158,7 @@ public class SystemLogAspect extends BaseClass {
 		// 操作人的信息
 		int userId = -1;
 		if (ShiroHelper.isLogin()) {
-			userId = ShiroHelper.getCurrentUserId();
+			userId = WebUtilHelper.getCurrentUserId();
 		}
 		sysLog.setUserCode(userId);
 		// 登录的IP地址
