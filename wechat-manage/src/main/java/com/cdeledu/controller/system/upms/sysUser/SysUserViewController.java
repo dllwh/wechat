@@ -80,6 +80,7 @@ public class SysUserViewController extends BaseController {
 	@RequestMapping(value = "online")
 	public ModelAndView online(ModelMap modelMap) {
 		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/sysUser/onlineUser");
 		return mv;
 	}
 
