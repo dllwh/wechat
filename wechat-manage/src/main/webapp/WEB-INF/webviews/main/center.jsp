@@ -123,7 +123,7 @@
 							</a>
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
-									<a href="javascript:ovid(0)" id="Exit_system">
+									<a href="javascript:void(0)" id="Exit_system">
 										<i class="icon-off"></i>退出
 									</a>
 								</li>
