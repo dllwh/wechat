@@ -106,14 +106,6 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	/**
-	 * @方法描述: 根据用户ID查询操作按钮权限
-	 * @return
-	 */
-	public List<String> getButtonPermsByUserId(SysUser sysUser) throws Exception {
-		return (List<String>)baseDao.findListForJdbcParam(prefix+"getButtonPermsByUserId", sysUser);
-	}
-
-	/**
 	 * ----------------------------------------------------- privateMethod start
 	 */
 	/**

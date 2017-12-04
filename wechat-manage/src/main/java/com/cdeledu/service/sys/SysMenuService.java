@@ -16,9 +16,6 @@ public interface SysMenuService extends BaseService<SysMenu> {
 	/** 根据用户ID查询权限菜单（permission） */
 	List<String> getMenuPermsByUserId(SysUser sysUser) throws Exception;
 
-	/** 根据用户ID查询权限按钮（permission） */
-	List<String> getButtonPermsByUserId(SysUser sysUser) throws Exception;
-
 	/** 是否有子菜单 */
 	boolean hasChildren(int id) throws Exception;
 }

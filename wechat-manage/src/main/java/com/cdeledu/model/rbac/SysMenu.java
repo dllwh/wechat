@@ -26,8 +26,6 @@ public class SysMenu extends DataEntity<SysMenu> {
 	private String parentName;
 	/** 菜单图标样式 */
 	private String iconClass;
-	/** 授权标识(多个用逗号分隔，如：user:list,user:create) */
-	private String perms;
 	/** tree属性 */
 	private Boolean open = false;
 	private List<?> childrenList;
@@ -80,14 +78,6 @@ public class SysMenu extends DataEntity<SysMenu> {
 		this.iconClass = iconClass;
 	}
 
-	public String getPerms() {
-		return perms;
-	}
-
-	public void setPerms(String perms) {
-		this.perms = perms;
-	}
-
 	public Boolean getOpen() {
 		return open;
 	}
@@ -106,9 +96,9 @@ public class SysMenu extends DataEntity<SysMenu> {
 
 	@Override
 	public String toString() {
-		return "SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl + ", type=" + type
+		return super.toString()+ "\n\r SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl + ", type=" + type
 				+ ", parentCode=" + parentCode + ", parentName=" + parentName + ", iconClass="
-				+ iconClass + ", perms=" + perms + ", open=" + open + ", childrenList="
-				+ childrenList + "]";
+				+ iconClass + ", open=" + open + ", childrenList=" + childrenList + "]";
 	}
+	
 }
