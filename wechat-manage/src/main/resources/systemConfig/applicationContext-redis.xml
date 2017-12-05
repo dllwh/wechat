@@ -24,7 +24,19 @@
 	</bean>
 	-->
 
-	<!-- <bean id="jeidsConnectionFactory"></bean> -->
+	<!--  spring data redis -->
+	<bean id="jeidsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<constructor-arg ref="jedisPoolConfig"/>
+		<property name="usePool" value="true" />
+		<property name="hostName" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="password" value="${redis.password}"/>
+	</bean>
 
-	<!-- <bean id="redisTemplate"></bean> -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jeidsConnectionFactory" />
+	</bean>
+	
+	<!-- 该 BeanPostProcessor 将自动对标注 @Autowired 的 Bean 进行注入 -->
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
 </beans>
