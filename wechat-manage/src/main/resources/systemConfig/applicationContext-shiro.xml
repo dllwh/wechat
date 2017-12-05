@@ -19,7 +19,7 @@
 
 	<description>Shiro Configuration</description>
 
-	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
+	<!-- shiro于数据交互的类 ，继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义实现 -->
 	<bean id="shiroRealm" class="com.cdeledu.core.shiro.ShiroRealm" />
 	
 	<!-- 会话验证调度器 -->
@@ -30,11 +30,23 @@
 		<property name="sessionManager" ref="sessionManager" />
 	</bean>
 	
+	 <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID --> 
+	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<!--cookie的name -->
+		<property name="name" value="shiro.sesssioCookie"/>
+		<!-- 设置Cookie的路径，默认空，即存储在域名根下 -->
+		<property name="path" value="/"/>
+		<!--  设置Cookie的过期时间，秒为单位，默认-1表示关闭浏览器时过期Cookie -->
+		<property name="maxAge" value="-1"/>
+		<!-- 如果设置为true，则客户端不会暴露给客户端脚本代码，使用HttpOnly cookie有助于减少某些类型的跨站点脚本攻击 -->
+		<property name="httpOnly" value="true"/>
+	</bean>
+	
 	<!-- Session Manager -->
 	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-		<!-- session的失效时长，默认是30 分钟,该值以毫秒为时间单位-->
+		<!-- session的失效时长，默认是30 分钟((1800000)),该值以毫秒为时间单位-->
 		<property name="globalSessionTimeout" value="${session.timeout}" />
-		<!-- 删除失效的session -->
+		<!-- 是否在会话过期后会调用SessionDAO的delete方法删除会话,默认true -->
 		<property name="deleteInvalidSessions" value="true" />
 		<!-- 间隔多少时间检查，不配置是60分钟 -->	
 		<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
@@ -42,14 +54,7 @@
 		<property name="sessionValidationSchedulerEnabled" value="true"/>
 		<!-- 定时清理失效session , 清理用户直接关闭浏览器造成的孤立会话 :默认每小时检测一次-->
 		<property name="sessionValidationInterval" value="${session.validation}"/>
-		<!--cookie的name -->
-		<property name="sessionIdCookie.name" value="shiro.sesssioCookie"/>
-		<!-- 设置Cookie的路径，默认空，即存储在域名根下 -->
-		<property name="sessionIdCookie.path" value="/"/>
-		<!--  设置Cookie的过期时间，秒为单位，默认-1表示关闭浏览器时过期Cookie -->
-		<property name="sessionIdCookie.maxAge" value="-1" />
-		<!-- 如果设置为true，则客户端不会暴露给客户端脚本代码，使用HttpOnly cookie有助于减少某些类型的跨站点脚本攻击 -->
-		<property name="sessionIdCookie.httpOnly" value="true"/>
+		<property name="sessionIdCookie" ref="sessionIdCookie"/>
 		<!-- 是否启用/禁用，默认是启用的；如果禁用后将不会设置Session Id Cookie，即默认使用了Servlet容器的JSESSIONID -->
 		<property name="sessionIdCookieEnabled" value="true" />
 		<!-- session 监听，可以多个。 -->
@@ -63,7 +68,9 @@
 	<!-- 定义Shiro安全管理配置 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="shiroRealm" />
+		<!-- 注入session 管理器 -->
 		<property name="sessionManager" ref="sessionManager" />
+		<!-- 注入缓存管理器 -->
 		<!-- <property name="cacheManager" ref="cacheManager"/> -->
 	</bean>
 
@@ -118,7 +125,6 @@
 		<!-- 下面value值的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的 -->
 		<property name="filterChainDefinitions" ref="shiroFilterChainDefinitions"/>
 	</bean>
-
 	
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
@@ -126,5 +132,14 @@
 	<!-- session 校验单个用户是否多次登录 -->
 	<bean id="kickoutSessionFilter" class="com.cdeledu.core.shiro.filter.KickoutSessionFilter">
 		<property name="kickoutUrl" value="/loginController.shtml?doLogin"/>
+	</bean>
+	
+	<!-- 开启shiro的注解，需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor"/>
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
 	</bean>
 </beans>
