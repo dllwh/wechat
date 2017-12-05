@@ -21,11 +21,50 @@
 
 	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
 	<bean id="shiroRealm" class="com.cdeledu.core.shiro.ShiroRealm" />
+	
+	<!-- 会话验证调度器 -->
+	<bean id="sessionValidationScheduler" 
+		class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
+		<!-- 间隔多少时间检查，不配置是60分钟 -->
+		<property name="interval" value="${session.validate.timespan}"/>
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<!-- Session Manager -->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- session的失效时长，默认是30 分钟,该值以毫秒为时间单位-->
+		<property name="globalSessionTimeout" value="${session.timeout}" />
+		<!-- 删除失效的session -->
+		<property name="deleteInvalidSessions" value="true" />
+		<!-- 间隔多少时间检查，不配置是60分钟 -->	
+		<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
+		<!-- 是否开启session验证检测 -->
+		<property name="sessionValidationSchedulerEnabled" value="true"/>
+		<!-- 定时清理失效session , 清理用户直接关闭浏览器造成的孤立会话 :默认每小时检测一次-->
+		<property name="sessionValidationInterval" value="${session.validation}"/>
+		<!--cookie的name -->
+		<property name="sessionIdCookie.name" value="shiro.sesssioCookie"/>
+		<!-- 设置Cookie的路径，默认空，即存储在域名根下 -->
+		<property name="sessionIdCookie.path" value="/"/>
+		<!--  设置Cookie的过期时间，秒为单位，默认-1表示关闭浏览器时过期Cookie -->
+		<property name="sessionIdCookie.maxAge" value="-1" />
+		<!-- 如果设置为true，则客户端不会暴露给客户端脚本代码，使用HttpOnly cookie有助于减少某些类型的跨站点脚本攻击 -->
+		<property name="sessionIdCookie.httpOnly" value="true"/>
+		<!-- 是否启用/禁用，默认是启用的；如果禁用后将不会设置Session Id Cookie，即默认使用了Servlet容器的JSESSIONID -->
+		<property name="sessionIdCookieEnabled" value="true" />
+		<!-- session 监听，可以多个。 -->
+		<property name="sessionListeners">
+			<list>
+				<bean class="com.cdeledu.core.shiro.listener.CustomSessionListener"/>
+			</list>
+		</property>
+	</bean>
 
-	<!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
+	<!-- 定义Shiro安全管理配置 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session --> 
 		<property name="realm" ref="shiroRealm" />
+		<property name="sessionManager" ref="sessionManager" />
+		<!-- <property name="cacheManager" ref="cacheManager"/> -->
 	</bean>
 
 	<!-- 登录校验 -->
@@ -34,9 +73,8 @@
 	<bean id="roleFilter" class="com.cdeledu.core.shiro.filter.RoleFilter"/>
 	<!-- 权限校验 -->
 	<bean id="permissionFilter" class="com.cdeledu.core.shiro.filter.PermissionFilter"/>
-	<!-- 判断是否踢出  
-		<bean id="simple" class="com.cdeledu.common.filter.shiro.kickedOutFilter"/>
-	-->
+	<!-- 用户session -->
+	<bean id="userSessionFilter" class="com.cdeledu.core.shiro.filter.UserSessionFilter" />
 
 	<!-- ================================================================================== 
 		Shiro验证URL时,URL匹配成功便不再继续匹配查找(所以要注意配置文件中的URL顺序,尤其在使用通配符时),
@@ -73,6 +111,7 @@
 				<entry key="roleFilter" value-ref="roleFilter"/>
 				<entry key="permissionFilter" value-ref="permissionFilter"/>
 				<entry key="kickoutFilter" value-ref="kickoutSessionFilter"/>
+				<entry key="userSessionFilter" value-ref="userSessionFilter"/>
 			</util:map>
 		</property>
 		<!-- Shiro连接约束配置,即过滤链的定义 -->
@@ -88,9 +127,4 @@
 	<bean id="kickoutSessionFilter" class="com.cdeledu.core.shiro.filter.KickoutSessionFilter">
 		<property name="kickoutUrl" value="/loginController.shtml?doLogin"/>
 	</bean>
-
-	<!-- 用户缓存 -->
-	
-	<!-- redis 的缓存 -->
-
 </beans>
