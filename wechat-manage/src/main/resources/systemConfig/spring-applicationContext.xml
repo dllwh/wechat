@@ -34,6 +34,7 @@
 			<list>
 				<value>classpath:properties/dbConfig.properties</value>
 				<value>classpath:properties/redis.properties</value>
+				<value>classpath:properties/shiro-config.properties</value>
 			</list>
 		</property>
 	</bean>
