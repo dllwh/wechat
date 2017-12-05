@@ -16,4 +16,6 @@ public final class CacheConstans {
 	public static final String redis_shiro_cache = "shiro-cache:";
 	/** Redis session Key 的前缀 */
 	public static final String redis_shiro_session = "shiro-session:";
+	/** session status */
+	public static final String SESSION_STATUS = "session-online-status";
 }
