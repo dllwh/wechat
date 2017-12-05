@@ -45,6 +45,17 @@ public class SysUser extends DataEntity<SysUser> {
 	/** 是否允许登陆;1:允许,默认值;0:不允许 */
 	private Integer loginFlag;
 
+	public SysUser() {
+	}
+
+	public SysUser(SysUser sysUser) {
+		this.id = sysUser.getId();
+		this.userName = sysUser.getUserName();
+		this.isEnabled = sysUser.getIsEnabled();
+		this.isLocked = sysUser.getIsLocked();
+		this.isVisible = sysUser.getIsVisible();
+	}
+
 	public String getUserName() {
 		return userName;
 	}
