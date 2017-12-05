@@ -40,7 +40,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
 			Object mappedValue) throws Exception {
 		/**
-		 * 1.判断当前用户是否被提出
+		 * 1.判断当前用户是否已经踢出
 		 * <ul>
 		 * <li>1.1 如果是Ajax 访问,那么给予json返回值提示</li>
 		 * <li>1.2 如果是普通请求，直接跳转到登录页</li>
@@ -53,8 +53,10 @@ public class KickoutSessionFilter extends AccessControlFilter {
 		/**
 		 * 2. 处理当前授权用户的session
 		 * <ul>
-		 * <li>2.1 如果已经包含当前Session，并且是同一个用户，跳过。</li>
-		 * <li>2.2 如果用户相同，Session不相同，那么就要处理了</li>
+		 * <li>2.1 	如果已经包含当前Session，并且是同一个用户，跳过。</li>
+		 * <li>2.2	如果用户ID相同，Session不相同，那么就要处理了</li>
+		 * <li>2.2.1	获取到原来的的session，并且标记为提出 </li>
+		 * <li>2.2.2	更新session </li>
 		 * </ul>
 		 */
 		return Boolean.TRUE;
