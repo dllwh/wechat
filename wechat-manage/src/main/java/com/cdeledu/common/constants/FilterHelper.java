@@ -66,6 +66,7 @@ public class FilterHelper {
 		PrintWriter out = null;
 		try {
 			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json");
 			out = response.getWriter();
 			out.println(JSONObject.fromObject(resultMap).toString());
 		} catch (Exception e) {
