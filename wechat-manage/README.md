@@ -21,7 +21,7 @@ weinxin-manage
 [技术选型](http://note.youdao.com/noteshare?id=233df4488c0cac1b719952432977ca74&sub=CD29D21A0EA0410F83F9447BB3D1F0B9)
 ------------------------
 
-[命名规范](http://note.youdao.com/noteshare?id=edb0df577a78a28d3c44cc8778b74149&sub=5F205BB8938F437CB2CF7F02ED11AD71)
+[命名规范](http://note.youdao.com/noteshare?id=9b94780ce3ef3d4c737e1a3c5d8e8231&sub=3B2803855230462A9F4AAF656D6B164E)
 ------------------------
 
 
