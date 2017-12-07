@@ -42,7 +42,7 @@
 	<function>
 		<description>获取授权用户信息</description>
 		<name>getCurrentUserName</name>
-		<function-class>com.cdeledu.core.shiro.token.ShiroHelper</function-class>
+		<function-class>com.cdeledu.util.WebUtilHelper</function-class>
 		<function-signature>com.cdeledu.model.rbac.SysUser getCurrentUserName()</function-signature>
 		<example>${fns:getCurrentUserName()}</example>
 	</function>
