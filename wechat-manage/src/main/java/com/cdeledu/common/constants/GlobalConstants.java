@@ -28,35 +28,22 @@ public class GlobalConstants {
 	public static final String Log_Leavel_INFO = "info";
 	public static final String Log_Leavel_WARRING = "warn";
 	public static final String Log_Leavel_ERROR = "error";
-
 	/** 该值会在web容器启动时由WebContextListener初始化 */
 	public static ApplicationContext WEB_APP_CONTEXT = null;
-	/**
-	 * 上传图片大小限制，单位byte
-	 */
-	public final static long MAX_UPLOAD_PIC_SIZE = 1000 * 1024 * 4;
-	/**
-	 * 上传文件大小限制，单位byte
-	 */
-	public final static long MAX_UPLOAD_FILE_SIZE = 10 * 1024 * 1024 * 8;
-
-	/**
-	 * 上传软件大小限制，单位byte
-	 */
-	public final static long MAX_UPLOAD_SOFT_SIZE = 100 * 1024 * 1024 * 8;
-
-	/**
-	 * 错误登录次数最多3次
-	 */
+	/** 错误登录次数最多3次 */
 	public final static int MAX_LOGIN_TIMES = 3;
-	/**
-	 * 错误登录3次后用户被锁10分钟
-	 */
+	/** 错误登录3次后用户被锁10分钟 */
 	public final static int LOCK_TIME = +10;
-
 	/**
-	 * 获取Key加载信息
+	 * 错误页面
 	 */
+	public final static String error_page_403 = "/sysPage/errorPage/403.shtml";
+	public final static String error_page_404 = "/sysPage/errorPage/404.shtml";
+	public final static String error_page_405 = "/sysPage/errorPage/405.shtml";
+	public final static String error_page_500 = "/sysPage/errorPage/500.shtml";
+	public final static String error_page_503 = "/sysPage/errorPage/503.shtml";
+
+	/** 获取Key加载信息 */
 	public static boolean printKeyLoadMessage() {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(
@@ -96,11 +83,12 @@ public class GlobalConstants {
 		String dm = WebUtilHelper.getConfigByName("demoMode");
 		return "true".equals(dm) || "1".equals(dm);
 	}
+
 	/** 系统登录后默认首页地址 */
 	public static String getHomePageUrl() {
 		return "homeController/home.shtml";
 	}
-	
+
 	public static String getloginPageUrl() {
 		return FilterHelper.LOGIN_ACTION;
 	}
