@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
+import com.cdeledu.common.constants.SystemConstant.SysLogLeavel;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.shiro.token.ShiroHelper;
@@ -71,13 +72,13 @@ public class LoginController extends BaseController {
 				String OpType = "",logLeavel = "";
 				if (loginResult.isSuccess()) {
 					loginStatus = 1;
-					logLeavel = GlobalConstants.Log_Leavel_INFO;
+					logLeavel = SysLogLeavel.info.name();
 					OpType = SysOpType.LOGIN.getValue();
 					session.removeAttribute(GlobalConstants.IMAGECAPTCHA);
 				} else {
 
 					loginStatus = 0;
-					logLeavel = GlobalConstants.Log_Leavel_WARRING;
+					logLeavel = SysLogLeavel.warn.name();
 					OpType = SysOpType.LOGIN.getValue();
 
 					logMsg = loginResult.getMsg();
@@ -158,7 +159,7 @@ public class LoginController extends BaseController {
 			loginLog.setUserCode(currenLoginUser.getUserName());
 			loginLog.setLogContent(logMsg);
 			loginLog.setLoginStatus(-1);
-			loginLog.setLogLeavel(GlobalConstants.Log_Leavel_INFO);
+			loginLog.setLogLeavel(SysLogLeavel.info.name());
 			loginLog.setOpType(SysOpType.EXIT.getValue());
 			loginLog.setIpAddress(IpUtilHelper.getClientIP(request));
 			String userAgent = request.getHeader("User-Agent");

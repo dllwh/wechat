@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
-import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysRole;
-import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.RoleService;
 
 /**
@@ -38,22 +37,92 @@ public class RoleOperateController extends BaseController {
 	/** ----------------------------------------------------- Fields end */
 
 	/**
-	 * @方法描述: 角色添加
+	 * @方法描述 : 角色创建的时候，必须要自动添加到管理员下，保证管理员的权限是最大最全的
 	 * @param role
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "addRole", method = RequestMethod.POST)
+	@SystemLog(desc = "角色添加", opType = SysOpType.INSERT, tableName = "sys_role")
 	public AjaxJson addRole(SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
 			roleService.insert(role);
-			resultMsg.setSuccess(true);
 		} catch (Exception e) {
 			resultMsg.setSuccess(false);
 			resultMsg.setMsg("添加失败，请刷新后再试！");
+			resultMsg.setResultCode(500);
 		}
 		return resultMsg;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "saveRole")
+	@SystemLog(desc = "角色更新", opType = SysOpType.UPDATE, tableName = "sys_role")
+	public AjaxJson saveRole(HttpServletRequest request, HttpServletResponse response,
+			SysRole role) {
+		AjaxJson resultMsg = new AjaxJson();
+		try {
+			if (null != role) {
+				if (StringUtils.isNotEmpty(String.valueOf(role.getId()))) {
+					msg = "角色: " + role.getRoleName() + "被更新成功";
+				} else {
+					msg = "角色: " + role.getRoleName() + "被添加成功";
+				}
+			}
+		} catch (Exception e) {
+			resultMsg.setSuccess(false);
+			resultMsg.setResultCode(500);
+			msg = MessageConstant.MSG_OPERATION_FAILED;
+		}
+		resultMsg.setMsg(msg);
+		return resultMsg;
+	}
+
+	/**
+	 * @方法描述: 删除角色，根据ID，但是删除角色的时候，需要查询是否有赋予给用户，如果有用户在使用，那么就不能删除
+	 * @param role
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "delRole")
+	@SystemLog(desc = "角色删除", opType = SysOpType.DEL, tableName = "sys_role")
+	public AjaxJson delRole(SysRole role) {
+		AjaxJson resultMsg = new AjaxJson();
+		try {
+			// 删除角色之前先删除角色权限关系
+			delRoleFunction(role);
+		} catch (Exception e) {
+			resultMsg.setSuccess(false);
+			resultMsg.setResultCode(500);
+			msg = MessageConstant.MSG_OPERATION_FAILED;
+		}
+		resultMsg.setMsg(msg);
+		return resultMsg;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "addMenuByRole")
+	@SystemLog(desc = "创建角色的权限", opType = SysOpType.INSERT, tableName = "sys_role_menu")
+	public AjaxJson addMenuByRole(int roleId, String ids) {
+		AjaxJson ajaxJson = new AjaxJson();
+		return ajaxJson;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "updateMenuByRole")
+	@SystemLog(desc = "更新角色的权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
+	public AjaxJson updateMenuByRole(int roleId, String ids) {
+		AjaxJson ajaxJson = new AjaxJson();
+		return ajaxJson;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "clearMenuByRoleIds")
+	@SystemLog(desc = "根据角色id清空权限", opType = SysOpType.DEL, tableName = "sys_role_menu")
+	public AjaxJson clearPermissionByRoleIds(String roleIds) {
+		AjaxJson ajaxJson = new AjaxJson();
+		return ajaxJson;
 	}
 
 	/**
@@ -67,75 +136,5 @@ public class RoleOperateController extends BaseController {
 	 */
 	protected void delRoleFunction(SysRole role) {
 
-	}
-
-	/**
-	 * @方法:角色录入
-	 * @创建人:独泪了无痕
-	 * @param request
-	 * @param response
-	 * @param role
-	 * @return
-	 */
-	@RequestMapping(value = "saveRole")
-	@ResponseBody
-	public AjaxJson saveRole(HttpServletRequest request, HttpServletResponse response,
-			SysRole role) {
-		AjaxJson resultMsg = new AjaxJson();
-		try {
-			if (null != role) {
-				if (StringUtils.isNotEmpty(String.valueOf(role.getId()))) {
-					msg = "角色: " + role.getRoleName() + "被更新成功";
-				} else {
-					msg = "角色: " + role.getRoleName() + "被添加成功";
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			msg = "出现操作错误,其异常原因如下所示:" + e.getMessage();
-		}
-		resultMsg.setMsg(msg);
-		return resultMsg;
-	}
-
-	/**
-	 * @方法描述: 删除角色，根据ID，但是删除角色的时候，需要查询是否有赋予给用户，如果有用户在使用，那么就不能删除
-	 * @param role
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "delRole")
-	public AjaxJson delRole(SysRole role) {
-		AjaxJson resultMsg = new AjaxJson();
-		SysUser managerUser = ShiroHelper.getPrincipal();
-		try {
-			// 删除角色之前先删除角色权限关系
-			delRoleFunction(role);
-
-			msg = "角色: " + role.getRoleName() + "被【" + managerUser.getId() + "】删除成功";
-		} catch (Exception e) {
-			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			msg = "角色: " + role.getRoleName() + "被【" + managerUser.getId() + "】删除事出现异常,其异常原因是" + e;
-		}
-		resultMsg.setMsg(msg);
-		return resultMsg;
-	}
-
-	@ResponseBody
-	@RequestMapping(params = "setAuthority")
-	@SystemLog(desc = "设置权限", opType = SysOpType.INSERT, tableName = "sys_role_menu")
-	public AjaxJson setAuthority() {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
-	}
-
-	@ResponseBody
-	@RequestMapping(params = "updateAuthority")
-	@SystemLog(desc = "更新权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
-	public AjaxJson updateAuthority(HttpServletRequest request) {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
 	}
 }

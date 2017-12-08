@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.service.sys.RoleService;
 import com.google.common.collect.Lists;
@@ -88,5 +89,17 @@ public class RoleViewController extends BaseController {
 		// 查询我所有的角色 ---> 权限
 		// 把查询出来的roles 转换成bootstarp 的 tree数据
 		return resultList;
+	}
+
+	/**
+	 * @方法描述: 根据角色ID查询权限
+	 * @param roleId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "selectPermissionById")
+	public List<SysMenu> selectPermissionById(int roleId) {
+		List<SysMenu> sysMenuList = Lists.newArrayList();
+		return sysMenuList;
 	}
 }

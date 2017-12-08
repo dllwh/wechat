@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
@@ -72,6 +74,7 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "saveRoleUser")
+	@SystemLog(desc = "用户-角色录入", opType = SysOpType.INSERT, tableName = "sys_user")
 	public AjaxJson saveRoleUser(SysUser managerUser,
 			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
 		AjaxJson resultMsg = new AjaxJson();

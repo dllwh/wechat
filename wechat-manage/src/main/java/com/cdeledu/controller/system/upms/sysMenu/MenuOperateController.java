@@ -74,28 +74,4 @@ public class MenuOperateController extends BaseController {
 		}
 		return ajaxJson;
 	}
-
-	@ResponseBody
-	@RequestMapping(value = "addMenuByRole")
-	@SystemLog(desc = "创建角色的权限", opType = SysOpType.INSERT, tableName = "sys_role_menu")
-	public AjaxJson addMenuByRole(int roleId, String ids) {
-		AjaxJson ajaxJson = new AjaxJson();
-		return ajaxJson;
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "updateMenuByRole")
-	@SystemLog(desc = "更新角色的权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
-	public AjaxJson updateMenuByRole(int roleId, String ids) {
-		AjaxJson ajaxJson = new AjaxJson();
-		return ajaxJson;
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "clearMenuByRoleIds")
-	@SystemLog(desc = "根据角色id清空权限", opType = SysOpType.DEL, tableName = "sys_role_menu")
-	public AjaxJson clearPermissionByRoleIds(String roleIds) {
-		AjaxJson ajaxJson = new AjaxJson();
-		return ajaxJson;
-	}
 }

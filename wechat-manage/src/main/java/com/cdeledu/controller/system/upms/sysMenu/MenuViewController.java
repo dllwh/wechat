@@ -1,7 +1,5 @@
 package com.cdeledu.controller.system.upms.sysMenu;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,8 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.SysMenu;
-import com.google.common.collect.Lists;
 
 /**
  * @类描述: 菜单数据控制类
@@ -54,17 +50,4 @@ public class MenuViewController extends BaseController {
 	public void tree(ModelMap map) {
 
 	}
-
-	/**
-	 * @方法描述: 根据角色ID查询权限
-	 * @param roleId
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "selectPermissionById")
-	public List<SysMenu> selectPermissionById(int roleId) {
-		List<SysMenu> sysMenuList = Lists.newArrayList();
-		return sysMenuList;
-	}
-
 }
