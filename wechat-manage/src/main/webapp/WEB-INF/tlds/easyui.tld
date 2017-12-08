@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN" "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd" >
+<taglib>
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>1.2</jsp-version>
+	<short-name>easyui</short-name>
+	<uri>/easyui-tags</uri>
+	<display-name>"easyui 自定义标签"</display-name>
+	<tag>
+		<name>comboTree</name>
+		<tag-class>com.cdeledu.core.tag.easyui.ComboTreeTag</tag-class>
+		<body-content>jsp</body-content>
+		<description>下拉树形选择框</description>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>控件名称</description>
+		</attribute>
+		<attribute>
+			<name>url</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>远程数据</description>
+		</attribute>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>ID对应字段</description>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+			<description>width对应字段</description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<rtexprvalue>true</rtexprvalue>
+			<description>值</description>
+		</attribute>
+		<attribute>
+			<name>multiple</name>
+			<rtexprvalue>true</rtexprvalue>
+			<description>是否多选</description>
+		</attribute>
+	</tag>
+</taglib>
