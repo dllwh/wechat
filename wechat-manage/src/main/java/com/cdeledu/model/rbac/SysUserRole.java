@@ -3,7 +3,7 @@ package com.cdeledu.model.rbac;
 import com.cdeledu.common.base.BaseEntity;
 
 /**
- * @类描述: 用户角色实体类
+ * @类描述: 用户{@link SysUser}角色{@link SysRole}实体类
  * @创建者: 独泪了无痕
  * @创建时间: 2015-8-22 上午01:20:34
  * @版本: V1.0

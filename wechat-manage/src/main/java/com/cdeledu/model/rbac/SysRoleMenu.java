@@ -3,7 +3,7 @@ package com.cdeledu.model.rbac;
 import com.cdeledu.common.base.BaseEntity;
 
 /**
- * @类描述: 角色与权限中间表实体类
+ * @类描述: 角色{@link SysRole}与权限{@link SysMenu}中间表实体类
  * @创建者: 独泪了无痕
  * @创建时间: 2015-8-22 上午01:28:19
  * @版本: V1.0
