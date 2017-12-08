@@ -127,7 +127,7 @@ public class SystemConstant {
 			return value;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * 把今天最好的表现当作明天最新的起点．．～
@@ -141,14 +141,14 @@ public class SystemConstant {
 	 * @since: JDK 1.7
 	 */
 	public enum SysOpType {
-		LOGIN("login"),//登录
-		EXIT("exit"),//退出
-		INSERT("insert"),//插入
-		DEL("delete"),// 删除
-		UPDATE("update"),// 更新
+		LOGIN("login"), // 登录
+		EXIT("exit"), // 退出
+		INSERT("insert"), // 插入
+		DEL("delete"), // 删除
+		UPDATE("update"), // 更新
 		UPLOAD("upload"), // 上传
-		SELECT("select"),// 选择、查询
-		DOWNLOAD("download"),// 下载
+		SELECT("select"), // 选择、查询
+		DOWNLOAD("download"), // 下载
 		OTHER("other");// 其他
 		private String value;
 
@@ -159,5 +159,20 @@ public class SystemConstant {
 		public String getValue() {
 			return value;
 		}
+	}
+
+	/**
+	 * 把今天最好的表现当作明天最新的起点．．～
+	 *
+	 * Today the best performance as tomorrow newest starter!
+	 *
+	 * @类描述: 日志级别
+	 * @创建者: 皇族灬战狼
+	 * @创建时间: 2017年12月8日 上午11:31:48
+	 * @版本: V1.0
+	 * @since: JDK 1.7
+	 */
+	public enum SysLogLeavel {
+		info, warn, error;
 	}
 }

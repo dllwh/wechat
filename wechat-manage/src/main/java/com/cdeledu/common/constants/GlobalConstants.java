@@ -21,13 +21,9 @@ public class GlobalConstants {
 	/** 保存用户到SESSION */
 	public static final String USER_SESSION = "USER_SESSION";
 	/** 人员类型 */
-	public static final Short User_Normal = 1;// 正常
-	public static final Short User_Forbidden = 0;// 禁用
-	public static final Short User_ADMIN = -1;// 超级管理员
-	/** 日志级别定义 */
-	public static final String Log_Leavel_INFO = "info";
-	public static final String Log_Leavel_WARRING = "warn";
-	public static final String Log_Leavel_ERROR = "error";
+	public static final Short USER_NORMAL = 1;// 正常
+	public static final Short USER_FORBIDDEN = 0;// 禁用
+	public static final Short USER_ADMIN = -1;// 超级管理员
 	/** 该值会在web容器启动时由WebContextListener初始化 */
 	public static ApplicationContext WEB_APP_CONTEXT = null;
 	/** 错误登录次数最多3次 */
@@ -37,11 +33,11 @@ public class GlobalConstants {
 	/**
 	 * 错误页面
 	 */
-	public final static String error_page_403 = "/sysPage/errorPage/403.shtml";
-	public final static String error_page_404 = "/sysPage/errorPage/404.shtml";
-	public final static String error_page_405 = "/sysPage/errorPage/405.shtml";
-	public final static String error_page_500 = "/sysPage/errorPage/500.shtml";
-	public final static String error_page_503 = "/sysPage/errorPage/503.shtml";
+	public final static String ERROR_PAGE_403 = "/sysPage/errorPage/403.shtml";
+	public final static String ERROR_PAGE_404 = "/sysPage/errorPage/404.shtml";
+	public final static String ERROR_PAGE_405 = "/sysPage/errorPage/405.shtml";
+	public final static String ERROR_PAGE_500 = "/sysPage/errorPage/500.shtml";
+	public final static String ERROR_PAGE_503 = "/sysPage/errorPage/503.shtml";
 
 	/** 获取Key加载信息 */
 	public static boolean printKeyLoadMessage() {
