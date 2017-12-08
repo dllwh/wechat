@@ -2,6 +2,7 @@ package com.cdeledu.controller;
 
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.cdeledu.common.base.BaseClass;
+import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.core.interceptors.DateConvertEditor;
 
 /**
@@ -32,6 +35,7 @@ public class BaseController extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法:将前台传递过来的日期格式的字符串,自动转化为Date类型
@@ -62,5 +66,27 @@ public class BaseController extends BaseClass {
 	 */
 	public ModelAndView getModelAndView() {
 		return new ModelAndView();
+	}
+
+	/**
+	 * @方法描述 : 404页面跳转
+	 * @return
+	 */
+	public ModelAndView redirect404() {
+		return new ModelAndView(new RedirectView(GlobalConstants.ERROR_PAGE_404));
+	}
+
+	/**
+	 * @方法描述 : 跳转
+	 * @param redirectUrl
+	 * @param parament
+	 * @return
+	 */
+	public ModelAndView redirect(String redirectUrl, Map<String, Object> parament) {
+		ModelAndView view = new ModelAndView(new RedirectView(redirectUrl));
+		if (null != parament && parament.size() > 0) {
+			view.addAllObjects(parament);
+		}
+		return view;
 	}
 }

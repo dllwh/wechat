@@ -33,12 +33,8 @@ public class SysPageController extends BaseController{
 		return module + "/" + url;
 	}
 
-	
-
 	@RequestMapping("{url}")
 	public String page(@PathVariable("url") String url) {
-		// ModelAndView view = this.getModelAndView();
-		// view.setViewName(url);
 		return url;
 	}
 	
