@@ -42,9 +42,13 @@
 	<!-- 数据库 -->
 	<import resource="applicationContext-dataSource.xml" />
 	<!-- 缓存配置 -->
-	<import resource="applicationContext-cache.xml" />
+	<!-- 
+		<import resource="applicationContext-cache.xml" />
+	-->
 	<!-- Redis  -->
-	<!-- <import resource="applicationContext-redis.xml" /> -->
+	<!-- 
+		<import resource="applicationContext-redis.xml" /> 
+	-->
 	<!-- Apache Shiro  -->
 	<import resource="applicationContext-shiro.xml" />
 	<!-- 定时任务 -->
