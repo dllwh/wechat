@@ -35,6 +35,10 @@ public class BaseController extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
 	protected Logger logger = LoggerFactory.getLogger(getClass());
+	/** 浏览器的地址栏会变  */
+	protected static String REDIRECT = "redirect:";
+	/** 浏览器的地址栏不会变,但是有视图返回来 */
+	protected static String FORWARD = "forward:";
 
 	/** ----------------------------------------------------- Fields end */
 	/**
