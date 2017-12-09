@@ -26,9 +26,11 @@ public class FilterHelper {
 	public final static String UNAUTHORIZED = "/sysPage/unauthorized.shtml";
 	/** 将登录前的URL放到Session中的键名称 */
 	public static final String LOGIN_TO_URL = "toUrl";
-	
+	/** 超级管理员角色代码 */
+	public final static String ADMIN_ROLE_CODE = "administrator";
+
 	/** Druid Monitor监控 */
-	public static final String  Druid_Monitor= "/system/druid/";
+	public static final String Druid_Monitor = "/system/druid/";
 
 	/** 非法字符:过滤掉的sql关键字，可以手动添加 */
 	public static String[] keywords = { "'", "*", "&", "%", ";", "or", "-", "+", "--", "#",
