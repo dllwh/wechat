@@ -40,9 +40,18 @@ public class MessageConstant {
 	public static final String MSG_HAS_CHILD = "操作失败，当前所选数据有子节点数据！";
 	/** 加载表单数据错误提示 */
 	public static final String MSG_INIT_FORM = "初始化表单数据失败，请重试！";
+	/** 数据已存在 */
+	public static final String EXISTED = "数据已经存在，请勿重复操作";
+	/** 数据创建失败 */
+	public static final String ERROR_CREATE = "初始化数据失败，请重试！";
+	/** 不能删除超级管理员 */
+	public static final String CANT_DELETE_ADMIN = "不能删除超级管理员";
+	/** 不能冻结超级管理员 */
+	public static final String CANT_FREEZE_ADMIN = "初始化数据失败，请重试！";
+	/** 不能修改超级管理员角色 */
+	public static final String CANT_CHANGE_ADMIN = "初始化数据失败，请重试！";
 
 	/**
-	 * 
 	 * @方法描述: 删除数据项不是全部所选
 	 * @param total
 	 * @param process
