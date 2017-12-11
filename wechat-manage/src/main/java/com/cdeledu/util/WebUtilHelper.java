@@ -10,6 +10,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysMenu;
@@ -162,13 +163,14 @@ public class WebUtilHelper {
 	}
 
 	/**
-	 * @方法描述: 是否拥有该角色
+	 * @方法描述:验证当前用户是否拥有该角色
 	 * @param roleCode
 	 * @return
 	 */
 	public static boolean hasRole(String roleCode) {
 		Subject subject = ShiroHelper.getSubject();
-		return subject != null && subject.hasRole(roleCode);
+		return subject != null && roleCode != null && roleCode.length() > 0
+				&& subject.hasRole(roleCode);
 	}
 
 	/**
@@ -180,7 +182,39 @@ public class WebUtilHelper {
 	 */
 	public boolean hasPermission(String permission) {
 		Subject subject = ShiroHelper.getSubject();
-		return subject != null && subject.isPermitted(permission);
+		return subject != null && permission != null && permission.length() > 0
+				&& subject.isPermitted(permission);
+	}
+
+	/**
+	 * @方法描述 : 已认证通过的用户。
+	 * @return
+	 */
+	public static boolean isAuthenticated() {
+		Subject subject = ShiroHelper.getSubject();
+		return subject != null && subject.isAuthenticated();
+	}
+
+	/**
+	 * @方法描述 : 未认证通过用户
+	 * @return
+	 */
+	public static boolean notAuthenticated() {
+		return !isAuthenticated();
+	}
+
+	/**
+	 * @方法描述 : 判断当前用户是否是超级管理员
+	 * @return
+	 */
+	public static boolean isAdmin() {
+		List<SysUserRole> roleList = getRoleList();
+		for (SysUserRole sysUserRole : roleList) {
+			if (FilterHelper.ADMIN_ROLE_CODE.equals(sysUserRole.getRoleCode())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
