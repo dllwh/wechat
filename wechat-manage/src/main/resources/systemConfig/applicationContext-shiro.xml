@@ -30,10 +30,10 @@
 		<property name="sessionManager" ref="sessionManager" />
 	</bean>
 	
-	 <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID --> 
+	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID --> 
 	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
 		<!--cookie的name -->
-		<property name="name" value="shiro.sesssioCookie"/>
+		<property name="name" value="shiro.sesssionCookie"/>
 		<!-- 设置Cookie的路径，默认空，即存储在域名根下 -->
 		<property name="path" value="/"/>
 		<!--  设置Cookie的过期时间，秒为单位，默认-1表示关闭浏览器时过期Cookie -->
@@ -56,7 +56,7 @@
 		<property name="sessionValidationInterval" value="${session.validation}"/>
 		<property name="sessionIdCookie" ref="sessionIdCookie"/>
 		<!-- 是否启用/禁用，默认是启用的；如果禁用后将不会设置Session Id Cookie，即默认使用了Servlet容器的JSESSIONID -->
-		<property name="sessionIdCookieEnabled" value="true" />
+		<property name="sessionIdCookieEnabled" value="false" />
 		<!-- session 监听，可以多个。 -->
 		<property name="sessionListeners">
 			<list>
