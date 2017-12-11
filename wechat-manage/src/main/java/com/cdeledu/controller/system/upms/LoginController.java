@@ -1,7 +1,5 @@
 package com.cdeledu.controller.system.upms;
 
-import java.util.TimerTask;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,9 +14,11 @@ import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.log.LogManager;
+import com.cdeledu.core.log.factory.LogFactory;
 import com.cdeledu.core.log.factory.LogTaskFactory;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.util.WebUtilHelper;
 import com.cdeledu.util.security.PasswordUtil;
 
@@ -50,9 +50,10 @@ public class LoginController extends BaseController {
 		// Session session = ShiroHelper.getSession();
 		boolean suc = true;
 		String logMsg = "";
+		String userName = user.getUserName();
 		try {
-			String password = PasswordUtil.encrypt(user.getUserName(), user.getPassword());
-			AjaxJson loginResult = ShiroHelper.login(user.getUserName(), password);
+			String password = PasswordUtil.encrypt(userName, user.getPassword());
+			AjaxJson loginResult = ShiroHelper.login(userName, password);
 			int loginStatus = 0;
 			if (loginResult.isSuccess()) {
 				loginStatus = 1;
@@ -63,9 +64,9 @@ public class LoginController extends BaseController {
 			}
 
 			try {
-				TimerTask task = LogTaskFactory.loginLog(user.getUserName(),
+				SysLoginLog loginLog = LogFactory.createLoginLog(userName,
 						String.valueOf(loginResult.getObj()), loginStatus, request);
-				LogManager.getInstance().executeLog(task);
+				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(loginLog));
 			} catch (Exception e) {
 			}
 
@@ -117,15 +118,16 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "doLogout")
 	public String doLogout(HttpServletRequest request) {
-		HttpSession session = request.getSession();
 		SysUser currenLoginUser = ShiroHelper.getPrincipal();
 		// 判断用户是否为空,不为空,则清空session中的用户object
-		if (null != session && currenLoginUser != null) {
-			// 注销该操作用户
+		if (currenLoginUser != null) {
+			// 保存退出日志
+			HttpSession session = request.getSession();
+			SysLoginLog exitLog = LogFactory.createExitLog(currenLoginUser.getUserName(), request);
+			LogManager.getInstance().executeLog(LogTaskFactory.exitLog(exitLog));
+
 			session.removeAttribute(GlobalConstants.USER_SESSION);
 			ShiroHelper.logout();
-			TimerTask task = LogTaskFactory.exitLog(currenLoginUser.getUserName(), request);
-			LogManager.getInstance().executeLog(task);
 
 		}
 		return FilterHelper.LOGIN_SHORT;

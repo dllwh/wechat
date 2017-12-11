@@ -2,12 +2,11 @@ package com.cdeledu.core.log.factory;
 
 import java.util.TimerTask;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cdeledu.core.log.LogManager;
+import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.sys.SystemService;
 import com.cdeledu.util.SpringContextUtil;
 
@@ -28,14 +27,12 @@ public class LogTaskFactory {
 
 	/** ----------------------------------------------- [公共方法] */
 
-	public static TimerTask loginLog(final String userName, final String logContent,
-			final int loginStatus, final HttpServletRequest request) {
+	public static TimerTask loginLog(final SysLoginLog LoginLog) {
 		return new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					systemService.addLoginLog(
-							LogFactory.createLoginLog(userName, logContent, loginStatus, request));
+					systemService.addLoginLog(LoginLog);
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);
 				}
@@ -43,12 +40,12 @@ public class LogTaskFactory {
 		};
 	}
 
-	public static TimerTask exitLog(final String userName, final HttpServletRequest request) {
+	public static TimerTask exitLog(final SysLoginLog exitLog) {
 		return new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					systemService.addLoginLog(LogFactory.createExitLog(userName, request));
+					systemService.addLoginLog(exitLog);
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);
 				}
