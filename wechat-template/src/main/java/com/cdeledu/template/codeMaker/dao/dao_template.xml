@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class>
-
 package #class.package#.dao;
 
 import java.util.HashMap;
@@ -13,20 +12,54 @@ import org.springframework.stereotype.Repository;
 
 import #class.package#.model.#class.name#;
 
-	/**
-	* 把今天最好的表现当作明天最新的起点．．～
-	*
-	* Today the best performance as tomorrow newest starter!
-	*
-	* @类描述:#table.desc# Dao服务
-	* @创建者: 独泪了无痕--duleilewuhen@sina.com
-	* @创建时间: #now#
-	* @版本: V1.0
-	* @since: JDK 1.7
-	*/
+/**
+* 把今天最好的表现当作明天最新的起点．．～
+*
+* Today the best performance as tomorrow newest starter!
+*
+* @类描述:#table.desc# Dao服务
+* @创建者: 独泪了无痕--duleilewuhen@sina.com
+* @创建时间: #now#
+* @版本: V1.0
+* @since: JDK 1.7
+*/
 @Repository
 public class #class.name#Dao extends SqlSessionDaoSupport{
 
+	public Integer insert(#class.name# bean) throws Exception{
+		return this.getSqlSession().insert(getNamespace()+"insert", id);
+	}
+	
+	public Integer delete(Object record) throws Exception{
+		return this.getSqlSession().delete(getNamespace()+"delete", record);
+	}
+	
+	public Integer batchUpdate(List<#class.name#> beans) throws Exception{
+		return this.getSqlSession().batchUpdate(getNamespace()+"batchUpdate", beans);
+	}
+	
+	public Integer update(#class.name# bean) throws Exception{
+		return this.getSqlSession().update(getNamespace()+"update", bean);
+	}
+	
+	public Integer batchDelete(List<#class.name#> beans) throws Exception{
+		return this.getSqlSession().delete(getNamespace()+"batchDelete", beans);
+	}
+	
+	public List<#class.name#> findForJdbc(#class.name# bean) throws Exception{
+		return this.getSqlSession().selectList(getNamespace()+"findForJdbc", bean);
+	}
+	
+	public Integer getCountForJdbcParam(#class.name# bean) throws Exception{
+		return this.getSqlSession().selectOne(getNamespace()+"getCountForJdbcParam", bean);
+	}
+	
+	public #class.name# findOneForJdbc(#class.name# bean) throws Exception{
+		return this.getSqlSession().selectOne(getNamespace()+"findOneForJdbc", bean);
+	}
+		
+	private String getNamespace() {
+		return "#class.package#.model.#class.name#"+".";
+	}
 }
-
 </class>
