@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.impl.sys.SysDictAreaDaoImpl">
+	<sql id="Base_Column_List">
+		id, areaCode, areaName, parentId, areaLevel, shortName,
+		areaUrl
+	</sql>
+	
+	<select id="findOneForJdbc" parameterType="java.lang.Integer"
+		resultType="com.cdeledu.model.system.SysArea">
+		select * from(
+			<include refid="findForJdbc_body"/>
+		) as myTable LIMIT 1
+	</select>
+	
+	<sql id="findForJdbc_body">
+		select
+		<include refid="Base_Column_List" />
+			from sys_dict_area
+		<where>
+			<if test="id != null"> 
+				and id = #{id} 
+			</if>
+			<if test="areaCode != null"> 
+				and areaCode = #{areaCode} 
+			</if>
+			<if test="areaName != null"> 
+				and areaName = #{areaname} 
+			</if>
+			<if test="parentId != null"> 
+				and parentId = #{parentId} 
+			</if>
+			<if test="areaLevel != null"> 
+				and areaLevel = #{areaLevel} 
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.system.SysArea" 
+		resultType="java.lang.Integer">
+		select count(*) from (
+			<include refid="findForJdbc_body"/>
+		)as myTable
+	</select>
+	
+	<select id="findListForJdbcParam" parameterType="com.cdeledu.model.system.SysArea"
+		resultType="com.cdeledu.model.system.SysArea">
+		select * from (
+			<include refid="findForJdbc_body"/>
+		)as myTable
+	</select>
+	
+	<select id="getArealistByParentCode" resultType="com.cdeledu.model.system.SysArea">
+		select
+			<include refid="Base_Column_List" />
+		from sys_dict_area
+		where
+			parentId = #{id}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_dict_area where id = #{id}
+	</delete>
+	
+	<insert id="insert" parameterType="com.cdeledu.model.system.SysArea">
+		insert into 
+			sys_dict_area (areaCode, areaName,parentId, areaLevel, shortName,areaUrl)
+		values(
+			#{areaCode},
+			#{areaName},
+			#{parentId},
+			#{areaLevel}, 
+			#{shortName},
+			#{areaUrl}
+		)
+	</insert>
+	
+	<insert id="insertSelective" parameterType="com.cdeledu.model.system.SysArea">
+		insert into sys_dict_area
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="areaCode != null"> areaCode,</if>
+			<if test="areaName != null"> areaName, </if>
+			<if test="parentId != null"> parentId, </if>
+			<if test="areaLevel != null"> areaLevel, </if>
+			<if test="shortName != null"> shortName, </if>
+			<if test="areaUrl != null"> areaUrl, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="areaCode != null"> #{areaCode}, </if>
+			<if test="areaName != null"> #{areaname}, </if>
+			<if test="parentId != null"> #{parentId}, </if>
+			<if test="areaLevel != null"> #{areaLevel}, </if>
+			<if test="shortName != null"> #{shortName}, </if>
+			<if test="areaUrl != null"> #{areaUrl},</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.cdeledu.model.system.SysArea">
+		update sys_dict_area
+		<set>
+			<if test="areaCode != null"> areaCode = #{areaCode}, </if>
+			<if test="areaName != null"> areaName = #{areaName}, </if>
+			<if test="parentId != null"> parentId = #{parentId}, </if>
+			<if test="areaLevel != null"> areaLevel = #{areaLevel}, </if>
+			<if test="shortName != null"> shortName = #{shortName}, </if>
+			<if test="areaUrl != null"> areaUrl = #{areaUrl}, </if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>
