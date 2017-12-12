@@ -8,19 +8,22 @@
 	<display-name>JSTL functions dict</display-name>
 	<tlib-version>1.2</tlib-version>
 	<short-name>dict</short-name>
+	<uri>/dict-tags</uri>
 
+	<!-- =====================================数据字典============================================ -->
 	<function>
 		<description>获取字典对象列表</description>
 		<name>getDictList</name>
 		<function-class>com.cdeledu.util.DictUtils</function-class>
 		<function-signature>java.util.List getDictList(java.lang.String)</function-signature>
-		<example>$dict:getDictList(type)}</example>
+		<example>${dict:getDictList(type)}</example>
 	</function>
 	<function>
 		<description>获取字典值</description>
 		<name>getDictValue</name>
 		<function-class>com.cdeledu.util.DictUtils</function-class>
-		<function-signature>java.lang.String getDictValue(java.lang.String, java.lang.String)</function-signature>
+		<function-signature>java.lang.String getDictValue(java.lang.String,
+			java.lang.String)</function-signature>
 		<example>${dict:getDictValue(code, defaultValue)}</example>
 	</function>
 	<function>
@@ -60,4 +63,14 @@
 		</attribute>
 	</tag>
 
+
+
+	<!-- =====================================行政区域============================================ -->
+	<function>
+		<description>获取行政区域</description>
+		<name>getSysAreaTree</name>
+		<function-class>com.cdeledu.util.DictUtils</function-class>
+		<function-signature>java.util.List getSysAreaTree()</function-signature>
+		<example>${dict:getSysAreaTree()}</example>
+	</function>
 </taglib>
