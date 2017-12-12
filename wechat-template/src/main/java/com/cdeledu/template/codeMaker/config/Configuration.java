@@ -14,6 +14,7 @@ package com.cdeledu.template.codeMaker.config;
 public class Configuration {
 	/** ----------------------------------------------------- Fields start */
 	private static MyBatisType codeTemplateType = MyBatisType.mysql;
+	private static boolean pageFlage = false;
 	private static final String BEAN_TEMPLATE = "entity/bean_template.xml";
 	private static final String SERVICE_TEMPLATE = "service/service_template.xml";
 	private static final String SERVICEIMPL_TEMPLATE = "service/impl/serviceimpl_template.xml";
@@ -84,6 +85,24 @@ public class Configuration {
 	 */
 	public static void setCodeTemplateType(MyBatisType codeTemplateType) {
 		Configuration.codeTemplateType = codeTemplateType;
+	}
+
+	/**
+	 * @方法:获取sql的配置文件路径
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	public static boolean getPageFlage() {
+		return pageFlage;
+	}
+
+	/**
+	 * @方法:设置连接数据库链接类型
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	public static void setPageFlage(boolean pageFlage) {
+		Configuration.pageFlage = pageFlage;
 	}
 
 	public static void main(String[] args) {

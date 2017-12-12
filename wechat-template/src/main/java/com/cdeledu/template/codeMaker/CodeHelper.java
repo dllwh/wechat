@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -58,13 +59,26 @@ public class CodeHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static JFrame frame = new JFrame("代码生成器");
 
-	private static JTextField driverField = new JTextField(
-			"com.microsoft.sqlserver.jdbc.SQLServerDriver");
-	private static JTextField urlField = new JTextField(
-			"jdbc:sqlserver://192.168.192.250:1433;DatabaseName=chinatet_live_302");
-	private static JTextField usernameField = new JTextField("sa");
-	private static JTextField passwordField = new JTextField("cailiqiang");
-	private static JTextField tableField = new JTextField("chat_client");
+	/**
+	 * SQLSERVER
+	 */
+	
+//	private static JTextField driverField = new JTextField("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//	private static JTextField urlField = new JTextField("jdbc:sqlserver://192.168.192.250:1433;DatabaseName=chinatet_live_302");
+//	private static JTextField usernameField = new JTextField("sa");
+//	private static JTextField passwordField = new JTextField("cailiqiang");
+//	private static JTextField tableField = new JTextField("chat_client");
+	
+	/**
+	 * Mysql
+	 */
+	private static JTextField driverField = new JTextField("com.mysql.jdbc.Driver");
+	private static JTextField urlField = new JTextField("jdbc:mysql://127.0.0.1:3306/db_wechat?useUnicode=true&characterEncoding=UTF8");
+	private static JTextField usernameField = new JTextField("root");
+	private static JTextField passwordField = new JTextField("");
+	private static JTextField tableField = new JTextField("cms_manageruser");
+	
+	
 	private static JTextField packageField = new JTextField("com.cdeledu");
 
 	private static JButton codeButton = new JButton(" 生成代码 ");
@@ -111,7 +125,7 @@ public class CodeHelper {
 				try {
 					if (checkParam() && getConnection()) {
 						showMessageDialog("连接成功", JOptionPane.INFORMATION_MESSAGE);
-
+						setEditable(false);
 						codeButton.setEnabled(true);
 						// 生成代码
 						codeButton.addMouseListener(new MouseAdapter() {
@@ -147,7 +161,7 @@ public class CodeHelper {
 		tab.addTab("Bean 代码", beanScroll);
 		tab.addTab("Service 接口", setTextAreaByTab(serviceText));
 		tab.addTab("Service 实现", setTextAreaByTab(serviceImplText));
-		tab.addTab("MyBatis 配置", setTextAreaByTab(daoText));
+		tab.addTab("Dao 实现", setTextAreaByTab(daoText));
 		tab.addTab("MyBatis 配置", setTextAreaByTab(mybatisText));
 
 		frame.setVisible(true); // 使窗体可视
@@ -203,14 +217,34 @@ public class CodeHelper {
 				Configuration.setCodeTemplateType(MyBatisType.sqlserver);
 			}
 		});
+		JRadioButton pageRandioButton = new JRadioButton("分页");
+		pageRandioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Configuration.setPageFlage(true);
+			}
+		});
+		JRadioButton noPageButton = new JRadioButton("不分页");
+		noPageButton.setSelected(true);
+		noPageButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Configuration.setPageFlage(false);
+			}
+		});
 		ButtonGroup group = new ButtonGroup();
 		group.add(daoRandioButton);
 		group.add(mapperRandioButton);
+		ButtonGroup group1 = new ButtonGroup();
+		group1.add(pageRandioButton);
+		group1.add(noPageButton);
 		tr.add(daoRandioButton);
 		tr.add(mapperRandioButton);
-		connButton.setPreferredSize(new Dimension(260, 30));
+		tr.add(pageRandioButton);
+		tr.add(noPageButton);
+		connButton.setPreferredSize(new Dimension(150, 30));
 		tr.add(connButton);
-		codeButton.setPreferredSize(new Dimension(260, 30));
+		codeButton.setPreferredSize(new Dimension(150, 30));
 		tr.add(codeButton);
 		return tr;
 	}
@@ -229,19 +263,26 @@ public class CodeHelper {
 	}
 
 	/**
-	 * @方法描述: 检查参数
+	 * @方法描述: 检查参数(数据库密码初始时可能为空)
 	 * @return
 	 */
 	private static boolean checkParam() {
 		if (StringUtils.isNoneBlank(driverField.getText())
 				&& StringUtils.isNoneBlank(urlField.getText())
 				&& StringUtils.isNoneBlank(usernameField.getText())
-				&& StringUtils.isNoneBlank(passwordField.getText())
 				&& StringUtils.isNoneBlank(tableField.getText())
 				&& StringUtils.isNoneBlank(packageField.getText())) {
 			return true;
 		}
 		return false;
+	}
+	private static void setEditable(boolean flag) {
+		driverField.setEditable(flag);
+		urlField.setEditable(flag);
+		usernameField.setEditable(flag);
+		passwordField.setEditable(flag);
+		tableField.setEditable(flag);
+		packageField.setEditable(flag);
 	}
 
 	/**
@@ -281,11 +322,11 @@ public class CodeHelper {
 		String daoCode = "";
 
 		if (ListUtilHelper.EMPTY_LIST != columns) {
-			// mybatisCode = getMyBatisCode(table, packages, columns);
 			domainCode = getBeanCode(table, packages, columns);
 			serviceCode = getServiceCode(table, packages);
-			// serviceImplCode = getServiceImplCode(table, packages);
-			// daoCode = getDaoCode(table, packages);
+			serviceImplCode = getServiceImplCode(table, packages);
+			daoCode = getDaoCode(table, packages);
+			mybatisCode = getMyBatisCode(table, packages, columns);
 		}
 
 		mybatisText.setText(mybatisCode);
@@ -322,8 +363,8 @@ public class CodeHelper {
 		for (Column column : columns) {
 			String template = fieldTemplate;
 			fieldMap = new LinkedHashMap<String, String>();
-			fieldMap.put("field.col", column.getName());
-			fieldMap.put("field.name", column.getField());
+			// fieldMap.put("field.name", column.getField());// 转换成小写
+			fieldMap.put("field.name", column.getName());// 原样输出
 			fieldMap.put("field.length", String.valueOf(column.getLength()));
 			fieldMap.put("field.nullable", String.valueOf(column.isNullable()));
 			fieldMap.put("field.desc", String.valueOf(column.getDesc()));
@@ -353,7 +394,8 @@ public class CodeHelper {
 			fieldMap = new LinkedHashMap<String, String>();
 			fieldMap.put("method.get", "get" + CodeMakerUtil.firstCharUpperCase(c.getField()));
 			fieldMap.put("method.set", "set" + CodeMakerUtil.firstCharUpperCase(c.getField()));
-			fieldMap.put("field.name", c.getField());
+			// fieldMap.put("field.name", c.getField());
+			fieldMap.put("field.name", c.getName());
 			fieldMap.put("field.desc",
 					StringUtils.isEmpty(c.getDesc()) ? c.getField() : String.valueOf(c.getDesc()));
 			fieldMap.put("field.type", c.getFieldType());
@@ -414,7 +456,19 @@ public class CodeHelper {
 	 * @throws Exception
 	 */
 	private static String getServiceImplCode(Table table, String pack) throws Exception {
-		String serviceImplTemplate = "", className = "";
+		String xml = CodeMakerUtil.read(Configuration.getServiceImplTemplateLocation());
+		// 匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。
+		String serviceImplTemplate = RegexUtil.getKeyWords("<class>([\\w\\W]+?)</class>",xml,  1);
+		String className =  CodeMakerUtil.firstCharUpperCase(CodeMakerUtil.toFieldName(table.getName()));
+		Map<String, String> classMap = new LinkedHashMap<String, String>();
+		classMap.put("class.package", pack);
+		classMap.put("class.name", className);
+		classMap.put("table.name", table.getName());
+		classMap.put("table.desc", table.getDesc());
+		classMap.put("now", DateUtilHelper.getCurrentTime());
+		for (Map.Entry<String, String> entry : classMap.entrySet()) {
+			serviceImplTemplate = serviceImplTemplate.replace("#" + entry.getKey() + "#", entry.getValue());
+		}
 		return serviceImplTemplate.toString();
 	}
 
@@ -427,7 +481,21 @@ public class CodeHelper {
 	 * @throws Exception
 	 */
 	private static String getDaoCode(Table table, String pack) throws Exception {
-		String daoTemplate = "", className = "";
+		String xml = CodeMakerUtil.read(Configuration.getDaoTemplateLocation());
+		// 匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。
+		String daoTemplate = RegexUtil.getKeyWords("<class>([\\w\\W]+?)</class>",xml,  1);
+		String className =  CodeMakerUtil.firstCharUpperCase(CodeMakerUtil.toFieldName(table.getName()));
+		
+		Map<String, String> classMap = new LinkedHashMap<String, String>();
+		classMap.put("table.name", table.getName());
+		classMap.put("table.desc", table.getDesc());
+		classMap.put("class.name", className);
+		classMap.put("class.package", pack);
+		classMap.put("now", DateUtilHelper.getCurrentTime());
+		
+		for (Map.Entry<String, String> entry : classMap.entrySet()) {
+			daoTemplate = daoTemplate.replace("#" + entry.getKey() + "#", entry.getValue());
+		}
 		return daoTemplate.toString();
 	}
 
@@ -442,8 +510,82 @@ public class CodeHelper {
 	 */
 	private static String getMyBatisCode(Table table, String pack, List<Column> columns)
 			throws Exception {
+		String xml = CodeMakerUtil.read(Configuration.getMybatisTemplateLocation());
 		StringBuilder sb = new StringBuilder();
-		return sb.toString();
+		String headTemplate =RegexUtil.getKeyWords("<head>([\\w\\W]+?)</head>",xml, 1);
+		sb.append(headTemplate);
+		String className =  CodeMakerUtil.firstCharUpperCase(CodeMakerUtil.toFieldName(table.getName()));
+		
+		String mapperTemplate =RegexUtil.getKeyWords("(<mapper[\\w\\W]+?</mapper>)",xml,  1);
+		
+		String useuseGeneratedKeyTemplate = RegexUtil.getKeyWords("<useuseGeneratedKeys>([\\w\\W]+?)</useuseGeneratedKeys>",xml,  1);
+		String ifTemplate = RegexUtil.getKeyWords("<ifEntry>([\\w\\W]+?)</ifEntry>",xml,  1);
+		String valueTemplate = RegexUtil.getKeyWords("<valueEntry>([\\w\\W]+?)</valueEntry>",xml,  1);
+		
+		List<String> idCols = new ArrayList<String>();
+		List<String> idVals = new ArrayList<String>();
+		List<String> excludeIdCols = new ArrayList<String>();
+		
+		StringBuilder useuseGeneratedKeys = new StringBuilder();
+		
+		for (int i = 0; i < columns.size(); i++) {
+			Column colum = columns.get(i);
+			if(colum.IsPrikey()){
+				idCols.add(colum.getName());
+				idVals.add(valueTemplate.replace("#value#", colum.getName()));
+				if (colum.IsAutoIncrement()) {
+					useuseGeneratedKeys.append(useuseGeneratedKeyTemplate.replace("#" + "id" + "#", colum.getField()));
+				}
+			} else {
+				excludeIdCols.add(colum.getName());
+			}
+		}
+		
+		List<String> andIfEntrys = new ArrayList<String>();
+		List<String> commaIfEntrys = new ArrayList<String>();
+		Map<String, String> map = null;
+		for (Column column : columns) {
+			map = new LinkedHashMap<String, String>();
+			map.put("EntryKey", column.getName());
+			map.put("EntryValue", column.getName());
+			map.put("preJoiner", "AND");
+			map.put("sufJoiner", " ");
+			String template = ifTemplate;
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				template = template.replace("#" + entry.getKey() + "#",  entry.getValue());
+			}
+			andIfEntrys.add(template.trim());
+			
+			
+			if(!column.IsPrikey()){
+				map.put("preJoiner", ",");
+				map.put("sufJoiner", " ");
+				template = ifTemplate;
+				for (Map.Entry<String, String> entry : map.entrySet()) {
+					template = template.replace("#" + entry.getKey() + "#", entry.getValue());
+				}
+				commaIfEntrys.add(template.trim());
+			}
+		}
+		map = new LinkedHashMap<String, String>();
+		map.put("table.name", table.getName());
+		map.put("table.desc", table.getDesc());
+		map.put("class.name", className);
+		map.put("class.package", pack);
+		map.put("useuseGeneratedKey", useuseGeneratedKeys.toString().trim());
+		map.put("id", ListUtilHelper.join(idCols, ","));
+		map.put("idVal", ListUtilHelper.join(idVals, ", "));
+		map.put("Columns",ListUtilHelper.join(excludeIdCols, ",").trim());
+		map.put("andIfEntrys", ListUtilHelper.join(andIfEntrys, "\n\t\t"));
+		map.put("commaIfEntrys", ListUtilHelper.join(commaIfEntrys, "\n\t\t"));
+		
+		
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			mapperTemplate = mapperTemplate.replace("#" + entry.getKey() + "#", entry.getValue());
+		}
+		sb.append(mapperTemplate);
+		
+		return sb.toString().trim();
 	}
 
 	/**
@@ -500,6 +642,17 @@ public class CodeHelper {
 				Column col = new Column(rs);
 				rows.add(col);
 			}
+			
+			if (Configuration.getPageFlage()) {
+				Column rowNumStart = new Column("rowNumStart", "取数据起始行，用于分页", "int", false,
+						Integer.MAX_VALUE);
+				rows.add(rowNumStart);
+				Column rowNumEnd = new Column("rowNumEnd", "取数据结束行，用于分页", "int", false,
+						Integer.MAX_VALUE);
+				rows.add(rowNumEnd);
+			}
+			
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

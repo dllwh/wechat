@@ -1,1 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<head>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+</head>
+<mapper namespace="#class.package#.model.#class.name#">
+
+	<resultMap id="BaseResultMap" type="#class.package#.model.#class.name#">
+		#columns.mapping#
+	</resultMap>
+	
+	<!--   -->
+	<useuseGeneratedKeys>useGeneratedKeys="true" keyProperty="#id#"</useuseGeneratedKeys>
+	
+	<insert id="insert" parameterType="#class.package#.model.#class.name#" #useuseGeneratedKey#>
+		
+	</insert>
+	
+	<select id="findForJdbc" parameterType="#class.package#.model.#class.name#" resultMap="BaseResultMap">
+	
+	</select>
+	
+	<select id="getCountForJdbcParam" parameterType="#class.package#.model.#class.name#" resultMap="BaseResultMap">
+	
+	</select>
+	
+	<select id="findOneForJdbc" parameterType="#class.package#.model.#class.name#" resultMap="BaseResultMap">
+	
+	</select>
+	
+	<update id="update" parameterType="#class.package#.model.#class.name#">
+	
+	</update>
+	
+	<update id="batchUpdate" parameterType="java.util.List">
+	
+	</update>
+	
+	<delete id="delete" parameterType="java.util.Map">
+	
+	</delete>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+	
+	</delete>
+</mapper>

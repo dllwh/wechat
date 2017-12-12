@@ -1,1 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<head>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+</head>
+<mapper namespace="#class.package#.model.#class.name#">
+	<!-- 主键模板  -->
+	<useuseGeneratedKeys>useGeneratedKeys="true" keyProperty="#id#"</useuseGeneratedKeys>
+	<!--  添加模板-->
+	<ifEntry>
+		<isNotNull prepend="#preJoiner#" property="#EntryKey#"> #EntryKey# = ##EntryValue## #sufJoiner#</isNotNull>
+	</ifEntry>
+	<!-- 主键值模板 -->
+	<valueEntry>##value##</valueEntry>
+	<!-- 结果模板 -->
+	<resultEntry></resultEntry>
+	
+	<resultMap id="BaseResultMap" type="#class.package#.model.#class.name#">
+		#columns.mapping#
+	</resultMap>
+	
+	<!-- 操作表名 -->
+	<sql id="tableName">
+		#table.name#
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="cols_all">
+		#id#, <include refid="cols_exclude_id" />,ROW_NUMBER() Over(ORDER BY #id# DESC) AS rowNum
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="cols_exclude_id">
+		#Columns#
+	</sql>
+	
+	<!-- 查询条件 -->
+	<sql id="normal_query_conditions">
+		#andIfEntrys#
+	</sql>
+	
+	<sql id="query_body">
+		SELECT
+			<include refid="cols_all" />
+		FROM
+		<include refid="tableName" />
+		<dynamic prepend="WHERE">
+			<include refid="normal_query_conditions" />
+		</dynamic>
+	</sql>
+	
+	<insert id="insert" parameterType="#class.package#.model.#class.name#" #useuseGeneratedKey#>
+		INSERT INTO <include refid="tableName" /> (<include refid="cols_all"/>)
+	</insert>
+	
+	<select id="findForJdbc" parameterType="#class.package#.model.#class.name#" resultMap="BaseResultMap">
+		SELECT * FROM (
+			<include refid="quert_body" />
+		) AS myTable WHERE  rowNum #rowNumStart# and #rowNumEnd# 
+	</select>
+	
+	<select id="getCountForJdbcParam" parameterType="#class.package#.model.#class.name#" resultMap="BaseResultMap">
+		SELECT
+			count(*)
+		FROM(
+			<include refid="query_body" />
+		) AS myTable
+	</select>
+	
+	<select id="findOneForJdbc" parameterType="#class.package#.model.#class.name#" resultMap="BaseResultMap">
+		SELECT top 1 
+			<include refid="cols_all" />
+		FROM
+		<include refid="tableName" />
+	</select>
+	
+	<update id="update" parameterType="#class.package#.model.#class.name#">
+		UPDATE <include refid="tableName" />  
+		<dynamic prepend="set">
+			#commaIfEntrys#
+		</dynamic>
+		WHERE #id# =  #idVal#
+	</update>
+	
+	<update id="batchUpdate" parameterType="java.util.List">
+		UPDATE <include refid="tableName" />  
+		<dynamic prepend="set">
+		
+		</dynamic>
+		WHERE
+	</update>
+	
+	<delete id="delete" parameterType="java.util.Map">
+		DELETE FROM <include refid="tableName" />
+		<dynamic prepend="WHERE">
+			<include refid="normal_query_conditions" />
+		</dynamic>
+	</delete>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		DELETE FROM <include refid="tableName" /> WHERE  #id# in 
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			${item}
+		</foreach>
+	</delete>
+</mapper>
