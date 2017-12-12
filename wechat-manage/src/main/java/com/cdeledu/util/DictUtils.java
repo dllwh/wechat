@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.cdeledu.common.mapper.JsonMapper;
 import com.cdeledu.core.listener.DictListener;
 import com.cdeledu.model.system.SysDict;
+import com.cdeledu.service.sys.SysAreaService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -20,8 +21,8 @@ import com.google.common.collect.Maps;
  */
 public class DictUtils {
 	/** ----------------------------------------------------- Fields start */
-
 	public static final String CACHE_DICT_MAP = "dictMap";
+	private static SysAreaService sysAreaService = SpringContextUtil.getBean("sysAreaService");
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -71,5 +72,18 @@ public class DictUtils {
 	 */
 	public static String getDictListJson(String type) {
 		return JsonMapper.toJsonString(getDictList(type));
+	}
+
+	/**
+	 * @方法描述 : 获取行政区域的树形菜单
+	 * @return
+	 */
+	public static String getSysAreaTree() {
+		try {
+			return JsonMapper.toJsonString(sysAreaService.getSysAreaTree());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
