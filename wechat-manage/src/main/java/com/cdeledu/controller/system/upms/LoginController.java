@@ -13,12 +13,10 @@ import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.core.factory.LogFactory;
 import com.cdeledu.core.factory.LogTaskFactory;
 import com.cdeledu.core.log.LogManager;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
-import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.util.WebUtilHelper;
 import com.cdeledu.util.security.PasswordUtil;
 
@@ -44,7 +42,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "checkuser")
 	@ResponseBody
-	public AjaxJson checkuser(HttpServletRequest request, SysUser user) {
+	public AjaxJson checkuser(SysUser user) {
 		AjaxJson reslutMsg = new AjaxJson();
 		HttpSession session = WebUtilHelper.getSession();
 		// Session session = ShiroHelper.getSession();
@@ -64,9 +62,8 @@ public class LoginController extends BaseController {
 			}
 
 			try {
-				SysLoginLog loginLog = LogFactory.createLoginLog(userName,
-						String.valueOf(loginResult.getObj()), loginStatus, request);
-				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(loginLog));
+				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,
+						String.valueOf(loginResult.getObj()), loginStatus));
 			} catch (Exception e) {
 			}
 
@@ -123,8 +120,7 @@ public class LoginController extends BaseController {
 		if (currenLoginUser != null) {
 			// 保存退出日志
 			HttpSession session = request.getSession();
-			SysLoginLog exitLog = LogFactory.createExitLog(currenLoginUser.getUserName(), request);
-			LogManager.getInstance().executeLog(LogTaskFactory.exitLog(exitLog));
+			LogManager.getInstance().executeLog(LogTaskFactory.exitLog());
 
 			session.removeAttribute(GlobalConstants.USER_SESSION);
 			ShiroHelper.logout();
