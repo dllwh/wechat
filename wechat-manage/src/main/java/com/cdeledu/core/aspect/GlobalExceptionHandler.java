@@ -2,12 +2,18 @@ package com.cdeledu.core.aspect;
 
 import java.lang.reflect.UndeclaredThrowableException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.session.InvalidSessionException;
+import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -80,6 +86,10 @@ public class GlobalExceptionHandler {
 		}
 	}
 
+	/**
+	 * @方法描述 : 服务器未知运行时异常
+	 * @param e
+	 */
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
@@ -89,4 +99,28 @@ public class GlobalExceptionHandler {
 		}
 	}
 
+	/**
+	 * @方法描述 : session失效的异常拦截
+	 */
+	@ExceptionHandler(InvalidSessionException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public void sessionTimeout(InvalidSessionException e, Model model, HttpServletRequest request,
+			HttpServletResponse response) {
+		if (logger.isDebugEnabled()) {
+			logger.error("session失效的异常拦截:", e);
+		}
+	}
+
+	/**
+	 * @方法描述 : session异常
+	 * @param e
+	 */
+	@ExceptionHandler(UnknownSessionException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public void sessionTimeout(UnknownSessionException e, Model model, HttpServletRequest request,
+			HttpServletResponse response) {
+		if (logger.isDebugEnabled()) {
+			logger.error("session异常拦截:", e);
+		}
+	}
 }
