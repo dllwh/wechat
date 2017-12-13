@@ -2,11 +2,11 @@ package com.cdeledu.core.factory;
 
 import java.util.TimerTask;
 
+import org.aspectj.lang.JoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cdeledu.core.log.LogManager;
-import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.sys.SystemService;
 
 /**
@@ -26,12 +26,13 @@ public class LogTaskFactory {
 
 	/** ----------------------------------------------- [公共方法] */
 
-	public static TimerTask loginLog(final SysLoginLog LoginLog) {
+	public static TimerTask operateLog(final JoinPoint point, final long time, final Throwable e,
+			final Object opResult) {
 		return new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					systemService.addLoginLog(LoginLog);
+					systemService.addLog(LogFactory.createOperateLog(point, time, e, opResult));
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);
 				}
@@ -39,12 +40,26 @@ public class LogTaskFactory {
 		};
 	}
 
-	public static TimerTask exitLog(final SysLoginLog exitLog) {
+	public static TimerTask loginLog(final String userCode, final String content,
+			final int status) {
 		return new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					systemService.addLoginLog(exitLog);
+					systemService.addLoginLog(LogFactory.createLoginLog(userCode, content, status));
+				} catch (Exception e) {
+					logger.error("创建退出日志异常!", e);
+				}
+			}
+		};
+	}
+
+	public static TimerTask exitLog() {
+		return new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					systemService.addLoginLog(LogFactory.createExitLog());
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);
 				}
