@@ -93,6 +93,22 @@ public class ShiroHelper {
 	}
 
 	/**
+	 * @方法描述 :认证通过或已记住的用户。
+	 * @return 用户：true，否则 false
+	 */
+	public boolean isUser() {
+		return isLogin();
+	}
+
+	/**
+	 * @方法描述 : 验证当前用户是否为“访客”，即未认证（包含未记住）的用户。
+	 * @return 访客：true，否则false
+	 */
+	public boolean isGuest() {
+		return !isUser();
+	}
+
+	/**
 	 * 判断是否登录
 	 * 
 	 * @return
