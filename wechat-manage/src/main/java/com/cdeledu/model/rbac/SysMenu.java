@@ -1,5 +1,6 @@
 package com.cdeledu.model.rbac;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.cdeledu.common.base.DataEntity;
@@ -28,7 +29,8 @@ public class SysMenu extends DataEntity<SysMenu> {
 	private String iconClass;
 	/** tree属性 */
 	private Boolean open = false;
-	private List<?> childrenList;
+	/** 子节点的集合 */
+	private List<SysMenu> childrenList;
 
 	public String getMenuName() {
 		return menuName;
@@ -86,19 +88,39 @@ public class SysMenu extends DataEntity<SysMenu> {
 		this.open = open;
 	}
 
-	public List<?> getChildrenList() {
+	public List<SysMenu> getChildrenList() {
 		return childrenList;
 	}
 
-	public void setChildrenList(List<?> childrenList) {
+	public void setChildrenList(List<SysMenu> childrenList) {
 		this.childrenList = childrenList;
 	}
 
 	@Override
 	public String toString() {
-		return super.toString()+ "\n\r SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl + ", type=" + type
-				+ ", parentCode=" + parentCode + ", parentName=" + parentName + ", iconClass="
-				+ iconClass + ", open=" + open + ", childrenList=" + childrenList + "]";
+		return super.toString() + "\n\r SysMenu [menuName=" + menuName + ", menuUrl=" + menuUrl
+				+ ", type=" + type + ", parentCode=" + parentCode + ", parentName=" + parentName
+				+ ", iconClass=" + iconClass + ", open=" + open + ", childrenList=" + childrenList
+				+ "]";
 	}
-	
+
+	/**
+	 * @方法描述 : 得到子节点列表
+	 * @param nodeList
+	 * @param parentId
+	 * @return
+	 */
+	public List<SysMenu> findChildNodes(List<SysMenu> nodeList, Integer parentId) {
+		if (nodeList == null && parentId == null) {
+			return null;
+		}
+		for (Iterator<SysMenu> iterator = nodeList.iterator(); iterator.hasNext();) {
+			SysMenu node = iterator.next();
+			// 根据传入的某个父节点ID,遍历该父节点的所有子节点
+			if (node.getParentCode() != -1 && parentId.equals(node.getParentCode())) {
+				nodeList.add(node);
+			}
+		}
+		return nodeList;
+	}
 }
