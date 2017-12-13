@@ -42,7 +42,21 @@
 		<property name="jedisPool" ref="jedisPoolConfig" />
 	</bean>
 	-->
-
+	
+	<!-- 
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool" scope="singleton">
+		<constructor-arg index="0" ref="jedisPoolConfig"/>
+		<constructor-arg index="1">
+			<list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis.host}"/>
+					<constructor-arg index="1" value="${redis.port}"/>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+	-->
+	
 	<!--  spring data redis -->
 	<bean id="jeidsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
 		<constructor-arg ref="jedisPoolConfig"/>
