@@ -37,7 +37,7 @@
 		<!-- 设置Cookie的路径，默认空，即存储在域名根下 -->
 		<property name="path" value="/"/>
 		<!--  设置Cookie的过期时间，秒为单位，默认-1表示关闭浏览器时过期Cookie -->
-		<property name="maxAge" value="-1"/>
+		<property name="maxAge" value="7200"/>
 		<!-- 如果设置为true，则客户端不会暴露给客户端脚本代码，使用HttpOnly cookie有助于减少某些类型的跨站点脚本攻击 -->
 		<property name="httpOnly" value="true"/>
 	</bean>
@@ -56,7 +56,7 @@
 		<property name="sessionValidationInterval" value="${session.validation}"/>
 		<property name="sessionIdCookie" ref="sessionIdCookie"/>
 		<!-- 是否启用/禁用，默认是启用的；如果禁用后将不会设置Session Id Cookie，即默认使用了Servlet容器的JSESSIONID -->
-		<property name="sessionIdCookieEnabled" value="false" />
+		<property name="sessionIdCookieEnabled" value="true" />
 		<!-- session 监听，可以多个。 -->
 		<property name="sessionListeners">
 			<list>
