@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.common.mapper.JsonMapper;
+import com.cdeledu.core.factory.ConstantFactory;
 import com.cdeledu.core.listener.DictListener;
 import com.cdeledu.model.system.SysDict;
 import com.cdeledu.service.sys.SysAreaService;
@@ -22,7 +23,7 @@ import com.google.common.collect.Maps;
 public class DictUtils {
 	/** ----------------------------------------------------- Fields start */
 	public static final String CACHE_DICT_MAP = "dictMap";
-	private static SysAreaService sysAreaService = SpringContextUtil.getBean("sysAreaService");
+	private static SysAreaService sysAreaService = ConstantFactory.sysAreaService;
 
 	/** ----------------------------------------------------- Fields end */
 

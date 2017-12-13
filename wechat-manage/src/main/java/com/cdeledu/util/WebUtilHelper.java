@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
+import com.cdeledu.core.factory.ConstantFactory;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
@@ -28,10 +29,9 @@ import com.cdeledu.service.sys.SysMenuService;
  */
 public class WebUtilHelper {
 	/** ----------------------------------------------------- Fields start */
-	private static final ResourceBundle sysConfig = ResourceBundle
-			.getBundle("properties/sysConfig");
-	private static ManagerUserService userService = SpringContextUtil.getBean("managerUserService");
-	private static SysMenuService sysMenuService = SpringContextUtil.getBean("sysMenuService");
+	private static final ResourceBundle sysConfig = ConstantFactory.sysConfig;
+	private static ManagerUserService userService = ConstantFactory.userService;
+	private static SysMenuService sysMenuService = ConstantFactory.sysMenuService;
 
 	/** ----------------------------------------------------- Fields end */
 
