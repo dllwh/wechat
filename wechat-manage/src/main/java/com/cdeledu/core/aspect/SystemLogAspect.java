@@ -1,10 +1,5 @@
 package com.cdeledu.core.aspect;
 
-import java.lang.reflect.Method;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -14,20 +9,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cdeledu.common.base.BaseClass;
-import com.cdeledu.common.mapper.JsonMapper;
-import com.cdeledu.core.annotation.SystemLog;
-import com.cdeledu.core.shiro.token.ShiroHelper;
-import com.cdeledu.model.system.SysLogEntity;
-import com.cdeledu.service.sys.SystemService;
-import com.cdeledu.util.WebUtilHelper;
-import com.cdeledu.util.network.IpUtilHelper;
-
-import nl.bitwalker.useragentutils.UserAgent;
+import com.cdeledu.core.factory.LogTaskFactory;
+import com.cdeledu.core.log.LogManager;
 
 /**
  * 
@@ -47,9 +33,6 @@ public class SystemLogAspect extends BaseClass {
 
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
-
-	@Autowired
-	private SystemService sysLogManager;
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -86,7 +69,8 @@ public class SystemLogAspect extends BaseClass {
 		long time = System.currentTimeMillis() - beginTime;
 		// 保存日志
 		try {
-			saveSysLog(point, time, null, result);
+			LogManager.getInstance()
+					.executeLog(LogTaskFactory.operateLog(point, time, null, result));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -129,59 +113,9 @@ public class SystemLogAspect extends BaseClass {
 			logger.debug("=========执行异常通知===============");
 		}
 		try {
-			saveSysLog(joinPoint, -1L, e, null);
+			LogManager.getInstance().executeLog(LogTaskFactory.operateLog(joinPoint, 0, e, null));
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-	}
-
-	private void saveSysLog(JoinPoint joinPoint, long time, Throwable throwable, Object opResult)
-			throws Exception  {
-		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-		Method method = signature.getMethod();
-		SysLogEntity sysLog = new SysLogEntity();
-		SystemLog systemLog = method.getAnnotation(SystemLog.class);
-		if (systemLog != null) {
-			sysLog.setRemark(systemLog.desc());
-			sysLog.setTableName(StringUtils.join(systemLog.tableName(), ","));
-			sysLog.setOpType(systemLog.opType().getValue());
-		}
-		// 获取request
-		HttpServletRequest request = WebUtilHelper.getHttpServletRequest();
-
-		// 请求方法名
-		String targetName = joinPoint.getTarget().getClass().getName();// 获取目标类名
-		sysLog.setMethod(targetName + "." + signature.getName() + "()");
-		//访问目标方法的参数：
-		sysLog.setParams(JsonMapper.toJsonString(joinPoint.getArgs()));
-
-		// 操作人的信息
-		int userId = -1;
-		if (ShiroHelper.isLogin()) {
-			userId = WebUtilHelper.getCurrentUserId();
-		}
-		sysLog.setUserCode(userId);
-		// 登录的IP地址
-		sysLog.setIpAddress(IpUtilHelper.getClientIP(request));
-		// 浏览器
-		String userAgent = "";
-		try {
-			userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent")).getBrowser()
-					.getName();
-		} catch (Exception ex) {
-
-		}
-
-		if (opResult != null) {
-			sysLog.setOpResult(JsonMapper.toJsonString(opResult));
-		}
-		if (throwable != null) {
-			sysLog.setLogType(-1);
-			sysLog.setExceptionCode(sysLog.getClass().getName());
-			sysLog.setExceptionDetail(throwable.getMessage());
-		}
-		sysLog.setBroswer(userAgent);
-		sysLog.setTime(time);
-		sysLogManager.addLog(sysLog);
 	}
 }
