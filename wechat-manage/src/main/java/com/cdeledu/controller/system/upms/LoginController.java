@@ -18,7 +18,10 @@ import com.cdeledu.core.log.LogManager;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.util.WebUtilHelper;
+import com.cdeledu.util.network.IpUtilHelper;
 import com.cdeledu.util.security.PasswordUtil;
+
+import nl.bitwalker.useragentutils.UserAgent;
 
 /**
  * @类描述: 登陆初始化控制器
@@ -42,7 +45,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "checkuser")
 	@ResponseBody
-	public AjaxJson checkuser(SysUser user) {
+	public AjaxJson checkuser(HttpServletRequest request, SysUser user) {
 		AjaxJson reslutMsg = new AjaxJson();
 		HttpSession session = WebUtilHelper.getSession();
 		// Session session = ShiroHelper.getSession();
@@ -62,8 +65,11 @@ public class LoginController extends BaseController {
 			}
 
 			try {
+				String ip = IpUtilHelper.getClientIP(request);
+				String browser = UserAgent.parseUserAgentString(request.getHeader("User-Agent"))
+						.getBrowser().getName();
 				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,
-						String.valueOf(loginResult.getObj()), loginStatus));
+						String.valueOf(loginResult.getObj()), loginStatus, ip, browser));
 			} catch (Exception e) {
 			}
 
@@ -120,11 +126,8 @@ public class LoginController extends BaseController {
 		if (currenLoginUser != null) {
 			// 保存退出日志
 			HttpSession session = request.getSession();
-			LogManager.getInstance().executeLog(LogTaskFactory.exitLog());
-
 			session.removeAttribute(GlobalConstants.USER_SESSION);
 			ShiroHelper.logout();
-
 		}
 		return FilterHelper.LOGIN_SHORT;
 	}
