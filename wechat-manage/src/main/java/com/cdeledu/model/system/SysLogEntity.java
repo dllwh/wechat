@@ -31,7 +31,7 @@ public class SysLogEntity implements Serializable {
 	/** 请求方法 */
 	private String method;
 	/** 浏览器信息 */
-	private String broswer;
+	private String browser;
 	/** 请求参数 */
 	private String params;
 	/** 日志操作表 */
@@ -96,12 +96,12 @@ public class SysLogEntity implements Serializable {
 		this.method = method;
 	}
 
-	public String getBroswer() {
-		return broswer;
+	public String getBrowser() {
+		return browser;
 	}
 
-	public void setBroswer(String broswer) {
-		this.broswer = broswer;
+	public void setBrowser(String browser) {
+		this.browser = browser;
 	}
 
 	public String getParams() {
@@ -172,7 +172,7 @@ public class SysLogEntity implements Serializable {
 	public String toString() {
 		return "SysLogEntity [id=" + id + ", userCode=" + userCode + ", ipAddress=" + ipAddress
 				+ ", opType=" + opType + ", time=" + time + ", method=" + method + ", broswer="
-				+ broswer + ", params=" + params + ", tableName=" + tableName + ", remark=" + remark
+				+ browser + ", params=" + params + ", tableName=" + tableName + ", remark=" + remark
 				+ ", exceptionCode=" + exceptionCode + ", exceptionDetail=" + exceptionDetail
 				+ ", logType=" + logType + ", opResult=" + opResult + ", createTime=" + createTime
 				+ "]";
