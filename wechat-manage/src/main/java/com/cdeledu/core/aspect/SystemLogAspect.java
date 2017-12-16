@@ -1,5 +1,7 @@
 package com.cdeledu.core.aspect;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -14,6 +16,10 @@ import org.springframework.stereotype.Component;
 import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.core.factory.LogTaskFactory;
 import com.cdeledu.core.log.LogManager;
+import com.cdeledu.util.WebUtilHelper;
+import com.cdeledu.util.network.IpUtilHelper;
+
+import nl.bitwalker.useragentutils.UserAgent;
 
 /**
  * 
@@ -69,8 +75,12 @@ public class SystemLogAspect extends BaseClass {
 		long time = System.currentTimeMillis() - beginTime;
 		// 保存日志
 		try {
+			HttpServletRequest request = WebUtilHelper.getHttpServletRequest();
+			String ip = IpUtilHelper.getClientIP(request);
+			String browser = UserAgent.parseUserAgentString(request.getHeader("User-Agent")).getBrowser()
+					.getName();
 			LogManager.getInstance()
-					.executeLog(LogTaskFactory.operateLog(point, time, null, result));
+					.executeLog(LogTaskFactory.operateLog(point, time, null, result,ip,browser));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,7 +123,11 @@ public class SystemLogAspect extends BaseClass {
 			logger.debug("=========执行异常通知===============");
 		}
 		try {
-			LogManager.getInstance().executeLog(LogTaskFactory.operateLog(joinPoint, 0, e, null));
+			HttpServletRequest request = WebUtilHelper.getHttpServletRequest();
+			String ip = IpUtilHelper.getClientIP(request);
+			String browser = UserAgent.parseUserAgentString(request.getHeader("User-Agent")).getBrowser()
+					.getName();
+			LogManager.getInstance().executeLog(LogTaskFactory.operateLog(joinPoint, 0, e, null,ip,browser));
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}

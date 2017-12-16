@@ -27,12 +27,12 @@ public class LogTaskFactory {
 	/** ----------------------------------------------- [公共方法] */
 
 	public static TimerTask operateLog(final JoinPoint point, final long time, final Throwable e,
-			final Object opResult) {
+			final Object opResult,final String ip,final String browser) {
 		return new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					systemService.addLog(LogFactory.createOperateLog(point, time, e, opResult));
+					systemService.addLog(LogFactory.createOperateLog(point, time, e, opResult,ip,browser));
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);
 				}
@@ -40,13 +40,14 @@ public class LogTaskFactory {
 		};
 	}
 
-	public static TimerTask loginLog(final String userCode, final String content,
-			final int status) {
+	public static TimerTask loginLog(final String userCode, final String content, final int status,
+			final String ip, final String browser) {
 		return new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					systemService.addLoginLog(LogFactory.createLoginLog(userCode, content, status));
+					systemService.addLoginLog(
+							LogFactory.createLoginLog(userCode, content, status, ip, browser));
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);
 				}
@@ -54,18 +55,6 @@ public class LogTaskFactory {
 		};
 	}
 
-	public static TimerTask exitLog() {
-		return new TimerTask() {
-			@Override
-			public void run() {
-				try {
-					systemService.addLoginLog(LogFactory.createExitLog());
-				} catch (Exception e) {
-					logger.error("创建退出日志异常!", e);
-				}
-			}
-		};
-	}
 	/** ----------------------------------------------- [公共方法] */
 
 	/** ----------------------------------------------- [私有方法] */
