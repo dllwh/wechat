@@ -14,7 +14,7 @@ import com.cdeledu.common.base.BaseEntity;
  * @since: JDK 1.7
  * @see <a href="">TODO(连接内容简介)</a>
  */
-public class SysUserMenu extends BaseEntity<SysUserMenu> {
+public class SysUserMenu extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */

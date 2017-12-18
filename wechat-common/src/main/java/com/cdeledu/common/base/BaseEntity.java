@@ -7,7 +7,7 @@ package com.cdeledu.common.base;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public abstract class BaseEntity<T> extends PageEntity<T> {
+public abstract class BaseEntity extends PageEntity {
 
 	private static final long serialVersionUID = 1L;
 	/**

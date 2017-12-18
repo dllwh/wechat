@@ -11,7 +11,7 @@ import com.cdeledu.common.base.BaseEntity;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class SysIcon extends BaseEntity<SysIcon> {
+public class SysIcon extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	/** 显示名称 */

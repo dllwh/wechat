@@ -9,7 +9,7 @@ import com.cdeledu.common.base.DataEntity;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class SysRole extends DataEntity<SysRole> {
+public class SysRole extends DataEntity {
 	private static final long serialVersionUID = 1L;
 	// 角色名称
 	private String roleName;

@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @版本: V1.2
  * @since: JDK 1.7
  */
-public abstract class DataEntity<T> extends BaseEntity<T> {
+public abstract class DataEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	// 最初创建者
 	protected Integer create;

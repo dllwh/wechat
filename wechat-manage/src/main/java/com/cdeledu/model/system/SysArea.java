@@ -13,7 +13,7 @@ import com.cdeledu.common.base.BaseEntity;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class SysArea extends BaseEntity<SysArea> {
+public class SysArea extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 	/** 行政区划代码 */

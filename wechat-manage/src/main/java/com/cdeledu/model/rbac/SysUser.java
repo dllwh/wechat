@@ -12,7 +12,7 @@ import com.cdeledu.common.base.DataEntity;
  * @版本: V1.2
  * @since: JDK 1.7
  */
-public class SysUser extends DataEntity<SysUser> {
+public class SysUser extends DataEntity {
 	private static final long serialVersionUID = 1L;
 	/** 用户名(数字与字母组成) */
 	@NotBlank(message = "登陆账号不能为空")

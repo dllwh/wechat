@@ -9,7 +9,7 @@ import com.cdeledu.common.base.BaseEntity;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class SysRoleMenu extends BaseEntity<SysRoleMenu> {
+public class SysRoleMenu extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	// 角色id
 	private Integer roleId;

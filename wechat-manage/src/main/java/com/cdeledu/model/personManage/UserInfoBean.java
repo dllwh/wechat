@@ -14,7 +14,7 @@ import com.cdeledu.common.base.BaseEntity;
  * @版本: V1.2
  * @since: JDK 1.7
  */
-public class UserInfoBean extends BaseEntity<UserInfoBean> {
+public class UserInfoBean extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	// 登录用户名(数字与字母组成)
 	private String loginName;

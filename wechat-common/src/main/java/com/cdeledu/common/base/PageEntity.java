@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class PageEntity<T> implements Serializable {
+public class PageEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/** 当前页数:第几页 --pageNo */
 	protected int page = 1;

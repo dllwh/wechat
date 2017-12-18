@@ -11,7 +11,7 @@ import com.cdeledu.common.base.BaseEntity;
  * @版本: V1.3
  * @since: JDK 1.7
  */
-public class SysLoginLog extends BaseEntity<SysLoginLog> {
+public class SysLoginLog extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	// 登录人
 	private String userCode;
