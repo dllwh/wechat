@@ -2,6 +2,8 @@ package com.cdeledu.service.pay.impl;
 
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.cdeledu.service.pay.UnionPayService;
 
 /**
@@ -15,6 +17,7 @@ import com.cdeledu.service.pay.UnionPayService;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@Service
 public class UnionPayServiceImpl implements UnionPayService {
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */

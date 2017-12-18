@@ -1,5 +1,7 @@
 package com.cdeledu.service.pay.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.cdeledu.service.pay.AliPayService;
 
 /**
@@ -13,6 +15,7 @@ import com.cdeledu.service.pay.AliPayService;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@Service
 public class AliPayServiceImpl implements AliPayService {
 
 	@Override
