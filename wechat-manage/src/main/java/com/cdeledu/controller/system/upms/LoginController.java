@@ -131,4 +131,23 @@ public class LoginController extends BaseController {
 		}
 		return FilterHelper.LOGIN_SHORT;
 	}
+	
+
+	/**
+	 * @方法:用户被提出\被挤掉
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@RequestMapping(params = "kickout")
+	public String kickout(HttpServletRequest request) {
+		SysUser currenLoginUser = ShiroHelper.getPrincipal();
+		// 判断用户是否为空,不为空,则清空session中的用户object
+		if (currenLoginUser != null) {
+			// 保存退出日志
+			HttpSession session = request.getSession();
+			session.removeAttribute(GlobalConstants.USER_SESSION);
+			ShiroHelper.logout();
+		}
+		return FilterHelper.LOGIN_SHORT;
+	}
 }
