@@ -21,16 +21,17 @@ public class FilterHelper {
 	/** 登录验证 */
 	public final static String LOGIN_CHECK = "/loginController.shtml?checkuser";
 	/** 踢出登录提示 */
-	public final static String KICKED_OUT = "/loginController/kickedOut.shtml";
+	public final static String KICKED_OUT = "/loginController.shtml?kickout";
 	/** 没有权限提醒 */
 	public final static String UNAUTHORIZED = "/sysPage/unauthorized.shtml";
 	/** 将登录前的URL放到Session中的键名称 */
 	public static final String LOGIN_TO_URL = "toUrl";
 	/** 超级管理员角色代码 */
 	public final static String ADMIN_ROLE_CODE = "administrator";
-
 	/** Druid Monitor监控 */
 	public static final String Druid_Monitor = "/system/druid/";
+	/** 支付自定义错误页面 */
+	public static final String PAY_ERROR_WEIXIN_H5 = "https://github.com/dllwh/";
 
 	/** 非法字符:过滤掉的sql关键字，可以手动添加 */
 	public static String[] keywords = { "'", "*", "&", "%", ";", "or", "-", "+", "--", "#",
