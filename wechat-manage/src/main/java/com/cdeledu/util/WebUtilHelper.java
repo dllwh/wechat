@@ -86,6 +86,14 @@ public class WebUtilHelper {
 		return sysUser;
 	}
 
+	public static void setSessionAttribute(String key, Object value) {
+		getSession().setAttribute(key, value);
+	}
+
+	public static Object getSessionAttribute(String key) {
+		return getSession().getAttribute(key);
+	}
+	
 	/**
 	 * @方法描述: 在HttpSession中设置当前登录的用户
 	 * @param user
