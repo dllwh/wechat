@@ -14,10 +14,7 @@
 	<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/ace-ie.min.css" />
 <![endif]-->
 <script src="${_currConText }/plug-in/assets/js/ace-extra.min.js"></script>
-<!--[if lt IE 9]>
-	<script src="${_currConText }/plug-in/assets/js/html5shiv.js"></script>
-	<script src="${_currConText }/plug-in/assets/js/respond.min.js"></script>
-<![endif]-->
+
 <!--[if !IE]> -->
 <script src="${_currConText }/plug-in/jquery/jquery-1.9.1.min.js"></script>
 <script src="${_currConText }/plug-in/assets/js/jquery.min.js"></script>   
