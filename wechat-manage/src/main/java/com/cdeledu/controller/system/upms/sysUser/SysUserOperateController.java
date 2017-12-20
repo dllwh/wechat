@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
+import com.cdeledu.util.WebUtilHelper;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -37,8 +39,6 @@ public class SysUserOperateController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	@Autowired
 	private ManagerUserService manageruserService;
-	private String logMsg = null;
-
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法描述: 用户注册
@@ -50,59 +50,22 @@ public class SysUserOperateController extends BaseController {
 	@RequestMapping(value = "singUp")
 	public AjaxJson singUp(SysUser managerUser) {
 		AjaxJson resultMsg = new AjaxJson();
-		logMsg = "用户: " + managerUser.getUserName();
 		try {
-			manageruserService.insert(managerUser);
-			logMsg += ",注册(创建)成功";
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			logMsg += ",在被创建之时出现异常,其原因是" + e.getMessage();
-			resultMsg.setSuccess(false);
-		}
-		resultMsg.setMsg(logMsg);
-		return resultMsg;
-	}
-
-	/**
-	 * @方法描述: 用户-角色录入
-	 * @创建者: 皇族灬战狼
-	 * @创建时间: 2016年9月27日 下午4:51:27
-	 * @param managerUser
-	 * @param request
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "saveRoleUser")
-	@SystemLog(desc = "用户-角色录入", opType = SysOpType.INSERT, tableName = "sys_user")
-	public AjaxJson saveRoleUser(SysUser managerUser,
-			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
-		AjaxJson resultMsg = new AjaxJson();
-		SysUser user = new SysUser();
-		user.setUserName(managerUser.getUserName());
-		logMsg = "用户: " + managerUser.getUserName();
-		try {
-			SysUser TSUser = manageruserService.findOneForJdbc(user);
-			if (null != TSUser) {
-				logMsg += " 不存在";
-				resultMsg.setSuccess(false);
+			if (manageruserService.checkUserExits(managerUser) == null) {
+				managerUser.setCreate(WebUtilHelper.getCurrentUserId());
+				managerUser.setModifier(WebUtilHelper.getCurrentUserId());
+				manageruserService.insert(managerUser);
+				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 			} else {
-				int userId = manageruserService.insert(managerUser);
-				logMsg += " 添加成功";
-
-				if (StringUtils.isNotEmpty(String.valueOf(roleID))) {
-					SysUserRole managerUserRole = new SysUserRole();
-					managerUserRole.setUserId(userId);
-					managerUserRole.setRoleId(roleID);
-					manageruserService.saveRoleUser(managerUserRole);
-				}
+				resultMsg.setSuccess(false);
+				resultMsg.setMsg(MessageConstant.EXISTED);
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			logMsg += " 分配角色时出现异常,其异常原因是" + e.getMessage();
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 			resultMsg.setSuccess(false);
 		}
-		resultMsg.setMsg(logMsg);
 		return resultMsg;
 	}
 
@@ -118,17 +81,15 @@ public class SysUserOperateController extends BaseController {
 	@RequestMapping(value = "updateUser")
 	public AjaxJson updateUser(SysUser managerUser) {
 		AjaxJson resultMsg = new AjaxJson();
-		logMsg = "用户: " + managerUser.getUserName();
 		try {
 			managerUser.setUserName(null);// 不能更新username
 			manageruserService.update(managerUser);
-			logMsg += "更新成功";
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMsg.setSuccess(false);
-			logMsg += "更新时出现异常,其异常原因时:" + e.getMessage();
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		resultMsg.setMsg(logMsg);
 		return resultMsg;
 	}
 
@@ -144,16 +105,15 @@ public class SysUserOperateController extends BaseController {
 	@RequestMapping(value = "deleteUser")
 	public AjaxJson delUser(@RequestParam(value = "id", required = true) Integer id) {
 		AjaxJson resultMsg = new AjaxJson();
-		logMsg = "删除用户ID: " + id + " 的用户";
 		try {
 			SysUser managerUser = new SysUser();
 			managerUser.setId(id);
 			manageruserService.delete(managerUser);
-			logMsg += ",删除成功";
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMsg.setSuccess(false);
-			logMsg += ",删除失败，其异常原因是:" + e.getMessage();
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		}
 		return resultMsg;
 	}
@@ -240,6 +200,41 @@ public class SysUserOperateController extends BaseController {
 		return resultMsg;
 	}
 
+	
+	/**
+	 * @方法描述: 用户-角色录入
+	 * @创建者: 皇族灬战狼
+	 * @创建时间: 2016年9月27日 下午4:51:27
+	 * @param managerUser
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveRoleUser")
+	@SystemLog(desc = "用户-角色录入", opType = SysOpType.INSERT, tableName = "sys_user")
+	public AjaxJson saveRoleUser(@RequestParam(value = "userName", required = true) String userName,
+			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
+		AjaxJson resultMsg = new AjaxJson();
+		SysUser user = new SysUser();
+		user.setUserName(userName);
+		try {
+			SysUser TSUser = manageruserService.findOneForJdbc(user);
+			if (null == TSUser) {
+				resultMsg.setMsg("不存在");
+				resultMsg.setSuccess(false);
+			} else {
+				SysUserRole managerUserRole = new SysUserRole();
+				managerUserRole.setUserId(TSUser.getId());
+				managerUserRole.setRoleId(roleID);
+				manageruserService.saveRoleUser(managerUserRole);
+			}
+		} catch (Exception e) {
+			resultMsg.setResultCode(500);
+			resultMsg.setMsg("分配角色时出现异常");
+			resultMsg.setSuccess(false);
+		}
+		return resultMsg;
+	}
 	/**
 	 * @方法描述: 操作用户的角色
 	 * @return
@@ -282,7 +277,6 @@ public class SysUserOperateController extends BaseController {
 	@RequestMapping("updateSelf")
 	public AjaxJson updateSelf(SysUser sysUser) {
 		AjaxJson resultMsg = new AjaxJson();
-		
 		return resultMsg;
 	}
 }
