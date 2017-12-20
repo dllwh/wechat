@@ -53,15 +53,24 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>${mongodb.version}</version>
 		</dependency>
-
+		
+		<!-- Redis -->
+		<dependency>  
+			<groupId>org.springframework.data</groupId>  
+			<artifactId>spring-data-redis</artifactId>
+			<version>${spring.redis.version}</version>  
+		</dependency>  
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>${jedis.version}</version>
 		</dependency>
+		
+		<!-- 包含对Spring对JDBC数据访问进行封装的所有类 -->
 		<dependency>
+		
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId><!-- 包含对Spring对JDBC数据访问进行封装的所有类 -->
+			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
 				
