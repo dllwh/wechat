@@ -28,6 +28,10 @@ public class KickoutSessionFilter extends AccessControlFilter {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 	// 静态注入
 	static String kickoutUrl;
+	// 踢出之前登录的/之后登录的用户 默认踢出之前登录的用户
+	boolean kickoutAfter = false;
+	// 同一个帐号最大会话数 默认1
+	int maxSession = 1;
 	// 在线用户
 	final static String ONLINE_USER = KickoutSessionFilter.class.getCanonicalName()
 			+ "_online_user";
@@ -46,17 +50,17 @@ public class KickoutSessionFilter extends AccessControlFilter {
 		 * <li>1.2 如果是普通请求，直接跳转到登录页</li>
 		 * </ul>
 		 */
-		
-		if(FilterHelper.isAjax(request)){
-			
+
+		if (FilterHelper.isAjax(request)) {
+
 		}
 		/**
 		 * 2. 处理当前授权用户的session
 		 * <ul>
-		 * <li>2.1 	如果已经包含当前Session，并且是同一个用户，跳过。</li>
-		 * <li>2.2	如果用户ID相同，Session不相同，那么就要处理了</li>
-		 * <li>2.2.1	获取到原来的的session，并且标记为提出 </li>
-		 * <li>2.2.2	更新session </li>
+		 * <li>2.1 如果已经包含当前Session，并且是同一个用户，跳过。</li>
+		 * <li>2.2 如果用户ID相同，Session不相同，那么就要处理了</li>
+		 * <li>2.2.1 获取到原来的的session，并且标记为提出</li>
+		 * <li>2.2.2 更新session</li>
 		 * </ul>
 		 */
 		return Boolean.TRUE;
@@ -74,5 +78,13 @@ public class KickoutSessionFilter extends AccessControlFilter {
 
 	public void setKickoutUrl(String kickoutUrl) {
 		KickoutSessionFilter.kickoutUrl = kickoutUrl;
+	}
+
+	public void setKickoutAfter(boolean kickoutAfter) {
+		this.kickoutAfter = kickoutAfter;
+	}
+
+	public void setMaxSession(int maxSession) {
+		this.maxSession = maxSession;
 	}
 }
