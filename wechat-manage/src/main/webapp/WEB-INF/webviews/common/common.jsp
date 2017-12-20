@@ -20,7 +20,9 @@
 
 <%-- 这3句每个页面必须添加 --%>
 <meta http-equiv="content-type" content="text/html;chartset=UTF-8">
+<%-- 关键词,5个左右,单个8汉字以内 --%>
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<%-- 网站描述，字数尽量空制在80个汉字，160个字符以内！ --%>
 <meta http-equiv="description" content="This is my page">
 
 <%-- 这4句是避免页面缓存（需要时添加） --%>
@@ -43,4 +45,17 @@
 <%-- 项目名称--%>
 <c:set var="_currProject" value="综合信息后台管理系统" />
 <%-- 网页标题图标  --%>
-<link rel='icon' href='${_currConText }/static/image/common/webSite.ico' type='image/x-ico' />
+<link rel="icon" href='${_currConText }/static/image/common/webSite.ico' type='image/x-ico' />
+<link rel="Bookmark" href='${_currConText }/static/image/common/webSite.ico' type='image/x-ico' />
+
+<%-- 让IE低版本浏览器兼容html5元素 --%>
+<!--[if lt IE 9]>
+	<script src="${_currConText }/plug-in/assets/js/html5shiv.js"></script>
+	<script src="${_currConText }/plug-in/assets/js/respond.min.js"></script>
+<![endif]-->
+
+<%-- 解决IE6png透明，请使用注释方式的方式加载，只有IE6的浏览器才会加载，避免增加其他浏览器的资源冗余 --%>
+<!--[if IE 6]>
+	<script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+	<script>DD_belatedPNG.fix('.pngfix,.icon');</script>
+<![endif]--> 
