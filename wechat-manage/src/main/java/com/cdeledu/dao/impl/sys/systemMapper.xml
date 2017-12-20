@@ -22,8 +22,8 @@
 			<if test="method != null">
 				`method`,
 			</if>
-			<if test="broswer != null">
-				broswer,
+			<if test="browser != null">
+				browser,
 			</if>
 			<if test="params != null">
 				params,
@@ -63,8 +63,8 @@
 			<if test="method != null">
 				#{method},
 			</if>
-			<if test="broswer != null">
-				#{broswer},
+			<if test="browser != null">
+				#{browser},
 			</if>
 			<if test="params != null">
 				#{params},

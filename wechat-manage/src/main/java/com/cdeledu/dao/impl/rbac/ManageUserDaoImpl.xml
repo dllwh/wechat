@@ -69,7 +69,7 @@
 		useGeneratedKeys="true" keyProperty="id" >
 		insert into sys_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="username != null">userName,</if>
+			<if test="userName != null">userName,</if>
 			<if test="password != null">password,</if>
 			<if test="usertype != null">userType,</if>
 			<if test="nickName != null">nickName,</if>
@@ -81,11 +81,12 @@
 			<if test="telephone != null">telephone,</if>
 			<if test="signature != null">signature,</if>
 			<if test="remark != null">remark,</if>
-			<if test="create != null">create,</if>
+			<if test="creator != null">creator,</if>
+			<if test="modifier != null">modifier,</if>
 		</trim>
 		values 
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="username != null">#{username},</if>
+			<if test="userName != null">#{userName},</if>
 			<if test="password != null">#{password},</if>
 			<if test="usertype != null">#{usertype},</if>
 			<if test="nickName != null">#{nickName},</if>
@@ -97,7 +98,8 @@
 			<if test="telephone != null">#{telephone},</if>
 			<if test="signature != null">#{signature},</if>
 			<if test="remark != null">#{remark},</if>
-			<if test="create != null">#{create},</if>
+			<if test="creator != null">#{creator},</if>
+			<if test="modifier != null">#{modifier},</if>
 		</trim>
 	</insert>
 	
@@ -105,7 +107,7 @@
 	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.SysUser" >
 		update sys_user
 		<trim prefix="SET" suffix="" suffixOverrides=",">
-			<if test="userName != null and userName != " > userName = #{username}, </if>
+			<if test="userName != null and userName != " > userName = #{userName}, </if>
 			<if test="password != null and password != '' " > password = #{password}, </if>
 			<if test="usertype != null " > userType = #{usertype}, </if>
 			<if test="nickName != null and nickName != '' "> nickName = #{nickName}, </if>
