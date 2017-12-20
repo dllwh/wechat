@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public abstract class DataEntity extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	// 最初创建者
-	protected Integer create;
+	protected Integer creator;
 	// 数据创建时间
 	@DateTimeFormat(pattern= "yyyy-MM-dd HH:mm:ss")
 	protected Date createTime;
@@ -24,12 +24,12 @@ public abstract class DataEntity extends BaseEntity {
 	@DateTimeFormat(pattern= "yyyy-MM-dd HH:mm:ss")
 	protected Date updateTime;
 
-	public Integer getCreate() {
-		return create;
+	public Integer getCreator() {
+		return creator;
 	}
 
-	public void setCreate(Integer create) {
-		this.create = create;
+	public void setCreate(Integer creator) {
+		this.creator = creator;
 	}
 
 	public Date getCreateTime() {
@@ -58,7 +58,7 @@ public abstract class DataEntity extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return super.toString()+ "\n DataEntity [create=" + create + ", createTime=" + createTime + ", modifier="
+		return super.toString()+ "\n DataEntity [creator=" + creator + ", createTime=" + createTime + ", modifier="
 				+ modifier + ", updateTime=" + updateTime + "]";
 	}
 	
