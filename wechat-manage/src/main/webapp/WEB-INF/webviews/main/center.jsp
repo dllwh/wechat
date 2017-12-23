@@ -6,6 +6,7 @@
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 <title>${_currProject}</title>
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/context/ace.jsp"%>
 <script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
 <script type="text/javascript">	
 
@@ -45,19 +46,22 @@
 		$(".iframeurl").click(function() {
 			var cid = $(this).attr("name");
 			var cname = $(this).attr("title");
-			$("#iframe").attr("src", cid).ready();
-			$("#Bcrumbs").attr("href", cid).ready();
+			showContabs(cid,cname);
+		});
+	});
+
+		function showContabs(url,name){
+			$("#iframe").attr("src", url).ready();
+			$("#Bcrumbs").attr("href", url).ready();
 			$(".Current_page a").attr('href',cid).ready();
-			$(".Current_page").attr('name', cid);
-			$(".Current_page").html(cname).css({
+			$(".Current_page").attr('name', url);
+			$(".Current_page").html(name).css({
 				"color" : "#333333",
 				"cursor" : "default"
 			}).ready();
 			$("#parentIframe").html('<span class="parentIframe iframeurl"> </span>').css("display", "none").ready();
 			$("#parentIfour").html('').css("display", "none").ready();
-		});
-	});
-
+		}
 	/*********************点击事件*********************/
 
 	$(document).ready(function() {
@@ -139,10 +143,12 @@
 									<i class="icon-warning-sign"></i>8条通知
 								</li>
 								<li>
-									<a href="#">
-										查看所有通知
-										<i class="icon-arrow-right"></i>
-									</a>
+									<div class="text-center link-block">
+										<a onclick="showContabs('${fns:getHomePageUrl()}','通知')">
+											查看所有通知
+											<i class="icon-arrow-right"></i>
+										</a>
+									</div>
 								</li>
 							</ul>
 						</li>
