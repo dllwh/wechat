@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.slf4j.Logger;
@@ -43,8 +44,11 @@ public class LoginFilter extends AccessControlFilter {
 			if (logger.isDebugEnabled()) {
 				logger.debug("当前用户没有登录，并且是Ajax请求！");
 			}
+			HttpServletResponse httpresponse = (HttpServletResponse) response; 
+			httpresponse.setHeader("sessionstatus", "timeout"); 
 			resultMap.put("success", false);
-			resultMap.put("msg", "当前用户没有登录，并且是Ajax请求！");
+			resultMap.put("resultCode", 10001);
+			resultMap.put("msg", "当前用户没有登录，需要重新登录");
 			FilterHelper.out(response, resultMap);
 			return Boolean.FALSE;
 
@@ -57,7 +61,9 @@ public class LoginFilter extends AccessControlFilter {
 			throws Exception {
 		// 保存Request和Response 到登录后的链接
 		logger.error("*************************************保存Request和Response 到登录后的链接");
-		saveRequestAndRedirectToLogin(request, response);
-		return true;
+		if (!FilterHelper.isAjax(request)) {
+			saveRequestAndRedirectToLogin(request, response);
+		}
+		return Boolean.FALSE;
 	}
 }

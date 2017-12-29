@@ -1,6 +1,8 @@
 package com.cdeledu.core.shiro.filter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -47,6 +49,17 @@ public class RoleFilter extends RolesAuthorizationFilter {
 			if (subject.hasRole(role)) {
 				return Boolean.TRUE;
 			}
+		}
+		
+		if (FilterHelper.isAjax(request)) {
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			if (logger.isDebugEnabled()) {
+				logger.debug("当前用户的角色没有操作权限，并且是Ajax请求！");
+			}
+			resultMap.put("success", false);
+			resultMap.put("msg", "操作失败:您没有权限");
+			FilterHelper.out(response, resultMap);
+			return Boolean.FALSE;
 		}
 		return Boolean.FALSE;
 	}

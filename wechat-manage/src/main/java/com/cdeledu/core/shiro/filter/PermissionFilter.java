@@ -71,10 +71,10 @@ public class PermissionFilter extends PermissionsAuthorizationFilter {
 		if (FilterHelper.isAjax(request)) {
 			Map<String, Object> resultMap = new HashMap<String, Object>();
 			if (logger.isDebugEnabled()) {
-				logger.debug("当前用户没有登录，并且是Ajax请求！");
+				logger.debug("当前用户没有操作权限，并且是Ajax请求！");
 			}
 			resultMap.put("success", false);
-			resultMap.put("msg", "当前用户没有登录，并且是Ajax请求！");
+			resultMap.put("msg", "操作失败:您没有权限");
 			FilterHelper.out(response, resultMap);
 			return Boolean.FALSE;
 		}
