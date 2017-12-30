@@ -4,12 +4,10 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <title>HTML5 多媒体播放器</title>
-<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
+<%@ include file="/WEB-INF/webviews/common/context/bootstrap.jsp"%>
 <link rel="stylesheet" href="${_currConText }/static/css/sample/style.css" />
-<script type="text/javascript" src="${_currConText }/plug-in/jquery/jquery-1.10.2.min.js"></script>
 </head>
 <body>
 <body class="gray-bg">
@@ -118,7 +116,5 @@
 		</div>
 	</div>
 </body>
-<!-- 自定义js -->
-<script src="${_currConText }/plug-in/tools/ExtJavascript.js?v=1.0.0"></script>
-<script src="${_currConText }/plug-in/tools/content.js?v=1.0.0"></script>
+<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 </html>

@@ -4,12 +4,11 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <title>ECharts，一个纯 Javascript 的图表库</title>
-<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
+<%@ include file="/WEB-INF/webviews/common/context/bootstrap.jsp"%>
 <link rel="stylesheet" href="${_currConText }/static/css/sample/animate.css" />
 <link rel="stylesheet" href="${_currConText }/static/css/sample/style.css" />
-<script type="text/javascript" src="${_currConText }/plug-in/jquery/jquery-1.10.2.min.js"></script>
 </head>
 <body class="gray-bg">
 	<%-- 简介 --%>
@@ -257,8 +256,7 @@
 	<!-- 示例 -->
 <%-- 	<script type="text/javascript" src="${_currConText }/static/sample/echarts-demo.js"></script> --%>
 <!-- 自定义js -->
-<script src="${_currConText }/plug-in/tools/ExtJavascript.js?v=1.0.0"></script>
-<script src="${_currConText }/plug-in/tools/content.js?v=1.0.0"></script>
+<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 	<script type="text/javascript">
 		var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
 		lineChart.showLoading({

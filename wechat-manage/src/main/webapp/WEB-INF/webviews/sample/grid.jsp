@@ -4,6 +4,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
 <link rel="stylesheet" href="${_currConText }/static/css/sample/animate.css" />
@@ -496,8 +497,5 @@
 	</div>
 </body>
 
-<script type="text/javascript" src="${_currConText }/plug-in/jquery/jquery-1.10.2.min.js"></script>
-<!-- 自定义js -->
-<script src="${_currConText }/plug-in/tools/ExtJavascript.js?v=1.0.0"></script>
-<script src="${_currConText }/plug-in/tools/content.js?v=1.0.0"></script>
+<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 </html>

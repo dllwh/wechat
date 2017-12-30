@@ -4,13 +4,13 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <title>后台主题UI框架 - 表单向导</title>
-<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"/>
+<%@ include file="/WEB-INF/webviews/common/context/bootstrap.jsp"%>
 <link rel="stylesheet" href="${_currConText }/plug-in/steps/jquery.steps.css"/>
 <link rel="stylesheet" href="${_currConText }/static/css/sample/animate.css" />
 <link rel="stylesheet" href="${_currConText }/static/css/sample/style.css" />
-<script type="text/javascript"
-	src="${_currConText }/plug-in/jquery/jquery-1.10.2.min.js"></script>
+
 </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
