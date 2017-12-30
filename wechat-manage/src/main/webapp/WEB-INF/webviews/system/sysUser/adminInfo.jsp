@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +30,7 @@
 							<c:if test="${empty currentUser.realName }">
 								<c:set var="userName" value="${currentUser.userName }" />
 							</c:if>
-							<input type="text" name="用户名" id="website-title" value="${userName}" 
+							<input type="text" name="用户名" value="${userName}" 
 								class="col-xs-6 text_info" disabled="disabled" />
 								&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="change_Password()" 
 								class="btn btn-warning btn-xs">修改密码</a>
@@ -65,7 +66,7 @@
 							年龄： 
 						</label>
 						<div class="col-sm-9">
-							<input type="text" name="年龄" id="website-title" value="24"
+							<input type="text" name="年龄" value="24"
 								class="col-xs-7 text_info" disabled="disabled" />
 						</div>
 					</div>
@@ -74,7 +75,7 @@
 							移动电话： 
 						</label>
 						<div class="col-sm-9">
-							<input type="text" name="移动电话" id="website-title" disabled="disabled"
+							<input type="text" name="移动电话" disabled="disabled"
 								value="${currentUser.mobile }" class="col-xs-7 text_info"/>
 						</div>
 					</div>
@@ -83,7 +84,7 @@
 							电子邮箱：
 						</label>
 						<div class="col-sm-9">
-							<input type="text" name="电子邮箱" id="website-title" disabled="disabled" 
+							<input type="text" name="电子邮箱" disabled="disabled" 
 								value="${currentUser.email }" class="col-xs-7 text_info" />
 						</div>
 					</div>
@@ -92,7 +93,7 @@
 							QQ： 
 						</label>
 						<div class="col-sm-9">
-							<input type="text" name="QQ" id="website-title" disabled="disabled"
+							<input type="text" name="QQ" disabled="disabled"
 								value="1349310440" class="col-xs-7 text_info" />
 						</div>
 					</div>

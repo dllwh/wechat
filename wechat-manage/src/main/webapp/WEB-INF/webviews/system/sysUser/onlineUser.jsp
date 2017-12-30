@@ -4,6 +4,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 <title>当前在线用户</title>
 </head>

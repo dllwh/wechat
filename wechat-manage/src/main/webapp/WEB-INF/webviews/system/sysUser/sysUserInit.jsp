@@ -2,8 +2,10 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<%@ include file="/WEB-INF/webviews/common/common.jsp"%>
 <head>
+<%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/context/ace.jsp"%>
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 <link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
 
