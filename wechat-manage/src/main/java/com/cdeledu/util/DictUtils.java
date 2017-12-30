@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.cdeledu.common.mapper.JsonMapper;
 import com.cdeledu.core.factory.ConstantFactory;
 import com.cdeledu.core.listener.DictListener;
+import com.cdeledu.model.system.SysArea;
 import com.cdeledu.model.system.SysDict;
 import com.cdeledu.service.sys.SysAreaService;
 import com.google.common.collect.Lists;
@@ -82,6 +83,19 @@ public class DictUtils {
 	public static String getSysAreaTree() {
 		try {
 			return JsonMapper.toJsonString(sysAreaService.getSysAreaTree());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * @方法描述 : 获取行政区域
+	 * @return
+	 */
+	public static List<SysArea> getProvinceArea() {
+		try {
+			return sysAreaService.getArealistByParentCode(100000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
