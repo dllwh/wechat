@@ -2,6 +2,7 @@ package com.cdeledu.controller.system.monitor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
 
@@ -17,10 +18,17 @@ import com.cdeledu.controller.BaseController;
  * @since: JDK 1.7
  */
 @Controller
-@RequestMapping("scheduled")
+@RequestMapping("scheduledController")
 public class ScheduledController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
+
+	@RequestMapping("")
+	public ModelAndView index() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/monitor/scheduled/taskInit");
+		return mv;
+	}
 
 	/** ----------------------------------------------------- Fields end */
 	/**
