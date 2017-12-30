@@ -4,13 +4,12 @@
 <html>
 <head  lang="en">
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
-
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <title>${_currProject}</title>
-<%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
+	<%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 	<script src="${_currConText }/plug-in/echarts2/echarts.js"></script>
 	<script src="${_currConText }/plug-in/assets/js/bootstrap.min.js"></script>
 	<title>${_currProject}</title>
-	<script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
 </head>
 <body>
 	<div class="page-content clearfix">
@@ -121,6 +120,7 @@
 		</div>
 	</div>
 </body>
+<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 <script type="text/javascript">
 $(function(){
 	$(".t_Record").width($(window).width()-320);

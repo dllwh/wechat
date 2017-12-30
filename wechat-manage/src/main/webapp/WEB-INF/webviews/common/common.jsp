@@ -47,15 +47,3 @@
 <%-- 网页标题图标  --%>
 <link rel="icon" href='${_currConText }/static/image/common/webSite.ico' type='image/x-ico' />
 <link rel="Bookmark" href='${_currConText }/static/image/common/webSite.ico' type='image/x-ico' />
-
-<%-- 让IE低版本浏览器兼容html5元素 --%>
-<!--[if lt IE 9]>
-	<script src="${_currConText }/plug-in/assets/js/html5shiv.js"></script>
-	<script src="${_currConText }/plug-in/assets/js/respond.min.js"></script>
-<![endif]-->
-
-<%-- 解决IE6png透明，请使用注释方式的方式加载，只有IE6的浏览器才会加载，避免增加其他浏览器的资源冗余 --%>
-<!--[if IE 6]>
-	<script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js" ></script>
-	<script>DD_belatedPNG.fix('.pngfix,.icon');</script>
-<![endif]--> 

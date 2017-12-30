@@ -1,0 +1,80 @@
+@CHARSET "UTF-8";
+
+/***********************搜索查询***********************/
+.search_style {
+	border: 1px solid #ddd;
+	padding: 20px 20px;
+	position: relative;
+	margin-top: 5px;
+	margin-bottom: 0px;
+}
+
+.search_style .title_names {
+	position: absolute;
+	top: -20px;
+	font-size: 18px;
+	background-color: #ffffff;
+	padding: 5px 10px;
+	left: 10px;
+}
+
+/***********************搜索查询***********************/
+ol, ul {
+	list-style: none outside none;
+}
+
+/***********************table 样式***********************/
+table.lms {
+	border-top: 1px solid #bbdde5;
+	border-left: 1px solid #bbdde5;
+	border-right: 0px;
+	border-bottom: 0px;
+	border: 0;
+	margin: 0;
+	border-collapse: collapse;
+}
+
+.lms tbody th {
+	text-align: right;
+}
+
+.lms thead th {
+	text-align: center;
+}
+
+.lms th {
+	line-height: 20px;
+	border-top: 1px solid #bbdde5;
+	border-left: 1px solid #bbdde5;
+	border-right: 1px solid #bbdde5;
+	border-bottom: 1px solid #bbdde5;
+	padding: 5px;
+	text-align: right;
+	font-weight: bold;
+	font-size: 13px;
+	color: #000000;
+	background: none repeat scroll 0 0 #F8F8F8;
+	font-family: verdana, geneva, arial, helvetica, sans-serif
+}
+
+
+.lms td {
+	border-top: 1px solid #bbdde5;
+	border-left: 1px solid #bbdde5;
+	border-right: 1px solid #bbdde5;
+	border-bottom: 1px solid #bbdde5;
+	padding: 5px;
+	background: #fff
+}
+
+
+.lms td:hover { /*background-color: #CDB38B;*/
+	background-color: #E0EDFF;
+}
+.lms caption {
+	text-align: center;
+	font-size: 13px;
+	color: #000000;
+	font-family: verdana, geneva, arial, helvetica, sans-serif
+}
+/***********************table 样式***********************/

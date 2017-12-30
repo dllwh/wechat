@@ -4,10 +4,10 @@
 <html>
 <head  lang="en">
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <title>${_currProject}</title>
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 <%@ include file="/WEB-INF/webviews/common/context/ace.jsp"%>
-<script type="text/javascript" src="${_currConText }/plug-in/tools/ExtJavascript.js"></script>
 <script type="text/javascript">	
 
 	$(function() {
@@ -53,7 +53,7 @@
 		function showContabs(url,name){
 			$("#iframe").attr("src", url).ready();
 			$("#Bcrumbs").attr("href", url).ready();
-			$(".Current_page a").attr('href',cid).ready();
+			$(".Current_page a").attr('href',url).ready();
 			$(".Current_page").attr('name', url);
 			$(".Current_page").html(name).css({
 				"color" : "#333333",
@@ -298,4 +298,5 @@
 		<p class="r_f">地址：北京市海淀区知春路1号学院国际大厦   技术支持：XXXX</p>
 	</div>
 </body>
+<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 </html>
