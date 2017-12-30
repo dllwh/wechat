@@ -1,9 +1,13 @@
 package com.cdeledu.controller.system.upms;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,11 +21,10 @@ import com.cdeledu.core.factory.LogTaskFactory;
 import com.cdeledu.core.log.LogManager;
 import com.cdeledu.core.shiro.token.ShiroHelper;
 import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.rbac.SysUserRole;
+import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.util.WebUtilHelper;
-import com.cdeledu.util.network.IpUtilHelper;
 import com.cdeledu.util.security.PasswordUtil;
-
-import nl.bitwalker.useragentutils.UserAgent;
 
 /**
  * @类描述: 登陆初始化控制器
@@ -36,6 +39,9 @@ public class LoginController extends BaseController {
 	private static final long serialVersionUID = 1L;
 
 	/** ----------------------------------------------------- Fields start */
+	@Autowired
+	private ManagerUserService userService;
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法:登陆验证
@@ -51,9 +57,9 @@ public class LoginController extends BaseController {
 		// Session session = ShiroHelper.getSession();
 		boolean suc = true;
 		String logMsg = "";
-		String userName = user.getUserName();
+		String userName = user.getUserName().trim();
 		try {
-			String password = PasswordUtil.encrypt(userName, user.getPassword());
+			String password = PasswordUtil.encrypt(userName, user.getPassword().trim());
 			AjaxJson loginResult = ShiroHelper.login(userName, password);
 			int loginStatus = 0;
 			if (loginResult.isSuccess()) {
@@ -65,11 +71,10 @@ public class LoginController extends BaseController {
 			}
 
 			try {
-				String ip = IpUtilHelper.getClientIP(request);
-				String browser = UserAgent.parseUserAgentString(request.getHeader("User-Agent"))
-						.getBrowser().getName();
-				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,
-						String.valueOf(loginResult.getObj()), loginStatus, ip, browser));
+				LogManager.getInstance()
+						.executeLog(LogTaskFactory.loginLog(userName,
+								String.valueOf(loginResult.getObj()), loginStatus, getIp(request),
+								getBrowser(request)));
 			} catch (Exception e) {
 			}
 
@@ -89,12 +94,24 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "doLogin")
-	public String doLogin(HttpServletRequest request) {
+	public String doLogin(Model model) {
 		SysUser managerUser = ShiroHelper.getPrincipal();
+		List<SysUserRole> roleList = null;
 		try {
 			if (null != managerUser) {
-				return "main/center";
+				// 获取菜单、角色列表
+				roleList = userService.getUserRole(managerUser);
+				// 如果没有角色，则不允许登录
+				if (roleList != null && roleList.size() > 0) {
+					// 用户头像
+					// model.addAttribute("avatar", );
+					return "main/center";
+				} else {
+					model.addAttribute("tips", "该用户没有角色，无法登录");
+					return FilterHelper.LOGIN_SHORT;
+				}
 			} else {
+				model.addAttribute("tips", "该用户长时间未操作，请重新登录");
 				return FilterHelper.LOGIN_SHORT;
 			}
 		} catch (Exception e) {
@@ -131,7 +148,6 @@ public class LoginController extends BaseController {
 		}
 		return FilterHelper.LOGIN_SHORT;
 	}
-	
 
 	/**
 	 * @方法:用户被提出\被挤掉
@@ -143,7 +159,6 @@ public class LoginController extends BaseController {
 		SysUser currenLoginUser = ShiroHelper.getPrincipal();
 		// 判断用户是否为空,不为空,则清空session中的用户object
 		if (currenLoginUser != null) {
-			// 保存退出日志
 			HttpSession session = request.getSession();
 			session.removeAttribute(GlobalConstants.USER_SESSION);
 			ShiroHelper.logout();
