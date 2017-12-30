@@ -4,6 +4,8 @@ import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.core.interceptors.DateConvertEditor;
+import com.cdeledu.util.network.IpUtilHelper;
+
+import nl.bitwalker.useragentutils.UserAgent;
 
 /**
  * @类描述:
@@ -35,7 +40,7 @@ public class BaseController extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
 	protected Logger logger = LoggerFactory.getLogger(getClass());
-	/** 浏览器的地址栏会变  */
+	/** 浏览器的地址栏会变 */
 	protected static String REDIRECT = "redirect:";
 	/** 浏览器的地址栏不会变,但是有视图返回来 */
 	protected static String FORWARD = "forward:";
@@ -92,5 +97,24 @@ public class BaseController extends BaseClass {
 			view.addAllObjects(parament);
 		}
 		return view;
+	}
+
+	/**
+	 * @方法描述 : 获取用户IP
+	 * @param request
+	 * @return
+	 */
+	public static String getIp(HttpServletRequest request) {
+		return IpUtilHelper.getClientIP(request);
+	}
+
+	/**
+	 * @方法描述 : 获取用户浏览器
+	 * @param request
+	 * @return
+	 */
+	public static String getBrowser(HttpServletRequest request) {
+		return UserAgent.parseUserAgentString(request.getHeader("User-Agent")).getBrowser()
+				.getName();
 	}
 }
