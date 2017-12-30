@@ -36,10 +36,10 @@ public class SysAreaViewController extends BaseController {
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	@RequestMapping(value = "index")
+	@RequestMapping("")
 	public ModelAndView index(ModelMap map) {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/area/index");
+		mv.setViewName("system/area/init");
 		return mv;
 	}
 

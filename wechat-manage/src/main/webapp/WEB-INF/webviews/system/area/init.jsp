@@ -4,6 +4,7 @@
 <html>
 <head>
 <%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <%@ include file="/WEB-INF/webviews/common/context/easyUI.jsp"%>
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
@@ -81,64 +82,43 @@
 											<th>区域代码</th>
 											<th class="hidden-480">区域名称</th>
 											<th>层级</th>
-											<th>
-												<i class="icon-time bigger-110 hidden-480"></i>
-												排序
-											</th>
 											<th class="hidden-480">可用</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td></td>
-											<td>110000</td>
-											<td>北京市</td>
-											<td>
-												<span class="label label-warning">区县</span>
-											</td>
-											<td>1</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>120000</td>
-											<td>天津市</td>
-											<td>
-												<span class="label label-warning">区县</span>
-											</td>
-											<td>2</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>120100</td>
-											<td>市辖区</td>
-											<td>
-												<span class="label label-success">地市</span>
-											</td>
-											<td>2</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>140000</td>
-											<td>山西省</td>
-											<td>
-												<span class="label label-primary">省级</span>
-											</td>
-											<td>1</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>150000</td>
-											<td>内蒙古自治区</td>
-											<td>
-												<span class="label label-primary">省级</span>
-											</td>
-											<td>1</td>
-											<td></td>
-										</tr>
+										<c:forEach items="${dict:getProvinceArea()}" var="sysArea">
+											<tr>
+												<td></td>
+												<td>${sysArea.areaCode}</td>
+												<td>${sysArea.areaName}</td>
+												<td>
+													<c:choose>
+														<c:when test="${sysArea.areaLevel eq 0}">
+															<span class="label label-primary">国家</span>
+														</c:when>
+														<c:when test="${sysArea.areaLevel eq 1}">
+															<span class="label label-info">省级行政区</span>
+														</c:when>
+														<c:when test="${sysArea.areaLevel eq 2}">
+															<span class="label label-success">地市</span>
+														</c:when>
+														<c:when test="${sysArea.areaLevel eq 3}">
+															<span class="label label-warning">区县</span>
+														</c:when>
+														<c:when test="${sysArea.areaLevel eq 4}">
+															<span class="label label-danger">乡</span>
+														</c:when>
+														<c:when test="${sysArea.areaLevel eq 5}">
+															<span class="label label-inverse">镇</span>
+														</c:when>
+														<c:otherwise>
+															<span class="label">-</span>
+														</c:otherwise>
+													</c:choose>
+												</td>
+												<td></td>
+											</tr>
+										</c:forEach>
 									</tbody>
 								</table>
 							</div>
@@ -170,7 +150,6 @@
 			animate : true, // 定义节点在展开或折叠的时候是否显示动画效果。
 			lines : true,// 定义是否显示树控件上的虚线。
 			dnd : false,// 定义是否启用拖拽功能。
-			data:<utilHelper:getSysAreaTree/>,
 			onDblClick : function(node){// 在用户双击一个节点的时候触发。
 				
 			}, onClick : function(node){// 在用户点击一个节点的时候触发。
