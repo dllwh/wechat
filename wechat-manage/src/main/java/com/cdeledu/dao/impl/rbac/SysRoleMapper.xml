@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.SysRoleMapper">
+	
+	<sql id="Base_Column_List">
+		id, roleCode, roleName, categoryCode, isVisible, isEnabled, allowEdit,
+		allowDelete,
+		`sequence`, creator, createTime, modifier, updateTime, remark
+	</sql>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultType="com.cdeledu.model.rbac.SysRole">
+		select
+			<include refid="Base_Column_List" />
+		from sys_role where id = #{id}
+	</select>
+	
+	<sql id="findForJdbcParam_body">
+		select 
+			<include refid="Base_Column_List"/>
+		from sys_role
+		<where>
+			<if test="roleName != null and roleName != '' ">  
+				and roleName  LIKE CONCAT(CONCAT('%', #{roleName}),'%') 
+			</if>
+			<if test="roleCode != null and roleCode != '' ">  
+				and roleCode  LIKE CONCAT(CONCAT('%', #{roleCode}),'%') 
+			</if>
+		</where>
+	</sql>
+	
+	<select id="findForJdbcParam" parameterType="com.cdeledu.model.rbac.SysRole"
+		resultType="com.cdeledu.model.rbac.SysRole">
+		select * from (
+			<include refid="findForJdbcParam_body"/>
+		)as myTable LIMIT #{startRow},#{rows}
+	</select>
+	
+	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.rbac.SysRole"
+		resultType="java.lang.Integer">
+		select count(*) from (
+			<include refid="findForJdbcParam_body"/>
+		) as myTable
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_role where id = #{id}
+	</delete>
+	
+	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.SysRole">
+		insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">roleCode,</if>
+			<if test="roleName != null">roleName,</if>
+			<if test="categoryCode != null">categoryCode,</if>
+			<if test="isVisible != null">isVisible,</if>
+			<if test="isEnabled != null">isEnabled,</if>
+			<if test="allowEdit != null">allowEdit,</if>
+			<if test="allowDelete != null">allowDelete,</if>
+			<if test="sequence != null">`sequence`,</if>
+			<if test="creator != null">creator,</if>
+			<if test="modifier != null">modifier,</if>
+			<if test="remark != null">remark,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleCode != null">#{roleCode},</if>
+			<if test="roleName != null">#{roleName},</if>
+			<if test="categoryCode != null">#{categoryCode},</if>
+			<if test="isVisible != null">#{isVisible},</if>
+			<if test="isEnabled != null">#{isEnabled},</if>
+			<if test="allowEdit != null">#{allowEdit},</if>
+			<if test="allowDelete != null">#{allowDelete},</if>
+			<if test="sequence != null">#{sequence},</if>
+			<if test="creator != null">#{creator},</if>
+			<if test="modifier != null">#{modifier},</if>
+			<if test="remark != null"> #{remark},</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.SysRole">
+		update sys_role
+		<set>
+			<if test="roleCode != null"> roleCode = #{roleCode}, </if>
+			<if test="roleName != null"> roleName = #{roleName}, </if>
+			<if test="categoryCode != null"> categoryCode = #{categoryCode}, </if>
+			<if test="isVisible != null"> isVisible = #{isVisible}, </if>
+			<if test="isEnabled != null"> isEnabled = #{isEnabled}, </if>
+			<if test="allowEdit != null"> allowEdit = #{allowEdit}, </if>
+			<if test="allowDelete != null"> allowDelete = #{allowDelete}, </if>
+			<if test="sequence != null"> `sequence` = #{sequence}, </if>
+			<if test="modifier != null"> modifier = #{modifier}, </if>
+			<if test="remark != null"> remark = #{remark}, </if>
+		</set>
+		where id = #{id} and allowEdit = 1
+	</update>
+	
+	<select id="hasMenuByRole" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			sys_role_menu srm
+		INNER JOIN sys_menu sm ON sm.id = srm.menuId
+		WHERE
+			srm.roleId = #{id}  AND sm.isVisible = 1 AND sm.isEnabled = 1 
+	</select>
+	
+	<select id="hasUserByRole" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			sys_user_role sur
+		INNER JOIN sys_user su ON su.isVisible = 1
+		AND su.isEnabled = 1
+		WHERE
+			sur.roleId = #{id}  
+	</select>
+	
+	<select id="selectByRocode" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(*) from sys_role where roleCode = #{id} and isEnabled = 1
+	</select>
+</mapper>

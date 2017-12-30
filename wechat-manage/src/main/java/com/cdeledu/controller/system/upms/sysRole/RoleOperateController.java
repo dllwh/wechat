@@ -3,11 +3,11 @@ package com.cdeledu.controller.system.upms.sysRole;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cdeledu.common.base.AjaxJson;
@@ -17,6 +17,7 @@ import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.service.sys.RoleService;
+import com.cdeledu.util.WebUtilHelper;
 
 /**
  * @类描述: 角色处理类
@@ -30,7 +31,6 @@ import com.cdeledu.service.sys.RoleService;
 public class RoleOperateController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
-	private String msg = null;
 	@Autowired
 	RoleService roleService;
 
@@ -47,8 +47,17 @@ public class RoleOperateController extends BaseController {
 	public AjaxJson addRole(SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			roleService.insert(role);
+			if (roleService.existRoleWithRoleCode(role.getRoleCode())) {
+				resultMsg.setSuccess(false);
+				resultMsg.setMsg(MessageConstant.EXISTED);
+				resultMsg.setResultCode(201);
+			} else {
+				role.setCreate(WebUtilHelper.getCurrentUserId());
+				role.setModifier(WebUtilHelper.getCurrentUserId());
+				roleService.insert(role);
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMsg.setSuccess(false);
 			resultMsg.setMsg("添加失败，请刷新后再试！");
 			resultMsg.setResultCode(500);
@@ -62,15 +71,26 @@ public class RoleOperateController extends BaseController {
 	public AjaxJson saveRole(HttpServletRequest request, HttpServletResponse response,
 			SysRole role) {
 		AjaxJson resultMsg = new AjaxJson();
+		String msg = "";
 		try {
 			if (null != role) {
-				if (StringUtils.isNotEmpty(String.valueOf(role.getId()))) {
-					msg = "角色: " + role.getRoleName() + "被更新成功";
-				} else {
-					msg = "角色: " + role.getRoleName() + "被添加成功";
+				String roleCode = role.getRoleCode();
+				SysRole seacherRole = roleService.getRoleById(role.getId());
+				if (seacherRole != null) {
+					if (seacherRole.getRoleCode().equalsIgnoreCase(roleCode)) {
+						roleService.update(role);
+					} else {
+						if (roleService.existRoleWithRoleCode(roleCode)) {
+							resultMsg.setSuccess(false);
+							msg = MessageConstant.EXISTED;
+						} else {
+							roleService.update(role);
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMsg.setSuccess(false);
 			resultMsg.setResultCode(500);
 			msg = MessageConstant.MSG_OPERATION_FAILED;
@@ -87,17 +107,32 @@ public class RoleOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "delRole")
 	@SystemLog(desc = "角色删除", opType = SysOpType.DEL, tableName = "sys_role")
-	public AjaxJson delRole(SysRole role) {
+	public AjaxJson delRole(@RequestParam(name="delId",required=false) int roleId) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			// 删除角色之前先删除角色权限关系
-			delRoleFunction(role);
+			if (roleService.hasMenuByRole(roleId)) {
+				resultMsg.setSuccess(false);
+				resultMsg.setResultCode(201);
+				resultMsg.setMsg("该角色下尚有权限未解除");
+			} else {
+				if (roleService.hasUserByRole(roleId)) {
+					resultMsg.setSuccess(false);
+					resultMsg.setResultCode(201);
+					resultMsg.setMsg("该角色下尚有用户未解除");
+				} else {
+					roleService.delete(roleId);
+					resultMsg.setSuccess(true);
+					resultMsg.setResultCode(200);
+					resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+				}
+			}
+
+			// delRoleFunction(role);
 		} catch (Exception e) {
 			resultMsg.setSuccess(false);
 			resultMsg.setResultCode(500);
-			msg = MessageConstant.MSG_OPERATION_FAILED;
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		resultMsg.setMsg(msg);
 		return resultMsg;
 	}
 

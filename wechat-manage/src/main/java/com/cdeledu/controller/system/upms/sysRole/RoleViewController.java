@@ -17,12 +17,16 @@ import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.service.sys.RoleService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * @类描述: 角色数据
+ * <pre>
+ * 数据访问权限不在验证，即只要配置对应的访问权限，其数据访问权限除非特别配置，均不再验证。
+ * </pre>
  * @创建者: 独泪了无痕--duleilewuhen@sina.com
  * @创建日期: 2016年4月4日 下午8:13:20
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 @Controller
@@ -37,7 +41,7 @@ public class RoleViewController extends BaseController {
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	@RequestMapping(value = "index")
+	@RequestMapping(value = "")
 	public ModelAndView index(ModelMap modelMap) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysRole/roleInit");
@@ -52,10 +56,19 @@ public class RoleViewController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "getList")
 	@ResponseBody
-	public void getList(SysRole role, ModelMap modelMap) {
-
+	@RequestMapping(params = "getList")
+	public Map<String, Object> getList(SysRole role, ModelMap modelMap) {
+		Map<String, Object> resultMap = Maps.newConcurrentMap();
+		try {
+			resultMap.put("rows", roleService.findForJdbcParam(role));
+			resultMap.put("total", roleService.getCountForJdbcParam(role));
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("rows", "{[]}");
+			resultMap.put("total", 0);
+		}
+		return resultMap;
 	}
 
 	/**
@@ -73,7 +86,7 @@ public class RoleViewController extends BaseController {
 	 * @方法描述: 我的权限页面
 	 * @return
 	 */
-	@RequestMapping(value = "mypermission", method = RequestMethod.GET)
+	@RequestMapping(params = "mypermission", method = RequestMethod.GET)
 	public ModelAndView mypermission() {
 		return new ModelAndView("permission/mypermission");
 	}
@@ -83,7 +96,7 @@ public class RoleViewController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "getPermissionTree", method = RequestMethod.POST)
+	@RequestMapping(params = "getPermissionTree", method = RequestMethod.POST)
 	public List<Map<String, Object>> getPermissionTree() {
 		List<Map<String, Object>> resultList = Lists.newArrayList();
 		// 查询我所有的角色 ---> 权限
@@ -97,7 +110,7 @@ public class RoleViewController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "selectPermissionById")
+	@RequestMapping(params = "selectPermissionById")
 	public List<SysMenu> selectPermissionById(int roleId) {
 		List<SysMenu> sysMenuList = Lists.newArrayList();
 		return sysMenuList;
