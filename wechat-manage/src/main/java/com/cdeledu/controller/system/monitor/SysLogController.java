@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.system.SysLoginLog;
 
@@ -30,7 +33,7 @@ public class SysLogController extends BaseController {
 	 * @方法描述: 登录日志列表
 	 * @return
 	 */
-	@RequestMapping("/loginLog/index")
+	@RequestMapping(value= "/loginLog")
 	public String sysLoginLogIndex() {
 		return null;
 	}
@@ -38,7 +41,7 @@ public class SysLogController extends BaseController {
 	 * @方法描述: 登录日志列表
 	 * @return
 	 */
-	@RequestMapping("/loginLog/list")
+	@RequestMapping(value = "/loginLog",params = "list")
 	public List<SysLoginLog> sysLoginLogList() {
 		return null;
 	}
@@ -47,9 +50,11 @@ public class SysLogController extends BaseController {
 	 * @方法描述: 删除登录日志
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping("/loginLog/del")
-	public List<SysLoginLog> sysLoginLogRemove() {
-		return null;
+	public AjaxJson sysLoginLogRemove() {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
 	}
 
 	
@@ -57,16 +62,18 @@ public class SysLogController extends BaseController {
 	 * @方法描述: 操作日志列表
 	 * @return
 	 */
-	@RequestMapping("/opLog/index")
-	public List<SysLoginLog> sysOperateLogIndex() {
-		return null;
+	@RequestMapping(value = "/opLog")
+	public ModelAndView sysOperateLogIndex() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/sysLog/opLog/opLogInit");
+		return mv;
 	}
 	
 	/**
 	 * @方法描述: 操作日志列表
 	 * @return
 	 */
-	@RequestMapping("/opLog/list")
+	@RequestMapping(value = "/opLog",params = "list")
 	public List<SysLoginLog> sysOperateLogList() {
 		return null;
 	}
