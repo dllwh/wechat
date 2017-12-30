@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
 
 /**
@@ -29,10 +30,15 @@ public class DictViewController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(params = "index")
+	@RequestMapping(params = "")
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/dict/index");
 		return mv;
+	}
+	@RequestMapping("list")
+	public AjaxJson list() {
+		AjaxJson result = new AjaxJson();
+		return result;
 	}
 }
