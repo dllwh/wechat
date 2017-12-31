@@ -22,6 +22,7 @@ import com.cdeledu.core.redis.service.RedisClientService;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@SuppressWarnings("unused")
 public class RedisClientServiceImpl<K, V> extends BaseClass implements RedisClientService {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;

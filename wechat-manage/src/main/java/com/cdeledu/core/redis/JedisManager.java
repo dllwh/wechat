@@ -29,6 +29,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@SuppressWarnings("unused")
 public class JedisManager extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
