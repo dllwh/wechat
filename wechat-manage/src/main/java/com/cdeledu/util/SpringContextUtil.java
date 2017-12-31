@@ -8,6 +8,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -20,6 +21,7 @@ import org.springframework.context.ApplicationContextAware;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@Component("springContextHolder")
 public class SpringContextUtil implements ApplicationContextAware, DisposableBean {
 	/** ----------------------------------------------------- Fields start */
 	private static ApplicationContext applicationContext;

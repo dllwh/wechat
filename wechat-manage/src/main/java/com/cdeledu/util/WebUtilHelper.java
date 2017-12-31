@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.shiro.subject.Subject;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -93,7 +92,7 @@ public class WebUtilHelper {
 	public static Object getSessionAttribute(String key) {
 		return getSession().getAttribute(key);
 	}
-	
+
 	/**
 	 * @方法描述: 在HttpSession中设置当前登录的用户
 	 * @param user
@@ -123,12 +122,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static Integer getCurrentUserId() {
-		SysUser user = ShiroHelper.getPrincipal();
-		if (user != null) {
-			return user.getId();
-		} else {
-			return null;
-		}
+		return ShiroHelper.getCurrentUserId();
 	}
 
 	/**
@@ -136,12 +130,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static String getCurrentUserName() {
-		SysUser user = ShiroHelper.getPrincipal();
-		if (user != null) {
-			return user.getUserName();
-		} else {
-			return "";
-		}
+		return ShiroHelper.getCurrentNickName();
 	}
 
 	/**
@@ -149,12 +138,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static String getCurrentRealName() {
-		SysUser user = ShiroHelper.getPrincipal();
-		if (user != null) {
-			return user.getRealName();
-		} else {
-			return "";
-		}
+		return ShiroHelper.getCurrentRealName();
 	}
 
 	/**
@@ -162,12 +146,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static String getCurrentNickName() {
-		SysUser user = ShiroHelper.getPrincipal();
-		if (user != null) {
-			return user.getNickName();
-		} else {
-			return "";
-		}
+		return ShiroHelper.getCurrentNickName();
 	}
 
 	/**
@@ -176,9 +155,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static boolean hasRole(String roleCode) {
-		Subject subject = ShiroHelper.getSubject();
-		return subject != null && roleCode != null && roleCode.length() > 0
-				&& subject.hasRole(roleCode);
+		return ShiroHelper.hasRole(roleCode);
 	}
 
 	/**
@@ -189,9 +166,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public boolean hasPermission(String permission) {
-		Subject subject = ShiroHelper.getSubject();
-		return subject != null && permission != null && permission.length() > 0
-				&& subject.isPermitted(permission);
+		return ShiroHelper.hasPermission(permission);
 	}
 
 	/**
@@ -199,8 +174,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static boolean isAuthenticated() {
-		Subject subject = ShiroHelper.getSubject();
-		return subject != null && subject.isAuthenticated();
+		return ShiroHelper.isAuthenticated();
 	}
 
 	/**
@@ -208,7 +182,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static boolean notAuthenticated() {
-		return !isAuthenticated();
+		return ShiroHelper.notAuthenticated();
 	}
 
 	/**
