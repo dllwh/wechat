@@ -35,7 +35,7 @@
 	</function>
 	<tag>
 		<name>item</name>
-		<tag-class>com.cdeledu.common.tag.DictTag</tag-class>
+		<tag-class>com.cdeledu.core.tag.system.DictTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<description>数据字典的名称</description>
