@@ -2,8 +2,12 @@ package com.cdeledu.controller.system.notice;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.system.Notice;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -25,6 +29,46 @@ public class NoticeOperateController extends BaseController {
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [公共方法] */
+	/**
+	 * @方法:新增通知
+	 * @创建人:独泪了无痕
+	 * @param notice
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "add")
+	public AjaxJson add(Notice notice) {
+		AjaxJson result = new AjaxJson();
+		return result;
+	}
+
+	/**
+	 * 
+	 * @方法:修改通知
+	 * @创建人:独泪了无痕
+	 * @param noticeId
+	 * @return
+	 */
+	@RequestMapping(value = "delete")
+	@ResponseBody
+	public AjaxJson update(@RequestParam Integer noticeId) {
+		AjaxJson result = new AjaxJson();
+		return result;
+	}
+
+	/**
+	 * 
+	 * @方法:删除通知
+	 * @创建人:独泪了无痕
+	 * @param noticeId
+	 * @return
+	 */
+	@RequestMapping(value = "delete")
+	@ResponseBody
+	public AjaxJson delete(@RequestParam Integer noticeId) {
+		AjaxJson result = new AjaxJson();
+		return result;
+	}
 	/** ----------------------------------------------- [公共方法] */
 
 	/** ----------------------------------------------- [私有方法] */

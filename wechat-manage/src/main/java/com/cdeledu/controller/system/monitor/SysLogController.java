@@ -33,15 +33,16 @@ public class SysLogController extends BaseController {
 	 * @方法描述: 登录日志列表
 	 * @return
 	 */
-	@RequestMapping(value= "/loginLog")
+	@RequestMapping(value = "/loginLog")
 	public String sysLoginLogIndex() {
 		return null;
 	}
+
 	/**
 	 * @方法描述: 登录日志列表
 	 * @return
 	 */
-	@RequestMapping(value = "/loginLog",params = "list")
+	@RequestMapping(value = "/loginLog", params = "list")
 	public List<SysLoginLog> sysLoginLogList() {
 		return null;
 	}
@@ -51,13 +52,23 @@ public class SysLogController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("/loginLog/del")
+	@RequestMapping("/loginLog/remove")
 	public AjaxJson sysLoginLogRemove() {
 		AjaxJson resultMsg = new AjaxJson();
 		return resultMsg;
 	}
 
-	
+	/**
+	 * @方法描述: 清空日志 （需要超级管理员才能删除）
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/loginLog/reset")
+	public AjaxJson sysLoginLogReset() {
+		AjaxJson resultMsg = new AjaxJson();
+		return resultMsg;
+	}
+
 	/**
 	 * @方法描述: 操作日志列表
 	 * @return
@@ -68,12 +79,12 @@ public class SysLogController extends BaseController {
 		mv.setViewName("system/sysLog/opLog/opLogInit");
 		return mv;
 	}
-	
+
 	/**
 	 * @方法描述: 操作日志列表
 	 * @return
 	 */
-	@RequestMapping(value = "/opLog",params = "list")
+	@RequestMapping(value = "/opLog", params = "list")
 	public List<SysLoginLog> sysOperateLogList() {
 		return null;
 	}

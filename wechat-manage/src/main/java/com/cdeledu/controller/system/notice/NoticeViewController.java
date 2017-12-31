@@ -2,6 +2,7 @@ package com.cdeledu.controller.system.notice;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
@@ -34,6 +35,13 @@ public class NoticeViewController extends BaseController {
 		mv.setViewName("platform/notice/init");
 		return mv;
 	}
+	 /**
+     * 获取通知列表
+     */
+	@ResponseBody
+    @RequestMapping(value = "/list")
+    public void list(String condition) {
+    }
 	/** ----------------------------------------------- [公共方法] */
 
 	/** ----------------------------------------------- [私有方法] */
