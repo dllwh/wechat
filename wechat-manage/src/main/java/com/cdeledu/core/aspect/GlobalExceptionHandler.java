@@ -1,9 +1,11 @@
 package com.cdeledu.core.aspect;
 
 import java.lang.reflect.UndeclaredThrowableException;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ValidationException;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.CredentialsException;
@@ -13,11 +15,18 @@ import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.cdeledu.common.base.AjaxJson;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -122,5 +131,125 @@ public class GlobalExceptionHandler {
 		if (logger.isDebugEnabled()) {
 			logger.error("session异常拦截:", e);
 		}
+	}
+
+	/**
+	 * 400 - Bad Request
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public void handleHttpMessageNotReadableException(final HttpMessageNotReadableException e) {
+		if (logger.isDebugEnabled()) {
+			logger.error("HttpMessageNotReadableException", e);
+		}
+	}
+
+	/**
+	 * 400 - Bad Request
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ValidationException.class)
+	public void handleValidationException(final ValidationException e) {
+		if (logger.isDebugEnabled()) {
+			logger.error("ValidationException", e);
+		}
+	}
+
+	/**
+	 * 400 - Bad Request
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(BindException.class)
+	public AjaxJson handleBindException(final BindException e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error("BindException", e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(400);
+		return result;
+	}
+
+	/**
+	 * 400 - Bad Request
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(SQLException.class)
+	public AjaxJson handleSQLException(final SQLException e) {
+
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error("SQLException", e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(400);
+		return result;
+	}
+
+	/**
+	 * 400 - Bad Request
+	 */
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public AjaxJson handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error("MethodArgumentNotValidException", e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(400);
+		return result;
+	}
+
+	/**
+	 * 405 - Method Not Allowed
+	 */
+	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public AjaxJson handleHttpRequestMethodNotSupportedException(
+			final HttpRequestMethodNotSupportedException e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase(), e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(405);
+		return result;
+	}
+
+	/**
+	 * 415 - Unsupported Media Type
+	 */
+	@ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	public AjaxJson handleHttpMediaTypeNotSupportedException(final Exception e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.UNSUPPORTED_MEDIA_TYPE.getReasonPhrase(), e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(415);
+		return result;
+	}
+
+	/**
+	 * 500 - Internal Server Error
+	 */
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(Exception.class)
+	public AjaxJson handleException(final Exception e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(500);
+		return result;
 	}
 }
