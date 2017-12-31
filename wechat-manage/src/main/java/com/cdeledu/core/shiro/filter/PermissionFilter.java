@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cdeledu.common.constants.FilterHelper;
+import com.cdeledu.core.shiro.token.ShiroHelper;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -55,17 +56,7 @@ public class PermissionFilter extends PermissionsAuthorizationFilter {
 
 		// 2.取到请求的uri ，进行权限判断
 		HttpServletRequest httpRequest = ((HttpServletRequest) request);
-		// 获取URI
-		String uri = httpRequest.getRequestURI();
-		// 获取basePath
-		String basePath = httpRequest.getContextPath();
-		if (null != uri && uri.startsWith(basePath)) {
-			uri = uri.replaceFirst(basePath, "");
-			if (uri.startsWith("/")) {
-				uri = uri.substring(1);
-			}
-		}
-		if (subject.isPermitted(uri)) {
+		if (subject.isPermitted(ShiroHelper.getAccessAddress(httpRequest))) {
 			return Boolean.TRUE;
 		}
 		if (FilterHelper.isAjax(request)) {

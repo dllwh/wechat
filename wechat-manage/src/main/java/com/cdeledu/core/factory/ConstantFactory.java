@@ -2,6 +2,7 @@ package com.cdeledu.core.factory;
 
 import java.util.ResourceBundle;
 
+import com.cdeledu.core.shiro.service.ShiroService;
 import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.service.sys.SysAreaService;
 import com.cdeledu.service.sys.SysMenuService;
@@ -29,4 +30,6 @@ public final class ConstantFactory {
 	public static SystemService systemService = SpringContextUtil.getBean("systemService");
 	/** 行政区域业务处理 */
 	public static SysAreaService sysAreaService = SpringContextUtil.getBean("sysAreaService");
+	/** 授权认证服务处理层 */
+	public static ShiroService shiroService = SpringContextUtil.getBean("shiroService");
 }

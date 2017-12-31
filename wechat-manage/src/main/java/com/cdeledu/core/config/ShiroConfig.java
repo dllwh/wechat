@@ -179,6 +179,7 @@ public class ShiroConfig {
 	}
 
 	//@Bean
+	// @DependsOn(value = "lifecycleBeanPostProcessor") //依赖其他bean的初始化
 	public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
 		DefaultAdvisorAutoProxyCreator proxyCreator = new DefaultAdvisorAutoProxyCreator();
 		proxyCreator.setProxyTargetClass(true);
