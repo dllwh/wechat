@@ -2,6 +2,7 @@ package com.cdeledu.controller.system.upms.sysMenu;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,13 +42,35 @@ public class MenuViewController extends BaseController {
 	}
 
 	/**
-	 * @方法描述:easyuiAJAX请求数据
+	 * @方法描述:获取菜单列表(首页用)
 	 * @param map
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "tree")
-	public void tree(ModelMap map) {
+	public void menuTreeList(ModelMap map) {
+
+	}
+
+	/**
+	 * @方法描述:获取菜单列表(选择父级菜单用)
+	 * @param map
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "tree")
+	public void selectMenuTreeList(ModelMap map) {
+
+	}
+
+	/**
+	 * @方法:获取角色列表
+	 * @创建人:独泪了无痕
+	 * @param menuId
+	 */
+	@ResponseBody
+	@RequestMapping(value = "tree")
+	public void menuTreeListByRoleId(@PathVariable Integer menuId) {
 
 	}
 }
