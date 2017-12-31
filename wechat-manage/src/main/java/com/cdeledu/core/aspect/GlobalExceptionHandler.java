@@ -1,5 +1,6 @@
 package com.cdeledu.core.aspect;
 
+import java.io.IOException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 
@@ -14,13 +15,18 @@ import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,9 +40,16 @@ import com.cdeledu.common.base.AjaxJson;
  * Today the best performance as tomorrow newest starter!
  *
  * @类描述: 全局的的异常拦截器（拦截所有的控制器）（带有@RequestMapping注解的方法上都会拦截）
+ * 
+ *       <pre>
+	ExceptionHandler：统一处理某一类异常，从而能够减少代码重复率和复杂度
+	ControllerAdvice：异常集中处理，更好的使业务逻辑与异常处理剥离开
+	ResponseStatus：可以将某种异常映射为HTTP状态码
+ *       </pre>
+ * 
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年12月9日 下午2:36:42
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 @ControllerAdvice
@@ -102,9 +115,75 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody
-	public void notFount(RuntimeException e) {
+	public void runtimeExceptionHandler(RuntimeException e) {
 		if (logger.isDebugEnabled()) {
 			logger.error("服务器未知运行时异常:", e);
+		}
+	}
+
+	/**
+	 * @方法:空指针异常
+	 * @创建人:独泪了无痕
+	 * @param ex
+	 */
+	@ExceptionHandler(NullPointerException.class)
+	@ResponseBody
+	public void nullPointerExceptionHandler(NullPointerException ex) {
+		if (logger.isDebugEnabled()) {
+			logger.error("空指针异常:", ex);
+		}
+	}
+
+	/**
+	 * 
+	 * @方法:类型转换异常
+	 * @创建人:独泪了无痕
+	 * @param ex
+	 */
+	@ExceptionHandler(ClassCastException.class)
+	@ResponseBody
+	public void classCastExceptionHandler(ClassCastException ex) {
+		if (logger.isDebugEnabled()) {
+			logger.error("类型转换异常:", ex);
+		}
+	}
+
+	/**
+	 * @方法:IO异常
+	 * @创建人:独泪了无痕
+	 * @param ex
+	 */
+	@ExceptionHandler(IOException.class)
+	@ResponseBody
+	public void iOExceptionHandler(IOException ex) {
+		if (logger.isDebugEnabled()) {
+			logger.error("IO异常:", ex);
+		}
+	}
+
+	/**
+	 * @方法:未知方法异常
+	 * @创建人:独泪了无痕
+	 * @param ex
+	 */
+	@ExceptionHandler(NoSuchMethodException.class)
+	@ResponseBody
+	public void noSuchMethodExceptionHandler(NoSuchMethodException ex) {
+		if (logger.isDebugEnabled()) {
+			logger.error("未知方法异常:", ex);
+		}
+	}
+
+	/**
+	 * @方法:数组越界异常
+	 * @创建人:独泪了无痕
+	 * @param ex
+	 */
+	@ExceptionHandler(IndexOutOfBoundsException.class)
+	@ResponseBody
+	public void indexOutOfBoundsExceptionHandler(IndexOutOfBoundsException ex) {
+		if (logger.isDebugEnabled()) {
+			logger.error("数组越界异常:", ex);
 		}
 	}
 
@@ -174,6 +253,38 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
+	@ExceptionHandler(TypeMismatchException.class)
+	@ResponseBody
+	public AjaxJson requestTypeMismatch(TypeMismatchException ex) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error("TypeMismatchException", ex);
+		}
+		result.setSuccess(false);
+		result.setMsg(ex.getMessage());
+		result.setResultCode(400);
+		return result;
+	}
+
+	/**
+	 * 400 - Bad Request
+	 */
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	@ResponseBody
+	public AjaxJson requestMissingServletRequest(MissingServletRequestParameterException ex) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error("MissingServletRequestParameterException", ex);
+		}
+		result.setSuccess(false);
+		result.setMsg(ex.getMessage());
+		result.setResultCode(400);
+		return result;
+	}
+
+	/**
+	 * 400 - Bad Request
+	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(SQLException.class)
 	public AjaxJson handleSQLException(final SQLException e) {
@@ -222,6 +333,22 @@ public class GlobalExceptionHandler {
 	}
 
 	/**
+	 * 406 - Not Acceptable
+	 */
+	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+	@ResponseBody
+	public AjaxJson request406(HttpMediaTypeNotAcceptableException e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase(), e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(406);
+		return result;
+	}
+
+	/**
 	 * 415 - Unsupported Media Type
 	 */
 	@ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
@@ -243,6 +370,38 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public AjaxJson handleException(final Exception e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(500);
+		return result;
+	}
+
+	/**
+	 * 500 - Internal Server Error
+	 */
+	@ExceptionHandler(ConversionNotSupportedException.class)
+	@ResponseBody
+	public AjaxJson ConversionNotSupportedException(ConversionNotSupportedException e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(500);
+		return result;
+	}
+
+	/**
+	 * 500 - Internal Server Error
+	 */
+	@ExceptionHandler(HttpMessageNotWritableException.class)
+	@ResponseBody
+	public AjaxJson HttpMessageNotWritableException(HttpMessageNotWritableException e) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
