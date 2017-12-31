@@ -57,6 +57,10 @@
 
 	<!-- 异常处理类 -->
 	<bean id="handlerExceptionResolver" class="com.cdeledu.common.exception.SpringExceptionHandler" />
+	<!-- 
+		<bean class="com.cdeledu.core.aspect.ServiceExceptionAspect" />
+		<bean class="com.cdeledu.core.aspect.WebExceptionAspect" />
+	-->
 	
 	<!-- 获取bean工具注入 --> 
 	<bean name="springContextUtil" class="com.cdeledu.util.SpringContextUtil" lazy-init="false"/>

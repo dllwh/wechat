@@ -17,6 +17,7 @@
 	<!-- 加载controller的时候,不加载service,因为此时事物并未生效,若此时加载了service,那么事物无法对service进行拦截 -->
 	<context:component-scan base-package="com.cdeledu.controller,com.cdeledu.*.controller,com.cdeledu.controller.*.*.controller">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>  
 	</context:component-scan>
 	
 	<!-- 配置注解扫描 -->
