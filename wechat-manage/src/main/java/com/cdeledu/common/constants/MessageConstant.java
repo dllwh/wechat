@@ -50,6 +50,28 @@ public class MessageConstant {
 	public static final String CANT_FREEZE_ADMIN = "初始化数据失败，请重试！";
 	/** 不能修改超级管理员角色 */
 	public static final String CANT_CHANGE_ADMIN = "初始化数据失败，请重试！";
+	/** 加载成功 */
+	public static final String SUCCESS_LOAD_MESSAGE = "加载成功!";
+	/** 加载失败! */
+	public static final String FAILURE_LOAD_MESSAGE = "加载失败!";
+	/** 保存成功! */
+	public static final String SUCCESS_SAVE_MESSAGE = "保存成功!";
+	/** 保存失败! */
+	public static final String FAILURE_SAVE_MESSAGE = "保存失败!";
+	/** 更新成功 */
+	public static final String SUCCESS_UPDATE_MESSAGE = "更新成功!";
+	/** 更新失败! */
+	public static final String FAILURE_UPDATE_MESSAGE = "更新失败!";
+	/** 删除成功! */
+	public static final String SUCCESS_DELETE_MESSAGE = "删除成功!";
+	/** 删除失败! */
+	public static final String FAILURE_DELETE_MESSAGE = "删除失败!";
+	/** 已经删除! */
+	public static final String WARNING_DELETE_MESSAGE = "已经删除!";
+	/** 启用成功 */
+	public static final String SUCCESS_ENABLE_TRUE = "启用成功!";
+	/** 禁用成功! */
+	public static final String SUCCESS_ENABLE_FALSE = "禁用成功!";
 
 	/**
 	 * @方法描述: 删除数据项不是全部所选
