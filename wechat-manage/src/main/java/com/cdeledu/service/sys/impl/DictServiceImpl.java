@@ -47,7 +47,7 @@ public class DictServiceImpl implements DictService {
 		return baseDao.update(prefix + "updateByPrimaryKey", record);
 	}
 
-	public Integer batchDelete(List<SysDict> parameter) throws Exception {
+	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 

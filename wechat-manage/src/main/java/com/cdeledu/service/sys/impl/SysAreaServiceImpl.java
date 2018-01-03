@@ -38,7 +38,7 @@ public class SysAreaServiceImpl implements SysAreaService {
 	}
 
 	@Override
-	public Integer batchDelete(List<SysArea> parameter) throws Exception {
+	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 

@@ -34,7 +34,7 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 		return baseDao.delete(prefix + "deleteByPrimaryKey", record);
 	}
 
-	public Integer batchDelete(List<SysRole> parameter) throws Exception {
+	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 

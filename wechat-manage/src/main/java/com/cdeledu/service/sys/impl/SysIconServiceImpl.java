@@ -42,7 +42,7 @@ public class SysIconServiceImpl implements SysIconService {
 	}
 
 	@Override
-	public Integer batchDelete(List<SysIcon> parameter) throws Exception {
+	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 

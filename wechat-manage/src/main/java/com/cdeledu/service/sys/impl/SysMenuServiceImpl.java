@@ -50,7 +50,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	@Override
-	public Integer batchDelete(List<SysMenu> parameter) throws Exception {
+	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 

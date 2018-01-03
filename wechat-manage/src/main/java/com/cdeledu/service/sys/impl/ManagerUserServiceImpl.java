@@ -60,7 +60,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	}
 
 	@Transactional(readOnly = false)
-	public Integer batchDelete(List<SysUser> parameter) throws Exception {
+	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 
