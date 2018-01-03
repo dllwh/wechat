@@ -47,7 +47,7 @@ public class MenuViewController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "tree")
+	@RequestMapping(value = "menuTreeList")
 	public void menuTreeList(ModelMap map) {
 
 	}
@@ -58,7 +58,7 @@ public class MenuViewController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "tree")
+	@RequestMapping(value = "selectMenuTreeList")
 	public void selectMenuTreeList(ModelMap map) {
 
 	}
@@ -69,7 +69,7 @@ public class MenuViewController extends BaseController {
 	 * @param menuId
 	 */
 	@ResponseBody
-	@RequestMapping(value = "tree")
+	@RequestMapping(value = "menuTreeListByRoleId")
 	public void menuTreeListByRoleId(@PathVariable Integer menuId) {
 
 	}

@@ -33,7 +33,7 @@ import com.cdeledu.util.WebUtilHelper;
  * @since: JDK 1.7
  */
 @Controller
-@RequestMapping("/sysUser/operate")
+@RequestMapping("sysUserOperate")
 public class SysUserOperateController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */

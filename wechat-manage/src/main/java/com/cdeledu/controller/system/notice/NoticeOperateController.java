@@ -49,7 +49,7 @@ public class NoticeOperateController extends BaseController {
 	 * @param noticeId
 	 * @return
 	 */
-	@RequestMapping(value = "delete")
+	@RequestMapping(value = "update")
 	@ResponseBody
 	public AjaxJson update(@RequestParam Integer noticeId) {
 		AjaxJson result = new AjaxJson();
