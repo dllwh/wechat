@@ -1,5 +1,7 @@
 package com.cdeledu.dao;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,6 +25,10 @@ public class BaseDaoSupport<T> implements BaseDao<T> {
 
 	public Integer delete(String statement, Object parameter) throws Exception {
 		return sqlSessionTemplate.delete(statement, parameter);
+	}
+
+	public Integer update(String statement) throws Exception {
+		return sqlSessionTemplate.update(statement);
 	}
 
 	public Integer update(String statement, Object parameter) throws Exception {
@@ -76,5 +82,15 @@ public class BaseDaoSupport<T> implements BaseDao<T> {
 	@Override
 	public void clearCache() {
 		sqlSessionTemplate.clearCache();
+	}
+
+	@Override
+	public Integer executeSql(String statement, List<Object> parameter) {
+		return sqlSessionTemplate.update(statement, parameter);
+	}
+
+	@Override
+	public Integer executeSql(String statement, Object... parameter) {
+		return sqlSessionTemplate.update(statement, parameter);
 	}
 }

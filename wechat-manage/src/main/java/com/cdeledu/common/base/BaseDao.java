@@ -1,5 +1,7 @@
 package com.cdeledu.common.base;
 
+import java.util.List;
+
 public interface BaseDao<T> {
 
 	/**
@@ -17,6 +19,8 @@ public interface BaseDao<T> {
 	/**
 	 * @方法描述:执行SQL:更新记录,返回更新记录数
 	 */
+	Integer update(String statement) throws Exception;
+
 	Integer update(String statement, Object parameter) throws Exception;
 
 	/**
@@ -69,4 +73,10 @@ public interface BaseDao<T> {
 	 * @方法描述 : 清理缓存，防止溢出
 	 */
 	void clearCache();
+	
+	/** 执行SQL */
+	Integer executeSql(String statement, List<Object> param);
+
+	/** 执行SQL */
+	Integer executeSql(String statement, Object... param);
 }
