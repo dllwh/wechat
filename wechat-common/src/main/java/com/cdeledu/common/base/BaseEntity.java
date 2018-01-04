@@ -17,23 +17,23 @@ public abstract class BaseEntity extends PageEntity {
 	/**
 	 * 是否可见;1:可见,默认值;0:不可见
 	 */
-	protected Integer isVisible = 1;
+	protected Integer isVisible;
 	/**
 	 * 是否有效;-1:删除;0:不可用,默认值;1:可用
 	 */
-	protected Integer isEnabled = 1;
+	protected Integer isEnabled;
 	/**
 	 * 是否允许编辑;1:允许,默认值;0:不允许
 	 */
-	protected Integer allowEdit = 1;
+	protected Integer allowEdit;
 	/**
 	 * 是否允许删除;1:允许删除,默认值,0:不允许删除
 	 */
-	protected Integer allowDelete = 1;
+	protected Integer allowDelete;
 	/**
 	 * 排序,默认从1开始
 	 */
-	protected Integer sequence = 1;
+	protected Integer sequence;
 	/**
 	 * 备注、说明
 	 */
