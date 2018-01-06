@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu.util;
+package com.cdeledu.util.openplatform.baidu.map;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,7 +29,7 @@ import com.cdeledu.util.openplatform.baidu.model.PlaceSuggestionAPI;
  *       是一套以HTTP形式提供的匹配用户输入关键字辅助信息、提示接口
  *       <p>
  */
-public class PlaceSuggestionUtil {
+class PlaceSuggestionUtil {
 
 	private final static String PLACE = "http://api.map.baidu.com/place/v2/suggestion";
 

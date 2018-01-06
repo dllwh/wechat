@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu.util;
+package com.cdeledu.util.openplatform.baidu.map;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,7 +18,7 @@ import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.openplatform.baidu.model.LatitudeInfo;
 import com.cdeledu.util.openplatform.baidu.model.LocalInfo;
 
-public class GeocodingUtil {
+class GeocodingUtil {
 	private final static String GEOCODER = "http://api.map.baidu.com/geocoder/v2/";
 
 	/**
@@ -49,8 +49,8 @@ public class GeocodingUtil {
 	 *            <p>
 	 * @return
 	 */
-	public static LatitudeInfo SearchLatitudeByGeocodingAPI(String ak,
-			String address, String city) {
+	public static LatitudeInfo SearchLatitudeByGeocodingAPI(String ak, String address,
+			String city) {
 		BufferedReader l_reader = null;
 		HttpURLConnection l_connection = null;
 		JSONObject json;
@@ -78,8 +78,7 @@ public class GeocodingUtil {
 				URL l_url = new URL(url);
 				l_connection = (HttpURLConnection) l_url.openConnection();
 				l_connection.connect();
-				l_reader = new BufferedReader(new InputStreamReader(
-						l_connection.getInputStream()));
+				l_reader = new BufferedReader(new InputStreamReader(l_connection.getInputStream()));
 
 				jsonString = l_reader.readLine();
 				json = new JSONObject(jsonString);
@@ -139,8 +138,7 @@ public class GeocodingUtil {
 	 *            : 纬度值
 	 * @return
 	 */
-	public static Map<String, Object> SearchLocalByGeocodingAPI(String ak,
-			float lng, float lat) {
+	public static Map<String, Object> SearchLocalByGeocodingAPI(String ak, float lng, float lat) {
 		BufferedReader l_reader = null;
 		HttpURLConnection l_connection = null;
 		JSONObject json;
@@ -160,8 +158,7 @@ public class GeocodingUtil {
 			l_connection = (HttpURLConnection) l_url.openConnection();
 			l_connection.connect();
 
-			l_reader = new BufferedReader(new InputStreamReader(
-					l_connection.getInputStream()));
+			l_reader = new BufferedReader(new InputStreamReader(l_connection.getInputStream()));
 			jsonString = l_reader.readLine();
 			json = new JSONObject(jsonString);
 			int status = json.getInt("status");

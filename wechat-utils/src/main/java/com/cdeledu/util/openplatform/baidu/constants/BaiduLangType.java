@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu.util.constants;
+package com.cdeledu.util.openplatform.baidu.constants;
 
 /**
  * @ClassName: BaiduLangType

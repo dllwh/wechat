@@ -1,11 +1,8 @@
-package com.cdeledu.util.openplatform.baidu;
+package com.cdeledu.util.openplatform.baidu.map;
 
 import java.util.Map;
 
 import com.cdeledu.util.openplatform.baidu.model.LatitudeInfo;
-import com.cdeledu.util.openplatform.baidu.util.GeocodingUtil;
-import com.cdeledu.util.openplatform.baidu.util.PlaceSuggestionUtil;
-import com.cdeledu.util.openplatform.baidu.util.PlaceUtil;
 
 /**
  * @类描述: 百度地图工具类(调用百度地图接口)
@@ -17,7 +14,7 @@ import com.cdeledu.util.openplatform.baidu.util.PlaceUtil;
  * @see <a href="http://developer.baidu.com/map/index.php?title=webapi">
  *      百度地图Web服务API</a>
  */
-public class BaiduMap {
+public class BaiduMapHelper {
 	/**
 	 * @Title: SearchLocalByGeocoding_API
 	 * @Description: 通过 GEocoding API 根据经纬度查询周边信息

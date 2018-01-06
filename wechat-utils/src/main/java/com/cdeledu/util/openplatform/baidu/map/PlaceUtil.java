@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu.util;
+package com.cdeledu.util.openplatform.baidu.map;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import com.cdeledu.util.openplatform.baidu.model.PlaceApi;
 /**
  * 
  * @类描述:
- *       <ul>
+ * 		<ul>
  *       <li>Place API 是一套免费使用的API接口，调用次数限制默认为2000次/天</li>
  *       <li>用于返回查询某个区域的某类POI数据且提供单个POI的详情查询服务,提供区域检索POI服务、POI详情服务</li>
  *       </ul>
@@ -31,7 +31,7 @@ import com.cdeledu.util.openplatform.baidu.model.PlaceApi;
  *      "http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-placeapi">
  *      Place API Web服务API </a>
  */
-public class PlaceUtil {
+class PlaceUtil {
 	/** ----------------------------------------------------- Fields start */
 	/** place区域检索POI服务 */
 	private final static String PLACE_SEARCH = "http://api.map.baidu.com/place/v2/search";
@@ -46,11 +46,13 @@ public class PlaceUtil {
 	/** function返回结果 */
 	private static Map<String, Object> resultmap = null;
 	private static HttpURLConnHelper conn = null;
+
 	static {
 		conn = HttpURLConnHelper.getInstance(ConstantHelper.UTF_8.name());
 	}
 
 	/** ----------------------------------------------------- Fields end */
+
 	/** ----------------------------------------------------- [私有方法] */
 	/**
 	 * Place区域检索通用接口参数
