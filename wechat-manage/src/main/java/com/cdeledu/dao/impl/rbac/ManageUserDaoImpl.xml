@@ -189,11 +189,24 @@
 	
 	<!-- 删除用户角色关联数据 -->
 	<delete id="deleteUserRole" parameterType="com.cdeledu.model.rbac.SysUser">
-		DELETE sys_user_role where userId=#{id}
+		DELETE FROM sys_user_role where userId=#{userId} and roleId =#{roleId}
 	</delete>
 	
 	<!-- 更新登录信息，如：登录IP、登录时间 -->
 	<update id="updateLoginInfo" parameterType="com.cdeledu.model.rbac.SysUser" >
 	
 	</update>
+	
+	<!-- 用户未授权的角色 -->
+	<select id="GetNotMyRoles" parameterType="java.lang.Integer" 
+		resultType="com.cdeledu.model.rbac.SysUserRole">
+		SELECT
+			id as roleId,roleName,roleCode
+		FROM
+			sys_role  
+		where
+			isEnabled =1 
+			AND isVisible=1 
+			AND id not in (select roleid from sys_user_role where userId = #{userCode} )
+	</select>
 </mapper>

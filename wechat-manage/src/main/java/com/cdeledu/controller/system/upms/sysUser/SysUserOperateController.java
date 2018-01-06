@@ -39,6 +39,7 @@ public class SysUserOperateController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	@Autowired
 	private ManagerUserService manageruserService;
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法描述: 用户注册
@@ -51,9 +52,7 @@ public class SysUserOperateController extends BaseController {
 	public AjaxJson singUp(SysUser managerUser) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			if (manageruserService.checkUserExits(managerUser) == null) {
-				managerUser.setCreate(WebUtilHelper.getCurrentUserId());
-				managerUser.setModifier(WebUtilHelper.getCurrentUserId());
+			if (manageruserService.getUserByName(managerUser.getUserName()) == null) {
 				manageruserService.insert(managerUser);
 				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 			} else {
@@ -62,7 +61,6 @@ public class SysUserOperateController extends BaseController {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 			resultMsg.setSuccess(false);
 		}
@@ -82,12 +80,18 @@ public class SysUserOperateController extends BaseController {
 	public AjaxJson updateUser(SysUser managerUser) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			managerUser.setUserName(null);// 不能更新username
-			manageruserService.update(managerUser);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			if (managerUser != null && managerUser.getId() != null) {
+				managerUser.setUserName(null);// 不能更新username
+				manageruserService.update(managerUser);
+				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			} else {
+				resultMsg.setSuccess(false);
+				resultMsg.setResultCode(10017);
+				resultMsg.setMsg("缺失必选参数 (%s)");
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			resultMsg.setSuccess(false);
+			resultMsg.setResultCode(500);
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
 		return resultMsg;
@@ -106,13 +110,19 @@ public class SysUserOperateController extends BaseController {
 	public AjaxJson delUser(@RequestParam(value = "id", required = true) Integer id) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			SysUser managerUser = new SysUser();
-			managerUser.setId(id);
-			manageruserService.delete(managerUser);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			SysUser sysUser = new SysUser();
+			sysUser.setId(id);
+			List<SysUserRole> userRoleList = manageruserService.getUserRole(sysUser);
+			if (userRoleList == null || userRoleList.isEmpty() || userRoleList.size() == 0) {
+				manageruserService.delete(id);
+				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			} else {
+				resultMsg.setSuccess(false);
+				resultMsg.setMsg("删除失败，该用户已分配角色");
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			resultMsg.setSuccess(false);
+			resultMsg.setResultCode(10001);
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		}
 		return resultMsg;
@@ -148,27 +158,55 @@ public class SysUserOperateController extends BaseController {
 		return reslutMsg;
 	}
 
-	/**
-	 * 
-	 * @方法描述: 启用账户
-	 * @return
-	 */
 	@ResponseBody
 	@RequestMapping("enable")
+	@SystemLog(desc = " 启用账户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
 	public AjaxJson updateUserEnable(int userId) {
 		AjaxJson resultMsg = new AjaxJson();
+		SysUser user = new SysUser();
+		user.setId(userId);
+
+		try {
+			SysUser sysUser = manageruserService.findOneForJdbc(user);
+			// 超级管理员不能操作
+			if (sysUser != null && sysUser.getUserType() != -1
+					&& WebUtilHelper.getCurrentUserId() != userId) {
+				sysUser.setIsVisible(1);
+				manageruserService.update(sysUser);
+			}
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMsg.setSuccess(false);
+			resultMsg.setResultCode(500);
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+		}
 		return resultMsg;
 	}
 
-	/**
-	 * 
-	 * @方法描述: 禁用账户
-	 * @return
-	 */
 	@ResponseBody
 	@RequestMapping("disable")
+	@SystemLog(desc = " 禁用账户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
 	public AjaxJson updateUserDisable(int userId) {
 		AjaxJson resultMsg = new AjaxJson();
+		SysUser user = new SysUser();
+		user.setId(userId);
+
+		try {
+			SysUser sysUser = manageruserService.findOneForJdbc(user);
+			// 超级管理员不能操作
+			if (sysUser != null && sysUser.getUserType() != -1
+					&& WebUtilHelper.getCurrentUserId() != userId) {
+				sysUser.setIsVisible(0);
+				manageruserService.update(sysUser);
+			}
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMsg.setSuccess(false);
+			resultMsg.setResultCode(500);
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+		}
 		return resultMsg;
 	}
 
@@ -181,26 +219,92 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "forbidUserById", method = RequestMethod.POST)
-	public AjaxJson forbidUserById(int userId, boolean status) {
+	@SystemLog(desc = "禁止登录/允许登录", opType = SysOpType.UPDATE, tableName = { "sys_user" })
+	public AjaxJson forbidUserById(@RequestParam(name = "id", required = true) int userId,
+			@RequestParam(name = "status", required = true, defaultValue = "1") int status) {
 		AjaxJson resultMsg = new AjaxJson();
+		SysUser user = new SysUser();
+		user.setId(userId);
+
+		try {
+			SysUser sysUser = manageruserService.findOneForJdbc(user);
+			if (sysUser != null && sysUser.getUserType() != -1
+					&& WebUtilHelper.getCurrentUserId() != userId) {
+				sysUser.setLoginFlag(status);
+				manageruserService.update(sysUser);
+			}
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMsg.setSuccess(false);
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+		}
 		return resultMsg;
 	}
 
+	
+	@ResponseBody
+	@RequestMapping(value = "lockUser", method = RequestMethod.POST)
+	@SystemLog(desc = "锁定用户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
+	public AjaxJson lockUser(@RequestParam(name = "id", required = true) int userId) {
+		AjaxJson resultMsg = new AjaxJson();
+		SysUser user = new SysUser();
+		user.setId(userId);
+
+		try {
+			SysUser sysUser = manageruserService.findOneForJdbc(user);
+			if (sysUser != null && sysUser.getUserType() != -1
+					&& WebUtilHelper.getCurrentUserId() != userId) {
+				sysUser.setIsLocked(0);
+				manageruserService.update(sysUser);
+			}
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMsg.setSuccess(false);
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+		}
+		return resultMsg;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "unlockUser")
+	@SystemLog(desc = "解锁用户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
+	public AjaxJson unlockUser(@RequestParam(name = "id", required = true) int userId) {
+		AjaxJson resultMsg = new AjaxJson();
+		SysUser user = new SysUser();
+		user.setId(userId);
+
+		try {
+			SysUser sysUser = manageruserService.findOneForJdbc(user);
+			if (sysUser != null && sysUser.getUserType() != -1
+					&& WebUtilHelper.getCurrentUserId() != userId) {
+				sysUser.setIsLocked(1);
+				manageruserService.update(sysUser);
+			}
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMsg.setSuccess(false);
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+		}
+		return resultMsg;
+	}
+	
 	/**
 	 * @方法描述: 重置密码
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("reset")
-	public AjaxJson updatePswd(int userId,String pswd,String newPswd) {
+	public AjaxJson updatePswd(int userId, String pswd, String newPswd) {
 		AjaxJson resultMsg = new AjaxJson();
-		//根据当前登录的用户帐号 + 老密码，查询。
-		
+		// 根据当前登录的用户帐号 + 老密码，查询。
+
 		// 管理员不准修改密码
 		return resultMsg;
 	}
 
-	
 	/**
 	 * @方法描述: 用户-角色录入
 	 * @创建者: 皇族灬战狼
@@ -210,14 +314,18 @@ public class SysUserOperateController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "saveRoleUser")
-	@SystemLog(desc = "用户-角色录入", opType = SysOpType.INSERT, tableName = "sys_user")
-	public AjaxJson saveRoleUser(@RequestParam(value = "userName", required = true) String userName,
+	@RequestMapping(value = "roleAssign", params = "saveRoleUser")
+	@SystemLog(desc = "用户-角色录入(授权)", opType = SysOpType.INSERT, tableName = "sys_user_role")
+	public AjaxJson saveRoleUser(@RequestParam(value = "userCode", required = true) int id,
 			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
 		AjaxJson resultMsg = new AjaxJson();
 		SysUser user = new SysUser();
-		user.setUserName(userName);
+		user.setId(id);
 		try {
+			if(roleID == 1){//超级管理员不参与分配
+				resultMsg.setSuccess(false);
+				resultMsg.setMsg("无法授予权限");
+			}
 			SysUser TSUser = manageruserService.findOneForJdbc(user);
 			if (null == TSUser) {
 				resultMsg.setMsg("不存在");
@@ -235,25 +343,33 @@ public class SysUserOperateController extends BaseController {
 		}
 		return resultMsg;
 	}
-	/**
-	 * @方法描述: 操作用户的角色
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "addRoleByUser")
-	public AjaxJson addRoleByUser(int userId, String ids) {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
-	}
 
 	/**
 	 * @方法描述: 根据用户id清空角色
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "clearRoleByUserIds")
-	public AjaxJson clearRoleByUserIds(String userIds) {
+	@RequestMapping(value = "roleAssign", params = "clearRoleUser")
+	@SystemLog(desc = "用户-角色(解除授权)", opType = SysOpType.INSERT, tableName = "sys_user")
+	public AjaxJson clearRoleByUserIds(SysUserRole sysUserRole) {
 		AjaxJson resultMsg = new AjaxJson();
+		if(sysUserRole.getUserId() != null){
+			if(WebUtilHelper.getCurrentUserId() != sysUserRole.getUserId()){
+				try {
+					manageruserService.deleteUserRole(sysUserRole);
+				} catch (Exception e) {
+					e.printStackTrace();
+					resultMsg.setSuccess(false);
+					resultMsg.setResultCode(500);
+					resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+				}
+			} else {
+				resultMsg.setSuccess(false);
+				resultMsg.setResultCode(500);
+				resultMsg.setMsg("不能解除当前用户权限");
+			}
+		}
+		// 超级管理员不能删除
 		return resultMsg;
 	}
 
@@ -268,7 +384,7 @@ public class SysUserOperateController extends BaseController {
 		AjaxJson resultMsg = new AjaxJson();
 		return resultMsg;
 	}
-	
+
 	/**
 	 * @方法描述: 个人资料修改
 	 * @return

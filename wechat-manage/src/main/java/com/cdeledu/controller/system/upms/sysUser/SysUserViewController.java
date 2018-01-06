@@ -1,6 +1,6 @@
 package com.cdeledu.controller.system.upms.sysUser;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -28,7 +27,7 @@ import com.google.common.collect.Lists;
  * @since: JDK 1.7
  */
 @Controller
-@RequestMapping("/sysUserView")
+@RequestMapping("sysUserView")
 public class SysUserViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
@@ -40,7 +39,7 @@ public class SysUserViewController extends BaseController {
 	 * @创建时间: 2016年9月27日 下午4:43:12
 	 * @return
 	 */
-	@RequestMapping(value = "index")
+	@RequestMapping(value = "")
 	public ModelAndView index(ModelMap modelMap) {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysUser/sysUserInit");
@@ -68,9 +67,11 @@ public class SysUserViewController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
+	@ResponseBody
 	@RequestMapping(value = "getList")
-	public void getList(ModelMap modelMap, @RequestBody SysUser managerUser) {
-
+	public Map<String, Object> getList(ModelMap modelMap, @RequestBody SysUser managerUser) {
+		Map<String, Object> resultMap = Maps.newConcurrentMap();
+		return resultMap;
 	}
 
 	/**
@@ -106,15 +107,24 @@ public class SysUserViewController extends BaseController {
 	}
 
 	/**
-	 * 
-	 * 根据用户ID查询权限
-	 * 
+	 * @方法描述 : 获取授权的角色
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "selectRoleByUserId")
-	public List<SysRole> selectRoleByUserId() {
-		List<SysRole> resultList = Lists.newArrayList();
-		return resultList;
+	public Map<String, Object> selectRoleByUserId() {
+		Map<String, Object> resultMap = Maps.newConcurrentMap();
+		return resultMap;
+	}
+
+	/**
+	 * @方法描述 :获取未授权的角色
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "getNotMyRoles")
+	public Map<String, Object> getNotMyRoles() {
+		Map<String, Object> resultMap = Maps.newConcurrentMap();
+		return resultMap;
 	}
 }
