@@ -12,8 +12,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import com.cdeledu.core.annotation.Permission;
-import com.cdeledu.core.factory.ConstantFactory;
-import com.cdeledu.core.shiro.service.ShiroService;
+import com.cdeledu.core.shiro.filter.PermissionCheckFilter;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -25,16 +24,15 @@ import com.cdeledu.core.shiro.service.ShiroService;
  * @创建时间: 2017年12月31日 下午10:26:44
  * @版本: V1.0
  * @since: JDK 1.7
- * @see <a href="">TODO(连接内容简介)</a>
  */
 @Aspect
 @Component
 public class PermissionAspect {
-	/** ----------------------------------------------------- Fields start */
-	private ShiroService shiroService = ConstantFactory.shiroService;
-	/** ----------------------------------------------------- Fields end */
 
-	/** ----------------------------------------------- [公共方法] */
+	@Pointcut("@annotation(com.cdeledu.core.annotation.Permission)")
+	private void cutPermission() {
+
+	}
 
 	@Around("cutPermission()")
 	public Object doPermission(ProceedingJoinPoint point) throws Throwable {
@@ -45,10 +43,10 @@ public class PermissionAspect {
 		boolean checkResult = Boolean.FALSE;
 		if (permissions == null || permissions.length == 0) {
 			// 检查全体角色 checkAll
-			checkResult = shiroService.checkAll();
+			checkResult = PermissionCheckFilter.checkAll();
 		} else {
 			// 检查指定角色 check
-			checkResult = shiroService.check(permissions);
+			checkResult = PermissionCheckFilter.check(permissions);
 		}
 		if (checkResult) {
 			return point.proceed();
@@ -56,16 +54,4 @@ public class PermissionAspect {
 			throw new NoPermissionException();
 		}
 	}
-
-	/** ----------------------------------------------- [公共方法] */
-
-	/** ----------------------------------------------- [私有方法] */
-	@Pointcut(value = "@annotation(com.cdeledu.core.annotation.Permission)")
-	private void cutPermission() {
-
-	}
-	/** ----------------------------------------------- [私有方法] */
-
-	/** ----------------------------------------------- [测试方法] */
-	/** ----------------------------------------------- [测试方法] */
 }
