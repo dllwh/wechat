@@ -159,3 +159,10 @@ $.ConfirmAjax = function(options) {
 		}, 500);
 	});
 }
+
+/**
+ * 重置
+ */
+$.resetForm = function(options) {
+	
+}
