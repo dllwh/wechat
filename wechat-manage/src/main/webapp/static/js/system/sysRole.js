@@ -1,50 +1,76 @@
 /**
  * 角色管理的单例
  */
-var Role = {
+var sysRole = {
 	id : "roleTable", // 表格id
 	seItem : null, // 选中的条目
 	table : null,
-	layerIndex : -1
+	layerIndex : -1,
+	check : function() { // 检查是否选中
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if (selected.length == 0) {
+			return false;
+		} else {
+			sysRole.seItem = selected[0];
+			return true;
+		}
+	},
+	openAddDig : function() {// 点击添加
+
+	},
+	openChangeDig : function() {// 点击修改按钮时
+		if (this.check()) {
+		}
+	},
+	openDeleleDig : function() {// 点击修改按钮时
+		if (this.check()) {
+		}
+	},
+	validate : function() {// 验证数据是否为空
+
+	},
+	searchClick : function() { // 搜索
+
+	},
+	refreshClick : function() { // 刷新
+
+	},
+	resetSearch : function() {// 重置搜索条件
+
+	}
 };
 
 /**
- * 检查是否选中
+ * 提交修改
  */
-Role.check = function() {
-};
-
-/**
- * 点击添加管理员
- */
-Role.openAddRole = function() {
-
-};
-
-/**
- * 点击修改按钮时
- */
-Role.openChangeRole = function() {
+sysRole.editSubmit = function() {
 
 };
 
 /**
  * 删除角色
  */
-Role.delRole = function() {
+sysRole.deleteClick = function() {
 
 };
 
 /**
  * 权限配置
  */
-Role.assign = function() {
+sysRole.assign = function() {
 
 };
 
 /**
- * 搜索角色
+ * 禁用
  */
-Role.search = function() {
+sysRole.disableClick = function() {
 
-}
+};
+
+/**
+ * 启用
+ */
+sysRole.enableClick = function() {
+
+};
