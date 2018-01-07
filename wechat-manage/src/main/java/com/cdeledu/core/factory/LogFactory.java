@@ -8,6 +8,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.cdeledu.common.constants.SystemConstant.SysLogLeavel;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.common.mapper.JsonMapper;
@@ -41,8 +42,11 @@ public class LogFactory {
 		SysLogEntity sysLog = new SysLogEntity();
 		SystemLog systemLog = method.getAnnotation(SystemLog.class);
 		if (systemLog != null) {
+			//注解上的描述 
 			sysLog.setRemark(systemLog.desc());
+			//注解上的操作相关表
 			sysLog.setTableName(StringUtils.join(systemLog.tableName(), ","));
+			//注解上的操作类型
 			sysLog.setOpType(systemLog.opType().getValue());
 		}
 
@@ -50,7 +54,10 @@ public class LogFactory {
 		String targetName = joinPoint.getTarget().getClass().getName();// 获取目标类名
 		sysLog.setMethod(targetName + "." + signature.getName() + "()");
 		// 访问目标方法的参数：
+		Object[] args = joinPoint.getArgs();
+		String params = JSON.toJSONString(args[0]);
 		// sysLog.setParams(JsonMapper.toJsonString(joinPoint.getArgs()));
+		sysLog.setParams(params);
 
 		// 操作人的信息
 		int userId = -1;

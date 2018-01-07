@@ -44,7 +44,7 @@ public class SysAreaViewController extends BaseController {
 	}
 
 	/**
-	 * @方法描述: 根据父级code查询子节点，子区域列表
+	 * @方法描述: 列表
 	 * @param areaCode
 	 * @return
 	 */
@@ -58,7 +58,7 @@ public class SysAreaViewController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("select")
-	public List<Map<String, Object>> select(@RequestParam String areaCode) {
+	public List<Map<String, Object>> select(@RequestParam String parentAreaId) {
 		return null;
 	}
 	/** ----------------------------------------------- [私有方法] */
