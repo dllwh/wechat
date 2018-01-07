@@ -85,6 +85,11 @@
 			<artifactId>gson</artifactId>
 			<version>${gson.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.baidu.aip</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>4.0.0</version>
+			</dependency>
 	</dependencies>
 	
 		<build>

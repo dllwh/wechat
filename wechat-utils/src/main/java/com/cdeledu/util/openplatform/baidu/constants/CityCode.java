@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu.util.constants;
+package com.cdeledu.util.openplatform.baidu.constants;
 
 import java.util.ArrayList;
 import java.util.Collections;

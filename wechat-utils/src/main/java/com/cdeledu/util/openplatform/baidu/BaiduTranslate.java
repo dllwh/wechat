@@ -18,8 +18,8 @@ import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.apache.lang.RandomUtil;
 import com.cdeledu.util.appConfig.ConfigUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
-import com.cdeledu.util.openplatform.baidu.util.constants.BaiduLangType;
-import com.cdeledu.util.openplatform.baidu.util.constants.ResultStatus;
+import com.cdeledu.util.openplatform.baidu.constants.BaiduLangType;
+import com.cdeledu.util.openplatform.baidu.constants.ResultStatus;
 
 /**
  * 
