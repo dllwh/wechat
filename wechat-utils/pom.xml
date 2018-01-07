@@ -53,27 +53,27 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>${mongodb.version}</version>
 		</dependency>
-		
+
 		<!-- Redis -->
-		<dependency>  
-			<groupId>org.springframework.data</groupId>  
+		<dependency>
+			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-redis</artifactId>
-			<version>${spring.redis.version}</version>  
-		</dependency>  
+			<version>${spring.redis.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>${jedis.version}</version>
 		</dependency>
-		
+
 		<!-- 包含对Spring对JDBC数据访问进行封装的所有类 -->
 		<dependency>
-		
+
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-				
+
 		<!-- 引入echarts的jar -->
 		<dependency>
 			<groupId>com.github.abel533</groupId>
@@ -89,10 +89,22 @@
 			<groupId>com.baidu.aip</groupId>
 			<artifactId>java-sdk</artifactId>
 			<version>4.0.0</version>
-			</dependency>
+		</dependency>
+		<!-- 阿里云 短信服务 -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<optional>true</optional>
+			<version>3.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
-	
-		<build>
+
+	<build>
 		<finalName>wechat-utils</finalName>
 		<plugins>
 			<!-- Java编译插件 -->
