@@ -53,45 +53,6 @@ public class SystemConstant {
 		}
 	}
 
-	/** 定时任务状态 */
-	public enum SysScheduleStatus {
-		/** 正常 */
-		NORMAL(1),
-		/** 暂停 */
-		PAUSE(0);
-		int value;
-
-		SysScheduleStatus(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-	}
-
-	/** 系统通用状态 */
-	public enum SysStatusType {
-		/** 禁用，隐藏 */
-		DISABLE(0),
-		/** 可用，显示 */
-		ENABLE(1),
-		/** 显示 */
-		SHOW(1),
-		/** 隐藏 */
-		HIDDEN(0);
-
-		int value;
-
-		SysStatusType(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-	}
-
 	/** 日志类型 */
 	public enum SysOpType {
 		/** 登录日志 */
