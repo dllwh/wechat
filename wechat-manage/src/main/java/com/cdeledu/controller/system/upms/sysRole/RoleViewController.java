@@ -65,7 +65,7 @@ public class RoleViewController extends BaseController {
 			resultMap.put("total", roleService.getCountForJdbcParam(role));
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultMap.put("rows", "{[]}");
+			resultMap.put("rows", null);
 			resultMap.put("total", 0);
 		}
 		return resultMap;

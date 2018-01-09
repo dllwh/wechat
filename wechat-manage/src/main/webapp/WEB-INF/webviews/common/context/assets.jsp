@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="${_currConText }/static/style/style.css"/>
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/simple-line-icons.min.css" />
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/font-awesome.min.css" />
-<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/icon-font.min.css" />
+<link rel="stylesheet" href="${_currConText }/plug-in/font/css/icon-font.min.css" />
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/codemirror.css" />
 <!--[if IE 7]>
 	<link rel="stylesheet" href="${_currConText }/plug-in/assets/css/font-awesome-ie7.min.css" />
