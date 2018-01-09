@@ -3,7 +3,7 @@
  */
 var Dict = {
 	id : "DictTable", // 表格id
-	seItem : null, // 选中的条目
+	setItem : null, // 选中的条目
 	table : null,
 	layerIndex : -1,
 	check : function() { // 检查是否选中
@@ -11,7 +11,7 @@ var Dict = {
 		if (selected.length == 0) {
 			return false;
 		} else {
-			Dict.seItem = selected[0];
+			Dict.setItem = selected[0];
 			return true;
 		}
 	},

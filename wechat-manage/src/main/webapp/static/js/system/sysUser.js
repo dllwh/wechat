@@ -3,7 +3,7 @@
  */
 var sysUser = {
 	id : "managerTable",// 表格id
-	seItem : null, // 选中的条目
+	setItem : null, // 选中的条目
 	table : null,
 	layerIndex : -1,
 	check : function() { // 检查是否选中
@@ -11,7 +11,7 @@ var sysUser = {
 		if (selected.length == 0) {
 			return false;
 		} else {
-			sysUser.seItem = selected[0];
+			sysUser.setItem = selected[0];
 			return true;
 		}
 	},
@@ -26,8 +26,33 @@ var sysUser = {
 		if (this.check()) {
 		}
 	},
-	validate : function() {// 验证数据是否为空
-
+	deleteClick : function() { // 删除
+		if (this.check()) {
+		}
+	},
+	enableClick : function() {// 启用
+		if (this.check()) {
+		}
+	},
+	disableClick : function() {// 禁用
+		if (this.check()) {
+		}
+	},
+	freezeAccountClick : function() { // 冻结用户账户
+		if (this.check()) {
+		}
+	},
+	unfreezeClick : function() {// 解除冻结用户账户
+		if (this.check()) {
+		}
+	},
+	lockClick : function() {// 锁定用户
+		if (this.check()) {
+		}
+	},
+	unlockClick : function() {// 解除锁定
+		if (this.check()) {
+		}
 	},
 	searchClick : function() { // 搜索
 
@@ -47,6 +72,10 @@ var sysUser = {
 	},
 	exportClick : function() {// 导出
 
+	},
+	resetPwdClick : function() {// 重置密码
+		if (this.check()) {
+		}
 	}
 };
 
@@ -85,79 +114,9 @@ sysUser.addSubmitClick = function() {
 sysUser.editSubmitClick = function() {
 
 };
-
-/**
- * 删除用户
- */
-sysUser.deleteClick = function() {
-	if (this.check()) {
-	}
-};
-
-/**
- * 冻结用户账户
- * 
- * @param userId
- */
-sysUser.freezeAccountClick = function() {
-	if (this.check()) {
-	}
-};
-
-/**
- * 解除冻结用户账户
- * 
- * @param userId
- */
-sysUser.unfreezeClick = function() {
-	if (this.check()) {
-	}
-}
-
 /**
  * 重置密码
  */
-sysUser.resetPwdClick = function() {
-	if (this.check()) {
-	}
-};
+sysUser.resetPwdFun = function() {
 
-/**
- * 启用
- */
-sysUser.enableUserClick = function() {
-	if (this.check()) {
-	}
-}
-
-/**
- * 禁用
- */
-sysUser.disableUserClick = function() {
-	if (this.check()) {
-	}
-};
-
-/**
- * 用户审核
- */
-sysUser.auditClickFun = function() {
-	if (this.check()) {
-	}
-}
-
-/**
- * 锁定过户
- */
-sysUser.lockClick = function() {
-	if (this.check()) {
-	}
-}
-
-/**
- * 解锁用户
- */
-sysUser.unlockClick = function() {
-	if (this.check()) {
-	}
 };

@@ -3,7 +3,7 @@
  */
 var sysRole = {
 	id : "roleTable", // 表格id
-	seItem : null, // 选中的条目
+	setItem : null, // 选中的条目
 	table : null,
 	layerIndex : -1,
 	check : function() { // 检查是否选中
@@ -11,7 +11,7 @@ var sysRole = {
 		if (selected.length == 0) {
 			return false;
 		} else {
-			sysRole.seItem = selected[0];
+			sysRole.setItem = selected[0];
 			return true;
 		}
 	},
@@ -26,10 +26,22 @@ var sysRole = {
 		if (this.check()) {
 		}
 	},
-	validate : function() {// 验证数据是否为空
-
+	deleteClick : function() { // 删除
+		if (this.check()) {
+		}
+	},
+	enableClick : function() {// 启用
+		if (this.check()) {
+		}
+	},
+	disableClick : function() {// 禁用
+		if (this.check()) {
+		}
 	},
 	searchClick : function() { // 搜索
+
+	},
+	assign : function() {// 权限配置
 
 	},
 	refreshClick : function() { // 刷新
@@ -43,34 +55,12 @@ var sysRole = {
 /**
  * 提交修改
  */
+sysRole.addSubmitClick = function() {
+
+};
+/**
+ * 提交修改
+ */
 sysRole.editSubmit = function() {
-
-};
-
-/**
- * 删除角色
- */
-sysRole.deleteClick = function() {
-
-};
-
-/**
- * 权限配置
- */
-sysRole.assign = function() {
-
-};
-
-/**
- * 禁用
- */
-sysRole.disableClick = function() {
-
-};
-
-/**
- * 启用
- */
-sysRole.enableClick = function() {
 
 };

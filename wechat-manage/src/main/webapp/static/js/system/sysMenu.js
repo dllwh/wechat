@@ -3,7 +3,7 @@
  */
 var sysMenu = {
 	id : "menuTable", // 表格id
-	seItem : null, // 选中的条目
+	setItem : null, // 选中的条目
 	table : null,
 	layerIndex : -1,
 	check : function() { // 检查是否选中
@@ -11,7 +11,7 @@ var sysMenu = {
 		if (selected.length == 0) {
 			return false;
 		} else {
-			sysMenu.seItem = selected[0];
+			sysMenu.setItem = selected[0];
 			return true;
 		}
 	},
@@ -26,8 +26,17 @@ var sysMenu = {
 		if (this.check()) {
 		}
 	},
-	validate : function() {// 验证数据是否为空
-
+	deleteClick : function() { // 删除
+		if (this.check()) {
+		}
+	},
+	enableClick : function() {// 启用
+		if (this.check()) {
+		}
+	},
+	disableClick : function() {// 禁用
+		if (this.check()) {
+		}
 	},
 	searchClick : function() { // 搜索角色
 
@@ -60,28 +69,4 @@ sysMenu.addSubmitClick = function() {
  */
 sysMenu.editSubmitClick = function() {
 
-}
-
-/**
- * 禁用菜单
- */
-sysMenu.disableClick = function() {
-	if (this.check()) {
-	}
-}
-
-/**
- * 启用菜单
- */
-sysMenu.enableClick = function() {
-	if (this.check()) {
-	}
-}
-
-/**
- * 删除菜单
- */
-sysMenu.deleteClick = function() {
-	if (this.check()) {
-	}
 }
