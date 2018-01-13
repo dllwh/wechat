@@ -70,15 +70,13 @@ public class TaobaoGirlsCrawler {
 		if (_jResult.has("status") && _jResult.getInt("status") == 1) {
 			JSONArray jsArray = _jResult.getJSONObject("data").getJSONArray("searchDOList");
 			int userId = 0;
-			String realName = "";
 			for (int i = 0; i < jsArray.length(); i++) {
 				try {
 					mmPicList = Lists.newArrayList();
 					JSONObject parseInfo = jsArray.getJSONObject(i);
 					userId = parseInfo.getInt("userId");
-					realName = parseInfo.getString("realName");
-					grilAlbumList = new TaobaoGrilAlbumList(userId, realName);
-					grilAlbumList.getGrilAlbumCount();
+					// realName = parseInfo.getString("realName");
+					grilAlbumList = new TaobaoGrilAlbumList(userId);
 					grilAlbumList.getGrilAlbumList();
 					mmPicList.addAll(grilAlbumList.mmPicList);
 				} catch (Exception e) {

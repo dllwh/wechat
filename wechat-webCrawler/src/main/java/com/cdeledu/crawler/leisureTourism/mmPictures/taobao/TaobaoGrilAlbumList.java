@@ -16,6 +16,18 @@ import com.cdeledu.util.application.regex.RegexUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+/**
+ * 把今天最好的表现当作明天最新的起点．．～
+ *
+ * Today the best performance as tomorrow newest starter!
+ *
+ * @类描述: 爬取淘女郎的相册信息,其中的userID 来源与{@link TaobaoGirlsCrawler}
+ * @创建者: 皇族灬战狼
+ * @联系方式: duleilewuhen@sina.com
+ * @创建时间: 2017年8月27日 下午9:28:17
+ * @版本: V1.0
+ * @since: JDK 1.7
+ */
 class TaobaoGrilAlbumList {
 	/** ----------------------------------------------------- Fields start */
 	/** 相册列表 */
@@ -26,7 +38,6 @@ class TaobaoGrilAlbumList {
 	/** 相册内照片的总页数 */
 	private static int totalPicPage = 1;
 	private int userId;
-	private String realName;
 	List<Map<String, Object>> mmPicList = Lists.newArrayList();
 	private static JsoupHandler webCrawler = null;
 	private static CrawlParameter crawlParam = null;
@@ -39,23 +50,10 @@ class TaobaoGrilAlbumList {
 	}
 
 	/** ----------------------------------------------------- Fields end */
-	public TaobaoGrilAlbumList(int userId, String realName) {
+	public TaobaoGrilAlbumList(int userId) {
 		super();
 		this.userId = userId;
-		this.realName = realName;
-	}
-
-	/**
-	 * @方法描述: 获取相册的总页数
-	 * @param userId
-	 */
-	public int getGrilAlbumCount() throws Exception {
-		if (userId > 0) {
-			String crawHtml = webCrawler.crawl(String.format(ALBUM_COUNT, userId), crawlParam);
-			Document document = Jsoup.parse(crawHtml);
-			albumTotalPage = Integer.valueOf(document.select("input#J_Totalpage").attr("value"));
-		}
-		return albumTotalPage;
+		totalPicPage = getGrilAlbumCount();
 	}
 
 	/**
@@ -90,7 +88,7 @@ class TaobaoGrilAlbumList {
 						totalPicPage = (int) (picNum / 16) + 1;
 						detailPage = new GrilPhotoDetailPage(userId, albumId, totalPicPage);
 						detailPage.getGrilPhotoDetailPage();
-						mmResultMap.put("title", realName + albumName);
+						mmResultMap.put("title", albumName);
 						mmResultMap.put("mmImageUrl", detailPage.imageSrcs);
 						mmPicList.add(mmResultMap);
 					} catch (Exception e) {
@@ -109,6 +107,20 @@ class TaobaoGrilAlbumList {
 				}
 			}
 
+		}
+	}
+
+	/**
+	 * @方法描述: 获取相册的总页数
+	 * @param userId
+	 */
+	private Integer getGrilAlbumCount() {
+		try {
+			String crawHtml = webCrawler.crawl(String.format(ALBUM_COUNT, userId), crawlParam);
+			Document document = Jsoup.parse(crawHtml);
+			return Integer.valueOf(document.select("input#J_Totalpage").attr("value"));
+		} catch (Exception e) {
+			return 0;
 		}
 	}
 }

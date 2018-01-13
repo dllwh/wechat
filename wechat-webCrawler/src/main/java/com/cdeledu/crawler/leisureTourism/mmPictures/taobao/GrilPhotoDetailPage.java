@@ -7,7 +7,19 @@ import org.json.JSONObject;
 
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 
-public class GrilPhotoDetailPage {
+/**
+ * 把今天最好的表现当作明天最新的起点．．～
+ *
+ * Today the best performance as tomorrow newest starter!
+ *
+ * @类描述: 淘女郎相册详情页
+ * @创建者: 皇族灬战狼
+ * @联系方式: duleilewuhen@sina.com
+ * @创建时间: 2017年8月27日 下午9:28:17
+ * @版本: V1.0
+ * @since: JDK 1.7
+ */
+class GrilPhotoDetailPage {
 	/** ----------------------------------------------------- Fields start */
 	/** 相册内照片的总页数 */
 	private int userID, totalPicPage = 1;
