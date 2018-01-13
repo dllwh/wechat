@@ -5,9 +5,14 @@ var dllwh = dllwh || {};
 dllwh.data = dllwh.data || {};// 用于存放临时的数据或者对象
 
 /**
+ * 回调函数 
+ */
+var callbackFunction = function(){
+	
+}
+/**
  * 全局配置
  */
-
 $.ajaxSetup({
 	dataType: "json",
 	cache: false,
@@ -39,6 +44,7 @@ $.ajaxSetup({
 		} else if(textStatus=="parsererror"){
 			dialogAlert("网络问题，请稍候重试...", "error");
 		}
+		callbackFunction();
 	}
 });
 
@@ -54,9 +60,8 @@ dllwh.getRootPath = function() {
 	// 获取主机地址，如： http://localhost:8083
 	var localhostPaht = curWwwPath.substring(0, pos);
 	// 获取带"/"的项目名，如：/uimcardprj
-	var projectName = pathName
-			.substring(0, pathName.substr(1).indexOf('/') + 1);
-	return (localhostPaht + projectName);
+	var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+	return (localhostPaht + projectName) + "/";
 }
 
 /**
