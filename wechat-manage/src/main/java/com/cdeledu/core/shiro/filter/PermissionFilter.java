@@ -65,7 +65,7 @@ public class PermissionFilter extends PermissionsAuthorizationFilter {
 				logger.debug("当前用户没有操作权限，并且是Ajax请求！");
 			}
 			resultMap.put("success", false);
-			resultMap.put("msg", "操作失败:您没有权限");
+			resultMap.put("msg", "您未被授权使用该功能，请联系管理员进行处理。");
 			FilterHelper.out(response, resultMap);
 			return Boolean.FALSE;
 		}
@@ -76,16 +76,17 @@ public class PermissionFilter extends PermissionsAuthorizationFilter {
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response)
 			throws IOException {
-
-		Subject subject = getSubject(request, response);
-		if (null == subject.getPrincipal()) {// 表示没有登录，重定向到登录页面
-			saveRequest(request);
-			WebUtils.issueRedirect(request, response, FilterHelper.LOGIN_ACTION);
-		} else {
-			if (StringUtils.hasText(getUnauthorizedUrl())) {// 如果有未授权页面跳转过去
-				WebUtils.issueRedirect(request, response, getUnauthorizedUrl());
-			} else {// 否则返回401未授权状态码
-				WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		if (!FilterHelper.isAjax(request)) {
+			Subject subject = getSubject(request, response);
+			if (null == subject.getPrincipal()) {// 表示没有登录，重定向到登录页面
+				saveRequest(request);
+				WebUtils.issueRedirect(request, response, FilterHelper.LOGIN_ACTION);
+			} else {
+				if (StringUtils.hasText(getUnauthorizedUrl())) {// 如果有未授权页面跳转过去
+					WebUtils.issueRedirect(request, response, getUnauthorizedUrl());
+				} else {// 否则返回401未授权状态码
+					WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				}
 			}
 		}
 		return Boolean.FALSE;
