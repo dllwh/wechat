@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.dao.BaseDaoSupport;
 import com.cdeledu.model.rbac.SysRole;
+import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.RoleService;
 
 @Service("roleService")
+@SuppressWarnings("unchecked")
 public class RoleServiceImpl extends BaseClass implements RoleService {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
@@ -46,7 +48,6 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<SysRole> findForJdbcParam(SysRole record) throws Exception {
 		return (List<SysRole>) baseDao.findListForJdbcParam(prefix + "findForJdbcParam", record);
 	}
@@ -96,5 +97,14 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 			return findOneForJdbc(sysRole);
 		}
 		return sysRole;
+	}
+
+	
+	@Override
+	public List<SysUser> getUserByRole(Integer roleId) throws Exception {
+		if(roleId != null){
+			return (List<SysUser>) baseDao.findListForJdbcParam(prefix+"getUserByRole", roleId);
+		}
+		return null;
 	}
 }
