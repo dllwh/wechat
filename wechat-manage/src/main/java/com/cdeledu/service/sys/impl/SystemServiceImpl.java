@@ -1,5 +1,8 @@
 package com.cdeledu.service.sys.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -10,12 +13,15 @@ import com.cdeledu.dao.BaseDaoSupport;
 import com.cdeledu.model.system.SysLogEntity;
 import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.sys.SystemService;
+import com.cdeledu.util.database.model.TableProperty;
 
 @Service("systemService")
 @Transactional(readOnly = false)
+@SuppressWarnings("unchecked")
 public class SystemServiceImpl extends BaseClass implements SystemService {
 
 	private static final long serialVersionUID = 1L;
+	private static final String sysTable = "com.cdeledu.model.system.SysLogEntity.";
 	@Resource
 	private BaseDaoSupport<?> baseDao;
 
@@ -35,5 +41,30 @@ public class SystemServiceImpl extends BaseClass implements SystemService {
 		} catch (Exception e) {
 			error(getClass(), "添加登录/退出日志出现异常", e);
 		}
+	}
+
+	@Override
+	public List<TableProperty> getTablesList() {
+		try {
+			return (List<TableProperty>) baseDao.findListForJdbcParam(sysTable + "getTablesList");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public String getTableFrameWork(String tableName) {
+		Map<String, Object> tableFrameWork = null;
+		try {
+			tableFrameWork = (Map<String, Object>) baseDao
+					.findListForJdbcParam(sysTable + "getTableFrameWork", tableName);
+			if (tableFrameWork.containsKey("Create Table")) {
+				return tableFrameWork.get("Create Table").toString();
+			}
+		} catch (Exception e) {
+
+		}
+		return "";
 	}
 }

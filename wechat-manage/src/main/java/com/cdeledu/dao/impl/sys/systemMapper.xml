@@ -89,4 +89,19 @@
 			</if>
 		</trim>
 	</insert>
+	
+	<select id="getTablesList" resultType="com.cdeledu.util.database.model.TableProperty">
+		SELECT
+			table_name AS tableName,
+			IFNULL(TABLE_COMMENT, table_name) AS tableComment
+		FROM INFORMATION_SCHEMA.TABLES
+		WHERE TABLE_TYPE LIKE '%table%' AND table_schema = 'db_wechat'
+		ORDER BY table_name
+	</select>
+	
+	
+	<select id="getTableFrameWork" parameterType="java.lang.String" statementType="STATEMENT" 
+		resultType="java.util.Map">
+		SHOW CREATE TABLE ${_parameter}
+	</select>
 </mapper>

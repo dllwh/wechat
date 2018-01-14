@@ -377,7 +377,7 @@ public class DataTableHelper {
 			info.setTableName(rs.getString("TABLE_NAME"));// 列对应的表名
 			info.setCategory(rs.getString("TABLE_CAT"));// 表类别(可为null)
 			info.setTableName(rs.getString("TABLE_SCHEM")); // 表模式（可能为空）,在oracle中获取的是命名空间,其它数据库未知
-			info.setRemarks(rs.getString("REMARKS")); // 表备注
+			info.setTableComment(rs.getString("REMARKS")); // 表备注
 			info.setTableType(rs.getString("TABLE_TYPE")); // 数据库表的类型
 		}
 		return info;
@@ -500,7 +500,7 @@ public class DataTableHelper {
 			} else {
 				resultMap.setNullable(true);
 			}
-			resultMap.setRemark(rs.getString("REMARKS")); // 列描述
+			resultMap.setColumnComment(rs.getString("REMARKS")); // 列描述
 			resultMap.setDefaultValue(rs.getString("COLUMN_DEF")); // 默认值
 			/**
 			 * 指示此列是否是自动递增 YES -- 该列是自动递增的 NO -- 该列不是自动递增 空字串--- 不能确定该列是否自动递增
