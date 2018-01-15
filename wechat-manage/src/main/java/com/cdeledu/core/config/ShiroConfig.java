@@ -148,7 +148,7 @@ public class ShiroConfig {
 	 * 
 	 * @return
 	 */
-	//@Bean
+	//@Bean(name="shiroRealm")
 	public ShiroRealm shiroRealm() {
 		return new ShiroRealm();
 	}
