@@ -2,6 +2,49 @@
  * 基于layer的封装
  */
 
+
+var dialogOpen = function(opt){
+	var defaults = {
+		id : 'layerForm',
+		title : '',
+		width: '',
+		height: '',
+		url : null,
+		scroll : false,
+		data : {},
+		success: function(){},
+		yes: function(){}
+	}
+	
+	var option = $.extend({}, defaults, opt);
+	
+	if(option.scroll){
+		content = [opt.url]
+	}else{
+		content = [opt.url, 'no']
+	}
+	
+	layer.open({
+		id : option.id,
+		type: 2,
+		title : option.title,
+		shadeClose: true,
+		move : false,
+		shade: 0.3,
+		anim: -1,
+		isOutAnim: false,
+		resize :false,
+		shadeClose : false,
+		closeBtn :2,
+		area : [option.width, option.height],
+		btn: ['确定', '取消'],
+		maxmin: true,
+		content : content,
+		success:option.success,
+		yes:option.yes
+	}); 
+}
+
 /**
  * @方法描述 原始核心方法:页面层
  */
