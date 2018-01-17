@@ -22,17 +22,12 @@ var sysUser = {
 		if (this.check()) {
 		}
 	},
-	openDeleleDig : function() {// 点击修改按钮时
+	openDeleleDig : function() {// 点击删除按钮时
 		if (this.check()) {
 		}
 	},
-	deleteClick : function() { // 删除
-		if (this.check()) {
-		}
-	},
-	enableClick : function() {// 启用
-		if (this.check()) {
-		}
+	viewClick : function() {// 查看
+
 	},
 	disableClick : function() {// 禁用
 		if (this.check()) {
@@ -54,16 +49,11 @@ var sysUser = {
 		if (this.check()) {
 		}
 	},
-	searchClick : function() { // 搜索
-
+	enableClick : function() {// 启用
+		if (this.check()) {
+		}
 	},
-	refreshClick : function() { // 刷新
-
-	},
-	resetSearch : function() {// 重置搜索条件
-
-	},
-	roleAssign : function() {// 点击角色分配
+	roleAssignClick : function() {// 点击角色分配
 		if (this.check()) {
 		}
 	},
@@ -73,9 +63,14 @@ var sysUser = {
 	exportClick : function() {// 导出
 
 	},
-	resetPwdClick : function() {// 重置密码
-		if (this.check()) {
-		}
+	searchClick : function() { // 搜索
+
+	},
+	refreshClick : function() { // 刷新
+
+	},
+	resetSearch : function() {// 重置搜索条件
+
 	}
 };
 
@@ -105,6 +100,12 @@ var sysUserInfoDlg = {
  * 创建
  */
 sysUser.addSubmitClick = function() {
+
+};
+/**
+ * 删除
+ */
+sysUser.deleteClick = function() {
 
 };
 
