@@ -25,3 +25,7 @@
 <script src="${_currConText }/plug-in/jquery-plugs/jquery.validation/messages_zh.min.js?v=1.14.0"></script>
 <script src="${_currConText }/plug-in/assets/layer/layer.js"></script>
 <script src="${_currConText }/plug-in/assets/laydate/laydate.js"></script>
+
+<%-- zTree -- jQuery 树插件 --%>
+<link rel="stylesheet" href="${_currConText }/plug-in/jquery-plugs/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="${_currConText }/plug-in/jquery-plugs/zTree/js/jquery.ztree.all-3.5.min.js"></script>
