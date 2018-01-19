@@ -2,7 +2,7 @@ package com.cdeledu.common.constants;
 
 import org.springframework.context.ApplicationContext;
 
-import com.cdeledu.util.WebUtilHelper;
+import com.cdeledu.support.MessageAccessor;
 
 /**
  * @类描述: 全局配置类、系统常量
@@ -76,7 +76,8 @@ public class GlobalConstants {
 	 * 是否是演示模式，演示模式下不能修改用户、角色、密码、菜单、授权
 	 */
 	public static Boolean isDemoMode() {
-		String dm = WebUtilHelper.getConfigByName("demoMode");
+		
+		String dm = MessageAccessor.getText("demoMode");
 		return "true".equals(dm) || "1".equals(dm);
 	}
 
