@@ -7,7 +7,7 @@ dllwh.data = dllwh.data || {};// 用于存放临时的数据或者对象
 /**
  * 回调函数 
  */
-var callbackFunction = function(){
+var callbackFunHandler = function(){
 	
 }
 /**
@@ -44,7 +44,7 @@ $.ajaxSetup({
 		} else if(textStatus=="parsererror"){
 			dialogAlert("网络问题，请稍候重试...", "error");
 		}
-		callbackFunction();
+		callbackFunHandler();
 	}
 });
 
