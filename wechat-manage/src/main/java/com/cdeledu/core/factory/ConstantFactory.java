@@ -1,7 +1,5 @@
 package com.cdeledu.core.factory;
 
-import java.util.ResourceBundle;
-
 import com.cdeledu.core.shiro.service.ShiroService;
 import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.service.sys.SysAreaService;
@@ -21,7 +19,6 @@ import com.cdeledu.util.SpringContextUtil;
  * @since: JDK 1.7
  */
 public final class ConstantFactory {
-	public static final ResourceBundle sysConfig = ResourceBundle.getBundle("properties/sysConfig");
 	/** 管理用户业务处理层 */
 	public static ManagerUserService userService = SpringContextUtil.getBean("managerUserService");
 	/** 菜单业务处理层 */

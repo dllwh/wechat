@@ -1,7 +1,6 @@
 package com.cdeledu.util;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,21 +27,10 @@ import com.cdeledu.service.sys.SysMenuService;
  */
 public class WebUtilHelper {
 	/** ----------------------------------------------------- Fields start */
-	private static final ResourceBundle sysConfig = ConstantFactory.sysConfig;
 	private static ManagerUserService userService = ConstantFactory.userService;
 	private static SysMenuService sysMenuService = ConstantFactory.sysMenuService;
 
 	/** ----------------------------------------------------- Fields end */
-
-	/**
-	 * @方法:获取项目配置文件参数
-	 * @创建人:独泪了无痕
-	 * @param name
-	 * @return
-	 */
-	public static final String getConfigByName(String name) {
-		return sysConfig.getString(name);
-	}
 
 	/**
 	 * @方法:SpringMvc下获取request,尝试获取当前请求的HttpServletRequest实例
