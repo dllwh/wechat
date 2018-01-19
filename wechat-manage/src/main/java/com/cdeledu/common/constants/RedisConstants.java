@@ -23,19 +23,31 @@ public final class RedisConstants {
 
 	/** ----------------------------------------------- [失效时间] */
 	/** 缓存时效 1分钟 */
-	int RREDIS_EXP_MINUTE = 60;
+	public static final int RREDIS_EXP_MINUTE = 60;
 	/** 缓存时效 10分钟 */
-	int RREDIS_EXP_MINUTES = 60 * 10;
+	public static final int RREDIS_EXP_MINUTES = 60 * 10;
 	/** 缓存时效 60分钟 */
-	int RREDIS_EXP_HOURS = 60 * 60;
+	public static final int RREDIS_EXP_HOURS = 60 * 60;
 	/** 缓存时效 半天 */
-	int RREDIS_EXP_HALF_DAY = 3600 * 12;
+	public static final int RREDIS_EXP_HALF_DAY = 3600 * 12;
 	/** 缓存时效 1天 */
-	int RREDIS_EXP_DAY = 3600 * 24;
+	public static final int RREDIS_EXP_DAY = 3600 * 24;
 	/** 缓存时效 1周 */
-	int RREDIS_EXP_WEEK = 3600 * 24 * 7;
+	public static final int RREDIS_EXP_WEEK = 3600 * 24 * 7;
 	/** 缓存时效 1月 */
-	int RREDIS_EXP_MONTH = 3600 * 24 * 30 * 7;
-
+	public static final int RREDIS_EXP_MONTH = 3600 * 24 * 30 * 7;
 	/** ----------------------------------------------- [自定义的各种key] */
+	/** 存放uid的对象前缀 */
+	public static final String SHIRO_SESSION_PRE = "shiro_sessionid:";
+	/** 存放uid当前状态状态的前缀 uid */
+	public static final String UID_PRE = "uid:";
+	/** 存放用户信息uid */
+	public static final String USER_PRE = "user:";
+	/** 存放用户权限的前缀 */
+	public static final String PERMISSION_PRE = "permission:";
+	/** 角色中的权限 */
+	public static final String ROLE_PRE = "role:";
+	/** 字典缓存前缀 */
+	public static final String DICT_PRE = "dict:";
+	
 }
