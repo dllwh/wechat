@@ -91,14 +91,22 @@
 		</property>
 	</bean>
 
+	<bean id="messageSourceAccessor"
+		class="org.springframework.context.support.MessageSourceAccessor">
+		<constructor-arg index="0"
+			type="org.springframework.context.MessageSource" ref="messageSource" />
+	</bean>
+	
+
 	<!-- 国际化的消息资源文件 -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
 				<!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找 -->
-				<value>/properties/myResources/message</value>
-				<value>/properties/myResources/content</value>
+				<value>classpath:properties/myResources/message</value>
+				<value>classpath:properties/myResources/content</value>
+				<value>classpath:properties/sysConfig</value>
 			</list>
 		</property>
 		<property name="defaultEncoding" value="UTF-8" />
