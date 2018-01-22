@@ -137,4 +137,26 @@
 	<select id="countMenuChildren" resultType="int">
 		SELECT COUNT(1) FROM sys_menu WHERE isEnabled = 1 AND isVisible = 1 AND parentCode = #{id}
 	</select>
+	
+	<select id="getButtonPermsByUserId" parameterType="com.cdeledu.model.rbac.SysUser" 
+		resultType="java.lang.String">
+		SELECT 
+			DISTINCT sm.perms FROM sys_menu sm 
+		INNER JOIN sys_role_menu srm ON srm.menuId = sm.id
+		INNER JOIN sys_user_role sur ON sur.roleId = srm.roleId
+		WHERE 
+				sm.isEnabled = 1 
+			AND sm.isVisible = 1
+			AND sm.perms != ''
+			AND sur.userId = #{id}
+	</select>
+	
+	<select id="hasRole" parameterType="int" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			sys_role_menu srm
+		INNER JOIN sys_role sr ON sr.id = srm.roleId
+		WHERE sr.isEnabled = 1 AND sr.isVisible = 1 AND srm.menuId = #{id}
+	</select>
 </mapper>

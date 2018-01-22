@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.cdeledu.common.base.BaseClass;
 import com.cdeledu.dao.BaseDaoSupport;
 import com.cdeledu.model.rbac.SysRole;
+import com.cdeledu.model.rbac.SysRoleMenu;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.RoleService;
+import com.cdeledu.util.WebUtilHelper;
 
 @Service("roleService")
 @SuppressWarnings("unchecked")
@@ -25,6 +27,8 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 	/** ----------------------------------------------------- Fields end */
 
 	public Integer insert(SysRole record) throws Exception {
+		record.setCreate(WebUtilHelper.getCurrentUserId());
+		record.setModifier(WebUtilHelper.getCurrentUserId());
 		return baseDao.insert(prefix + "insertSelective", record);
 	}
 
@@ -106,5 +110,22 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 			return (List<SysUser>) baseDao.findListForJdbcParam(prefix+"getUserByRole", roleId);
 		}
 		return null;
+	}
+
+	@Override
+	public Integer saveRoleAccess(Integer roleId, Integer menuID) throws Exception {
+		SysRoleMenu sysRoleMenu = new SysRoleMenu();
+		sysRoleMenu.setRoleId(roleId);
+		sysRoleMenu.setPowerId(menuID);
+		return baseDao.insert(prefix + "saveRoleAccess", sysRoleMenu);
+	}
+
+	@Override
+	public Integer delRoleAccess(Integer roleId) {
+		try {
+			return baseDao.delete(prefix + "delRoleAccess", roleId);
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 }

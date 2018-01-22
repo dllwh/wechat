@@ -10,7 +10,7 @@ public interface RoleService extends BaseService<SysRole> {
 	/** 该角色下是否有菜单 */
 	boolean hasMenuByRole(int roleID);
 
-	/** 该角色下是用户 */
+	/** 该角色是否有用户 */
 	boolean hasUserByRole(int roleID);
 
 	/** 通过RoleCode查询Role是否存在,存在则返回true,否则false； */
@@ -21,4 +21,10 @@ public interface RoleService extends BaseService<SysRole> {
 
 	/** 通过角色获取用户列表 */
 	List<SysUser> getUserByRole(Integer roleId) throws Exception;
+
+	/** 角色授权 */
+	Integer saveRoleAccess(Integer roleId, Integer menuID) throws Exception;
+
+	/** 删除权限 */
+	Integer delRoleAccess(Integer roleId);
 }

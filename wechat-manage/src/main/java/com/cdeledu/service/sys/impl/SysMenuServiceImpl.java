@@ -1,6 +1,7 @@
 package com.cdeledu.service.sys.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.common.constants.SystemConstant.SysMenuType;
 import com.cdeledu.dao.BaseDaoSupport;
+import com.cdeledu.model.easyui.EasyUITreeNode;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SysMenuService;
@@ -105,6 +107,31 @@ public class SysMenuServiceImpl implements SysMenuService {
 		return baseDao.getCountForJdbcParam(prefix + "countMenuChildren", id) > 0 ? true : false;
 	}
 
+	@Override
+	public List<SysMenu> getMenuPermsByParentCode(Integer parentId) throws Exception {
+		return null;
+	}
+
+	@Override
+	public SysMenu findOneById(Integer id) throws Exception {
+		return null;
+	}
+
+	@Override
+	public boolean hasRole(int id) throws Exception {
+		return false;
+	}
+
+	@Override
+	public List<EasyUITreeNode> getMenuEasyUITree() throws Exception {
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> getMenuZTree(Integer roleId) throws Exception {
+		return null;
+	}
+
 	/**
 	 * ----------------------------------------------------- privateMethod start
 	 */
@@ -147,8 +174,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 		List<SysMenu> userMenuList = Lists.newArrayList();
 		for (SysMenu menu : rootMenuList) {
 			if (menuIdList.contains(menu.getId())) {
-				if(menu.getType() == SysMenuType.MENU.getValue()){// 是菜单
-					if(StringUtils.isNotBlank(menu.getMenuUrl())){
+				if (menu.getType() == SysMenuType.MENU.getValue()) {// 是菜单
+					if (StringUtils.isNotBlank(menu.getMenuUrl())) {
 						userMenuList.add(menu);
 					}
 				} else {

@@ -17,7 +17,6 @@ import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.service.sys.RoleService;
-import com.cdeledu.util.WebUtilHelper;
 
 /**
  * @类描述: 角色处理类
@@ -52,8 +51,6 @@ public class RoleOperateController extends BaseController {
 				resultMsg.setMsg(MessageConstant.EXISTED);
 				resultMsg.setResultCode(201);
 			} else {
-				role.setCreate(WebUtilHelper.getCurrentUserId());
-				role.setModifier(WebUtilHelper.getCurrentUserId());
 				roleService.insert(role);
 			}
 		} catch (Exception e) {

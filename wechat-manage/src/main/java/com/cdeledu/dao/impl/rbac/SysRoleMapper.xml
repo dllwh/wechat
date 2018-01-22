@@ -121,4 +121,26 @@
 		resultType="java.lang.Integer">
 		select count(*) from sys_role where roleCode = #{id} and isEnabled = 1
 	</select>
+	
+	<insert id="saveRoleAccess" parameterType="com.cdeledu.model.rbac.SysRoleMenu">
+		INSERT INTO sys_role_menu(roleId,menuId) VALUES (#{roleId},#{powerId});
+	</insert>
+	
+	<select id="getUserByRole" parameterType="java.lang.Integer" 
+		resultType="com.cdeledu.model.rbac.SysUser">
+		SELECT
+			su.id,
+			su.userName,
+			su.realName,
+			su.nickName
+		FROM
+			sys_user su
+		INNER JOIN sys_user_role sur ON sur.userId = su.id
+		WHERE
+			sur.roleId = #{roleId}
+	</select>
+	
+	<delete id="delRoleAccess" parameterType="int">
+		DELETE FROM sys_role_menu WHERE roleId !=1 AND roleId = #{roleId}
+	</delete>
 </mapper>
