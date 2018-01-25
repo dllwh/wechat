@@ -67,11 +67,11 @@ table {
 							</div>
 						</div>
 						<div class="ibox-content">
-							<table cellpadding="5" cellspacing="1" class="detail">
+							<table style="border-collapse:collapse;border-spacing:1px;padding:5px;" class="detail">
 								<tbody>
 									<tr>
 										<td height="34" colspan="3" bgcolor="#458B74">
-											<table class="col-sm-12"  border="0" cellspacing="1" cellpadding="1">
+											<table class="col-sm-12" style="border:0px;border-collapse:collapse;border-spacing:1px;padding:1px;">
 												<tbody>
 													<tr>
 														<td width="71%">
