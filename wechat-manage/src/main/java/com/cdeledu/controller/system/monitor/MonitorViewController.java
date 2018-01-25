@@ -1,5 +1,9 @@
 package com.cdeledu.controller.system.monitor;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,7 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.property.SystemHelper;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.shiro.token.ShiroHelper;
+import com.cdeledu.util.apache.lang.DateUtilHelper;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -38,6 +45,24 @@ public class MonitorViewController extends BaseController {
 	@RequestMapping(value = "serverInfo")
 	public ModelAndView serverInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mv = this.getModelAndView();
+		// 最大内存
+		mv.addObject("JVMmaxMem", SystemHelper.JVMmaxMem());
+		// 已用内存
+		mv.addObject("JVMtotalMem", SystemHelper.JVMtotalMem());
+		// 可用内存
+		mv.addObject("JVMfreeMem", SystemHelper.JVMfreeMem());
+		// 语言环境名
+		mv.addObject("Language", Locale.getDefault().getDisplayName());
+		RuntimeMXBean runtimeMXBean =  ManagementFactory.getRuntimeMXBean();
+		// 程序运行时间
+		long runningTime =  System.currentTimeMillis()-runtimeMXBean.getStartTime();
+		mv.addObject("runningTime", DateUtilHelper.formatSeconds(runningTime/1000));
+		mv.addObject("hostIP", SystemHelper.getHostIP());
+		mv.addObject("SessionID",ShiroHelper.getSession().getId());
+		mv.addObject("osName",SystemHelper.OS_NAME);
+		mv.addObject("osVersion",SystemHelper.OS_VERSION);
+		mv.addObject("osType",SystemHelper.SUN_DESKTOP);
+		mv.addObject("currentTime",DateUtilHelper.getCurrentTime());
 		mv.setViewName("system/monitor/server/serverInfo");
 		return mv;
 	}
