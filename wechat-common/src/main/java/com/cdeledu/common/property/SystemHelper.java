@@ -4,7 +4,6 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
@@ -70,49 +69,59 @@ public class SystemHelper {
 	 * @return
 	 */
 	public static String getHostIP() {
-		String hostIP = "";
+		String localip = "";
+		InetAddress ip = null;
+		List<InterfaceAddress> addressList = null;
 		try {
+			// 获得本机的所有网络接口
 			Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-			for (NetworkInterface netint : Collections.list(nets)) {
-				if (null != netint.getHardwareAddress()) {
-					List<InterfaceAddress> list = netint.getInterfaceAddresses();
-					for (InterfaceAddress interfaceAddress : list) {
-						InetAddress ip = interfaceAddress.getAddress();
-						if (ip instanceof Inet4Address) {
-							hostIP += interfaceAddress.getAddress().toString();
+
+			while (nets.hasMoreElements()) {
+				NetworkInterface netint = (NetworkInterface) nets.nextElement();
+
+				addressList = netint.getInterfaceAddresses();
+				for (InterfaceAddress interfaceAddress : addressList) {
+					ip = interfaceAddress.getAddress();
+					if (ip instanceof Inet4Address) { // 只关心 IPv4 地址
+						if (ip.isSiteLocalAddress() && !ip.isLoopbackAddress()
+								&& ip.getHostAddress().indexOf(":") == -1) {
+							localip = ip.getHostAddress();
+						} else {
+							localip += ip;
 						}
 					}
 				}
+
 			}
-			hostIP = hostIP.replaceAll("null", "");
+			localip = localip.replaceAll("null", "");
 		} catch (Exception e) {
 			System.out.println("获取服务器IP出错");
 		}
-		return hostIP;
+		return localip;
 	}
 
 	/**
-	 * 获取JVM内存总量:系统总内存空间
+	 * 获取JVM内存总量:系统总内存空间--已用内存(MB)
 	 *
 	 */
 	public final static long JVMtotalMem() {
-		return Runtime.getRuntime().totalMemory() / 1024;
+		return Runtime.getRuntime().totalMemory() / 1024 / 1024;
 	}
 
 	/**
-	 * 虚拟机空闲内存量:系统内存的空闲空间
+	 * 虚拟机空闲内存量:系统内存的空闲空间--可用内存(MB)
 	 *
 	 */
 	public final static long JVMfreeMem() {
-		return Runtime.getRuntime().freeMemory() / 1024;
+		return Runtime.getRuntime().freeMemory() / 1024 / 1024;
 	}
 
 	/**
-	 * 虚拟机使用最大内存量
+	 * 虚拟机使用最大内存量--最大内存(MB)
 	 *
 	 */
 	public final static long JVMmaxMem() {
-		return Runtime.getRuntime().maxMemory() / 1024;
+		return Runtime.getRuntime().maxMemory() / 1024 / 1024;
 	}
 
 	/**
