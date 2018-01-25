@@ -76,7 +76,7 @@
 						</label>
 						<div class="col-sm-9">
 							<input type="text" name="移动电话" disabled="disabled"
-								value="${currentUser.mobile }" class="col-xs-7 text_info"/>
+								value="${currentUser.mobile }" class="col-xs-8 text_info"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -85,7 +85,7 @@
 						</label>
 						<div class="col-sm-9">
 							<input type="text" name="电子邮箱" disabled="disabled" 
-								value="${currentUser.email }" class="col-xs-7 text_info" />
+								value="${currentUser.email }" class="col-xs-8 text_info" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -94,7 +94,7 @@
 						</label>
 						<div class="col-sm-9">
 							<input type="text" name="QQ" disabled="disabled"
-								value="1349310440" class="col-xs-7 text_info" />
+								value="1349310440" class="col-xs-8 text_info" />
 						</div>
 					</div>
 					<div class="form-group">
