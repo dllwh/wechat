@@ -488,10 +488,10 @@ public class DateUtilHelper extends DateUtils {
 	 *        </ul>
 	 * @创建者: 皇族灬战狼
 	 * @创建时间: 2016年3月7日 下午3:36:50
-	 * @param time
+	 * @param time 秒数
 	 * @return
 	 */
-	public static String secToTime(int time) {
+	public static String secToTime(long time) {
 		String hour = "00";
 		String minute = "00";
 		String second = "00";
@@ -509,6 +509,30 @@ public class DateUtilHelper extends DateUtils {
 		return hour + ":" + minute + ":" + second;
 	}
 
+	/**
+	 * @方法描述: 整数(秒数)转换为时分秒格式(xx:xx:xx)
+	 * @param seconds 秒数
+	 * @return
+	 */
+	public static String formatSeconds(long seconds) {
+		String timeStr = seconds + "秒";
+		if (seconds > 60) {
+			long second = seconds % 60;
+			long min = seconds / 60;
+			timeStr = min + "分" + second + "秒";
+			if (min > 60) {
+				min = (seconds / 60) % 60;
+				long hour = (seconds / 60) / 60;
+				timeStr = hour + "小时" + min + "分" + second + "秒";
+				if (hour > 24) {
+					hour = ((seconds / 60) / 60) % 24;
+					long day = (((seconds / 60) / 60) / 24);
+					timeStr = day + "天" + hour + "小时" + min + "分" + second + "秒";
+				}
+			}
+		}
+		return timeStr;
+	} 
 	/**
 	 * @方法描述: 根据日期获取星期
 	 * @param strdate
