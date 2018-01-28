@@ -11,8 +11,28 @@ package com.cdeledu.core.redis;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class RedisKeys {
+public final class RedisKeys {	
+	/**
+	 * @方法:获取Redis配置的key
+	 * @创建人:独泪了无痕
+	 * @param key
+	 * @return
+	 */
 	public static String getSysConfigKey(String key) {
 		return "sys:config:" + key;
+	}
+	
+	public static String getTokenKey(String key) {
+		return "sys:token:" + key;
+	}
+
+	/**
+	 * @方法:获取Redis Shiro配置的key
+	 * @创建人:独泪了无痕
+	 * @param key
+	 * @return
+	 */
+	public static String getShiroSessionKey(String key) {
+		return "sessionid:" + key;
 	}
 }
