@@ -1,5 +1,8 @@
 package com.cdeledu.service.sys;
 
+import com.cdeledu.common.base.BaseService;
+import com.cdeledu.model.system.ScheduleJobLog;
+
 /**
  * 把今天最好的表现当作明天最新的起点．．～
  *
@@ -12,6 +15,6 @@ package com.cdeledu.service.sys;
  * @since: JDK 1.7
  * @see <a href="">TODO(连接内容简介)</a>
  */
-public interface ScheduleJobLogService {
+public interface ScheduleJobLogService extends BaseService<ScheduleJobLog> {
 
 }

@@ -28,25 +28,25 @@ public interface ScheduleJobService {
 	/**
 	 * @方法描述 : 批量删除定时任务
 	 */
-	void deleteBatch(Integer[] jobIds);
+	void deleteBatch(Long[] jobIds);
 
 	/**
 	 * 批量更新定时任务状态
 	 */
-	int updateBatch(Integer[] jobIds, int status);
+	int updateBatch(Long[] jobIds, int status);
 
 	/**
 	 * 立即执行
 	 */
-	void run(Integer[] jobIds);
+	void run(Long[] jobIds);
 
 	/**
 	 * 暂停运行
 	 */
-	void pause(Integer[] jobIds);
+	void pause(Long[] jobIds);
 
 	/**
 	 * 恢复运行
 	 */
-	void resume(Integer[] jobIds);
+	void resume(Long[] jobIds);
 }

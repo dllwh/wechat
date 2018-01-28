@@ -1,10 +1,13 @@
 package com.cdeledu.controller.system.monitor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.system.ScheduleJobLog;
+import com.cdeledu.service.sys.ScheduleJobLogService;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -22,6 +25,8 @@ import com.cdeledu.controller.BaseController;
 public class ScheduleJobLogController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
+	@Autowired
+	private ScheduleJobLogService scheduleJobLogService;
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [公共方法] */
@@ -29,8 +34,12 @@ public class ScheduleJobLogController extends BaseController {
 	 * 定时任务日志列表
 	 */
 	@RequestMapping("/list")
-	public void list(){
-		
+	public void list(ScheduleJobLog scheduleJobLog){
+		try {
+			scheduleJobLogService.findForJdbcParam(scheduleJobLog);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * 定时任务日志信息

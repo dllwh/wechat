@@ -1,8 +1,11 @@
 package com.cdeledu.model.system;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.baomidou.mybatisplus.annotations.TableName;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -15,11 +18,20 @@ import org.hibernate.validator.constraints.NotBlank;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class ScheduleJob {
+@TableName("sys_schedule_job")
+public class ScheduleJob implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 任务调度参数key
+	 */
+	public static final String JOB_PARAM_KEY = "JOB_PARAM_KEY";
 	private Integer id;
 	@NotBlank(message = "bean名称不能为空")
 	private String beanName;
 	@NotBlank(message = "方法名称不能为空")
+	/** 参数 */
+	private String params;
 	private String methodName;
 	@NotBlank(message = "cron表达式不能为空")
 	private String cronExpression;
@@ -44,6 +56,14 @@ public class ScheduleJob {
 
 	public void setBeanName(String beanName) {
 		this.beanName = beanName;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
 	}
 
 	public String getMethodName() {

@@ -1,10 +1,15 @@
 package com.cdeledu.controller.system.monitor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.system.ScheduleJob;
+import com.cdeledu.service.sys.ScheduleJobService;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -22,7 +27,10 @@ import com.cdeledu.controller.BaseController;
 public class ScheduledController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
+	@Autowired
+	private ScheduleJobService scheduleJobService;
 
+	/** ----------------------------------------------------- Fields end */
 	@RequestMapping("")
 	public ModelAndView index() {
 		ModelAndView mv = this.getModelAndView();
@@ -30,7 +38,6 @@ public class ScheduledController extends BaseController {
 		return mv;
 	}
 
-	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法描述 : 定时任务列表
 	 */
@@ -50,53 +57,61 @@ public class ScheduledController extends BaseController {
 	/**
 	 * @方法描述 :保存定时任务
 	 */
-	@RequestMapping("/save")
-	public void save() {
-
+	@RequestMapping("save")
+	public AjaxJson save(@RequestBody ScheduleJob scheduleJob) {
+		AjaxJson ajaxJson = new AjaxJson();
+		scheduleJobService.save(scheduleJob);
+		return ajaxJson;
 	}
 
 	/**
 	 * @方法描述 :修改定时任务
 	 */
-	@RequestMapping("/update")
-	public void update() {
-
+	@RequestMapping("update")
+	public AjaxJson update(@RequestBody ScheduleJob scheduleJob) {
+		AjaxJson ajaxJson = new AjaxJson();
+		scheduleJobService.update(scheduleJob);
+		return ajaxJson;
 	}
 
 	/**
 	 * @方法描述 :删除定时任务
 	 */
-	@RequestMapping("/delete")
-	public void delete() {
-
+	@RequestMapping("delete")
+	public AjaxJson delete(@RequestBody Long[] jobIds) {
+		AjaxJson ajaxJson = new AjaxJson();
+		scheduleJobService.deleteBatch(jobIds);
+		return ajaxJson;
 	}
 
 	/**
 	 * @方法描述 : 立即执行任务
 	 */
-	@RequestMapping("/run")
-	public void run() {
-
+	@RequestMapping("run")
+	public AjaxJson run(@RequestBody Long[] jobIds) {
+		AjaxJson ajaxJson = new AjaxJson();
+		scheduleJobService.run(jobIds);
+		return ajaxJson;
 	}
 
 	/**
 	 * @方法描述 : 暂停定时任务
 	 */
-	@RequestMapping("/pause")
-	public void pause() {
-
+	@RequestMapping("pause")
+	public AjaxJson pause(@RequestBody Long[] jobIds) {
+		AjaxJson ajaxJson = new AjaxJson();
+		scheduleJobService.pause(jobIds);
+		return ajaxJson;
 	}
 
 	/**
 	 * @方法描述 :恢复定时任务
 	 */
-	@RequestMapping("/resume")
-	public void resume() {
-
+	@RequestMapping("resume")
+	public AjaxJson resume(@RequestBody Long[] jobIds) {
+		AjaxJson ajaxJson = new AjaxJson();
+		scheduleJobService.resume(jobIds);
+		return ajaxJson;
 	}
-	/** ----------------------------------------------- [私有方法] */
-	/** ----------------------------------------------- [私有方法] */
-
-	/** ----------------------------------------------- [测试方法] */
-	/** ----------------------------------------------- [测试方法] */
+	
 }
