@@ -8,15 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.CredentialsException;
-import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -58,53 +57,23 @@ public class GlobalExceptionHandler {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/** ----------------------------------------------------- Fields end */
-	/**
-	 * 
-	 * @方法描述 : 用户未登录
-	 * @param e
-	 * @return
-	 */
-	@ExceptionHandler(AuthenticationException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public void unAuth(AuthenticationException e) {
+
+	@ExceptionHandler(DuplicateKeyException.class)
+	public void handleDuplicateKeyException(DuplicateKeyException e){
 		if (logger.isDebugEnabled()) {
-			logger.error("用户未登陆：", e);
+			logger.error("数据库中已存在该记录：", e);
 		}
 	}
-
-	/**
-	 * @方法描述 : 账号被冻结
-	 * @param e
-	 */
-	@ExceptionHandler(DisabledAccountException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public void accountLocked(AuthenticationException e) {
-		if (logger.isDebugEnabled()) {
-			logger.error("账号被冻结：", e);
-		}
-	}
-
-	/**
-	 * @方法描述 : 账号密码错误
-	 * @param e
-	 */
-	@ExceptionHandler(CredentialsException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public void credentials(AuthenticationException e) {
-		if (logger.isDebugEnabled()) {
-			logger.error("账号密码错误：", e);
-		}
-	}
-
+	
 	/**
 	 * @方法描述 : 无权访问该资源
 	 * @param e
 	 */
-	@ExceptionHandler(UndeclaredThrowableException.class)
+	@ExceptionHandler(value = {UndeclaredThrowableException.class,AuthorizationException.class})
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public void credentials(UndeclaredThrowableException e) {
 		if (logger.isDebugEnabled()) {
-			logger.error("无权访问该资源：", e);
+			logger.error("没有权限，请联系管理员授权：", e);
 		}
 	}
 
