@@ -17,6 +17,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
@@ -37,6 +38,7 @@ import com.google.common.collect.Sets;
  * @版本: V1.0
  * @since: JDK 1.7
  */
+@Component
 public class ShiroRealm extends AuthorizingRealm {
 	@Autowired
 	private ManagerUserService userService;
