@@ -68,7 +68,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="bottom">Copyright &copy; 2016 - 2017 </div>
+		<div class="bottom">Copyright &copy; 2016 - <span id="curentYear"></span> </div>
 	</div>
 </div>
 
@@ -78,5 +78,8 @@
 <script src="${_currConText }/plug-in/login/js/supersized-init.js"></script>
 <script src="${_currConText }/plug-in/login/js/scripts.js"></script>
 <script src="${_currConText }/plug-in/login/js/jquery-jrumble.js"></script>
+<script type="text/javascript">
+	$("#curentYear").html(new Date().getFullYear());
+</script>
 </body>
 </html>

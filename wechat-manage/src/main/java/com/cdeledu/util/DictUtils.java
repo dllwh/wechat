@@ -77,19 +77,6 @@ public class DictUtils {
 	}
 
 	/**
-	 * @方法描述 : 获取行政区域的树形菜单
-	 * @return
-	 */
-	public static String getSysAreaTree() {
-		try {
-			return JsonMapper.toJsonString(sysAreaService.getSysAreaTree());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	/**
 	 * @方法描述 : 获取行政区域
 	 * @return
 	 */

@@ -65,15 +65,7 @@
 
 
 
-	<!-- =====================================行政区域============================================ -->
-	<function>
-		<description>获取全部的行政区域</description>
-		<name>getSysAreaTree</name>
-		<function-class>com.cdeledu.util.DictUtils</function-class>
-		<function-signature>java.util.List getSysAreaTree()</function-signature>
-		<example>${dict:getSysAreaTree()}</example>
-	</function>
-	
+	<!-- =====================================行政区域============================================ -->	
 	<function>
 		<description>获取省级行政区域</description>
 		<name>getProvinceArea</name>
