@@ -15,11 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 public class PageEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/** 当前页数:第几页 --pageNo */
-	protected Integer page = 1;
-	protected Integer pageNumber = 1;
-	/** 每页记录数 :pageSize(设置为“-1”表示不进行分页（分页无效）) */
-	protected Integer rows = 10;
-	protected Integer pageSize = 10;
+	protected Integer page;
+	protected Integer pageNumber;
+	/** 每页记录数 :pageSize */
+	protected Integer rows;
+	protected Integer pageSize;
 	/** 起始页 */
 	protected int startRow;
 	/** 排序字段名 */
@@ -47,7 +47,14 @@ public class PageEntity implements Serializable {
 		return page;
 	}
 
-	public void setPage(int page) {
+	public void setPage(Integer page) {
+		if (page == null) {
+			if (pageNumber != null) {
+				page = pageNumber;
+			} else {
+				page = 1;
+			}
+		}
 		this.page = page;
 	}
 
@@ -63,7 +70,15 @@ public class PageEntity implements Serializable {
 		return rows;
 	}
 
-	public void setRows(int rows) {
+	public void setRows(Integer rows) {
+
+		if (rows == null) {
+			if (pageSize != null) {
+				rows = pageSize;
+			} else {
+				rows = 10;
+			}
+		}
 		this.rows = rows;
 	}
 
@@ -85,6 +100,12 @@ public class PageEntity implements Serializable {
 	}
 
 	public void setSort(String sort) {
+		if (StringUtils.isBlank(sort)) {
+			if (StringUtils.isNotBlank(sortName)) {
+				sort = sortName;
+			}
+		}
+
 		if (hasField(sort)) {
 			this.sort = sort;
 		} else {
@@ -109,7 +130,13 @@ public class PageEntity implements Serializable {
 	}
 
 	public void setOrder(String order) {
-		if (StringUtils.isNoneBlank(order)
+		if (StringUtils.isBlank(order)) {
+			if (StringUtils.isNotBlank(sortOrder)) {
+				order = sortOrder;
+			}
+		}
+
+		if (StringUtils.isNotBlank(order)
 				&& (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
 			this.order = order;
 		} else {
