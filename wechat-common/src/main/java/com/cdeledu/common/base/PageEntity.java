@@ -1,12 +1,15 @@
 package com.cdeledu.common.base;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @类描述: 分页类
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年2月24日 上午11:16:44
- * @版本: V1.0
+ * @版本: V1.2
  * @since: JDK 1.7
  */
 public class PageEntity implements Serializable {
@@ -21,6 +24,20 @@ public class PageEntity implements Serializable {
 	protected String sort;
 	/** 按什么排序(asc,desc) */
 	protected String order;
+
+	public boolean hasField(String fieldName) {
+		if (null == fieldName) {
+			return false;
+		}
+		Field[] fields = this.getClass().getDeclaredFields();
+		for (int i = 0; i < fields.length; i++) {
+			Field field = fields[i];
+			if (field.getName().equalsIgnoreCase(fieldName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public int getPage() {
 		return page;
@@ -48,7 +65,11 @@ public class PageEntity implements Serializable {
 	}
 
 	public void setSort(String sort) {
-		this.sort = sort;
+		if (hasField(sort)) {
+			this.sort = sort;
+		} else {
+			this.sort = "";
+		}
 	}
 
 	public String getOrder() {
@@ -56,6 +77,12 @@ public class PageEntity implements Serializable {
 	}
 
 	public void setOrder(String order) {
-		this.order = order;
+		if(StringUtils.isNoneBlank(order) && (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))){
+			this.order = order;
+		} else {
+			this.order = "";
+		}
+		
 	}
+
 }
