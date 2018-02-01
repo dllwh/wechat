@@ -44,21 +44,21 @@ public class PageEntity implements Serializable {
 	}
 
 	public int getPage() {
+		if (page == null) {
+			page = (pageNumber != null) ? pageNumber : 1;
+		}
+
 		return page;
 	}
 
 	public void setPage(Integer page) {
-		if (page == null) {
-			if (pageNumber != null) {
-				page = pageNumber;
-			} else {
-				page = 1;
-			}
-		}
 		this.page = page;
 	}
 
 	public Integer getPageNumber() {
+		if (pageNumber == null) {
+			pageNumber = (page != null) ? page : 1;
+		}
 		return pageNumber;
 	}
 
@@ -67,22 +67,20 @@ public class PageEntity implements Serializable {
 	}
 
 	public int getRows() {
+		if (rows == null) {
+			rows = (pageSize != null) ? pageSize : 10;
+		}
 		return rows;
 	}
 
 	public void setRows(Integer rows) {
-
-		if (rows == null) {
-			if (pageSize != null) {
-				rows = pageSize;
-			} else {
-				rows = 10;
-			}
-		}
 		this.rows = rows;
 	}
 
 	public Integer getPageSize() {
+		if (pageSize == null) {
+			pageSize = (rows != null) ? rows : 10;
+		}
 		return pageSize;
 	}
 
@@ -96,16 +94,13 @@ public class PageEntity implements Serializable {
 	}
 
 	public String getSort() {
+		if (StringUtils.isBlank(sort)) {
+			sort = StringUtils.isNotBlank(sortName) ? sortName : "";
+		}
 		return sort;
 	}
 
 	public void setSort(String sort) {
-		if (StringUtils.isBlank(sort)) {
-			if (StringUtils.isNotBlank(sortName)) {
-				sort = sortName;
-			}
-		}
-
 		if (hasField(sort)) {
 			this.sort = sort;
 		} else {
@@ -114,6 +109,9 @@ public class PageEntity implements Serializable {
 	}
 
 	public String getSortName() {
+		if (StringUtils.isBlank(sortName)) {
+			sortName = StringUtils.isNotBlank(sort) ? sort : "";
+		}
 		return sortName;
 	}
 
@@ -126,16 +124,13 @@ public class PageEntity implements Serializable {
 	}
 
 	public String getOrder() {
+		if (StringUtils.isBlank(order)) {
+			order = StringUtils.isNotBlank(sortOrder) ? sortOrder : "";
+		}
 		return order;
 	}
 
 	public void setOrder(String order) {
-		if (StringUtils.isBlank(order)) {
-			if (StringUtils.isNotBlank(sortOrder)) {
-				order = sortOrder;
-			}
-		}
-
 		if (StringUtils.isNotBlank(order)
 				&& (order.equalsIgnoreCase("asc") || order.equalsIgnoreCase("desc"))) {
 			this.order = order;
@@ -146,6 +141,9 @@ public class PageEntity implements Serializable {
 	}
 
 	public String getSortOrder() {
+		if (StringUtils.isBlank(sortOrder)) {
+			sortOrder = StringUtils.isNotBlank(order) ? order : "";
+		}
 		return sortOrder;
 	}
 
