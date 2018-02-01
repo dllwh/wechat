@@ -95,12 +95,17 @@ public class GlobalExceptionHandler {
 	 * @创建人:独泪了无痕
 	 * @param ex
 	 */
-	@ExceptionHandler(NullPointerException.class)
 	@ResponseBody
-	public void nullPointerExceptionHandler(NullPointerException ex) {
+	@ExceptionHandler(NullPointerException.class)
+	public AjaxJson nullPointerExceptionHandler(NullPointerException ex) {
+		AjaxJson ajaxJson = new AjaxJson();
 		if (logger.isDebugEnabled()) {
 			logger.error("空指针异常:", ex);
 		}
+		ajaxJson.setSuccess(false);
+		ajaxJson.setResultCode(500);
+		ajaxJson.setMsg(NullPointerException.class.getName());
+		return ajaxJson;
 	}
 
 	/**
@@ -109,8 +114,8 @@ public class GlobalExceptionHandler {
 	 * @创建人:独泪了无痕
 	 * @param ex
 	 */
-	@ExceptionHandler(ClassCastException.class)
 	@ResponseBody
+	@ExceptionHandler(ClassCastException.class)
 	public void classCastExceptionHandler(ClassCastException ex) {
 		if (logger.isDebugEnabled()) {
 			logger.error("类型转换异常:", ex);
@@ -122,8 +127,8 @@ public class GlobalExceptionHandler {
 	 * @创建人:独泪了无痕
 	 * @param ex
 	 */
-	@ExceptionHandler(IOException.class)
 	@ResponseBody
+	@ExceptionHandler(IOException.class)
 	public void iOExceptionHandler(IOException ex) {
 		if (logger.isDebugEnabled()) {
 			logger.error("IO异常:", ex);
@@ -135,8 +140,8 @@ public class GlobalExceptionHandler {
 	 * @创建人:独泪了无痕
 	 * @param ex
 	 */
-	@ExceptionHandler(NoSuchMethodException.class)
 	@ResponseBody
+	@ExceptionHandler(NoSuchMethodException.class)
 	public void noSuchMethodExceptionHandler(NoSuchMethodException ex) {
 		if (logger.isDebugEnabled()) {
 			logger.error("未知方法异常:", ex);
@@ -148,8 +153,8 @@ public class GlobalExceptionHandler {
 	 * @创建人:独泪了无痕
 	 * @param ex
 	 */
-	@ExceptionHandler(IndexOutOfBoundsException.class)
 	@ResponseBody
+	@ExceptionHandler(IndexOutOfBoundsException.class)
 	public void indexOutOfBoundsExceptionHandler(IndexOutOfBoundsException ex) {
 		if (logger.isDebugEnabled()) {
 			logger.error("数组越界异常:", ex);
@@ -159,8 +164,9 @@ public class GlobalExceptionHandler {
 	/**
 	 * @方法描述 : session失效的异常拦截
 	 */
-	@ExceptionHandler(InvalidSessionException.class)
+	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(InvalidSessionException.class)
 	public void sessionTimeout(InvalidSessionException e, Model model, HttpServletRequest request,
 			HttpServletResponse response) {
 		if (logger.isDebugEnabled()) {
@@ -172,8 +178,9 @@ public class GlobalExceptionHandler {
 	 * @方法描述 : session异常
 	 * @param e
 	 */
-	@ExceptionHandler(UnknownSessionException.class)
+	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(UnknownSessionException.class)
 	public void sessionTimeout(UnknownSessionException e, Model model, HttpServletRequest request,
 			HttpServletResponse response) {
 		if (logger.isDebugEnabled()) {
@@ -184,6 +191,7 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
+	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public void handleHttpMessageNotReadableException(final HttpMessageNotReadableException e) {
@@ -195,6 +203,7 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
+	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(ValidationException.class)
 	public void handleValidationException(final ValidationException e) {
@@ -206,6 +215,7 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
+	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(BindException.class)
 	public AjaxJson handleBindException(final BindException e) {
@@ -222,8 +232,8 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
-	@ExceptionHandler(TypeMismatchException.class)
 	@ResponseBody
+	@ExceptionHandler(TypeMismatchException.class)
 	public AjaxJson requestTypeMismatch(TypeMismatchException ex) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
@@ -238,8 +248,8 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
-	@ExceptionHandler(MissingServletRequestParameterException.class)
 	@ResponseBody
+	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public AjaxJson requestMissingServletRequest(MissingServletRequestParameterException ex) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
@@ -254,8 +264,9 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
 	@ExceptionHandler(SQLException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public AjaxJson handleSQLException(final SQLException e) {
 
 		AjaxJson result = new AjaxJson();
@@ -271,6 +282,7 @@ public class GlobalExceptionHandler {
 	/**
 	 * 400 - Bad Request
 	 */
+	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public AjaxJson handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
@@ -287,6 +299,7 @@ public class GlobalExceptionHandler {
 	/**
 	 * 405 - Method Not Allowed
 	 */
+	@ResponseBody
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public AjaxJson handleHttpRequestMethodNotSupportedException(
@@ -304,8 +317,8 @@ public class GlobalExceptionHandler {
 	/**
 	 * 406 - Not Acceptable
 	 */
-	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
 	@ResponseBody
+	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
 	public AjaxJson request406(HttpMediaTypeNotAcceptableException e) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
@@ -320,6 +333,7 @@ public class GlobalExceptionHandler {
 	/**
 	 * 415 - Unsupported Media Type
 	 */
+	@ResponseBody
 	@ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
 	public AjaxJson handleHttpMediaTypeNotSupportedException(final Exception e) {
@@ -336,6 +350,7 @@ public class GlobalExceptionHandler {
 	/**
 	 * 500 - Internal Server Error
 	 */
+	@ResponseBody
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public AjaxJson handleException(final Exception e) {
@@ -352,8 +367,8 @@ public class GlobalExceptionHandler {
 	/**
 	 * 500 - Internal Server Error
 	 */
-	@ExceptionHandler(ConversionNotSupportedException.class)
 	@ResponseBody
+	@ExceptionHandler(ConversionNotSupportedException.class)
 	public AjaxJson ConversionNotSupportedException(ConversionNotSupportedException e) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
@@ -368,8 +383,8 @@ public class GlobalExceptionHandler {
 	/**
 	 * 500 - Internal Server Error
 	 */
-	@ExceptionHandler(HttpMessageNotWritableException.class)
 	@ResponseBody
+	@ExceptionHandler(HttpMessageNotWritableException.class)
 	public AjaxJson HttpMessageNotWritableException(HttpMessageNotWritableException e) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
