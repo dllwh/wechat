@@ -17,7 +17,7 @@ $.fn.bootstrapTableEx = function(opt) {
 		cache: false,                       // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 		sortable: false,                    // 是否启用排序
 		queryParamsType: '',
-		queryParams: queryParams,			// 传递参数（*）
+		// queryParams: queryParams,			// 传递参数（*）
 		sidePagination: "server",           // 分页方式：client客户端分页，server服务端分页（*）
 		pageNumber: 1,                      // 初始化加载第一页，默认第一页
 		pageSize: 10,                       // 每页的记录行数（*）
@@ -234,18 +234,4 @@ $.fn.fileinputExt = function(opt) {
 		}
 		console.log("同步上传错误结果处理");
 	});
-}
-
-/**
- * 获取查询的参数 
- */
-function queryParams(params) {
-	//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-	var temp = {   
-		rows: params.limit,                         //页面大小
-		page: (params.offset / params.limit) + 1,   //页码
-		sort: params.sort,      //排序列名  
-		sortOrder: params.order //排位命令（desc，asc） 
-	};
-	return temp;
 }
