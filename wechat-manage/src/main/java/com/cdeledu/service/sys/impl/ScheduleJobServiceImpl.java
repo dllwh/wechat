@@ -1,7 +1,6 @@
 package com.cdeledu.service.sys.impl;
 
 import org.quartz.Scheduler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +11,7 @@ import com.cdeledu.util.ScheduleUtils;
 @Service("scheduleJobService")
 public class ScheduleJobServiceImpl implements ScheduleJobService {
 	/** ----------------------------------------------------- Fields start */
-	@Autowired
+	
 	private Scheduler scheduler;
 
 	/** ----------------------------------------------------- Fields end */
