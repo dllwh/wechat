@@ -52,43 +52,43 @@
 							<div class="col-sm-12">
 								<div class="hidden-xs" id="roleTableToolbar" role="group">
 									<shiro:hasPermission name="roleOperate/addRole.shtml">
-										<button type="button" class="btn btn-primary" 
-											onclick="Role.addClickFun()">
+										<button type="button" class="btn btn-primary addBut" 
+											onclick="RoleController.addClickFun()">
 											<span class="fa fa-plus"> 创建</span>
 										</button>
 									</shiro:hasPermission>
-									<button type="button" class="btn btn-success"
-										onclick="Role.showClickFun()">
+									<button type="button" class="btn btn-success addBut"
+										onclick="RoleController.showClickFun()">
 										<span class="fa fa-eye"> 查看</span>
 									</button>
 									<shiro:hasPermission name="roleOperate/saveRole.shtml">
 										<button type="button" class="btn btn-info opBut" 
-											onclick="Role.editClickFun()">
+											onclick="RoleController.editClickFun()">
 											<span class="fa fa-pencil"> 修改</span>
 										</button>
 									</shiro:hasPermission>
 									<shiro:hasPermission name="roleOperate/delRole.shtml">
 										<button type="button" class="btn btn-danger opBut"
-											onclick="Role.delClickFun()">
+											onclick="RoleController.delClickFun()">
 											<span class="fa fa-trash-o"> 删除</span>
 										</button>
 									</shiro:hasPermission>
 									<shiro:hasPermission name="roleOperate/updateMenuByRole.shtml">
 										<button type="button" class="btn btn-info" 
-											onclick="Role.assignClick()">
+											onclick="RoleController.assignClick()">
 											<i class="fa fa-gavel"></i> 角色授权
 										</button>
 									</shiro:hasPermission>
 									<button type="button" class="btn btn-info" 
-										onclick="Role.UserClickFun()">
+										onclick="RoleController.UserClickFun()">
 										<i class="fa fa-user"></i> 角色用户
 									</button>
 									<button type="button" class="btn btn-warning opBut" id="disableClickBtn"
-										onclick="Role.disableClickFun()">
+										onclick="RoleController.disableClickFun()">
 										<i class="fa fa-user"></i> 角色禁用
 									</button>
 									<button type="button" class="btn btn-warning" id="enableClickBtn"
-										onclick="Role.enableClickFun()">
+										onclick="RoleController.enableClickFun()">
 										<i class="fa fa-user"></i> 角色启用
 									</button>
 								</div>
@@ -112,8 +112,9 @@
 	</div>
 	
 	<%-- 添加窗口 --%>
-	<div class="modal fade" id="addRoleMode" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog">
+	<div class="modal fade bs-example-modal-md" id="addRoleMode" tabindex="-1" role="dialog" 
+		aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -126,20 +127,50 @@
 					<form method="post" id="createForm" role="form"
 						class="form form-horizontal responsive">
 						<div class="form-group">
-							<label class="control-label" for="roleName">角色名称：</label>
-							<input type="text" class="form-control" name="roleName" 
-								placeholder="角色名称"
-								aria-invalid="true">
+							<label class="col-sm-2 control-label" for="roleName">角色名称：</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="roleName" 
+									placeholder="角色名称" aria-required="true" aria-invalid="true"
+									aria-invalid="true">
+							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label">角色代码：</label>
-							<input type="text" class="form-control" name="roleCode" placeholder="角色代码"
-							aria-required="true" aria-invalid="true" class="error">
+							<label class="col-sm-2 control-label">角色代码：</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="roleCode" 
+									placeholder="角色代码" aria-required="true" aria-invalid="true" 
+									class="error">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">角色分类：</label>
+							<div class="col-sm-9">
+								<select class="form-control" name="categoryCode">
+									<option value="0">业务角色</option>
+									<option value="1">系统角色</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group draggable">
+							<label class="col-sm-2 control-label">有效性：</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="1" name="isVisible">有效
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<i class="fa fa-info-circle"></i>注：选中则启用该角色
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">角色描述：</label>
+							<div class="col-sm-9">
+								<textarea class="form-control" rows="3" name=remark></textarea>
+							</div>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" onclick="Role.addRole()">
+					<button type="button" class="btn btn-primary" onclick="RoleController.addRole()">
 						保存
 					</button>
 					<button type="button" class="btn btn-white" data-dismiss="modal">
@@ -151,8 +182,9 @@
 	</div>
 	
 	<%-- 编辑窗口 --%>
-	<div class="modal fade" id="editRoleMode" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog">
+	<div class="modal fade bs-example-modal-md" id="editRoleMode" tabindex="-1" role="dialog" 
+		aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -166,20 +198,49 @@
 						class="form form-horizontal responsive">
 						<input type="hidden" name="id">
 						<div class="form-group">
-							<label class="control-label" for="roleName">角色名称：</label>
+							<label class="col-sm-2 control-label" for="roleName">角色名称：</label>
+							<div class="col-sm-6">
 							<input type="text" class="form-control" name="roleName" 
-								placeholder="角色名称"
-								aria-invalid="true">
+								placeholder="角色名称" aria-invalid="true">
+							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label">角色代码：</label>
-							<input type="text" class="form-control" name="roleCode" placeholder="角色代码"
-							aria-required="true" aria-invalid="true" class="error">
+							<label class="col-sm-2 control-label">角色代码：</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="roleCode" 
+									placeholder="角色代码" aria-required="true" aria-invalid="true" 
+									class="error">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">角色分类：</label>
+							<div class="col-sm-9">
+								<select class="form-control" name="categoryCode">
+									<option value="0">业务角色</option>
+									<option value="1">系统角色</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group draggable">
+							<label class="col-sm-2 control-label">有效性：</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="1" name="isVisible">有效
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<i class="fa fa-info-circle"></i>注：选中则启用该角色
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">角色描述：</label>
+							<div class="col-sm-9">
+								<textarea class="form-control" rows="3" name=remark></textarea>
+							</div>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" onclick="Role.editRoleFun()">
+					<button type="button" class="btn btn-primary" onclick="RoleController.editRoleFun()">
 						保存
 					</button>
 					<button type="button" class="btn btn-white" data-dismiss="modal">
@@ -252,13 +313,9 @@
 		//当点击查询按钮的时候执行  
 		$("#btnSearch").bind("click", initTable); 
 		
+		initButton();
+		
 		$("#createForm").validate({
-			errorElement : 'span', //用什么标签标记错误，默认是 label，可以改成 em。
-			errorClass : 'help-block',   //指定错误提示的 css 类名，可以自定义错误提示的样式。
-			focusInvalid : true,   //验证提示时，鼠标光标指向提示的input
-			onkeyup:false,  
-			focusCleanup:true,  
-			success:"valid",
 			rules : {
 				roleName : {  
 					required : true,
@@ -282,33 +339,10 @@
 				roleCode : {  
 					required : "角色代码不能为空" 
 				}  
-			},
-			highlight : function(element) {//可以给未通过验证的元素加效果、闪烁等。
-				$(element).closest('.form-group').addClass('has-error has-feedback');
-			},
-			success : function(label) {//要验证的元素通过验证后的动作
-				var el=label.closest('.form-group').find("input");
-				el.next().remove();//与errorPlacement相似
-				el.after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-				label.closest('.form-group').removeClass('has-error').addClass("has-feedback has-success");
-				label.remove();
-			},
-			errorPlacement : function(error, element) {//跟一个函数，可以自定义错误放到哪里
-				element.next().remove();//删除显示图标
-				element.after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-				element.closest('.form-group').append(error);//显示错误消息提示
-			},
-			submitHandler : function(form) {
 			}
 		});
 		
 		$("#editForm").validate({
-			errorElement : 'span', //用什么标签标记错误，默认是 label，可以改成 em。
-			errorClass : 'help-block',   //指定错误提示的 css 类名，可以自定义错误提示的样式。
-			focusInvalid : true,   //验证提示时，鼠标光标指向提示的input
-			onkeyup:false,  
-			focusCleanup:true,  
-			success:"valid",
 			rules : {
 				roleName : {  
 					required : true,
@@ -332,27 +366,15 @@
 				roleCode : {  
 					required : "角色代码不能为空" 
 				}  
-			},
-			highlight : function(element) {//可以给未通过验证的元素加效果、闪烁等。
-				$(element).closest('.form-group').addClass('has-error has-feedback');
-			},
-			success : function(label) {//要验证的元素通过验证后的动作
-				var el=label.closest('.form-group').find("input");
-				el.next().remove();//与errorPlacement相似
-				el.after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-				label.closest('.form-group').removeClass('has-error').addClass("has-feedback has-success");
-				label.remove();
-			},
-			errorPlacement : function(error, element) {//跟一个函数，可以自定义错误放到哪里
-				element.next().remove();//删除显示图标
-				element.after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-				element.closest('.form-group').append(error);//显示错误消息提示
-			},
-			submitHandler : function(form) {
 			}
 		});
 	});
 	
+	function initButton(){
+		// 初始化  禁止操作
+		$("#roleTableToolbar button").attr("disabled", true);
+		$(".addBut").attr("disabled", false);
+	}
 	function initTable(){
 		//先销毁表格  
 		$("#roleTable").bootstrapTable('destroy');  
@@ -360,6 +382,7 @@
 		$("#roleTable").bootstrapTableEx({
 			toolbar: '#roleTableToolbar',
 			url :"${_currConText}/roleView.shtml?getList",
+			queryParams: queryParams,			// 传递参数（*）
 			columns : [ { 
 				field: "cb", 
 				checkbox : true, 
@@ -426,6 +449,12 @@
 					$("#disableClickBtn").attr('disabled',"true");
 					$("#enableClickBtn").removeAttr("disabled");
 				}
+			},
+			onUncheck : function(){
+				var selected = $('#roleTable').bootstrapTable('getSelections');
+				if (selected.length == 0) {
+					initButton();
+				}
 			}
 		});
 	}
@@ -447,52 +476,122 @@
 	/**
 	 * 角色管理的单例
 	 */
-	var Role = {
+	var RoleController = {
 		id : "roleTable", //表格id
-		seItem : null, //选中的条目
+		setItem : null, //选中的条目
 		table : null,
-		layerIndex : -1
+		layerIndex : -1,
+		check : function(){
+			var selected = $('#' + this.id).bootstrapTable('getSelections');
+			if (selected.length == 0) {
+				dialogAlert("请选择要操作的数据", "warn");
+				return false;
+			} else {
+				RoleController.setItem = selected[0];
+				return true;
+			}
+		},
+		addClickFun : function() {// 点击添加 
+			$("#createForm")[0].reset();
+			$('#addRoleMode').modal('show');
+		},
+		editClickFun : function() {// 点击更新
+			if(RoleController.check()){
+				$("#editForm").form("load",RoleController.setItem);
+				$('#editRoleMode').modal('show');
+			}
+		},
+		delClickFun : function() { // 删除
+			if(RoleController.check()){
+				var id = RoleController.setItem.id;
+				dialogConfirm("您确认要删除该角色吗?", function() {
+					$.ajax({
+						url : "${_currConText }/roleOperate/delRole.shtml",
+						type : "POST",
+						data : {
+							delId : id
+						},
+						success : function(result) {
+							if (result.success) {
+								dialogMsg("删除成功");
+								initTable();
+							} else {
+								dialogMsg(result.msg, "error");
+							}
+						}
+					});
+				});
+			}
+		},
+		enableClickFun : function() { //启用
+			if(RoleController.check()){
+				var id = RoleController.setItem.id;
+				dialogConfirm("您确认要启用该角色吗?", function() {
+					$.ajax({
+						url : "${_currConText }/roleOperate/enable.shtml",
+						type : "POST",
+						data : {
+							id : id
+						},
+						success : function(result) {
+							if (result.success) {
+								dialogMsg("操作成功");
+								initTable();
+							} else {
+								dialogMsg("操作失败。原因" + result.msg, "error");
+							}
+						}
+					});
+				});
+			}
+		},
+		disableClickFun : function() {// 禁用 
+			if(RoleController.check()){
+				var id = RoleController.setItem.id;
+				dialogConfirm("您确认要禁用该角色吗?", function() {
+					$.ajax({
+						url : "${_currConText }/roleOperate/disable.shtml",
+						type : "POST",
+						data : {
+							id : id
+						},
+						success : function(result) {
+							if (result.success) {
+								dialogMsg("操作成功");
+								initTable();
+							} else {
+								dialogMsg(result.msg, "error");
+							}
+						}
+					});
+				});
+			}
+		},
+		assignClick : function() {// 权限配置
+			if(RoleController.check()){
+				var id = RoleController.setItem.id;
+			}
+		},
+		UserClickFun : function() {// 角色用户
+			if(RoleController.check()){
+				var id = RoleController.setItem.id;
+			}
+		}
 	};
-
-	/**
-	 * 角色管理的单例
-	 */
-	var Role = {
-		id : "roleTable", //表格id
-		seItem : null, //选中的条目
-		table : null,
-		layerIndex : -1
-	};
-
-	/**
-	 * 检查是否选中
-	 */
-	Role.check = function() {
-		alert("检查是否选中");
-	}
-
-	/**
-	 * 点击添加角色 
-	 */
-	Role.addClickFun = function() {
-		$("#createForm")[0].reset();
-		$('#addRoleMode').modal('show');
-	}
 	
-	Role.addRole =function(){
+	RoleController.addRole =function(){
 		$("#createForm").ajaxSubmit({
 			url : "${_currConText }/roleOperate/addRole.shtml",
 			beforeSubmit:function(){
 				return $("#createForm").valid();
 			},
 			success:function(result){
-				// var result=eval("("+data+")");
 				if (result.success) {
 					dialogMsg("添加成功");
 					$('#addRoleMode').modal('hide')
 					initTable();
 				} else {
-					dialogMsg(result.msg, {icon : 2});
+					dialogMsg(result.msg, "error");
 				}
 			}
 		});
@@ -501,13 +600,12 @@
 	/**
 	* 点击查看按钮时
 	*/
-	Role.showClickFun = function() {
+	RoleController.showClickFun = function() {
 			var selectContent = $("#roleTable").bootstrapTable('getSelections')[0];
 			if (typeof (selectContent) == 'undefined') {
 			dialogAlert("请选择要查看的数据", "warn");
 			return false;
 		}
-		// console.info(selectContent);
 		$("#s_roleName").text(selectContent.roleName);
 		$("#s_roleCode").text(selectContent.roleCode);
 		if (dllwh.isNotNullOrEmpty(selectContent.categoryCode)) {
@@ -560,143 +658,22 @@
 	/**
 	 * 点击修改按钮时
 	 */
-	Role.editClickFun = function() {
-		var selectContent = $("#roleTable").bootstrapTable('getSelections')[0];
-		if (typeof (selectContent) == 'undefined') {
-			dialogAlert("请选择要编辑的数据", "warn");
-			return false;
-		}
-		$("#editForm").form("load",selectContent);
-		$('#editRoleMode').modal('show');
-	}
-
-	Role.editRoleFun = function(){
+	RoleController.editRoleFun = function(){
 		$("#editForm").ajaxSubmit({
 			url : "${_currConText }/roleOperate/saveRole.shtml",
 			beforeSubmit:function(){
 				return $("#editForm").valid();
 			},
 			success:function(result){
-				// var result=eval("("+data+")");
 				if (result.success) {
 					dialogMsg("更新成功");
 					$('#editRoleMode').modal('hide')
 					initTable();
 				} else {
-					dialogMsg(result.msg, {icon : 2});
+					dialogMsg(result.msg, "error");
 				}
 			}
 		});
 	}
-	/**
-	 * 删除角色
-	 */
-	Role.delClickFun = function() {
-		var selectContent = $("#roleTable").bootstrapTable('getSelections')[0];
-		if (typeof (selectContent) == 'undefined') {
-			dialogAlert("请选择要删除的数据", "warn");
-			return false;
-		}
-
-		dialogConfirm("您确认要删除该角色吗?", function() {
-			$.ajax({
-				url : "${_currConText }/roleOperate/delRole.shtml",
-				type : "POST",
-				data : {
-					delId : selectContent.id
-				},
-				success : function(result) {
-					// var result=eval("("+data+")");
-					if (result.success) {
-						dialogMsg("删除成功");
-						initTable();
-					} else {
-						dialogMsg(result.msg, {icon : 2});
-					}
-				}
-			});
-		});
-	}
-
-	/**
-	 * 权限配置
-	 */
-	Role.assignClick = function() {
-		var selectContent = $("#roleTable").bootstrapTable('getSelections')[0];
-		if (typeof (selectContent) == 'undefined') {
-			dialogAlert("请选择要操作的数据", "warn");
-			return false;
-		}
-	}
-	/**
-	 * 角色用户
-	 */
-	Role.UserClickFun = function() {
-		var selectContent = $("#roleTable").bootstrapTable('getSelections')[0];
-		if (typeof (selectContent) == 'undefined') {
-			dialogAlert("请选择要操作的数据", "warn");
-			return false;
-		}
-	
-		}
-
-	/**
-	 * 禁用
-	 */
-	Role.disableClickFun = function() {
-		var selectContent = $("#roleTable").bootstrapTable('getSelections')[0];
-		if (typeof (selectContent) == 'undefined') {
-			dialogAlert("请选择要操作的数据", "warn");
-			return false;
-		}
-		dialogConfirm("您确认要禁用该角色吗?", function() {
-			$.ajax({
-				url : "${_currConText }/roleOperate/disable.shtml",
-				type : "POST",
-				data : {
-					id : selectContent.id
-				},
-				success : function(result) {
-					// var result=eval("("+data+")");
-					if (result.success) {
-						dialogMsg("操作成功");
-						initTable();
-					} else {
-						dialogMsg(result.msg, { icon : 2 });
-					}
-				}
-			});
-		});
-	}
-
-	/**
-	 * 启用
-	 */
-	Role.enableClickFun = function() {
-		var selectContent = $("#roleTable").bootstrapTable('getSelections')[0];
-		if (typeof (selectContent) == 'undefined') {
-			dialogAlert("请选择要操作的数据", "warn");
-			return false;
-		}
-		dialogConfirm("您确认要启用该角色吗?", function() {
-			$.ajax({
-				url : "${_currConText }/roleOperate/enable.shtml",
-				type : "POST",
-				data : {
-					id : selectContent.id
-				},
-				success : function(result) {
-					// var result=eval("("+data+")");
-					if (result.success) {
-						dialogMsg("操作成功");
-						initTable();
-					} else {
-						dialogMsg("操作失败。原因" + result.msg, { icon : 2 });
-					}
-				}
-			});
-		});
-	}
-	
 </script>
 </html>
