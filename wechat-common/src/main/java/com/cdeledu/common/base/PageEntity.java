@@ -74,6 +74,11 @@ public class PageEntity implements Serializable {
 	}
 
 	public void setRows(Integer rows) {
+		if(rows == null){
+			this.rows = 10;	
+		} else {
+			
+		}
 		this.rows = rows;
 	}
 
@@ -89,7 +94,7 @@ public class PageEntity implements Serializable {
 	}
 
 	public int getStartRow() {
-		startRow = (page - 1) * rows;
+		startRow = (getPage() - 1) * getRows();
 		return startRow;
 	}
 
