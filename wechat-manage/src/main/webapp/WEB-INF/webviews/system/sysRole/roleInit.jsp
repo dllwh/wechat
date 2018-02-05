@@ -170,7 +170,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" onclick="RoleController.addRole()">
+					<button type="button" class="btn btn-primary" onclick="RoleController.addSubmitClick()">
 						保存
 					</button>
 					<button type="button" class="btn btn-white" data-dismiss="modal">
@@ -240,7 +240,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" onclick="RoleController.editRoleFun()">
+					<button type="button" class="btn btn-primary" onclick="RoleController.editSubmit()">
 						保存
 					</button>
 					<button type="button" class="btn btn-white" data-dismiss="modal">
@@ -483,7 +483,11 @@
 		layerIndex : -1,
 		check : function(){
 			var selected = $('#' + this.id).bootstrapTable('getSelections');
-			if (selected.length == 0) {
+			if (selected == undefined || selected == "" || selected == 'null' || selected == 'undefined') {
+				dialogAlert("您没有选中任何数据项！", "warn");
+				return false;
+			}
+			if (selected.length > 1) {
 				dialogAlert("请选择要操作的数据", "warn");
 				return false;
 			} else {
@@ -576,10 +580,17 @@
 			if(RoleController.check()){
 				var id = RoleController.setItem.id;
 			}
+		},
+		searchClick : function(){// 搜索
+			
+		},
+		resetSearch : function(){// 重置搜索
+			
 		}
 	};
 	
-	RoleController.addRole =function(){
+	/** 提交修改  */
+	RoleController.addSubmitClick =function(){
 		$("#createForm").ajaxSubmit({
 			url : "${_currConText }/roleOperate/addRole.shtml",
 			beforeSubmit:function(){
@@ -658,7 +669,7 @@
 	/**
 	 * 点击修改按钮时
 	 */
-	RoleController.editRoleFun = function(){
+	RoleController.editSubmit = function(){
 		$("#editForm").ajaxSubmit({
 			url : "${_currConText }/roleOperate/saveRole.shtml",
 			beforeSubmit:function(){
