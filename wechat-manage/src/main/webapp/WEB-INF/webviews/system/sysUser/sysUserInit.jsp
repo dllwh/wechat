@@ -162,16 +162,16 @@
 </body>
 <script type="text/javascript">
 	
-$(function() { 
-	$("#administrator").fix({
-		float : 'left',
-		//minStatue : true,
-		skin : 'green',	
-		durationTime :false,
-		spacingw:50,//设置隐藏时的距离
-	    spacingh:270,//设置显示时间距
+	$(function() { 
+		$("#administrator").fix({
+			float : 'left',
+			//minStatue : true,
+			skin : 'green',	
+			durationTime :false,
+			spacingw:50, //设置隐藏时的距离
+			spacingh:270 //设置显示时间距
+		});
 	});
-});
 
 	//初始化宽度、高度  
 	$(".widget-box").height($(window).height()-215); 
@@ -183,34 +183,35 @@ $(function() {
 		$(".table_menu_list").width($(window).width()-260);
 		$(".table_menu_list").height($(window).height()-215);
 	});
-	laydate({
-	    elem: '#start',
-	    event: 'focus' 
-	});
 	
+	laydate({
+		elem: '#start',
+		event: 'focus' 
+	});
 	
 	//字数限制
 	function checkLength(which) {
 		var maxChars = 100; //
 		if(which.value.length > maxChars){
-		   layer.open({
-		   icon:2,
-		   title:'提示框',
-		   content:'您输入的字数超过限制!',	
-	    });
+			layer.open({
+				icon:2,
+				title:'提示框',
+				content:'您输入的字数超过限制!',	
+			});
 			// 超过限制的字数了就将 文本框中的内容按规定的字数 截取
 			which.value = which.value.substring(0,maxChars);
 			return false;
-		}else{
+		} else {
 			var curr = maxChars - which.value.length; //250 减去 当前输入的
 			document.getElementById("sy").innerHTML = curr.toString();
 			return true;
 		}
 	};
+	
 	/*添加管理员*/
 	$('#administrator_add').on('click', function(){
 		layer.open({
-	    type: 1,
+		type: 1,
 		title:'添加管理员',
 		area: ['700px',''],
 		shadeClose: false,
@@ -219,31 +220,127 @@ $(function() {
 		});
 	});
 	
-	
-	/*用户-停用*/
-	function sysUsereDisable(){
-		layer.confirm('确认要停用吗？',function(index){
-			layer.msg('已停用!',{icon: 5,time:1000});
-		});
+
+	/**
+	 * 用户详情对话框（可用于添加和修改对话框）
+	 */
+	var sysUserInfoDlg = {
+		userInfoData : {},
+		showRoleSelectTree : function() {// 角色选择的树
+
+		},
+		showMenuSelectTree : function() {// 菜单选择的树
+
+		},
+		showInfoDeptSelectTree : function() {// 显示用户详情部门选择的树
+
+		},
+		validatePwd : function() { // 验证两个密码是否一致
+
+		},
+		validate : function() { // 验证数据是否为空
+
+		}
 	}
 	
-	/*用户-启用*/
-	function sysUsereEnable(){
-		layer.confirm('确认要启用吗？',function(index){
-			layer.msg('已启用!',{icon: 6,time:1000});
-		});
+	var sysUserController = {
+		id : "managerTable",// 表格id
+		setItem : null, // 选中的条目
+		table : null,
+		layerIndex : -1,
+		check : function() { // 检查是否选中
+			var selected = $('#' + this.id).bootstrapTable('getSelections');
+			if (selected == undefined || selected == "" || selected == 'null' || selected == 'undefined') {
+				// "您没有选中任何数据项！
+				return false;
+			}
+			if (selected.length > 1) {
+				return false;
+			} else {
+				sysUser.setItem = selected[0];
+				return true;
+			}
+		},
+		openAddDig : function() {// 点击添加
+
+		},
+		openChangeDig : function() {// 点击修改按钮时
+			if (this.check()) {
+			}
+		},
+		delClickFun : function() {// 点击删除按钮时
+			if (this.check()) {
+				// $.messager.alert('警告提示', '不能删除当前登录用户！', 'warning');
+				// $.messager.alert('警告提示', '不能删除超级管理员用户！', 'warning');
+				// $.messager.alert('询问提示', '确认要删除所选用户吗?', 'warning');
+			}
+		},
+		viewClick : function() {// 查看
+
+		},
+		resetPwdFun : function() {// 重置密码
+
+		},
+		enableClick : function() {// 启用
+			if (this.check()) {
+				layer.confirm('确认要启用吗？',function(index){
+					layer.msg('已启用!',{icon: 6,time:1000});
+				});
+			}
+		},
+		disableClick : function() {// 禁用
+			if (this.check()) {
+				layer.confirm('确认要停用吗？',function(index){
+					layer.msg('已停用!',{icon: 5,time:1000});
+				});
+			}
+		},
+		freezeAccountClick : function() { // 冻结用户账户
+			if (this.check()) {
+			}
+		},
+		unfreezeClick : function() {// 解除冻结用户账户
+			if (this.check()) {
+			}
+		},
+		lockClick : function() {// 锁定用户
+			if (this.check()) {
+			}
+		},
+		unlockClick : function() {// 解除锁定
+			if (this.check()) {
+			}
+		},
+		roleAssignClick : function() {// 点击角色分配
+			if (this.check()) {
+			}
+		},
+		importClick : function() {// 导入
+
+		},
+		exportClick : function() {// 导出
+
+		},
+		searchClick : function() { // 搜索
+
+		},
+		resetSearch : function() {// 重置搜索条件
+
+		}
 	}
 	
-	/*用户-编辑*/
-	function editClickFun(){
-		
-	}
-	
-	/*用户-删除*/
-	function delClickFun(){
-		layer.confirm('确认要删除吗？',function(index){
-			layer.msg('已删除!',{icon:1,time:1000});
-		});
-	}
+	/**
+	 * 创建
+	 */
+	sysUserController.addSubmitClick = function() {
+
+	};
+
+	/**
+	 * 更新
+	 */
+	sysUserController.editSubmitClick = function() {
+
+	};
 </script>
 </html>
