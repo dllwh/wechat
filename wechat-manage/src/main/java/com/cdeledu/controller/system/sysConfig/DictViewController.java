@@ -33,7 +33,7 @@ public class DictViewController extends BaseController {
 	@RequestMapping(params = "")
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("system/dict/index");
+		mv.setViewName("system/dict/dictInit");
 		return mv;
 	}
 
