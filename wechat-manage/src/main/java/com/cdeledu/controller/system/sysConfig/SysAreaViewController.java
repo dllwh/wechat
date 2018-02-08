@@ -3,13 +3,19 @@ package com.cdeledu.controller.system.sysConfig;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.plugs.bootstrap.ZtreeNode;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.system.SysArea;
+import com.cdeledu.service.sys.SysAreaService;
+import com.google.common.collect.Maps;
 
 /**
  * 
@@ -28,7 +34,8 @@ import com.cdeledu.controller.BaseController;
 public class SysAreaViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
-
+	@Autowired
+	SysAreaService sysAreaService;    
 	/** ----------------------------------------------------- Fields end */
 
 	/**
@@ -48,8 +55,18 @@ public class SysAreaViewController extends BaseController {
 	 * @param areaCode
 	 * @return
 	 */
-	@RequestMapping("list")
-	public void list() {
+	@ResponseBody
+	@RequestMapping(params="getList")
+	public Map<String, Object> getList(SysArea sysArea) {
+		Map<String, Object> resultMap = Maps.newHashMap();
+		try {
+			resultMap.put("rows", sysAreaService.findForJdbcParam(sysArea));
+			resultMap.put("total", sysAreaService.getCountForJdbcParam(sysArea));
+		} catch (Exception e) {
+			resultMap.put("rows", null);
+			resultMap.put("total",0);
+		}
+		return resultMap;
 	}
 
 	/**
@@ -57,13 +74,9 @@ public class SysAreaViewController extends BaseController {
 	 * @param areaCode
 	 * @return
 	 */
-	@RequestMapping("select")
-	public List<Map<String, Object>> select(@RequestParam String parentAreaId) {
-		return null;
+	@ResponseBody
+	@RequestMapping(params="getTreeList")
+	public List<ZtreeNode> select(@RequestParam(name="areaCode",defaultValue="100000") int  parentAreaId) {
+		return sysAreaService.getSysAreaTree(parentAreaId);
 	}
-	/** ----------------------------------------------- [私有方法] */
-	/** ----------------------------------------------- [私有方法] */
-
-	/** ----------------------------------------------- [测试方法] */
-	/** ----------------------------------------------- [测试方法] */
 }
