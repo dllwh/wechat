@@ -1,17 +1,17 @@
 package com.cdeledu.service.sys.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import com.cdeledu.common.plugs.bootstrap.ZtreeNode;
 import com.cdeledu.dao.BaseDaoSupport;
 import com.cdeledu.model.system.SysArea;
 import com.cdeledu.service.sys.SysAreaService;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 @Service("sysAreaService")
 @SuppressWarnings("unchecked")
@@ -69,40 +69,46 @@ public class SysAreaServiceImpl implements SysAreaService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getSysAreaTree() throws Exception {
-		return getSysArearTreeList(100000);
-	}
-
-	private List<Map<String, Object>> getSysArearTreeList(int parentId) throws Exception{
-		List<SysArea> rootList = getArealistByParentCode(parentId);
-		List<Map<String, Object>> resultList = Lists.newArrayList();
-		Map<String, Object> map = null;
-		int parentCode = 0;
-		for (SysArea sysArea : rootList) {
-			map = Maps.newConcurrentMap();
-			parentCode = sysArea.getId();
-			map.put("id", parentCode);
-			map.put("text", sysArea.getAreaName());
-			if(hasChildren(parentCode)){
-				map.put("state", "closed");
-				map.put("children", getSysArearTreeList(parentCode));
-			} else {
-				map.put("state", "open");
+	public List<ZtreeNode> getSysAreaTree(int parentId) {
+		List<ZtreeNode> resultList = Lists.newArrayList();
+		List<SysArea> rootList = null;
+		try {
+			rootList = getArealistByParentCode(parentId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return resultList;
+		}
+		ZtreeNode node = null;
+		if (CollectionUtils.isNotEmpty(rootList)) {
+			for (SysArea sysArea : rootList) {
+				node = new ZtreeNode();
+				node.setpId(parentId);
+				node.setId(sysArea.getId());
+				node.setName(sysArea.getAreaName());
+				if (hasChildren(sysArea.getId())) {
+					node.setParent("true");
+					node.setOpen(true);
+				}
+				resultList.add(node);
 			}
-			resultList.add(map);
 		}
 		return resultList;
-		
-	}
-	@Override
-	public List<SysArea> getArealistByParentCode(int parentId) throws Exception {
-		return (List<SysArea>) baseDao.findListForJdbcParam(prefix+"getArealistByParentCode", parentId);
 	}
 
 	@Override
-	public boolean hasChildren(int parentId) throws Exception {
+	public List<SysArea> getArealistByParentCode(int parentId) throws Exception {
+		return (List<SysArea>) baseDao.findListForJdbcParam(prefix + "getArealistByParentCode",
+				parentId);
+	}
+
+	@Override
+	public boolean hasChildren(int parentId) {
 		SysArea sysArea = new SysArea();
 		sysArea.setParentId(parentId);
-		return getCountForJdbcParam(sysArea) > 0 ? true : false;
+		try {
+			return getCountForJdbcParam(sysArea) > 0 ? true : false;
+		} catch (Exception e) {
+			return true;
+		}
 	}
 }
