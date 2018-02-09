@@ -156,6 +156,14 @@
 			<artifactId>quartz</artifactId>
 			<version>${quartz.version}</version>
 		</dependency>
+
+		<!-- Spring WebSocket实现消息推送 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>
