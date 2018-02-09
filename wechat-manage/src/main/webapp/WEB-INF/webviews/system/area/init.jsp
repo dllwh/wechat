@@ -68,7 +68,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-xs-12">
+							<div class="col-xs-12" style="padding-top: 10px">
 								<table id="dataGrid"
 									class="table table-striped table-bordered table-hover">
 									<thead>
