@@ -137,6 +137,12 @@ $.fn.bootstrapFileInput = function(opt) {
 	
 	// 上传结果的回调函数
 	$(this).on("fileuploaded", function(event, data, previewId, index) {
+		// data: 这是一个数据对象(关联数组)发送以下信息 
+		// files: 上传的文件信息    
+		// response: ajax后台服务响应的内容
+		// jqXHR: jQuery XMLHttpRequest对象，响应报文
+		// previewId::每个文件的标识符的母公司缩略图预览窗口中的div元素
+		// index: 从零开始的索引文件中文件的堆栈
 		if (data == undefined) {
 			dialogAlert("文件格式类型不正确", "warn");
 			return;
