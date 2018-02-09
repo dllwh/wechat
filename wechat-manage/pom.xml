@@ -178,16 +178,17 @@
 				<version>2.2</version>
 				<configuration>
 					<!-- tomcat7部署管理路径:http://ip地址:端口/manager/text -->
-					<url>http://localhost:80/manager/text</url> <!-- 注意此处的url -->
+					<url>http://localhost:80/manager/html</url> 
 					<!-- 此处的名字必须和setting.xml中配置的ID一致 -->
-					<!-- <server>tomcat7</server> -->
+					<server>tomcat7</server>
 					<!--settings.xml文件已配置，此处可不配 -->
 					<username>admin</username>
 					<!--settings.xml文件已配置，此处可不配 -->
 					<password>admin</password>
-					<path>/wechat-manage</path><!-- 此处的名字是项目发布的工程名 -->
+					<path>/</path><!-- 此处的名字是项目发布的工程名 -->
 					<charset>UTF-8</charset>
 					<encoding>UTF-8</encoding>
+					<port>80</port>
 					<!-- 运行redeploy命令前，要能正常访问http://localhost:80/manager -->
 				</configuration>
 			</plugin>
