@@ -395,4 +395,12 @@ public class GlobalExceptionHandler {
 		result.setResultCode(500);
 		return result;
 	}
+	
+	
+	@ExceptionHandler(value = Exception.class)
+	public void defaultExceptionHandler(HttpServletRequest request, Exception e){
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
+		}
+	}
 }
