@@ -1,20 +1,14 @@
 package com.cdeledu.crawler.lifeServices;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.cdeledu.util.application.regex.RegexUtil;
-import com.cdeledu.util.database.DataTableHelper;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,12 +17,11 @@ import com.google.common.collect.Maps;
  * @类描述: 爬取花瓣网图片数据
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年6月3日 下午4:45:31
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 public class HuabanHelper {
 	/** ----------------------------------------------------- Fields start */
-	private static Logger logger = Logger.getLogger(HuabanHelper.class);
 	private final static String BASE_URL = "http://huaban.com/";
 	private final static String BASE_IMG_URL = "http://img.hb.aicdn.com/";
 	private final static String BEAUTY_IMG_URL = BASE_URL + "%s/?max=%s&limit=%s&wfl=1";
@@ -36,117 +29,9 @@ public class HuabanHelper {
 	private final static String REGEX_IMG = "\\{\"pin_id\":(\\d+),.+?\"board_id\":(\\d+),.+?\"key\":\"(.*?)\",.\"type\":\"image/(.*?)\",";
 	private final static String source = "huaban.com/";
 
-	private static ResourceBundle JDBC = ResourceBundle.getBundle("datasource/jdbc");
-	private static String dbUrl = JDBC.getString("database.dbUrl");
-	private static String dbUserName = JDBC.getString("database.dbUserName");
-	private static String dbPassword = JDBC.getString("database.dbPassword");
-	private static String jdbcName = JDBC.getString("database.jdbcName");
-	private static String SQL = "INSERT INTO crawler_image (userCode,boardId,url,type,source) VALUES ('%s','%s','%s','%s','%s')";
-	private static String ISEXIST = "SELECT COUNT(1) FROM crawler_image WHERE url = '%s'";
-
-	/** SQL执行工具 :实例化查询接口 */
-	private static QueryRunner runner = null;
-	private static DataTableHelper dataTableHelper = null;
-
-	static {
-		dataTableHelper = DataTableHelper.getInstance(dbUrl, dbUserName, dbPassword, jdbcName);
-		try {
-			runner = dataTableHelper.getQueryRunner();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/** ----------------------------------------------------- Fields end */
 
 	/** ----------------------------------------------- [私有方法] */
-
-	private static String getRealPath(String category, String pid, Integer limit) {
-		if (StringUtils.isNoneBlank(category)) {
-			if (limit < 1 || limit > 100) {
-				limit = 20;
-			}
-			while (category.startsWith("/")) {
-				category = category.substring(category.indexOf("/") + 1);
-			}
-
-			while (category.endsWith("/")) {
-				category = category.substring(0, category.lastIndexOf("/"));
-			}
-			return String.format(BEAUTY_IMG_URL, category, pid, limit);
-		}
-		return "";
-	}
-
-	/**
-	 * @方法描述: 解析数据
-	 * @param url
-	 * @return
-	 * @throws Exception
-	 */
-	private static List<Map<String, Object>> analyze(String url, boolean isSave) throws Exception {
-		List<Map<String, Object>> resultList = Lists.newArrayList();
-		// 创建 Pattern 对象
-		Pattern r = Pattern.compile(REGEX_IMG);
-		Matcher m = r.matcher(HttpURLConnHelper.getInstance().sendGetRequest(url));
-		Map<String, Object> beautyMap = null;
-		String pinId, boardId, imgPath, imgType = "";
-		while (m.find()) {
-			beautyMap = Maps.newConcurrentMap();
-			pinId = m.group(1);
-			boardId = m.group(2);
-			imgPath = BASE_IMG_URL + m.group(3);
-			imgType = m.group(4);
-			beautyMap.put("pinId", pinId);// 用户ID
-			beautyMap.put("boardId", boardId);// 画板ID
-			/** 图片地址后面带有类型_fw554、fw658,无实际意义，猜测是避免缓存 */
-			beautyMap.put("imgPath", imgPath);// 图片地址
-			beautyMap.put("imgType", imgType); // 图片类型
-			beautyMap.put("source", source);
-			resultList.add(beautyMap);
-
-			if (isSave) {
-				if (!isExist(imgPath)) {
-					try {
-						saveDocument(String.format(SQL, boardId, pinId, imgPath, imgType, source));
-					} catch (Exception e) {
-						logger.info("解析数据入数据库出现异常: " + e);
-					}
-				}
-			}
-		}
-		return resultList;
-	}
-
-	/**
-	 * @方法描述: 查询是否已经该条数据
-	 * @param val
-	 * @return
-	 */
-	private static boolean isExist(String val) {
-		int resultNum = 0;
-		if (StringUtils.isNotBlank(val)) {
-			resultNum = dataTableHelper.getCount(runner, String.format(ISEXIST, val));
-		}
-		return resultNum > 0 ? true : false;
-	}
-
-	/**
-	 * 
-	 * @方法描述: 将得到的document进行解析 存入数据库
-	 * @param sql
-	 *            执行sql
-	 * @throws SQLException
-	 */
-	private static void saveDocument(String inserSql) throws SQLException {
-		if (logger.isDebugEnabled()) {
-			logger.info("解析数据并保存入数据库:" + inserSql);
-		}
-		runner.insert(inserSql, new ScalarHandler<Long>());
-	}
-
-	/** ----------------------------------------------- [私有方法] */
-
 	/**
 	 * @方法描述: 类别信息
 	 * @return code 编码
@@ -220,4 +105,65 @@ public class HuabanHelper {
 			Integer limit, boolean isSave) throws Exception {
 		return analyze(getRealPath("/boards/" + bid, pid, limit), isSave);
 	}
+
+	/** ----------------------------------------------- [私有方法] */
+	private static String getRealPath(String category, String pid, Integer limit) {
+		if (StringUtils.isNoneBlank(category)) {
+			if (limit < 1 || limit > 100) {
+				limit = 20;
+			}
+			while (category.startsWith("/")) {
+				category = category.substring(category.indexOf("/") + 1);
+			}
+
+			while (category.endsWith("/")) {
+				category = category.substring(0, category.lastIndexOf("/"));
+			}
+			return String.format(BEAUTY_IMG_URL, category, pid, limit);
+		}
+		return "";
+	}
+
+	/**
+	 * @方法描述: 解析数据
+	 * @param url
+	 * @return
+	 * @throws Exception
+	 */
+	private static List<Map<String, Object>> analyze(String url, boolean isSave) throws Exception {
+		List<Map<String, Object>> resultList = Lists.newArrayList();
+		// 创建 Pattern 对象
+		Pattern r = Pattern.compile(REGEX_IMG);
+		Matcher m = r.matcher(HttpURLConnHelper.getInstance().sendGetRequest(url));
+		Map<String, Object> beautyMap = null;
+		String pinId, boardId, imgPath, imgType = "";
+		while (m.find()) {
+			imgPath = BASE_IMG_URL + m.group(3);
+			if (!isExist(imgPath)) {
+				beautyMap = Maps.newConcurrentMap();
+				pinId = m.group(1);
+				boardId = m.group(2);
+				imgType = m.group(4);
+				beautyMap.put("pinId", pinId);// 用户ID
+				beautyMap.put("boardId", boardId);// 画板ID
+				/** 图片地址后面带有类型_fw554、fw658,无实际意义，猜测是避免缓存 */
+				beautyMap.put("imgPath", imgPath);// 图片地址
+				beautyMap.put("imgType", imgType); // 图片类型
+				beautyMap.put("source", source);
+				resultList.add(beautyMap);
+			}
+		}
+		return resultList;
+	}
+
+	/**
+	 * @方法描述: 查询是否已经该条数据
+	 * @param val
+	 * @return
+	 */
+	private static boolean isExist(String val) {
+		return false;
+	}
+
+	/** ----------------------------------------------- [私有方法] */
 }
