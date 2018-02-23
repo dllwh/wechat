@@ -11,10 +11,6 @@
 <head>
 <title>角色管理</title>
 </head>
-<style type="text/css">
-.opBut {
-}
-</style>
 <title>${_currProject }-角色管理</title>
 </head>
 <body class="gray-bg">
@@ -73,24 +69,23 @@
 											<span class="fa fa-trash-o"> 删除</span>
 										</button>
 									</shiro:hasPermission>
-									<shiro:hasPermission name="roleOperate/updateMenuByRole.shtml">
-										<button type="button" class="btn btn-info" 
-											onclick="RoleController.assignClick()">
-											<i class="fa fa-gavel"></i> 角色授权
+									<shiro:hasPermission name="roleView/roleAccessConfig.shtml">
+										<button data-toggle="dropdown" type="button"
+											class="btn btn-info dropdown-toggle opBut">
+											授权操作<span class="caret"></span>
 										</button>
+										<ul class="dropdown-menu">
+											<li>
+												<a onclick="RoleController.assignClick()">角色授权</a>
+											</li>
+											<li>
+												<a onclick="RoleController.UserClickFun()">角色用户</a>
+											</li>
+										
+											<li class="divider"></li>
+											<li class="visibleButton"></li>
+										</ul>
 									</shiro:hasPermission>
-									<button type="button" class="btn btn-info" 
-										onclick="RoleController.UserClickFun()">
-										<i class="fa fa-user"></i> 角色用户
-									</button>
-									<button type="button" class="btn btn-warning opBut" id="disableClickBtn"
-										onclick="RoleController.disableClickFun()">
-										<i class="fa fa-user"></i> 角色禁用
-									</button>
-									<button type="button" class="btn btn-warning" id="enableClickBtn"
-										onclick="RoleController.enableClickFun()">
-										<i class="fa fa-user"></i> 角色启用
-									</button>
 								</div>
 							</div>
 						</div>
@@ -433,21 +428,16 @@
 				
 			},
 			onCheck: function (row) {
-				if(row.categoryCode == 1 ){
+				if(row.isVisible == 1){
+					$(".visibleButton").html('<a onclick="RoleController.roleVisibleButton(0)">角色禁用</a>');
+				} else {
+					$(".visibleButton").html('<a onclick="RoleController.roleVisibleButton(1)">角色启用</a>');
+				}
+				
+				if(row.id == 1 ){
 					$('.opBut').attr('disabled',"true");
 				}  else {
 					$('.opBut').removeAttr("disabled");
-				}
-				
-				if(row.isVisible == 1){
-					$("#disableClickBtn").removeAttr("disabled");
-					$("#enableClickBtn").attr('disabled',"true");
-					if(row.categoryCode == 1 ){
-						$("#disableClickBtn").attr('disabled',"true");
-					}
-				} else {
-					$("#disableClickBtn").attr('disabled',"true");
-					$("#enableClickBtn").removeAttr("disabled");
 				}
 			},
 			onUncheck : function(){
@@ -527,37 +517,20 @@
 				});
 			}
 		},
-		enableClickFun : function() { //启用
-			if(RoleController.check()){
-				var id = RoleController.setItem.id;
-				dialogConfirm("您确认要启用该角色吗?", function() {
-					$.ajax({
-						url : "${_currConText }/roleOperate/enable.shtml",
-						type : "POST",
-						data : {
-							id : id
-						},
-						success : function(result) {
-							if (result.success) {
-								dialogMsg("操作成功");
-								initTable();
-							} else {
-								dialogMsg("操作失败。原因" + result.msg, "error");
-							}
-						}
-					});
-				});
+		roleVisibleButton : function(visible) { // 启用、禁用
+			if(dllwh.isNullOrEmpty(visible)){
+				visible = 1;
 			}
-		},
-		disableClickFun : function() {// 禁用 
+			
 			if(RoleController.check()){
 				var id = RoleController.setItem.id;
-				dialogConfirm("您确认要禁用该角色吗?", function() {
+				dialogConfirm("您确认要操作该角色吗?", function() {
 					$.ajax({
-						url : "${_currConText }/roleOperate/disable.shtml",
+						url : "${_currConText }/roleOperate/roleVisibleButton.shtml",
 						type : "POST",
 						data : {
-							id : id
+							id : id,
+							visible:visible
 						},
 						success : function(result) {
 							if (result.success) {
@@ -573,12 +546,38 @@
 		},
 		assignClick : function() {// 权限配置
 			if(RoleController.check()){
-				var id = RoleController.setItem.id;
+				var roleCode = this.setItem.id;
+				dialogOpen({
+					title: '角色授权',
+					width: '30%',
+					height: '100%',
+					scroll:true,
+					maxmin: true,
+					url: '${_currConText }/roleView/roleAccessConfig.shtml?roleMenu&roleCode='+roleCode,
+					success: function(){
+						
+					},yes : function(layero, index){
+						var newpsw = window[index.find('iframe')[0]['name']];
+						newpsw.getCheckedAll(roleCode);
+					}
+				});
 			}
 		},
 		UserClickFun : function() {// 角色用户
 			if(RoleController.check()){
-				var id = RoleController.setItem.id;
+				var roleCode = this.setItem.id;
+				dialogOpen({
+					title: '角色用户',
+					width: '50%',
+					height: '90%',
+					maxmin: true,
+					url: '${_currConText }/roleView/roleAccessConfig.shtml?roleUser&roleCode='+roleCode,
+					success: function(){
+						
+					},yes : function(){
+						layer.closeAll();
+					}
+				});
 			}
 		},
 		searchClick : function(){// 搜索

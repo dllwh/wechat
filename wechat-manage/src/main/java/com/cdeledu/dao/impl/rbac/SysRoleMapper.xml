@@ -3,7 +3,7 @@
 <mapper namespace="com.cdeledu.dao.SysRoleMapper">
 	
 	<sql id="Base_Column_List">
-		id, roleCode, roleName, categoryCode, isVisible, isEnabled, allowEdit,
+		id, roleCode, roleName, categoryCode, isVisible, allowEdit,
 		allowDelete,
 		`sequence`, creator, createTime, modifier, updateTime, remark
 	</sql>
@@ -27,6 +27,7 @@
 				and roleCode  LIKE CONCAT(CONCAT('%', #{roleCode}),'%') 
 			</if>
 		</where>
+		ORDER BY sequence  ASC
 	</sql>
 	
 	<select id="findForJdbcParam" parameterType="com.cdeledu.model.rbac.SysRole"
@@ -50,11 +51,10 @@
 	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.SysRole">
 		insert into sys_role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="roleCode != null">roleCode,</if>
-			<if test="roleName != null">roleName,</if>
+			<if test="roleCode != null and roleCode != '' ">roleCode,</if>
+			<if test="roleName != null and roleName != '' ">roleName,</if>
 			<if test="categoryCode != null">categoryCode,</if>
 			<if test="isVisible != null">isVisible,</if>
-			<if test="isEnabled != null">isEnabled,</if>
 			<if test="allowEdit != null">allowEdit,</if>
 			<if test="allowDelete != null">allowDelete,</if>
 			<if test="sequence != null">`sequence`,</if>
@@ -63,11 +63,10 @@
 			<if test="remark != null">remark,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="roleCode != null">#{roleCode},</if>
-			<if test="roleName != null">#{roleName},</if>
+			<if test="roleCode != null and roleCode != '' ">#{roleCode},</if>
+			<if test="roleName != null and roleName != '' ">#{roleName},</if>
 			<if test="categoryCode != null">#{categoryCode},</if>
 			<if test="isVisible != null">#{isVisible},</if>
-			<if test="isEnabled != null">#{isEnabled},</if>
 			<if test="allowEdit != null">#{allowEdit},</if>
 			<if test="allowDelete != null">#{allowDelete},</if>
 			<if test="sequence != null">#{sequence},</if>
@@ -80,8 +79,8 @@
 	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.SysRole">
 		update sys_role
 		<set>
-			<if test="roleCode != null"> roleCode = #{roleCode}, </if>
-			<if test="roleName != null"> roleName = #{roleName}, </if>
+			<if test="roleCode != null and roleName != '' "> roleCode = #{roleCode}, </if>
+			<if test="roleName != null and roleName != '' "> roleName = #{roleName}, </if>
 			<if test="categoryCode != null"> categoryCode = #{categoryCode}, </if>
 			<if test="isVisible != null"> isVisible = #{isVisible}, </if>
 			<if test="isEnabled != null"> isEnabled = #{isEnabled}, </if>

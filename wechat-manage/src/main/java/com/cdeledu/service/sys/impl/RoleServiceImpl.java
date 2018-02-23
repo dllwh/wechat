@@ -45,7 +45,8 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 	}
 
 	public Integer update(SysRole record) throws Exception {
-		return baseDao.insert(prefix + "updateByPrimaryKey", record);
+		record.setModifier(WebUtilHelper.getCurrentUserId());
+		return baseDao.update(prefix + "updateByPrimaryKey", record);
 	}
 
 	public Integer batchUpdate(List<SysRole> parameter) throws Exception {

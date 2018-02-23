@@ -3,6 +3,7 @@ package com.cdeledu.controller.system.upms.sysRole;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -123,8 +124,6 @@ public class RoleOperateController extends BaseController {
 					resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 				}
 			}
-
-			// delRoleFunction(role);
 		} catch (Exception e) {
 			resultMsg.setSuccess(false);
 			resultMsg.setResultCode(500);
@@ -134,39 +133,61 @@ public class RoleOperateController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "addMenuByRole")
-	@SystemLog(desc = "创建角色的权限", opType = SysOpType.INSERT, tableName = "sys_role_menu")
-	public AjaxJson addMenuByRole(int roleId, String ids) {
-		AjaxJson ajaxJson = new AjaxJson();
-		return ajaxJson;
-	}
-
-	@ResponseBody
 	@RequestMapping(value = "updateMenuByRole")
 	@SystemLog(desc = "更新角色的权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
-	public AjaxJson updateMenuByRole(int roleId, String ids) {
+	public AjaxJson updateMenuByRole(Integer roleId, String ids) {
 		AjaxJson ajaxJson = new AjaxJson();
+		if(roleId != null && StringUtils.isNoneBlank(ids)){
+			if(roleId != 1){
+				roleService.delRoleAccess(roleId);	
+				String str[] = ids.split(",");
+				for (int i = 0; i < str.length; i++) {
+					try {
+						roleService.saveRoleAccess(roleId, Integer.parseInt(str[i]));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+			} else {
+				ajaxJson.setSuccess(false);
+				ajaxJson.setResultCode(10005);
+				ajaxJson.setMsg("该资源需要appkey拥有授权");
+			}
+		} else {
+			ajaxJson.setSuccess(false);
+			ajaxJson.setResultCode(10006);
+			ajaxJson.setMsg("缺少source (appkey) 参数");
+		}
 		return ajaxJson;
 	}
-
-	@ResponseBody
-	@RequestMapping(value = "clearMenuByRoleIds")
-	@SystemLog(desc = "根据角色id清空权限", opType = SysOpType.DEL, tableName = "sys_role_menu")
-	public AjaxJson clearPermissionByRoleIds(String roleIds) {
-		AjaxJson ajaxJson = new AjaxJson();
-		return ajaxJson;
-	}
-
 	/**
-	 * @方法:删除角色权限
-	 *            <ul>
-	 *            <li>1.删除角色具有的权限、菜单</li>
-	 *            <li>2.删除角色与用户的之间的关联</li>
-	 *            </ul>
-	 * @创建人:独泪了无痕
-	 * @param role
+	 * 
+	 * @方法描述: 启用、禁用账户
+	 * @return
 	 */
-	protected void delRoleFunction(SysRole role) {
-
+	@ResponseBody
+	@RequestMapping("roleVisibleButton")
+	@SystemLog(desc = "启用、禁用账户", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
+	public AjaxJson roleVisibleButton(
+			@RequestParam(name = "id", required = true, defaultValue = "") int id,
+			@RequestParam(name = "visible", required = true, defaultValue = "1") int visible) {
+		AjaxJson resultMsg = new AjaxJson();
+		SysRole role = new SysRole();
+		role.setId(id);
+		role.setIsVisible(visible);
+		try {
+			if(!roleService.hasMenuByRole(id) && ! roleService.hasUserByRole(id) && id != 1){				
+				roleService.update(role);	
+				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			} else {
+				resultMsg.setSuccess(false);
+				resultMsg.setMsg("当前所选数据有子节点数据！");
+			}
+		} catch (Exception e) {
+			resultMsg.setSuccess(false);
+			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+		}
+		return resultMsg;
 	}
 }

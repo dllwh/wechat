@@ -17,6 +17,7 @@ import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SysMenuService;
 import com.cdeledu.util.apache.collection.ListUtilHelper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 @Service("sysMenuService")
 @Transactional(readOnly = false)
@@ -109,27 +110,42 @@ public class SysMenuServiceImpl implements SysMenuService {
 
 	@Override
 	public List<SysMenu> getMenuPermsByParentCode(Integer parentId) throws Exception {
-		return null;
+		return (List<SysMenu>) baseDao.findListForJdbcParam(prefix + "getMenuPermsByParentCode",
+				parentId);
 	}
 
 	@Override
 	public SysMenu findOneById(Integer id) throws Exception {
-		return null;
+		SysMenu sysMenu = new SysMenu();
+		sysMenu.setId(id);
+		return findOneForJdbc(sysMenu);
 	}
 
 	@Override
 	public boolean hasRole(int id) throws Exception {
-		return false;
+		return baseDao.getCountForJdbcParam(prefix + "hasRole", id) > 0 ? true : false;
 	}
 
 	@Override
 	public List<EasyUITreeNode> getMenuEasyUITree() throws Exception {
-		return null;
+		List<EasyUITreeNode> results = null;
+		try {
+			results = getMenuEasyUITreeByParentId(-1);
+			EasyUITreeNode rootNode = new EasyUITreeNode();
+			rootNode.setId(-1);
+			rootNode.setText("无");
+			results.add(0, rootNode);
+		} catch (Exception ex) {
+
+		}
+		return results;
 	}
 
 	@Override
 	public List<Map<String, Object>> getMenuZTree(Integer roleId) throws Exception {
-		return null;
+		List<Integer> roleList = (List<Integer>) baseDao
+				.findListForJdbcParam(prefix + "getAllMenuIdByRole", roleId);
+		return getMenuZTreeByParentId(-1, roleList);
 	}
 
 	/**
@@ -208,6 +224,64 @@ public class SysMenuServiceImpl implements SysMenuService {
 
 		}
 		return subMenuList;
+	}
+	
+	private List<EasyUITreeNode> getMenuEasyUITreeByParentId(int parentId) {
+		List<EasyUITreeNode> results = Lists.newArrayList();
+		try {
+			List<SysMenu> rootMenuList = getMenuByParentCode(parentId);
+			EasyUITreeNode treeNode = null;
+			for (SysMenu sysMenu : rootMenuList) {
+				int treeId = sysMenu.getId();
+				treeNode = new EasyUITreeNode();
+				treeNode.setId(treeId);
+				treeNode.setText(sysMenu.getMenuName());
+				if (hasChildren(treeId)) {
+
+					if (sysMenu.getType() == SysMenuType.CATALOG.getValue()) {
+						treeNode.setState("closed");
+						treeNode.setChildren(getMenuEasyUITreeByParentId(treeId));
+					} else {
+						treeNode.setState("open");
+					}
+
+				} else {
+					treeNode.setState("open");
+				}
+				results.add(treeNode);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
+	private List<Map<String, Object>> getMenuZTreeByParentId(int parentId, List<Integer> authIds) {
+		List<Map<String, Object>> results = Lists.newArrayList();
+		try {
+			List<SysMenu> rootMenuList = getMenuPermsByParentCode(parentId);
+			Map<String, Object> resultMap = null;
+			Integer authId = null; 
+			for (SysMenu sysMenu : rootMenuList) {
+				authId = sysMenu.getId();
+				resultMap = Maps.newConcurrentMap();
+				resultMap.put("id", authId);
+				resultMap.put("name", sysMenu.getMenuName());
+				if (authIds.indexOf(authId) > -1) {
+					resultMap.put("checked", true);
+				}
+				if (hasChildren(authId)) {
+					resultMap.put("children", getMenuZTreeByParentId(authId, authIds));
+				} else {
+					resultMap.put("open", true);
+				}
+				
+				results.add(resultMap);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return results;
 	}
 	/**
 	 * ----------------------------------------------------- privateMethod end

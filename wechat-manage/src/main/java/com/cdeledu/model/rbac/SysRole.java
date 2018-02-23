@@ -16,7 +16,7 @@ public class SysRole extends DataEntity {
 	// 角色编码
 	private String roleCode;
 	// 角色分类
-	private String categoryCode;
+	private Integer categoryCode;
 
 	public String getRoleName() {
 		return roleName;
@@ -34,11 +34,11 @@ public class SysRole extends DataEntity {
 		this.roleCode = roleCode;
 	}
 
-	public String getCategoryCode() {
+	public Integer getCategoryCode() {
 		return categoryCode;
 	}
 
-	public void setCategoryCode(String categoryCode) {
+	public void setCategoryCode(Integer categoryCode) {
 		this.categoryCode = categoryCode;
 	}
 }

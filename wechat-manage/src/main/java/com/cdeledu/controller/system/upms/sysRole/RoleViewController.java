@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.controller.BaseController;
-import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysRole;
+import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.RoleService;
-import com.google.common.collect.Lists;
+import com.cdeledu.service.sys.SysMenuService;
 import com.google.common.collect.Maps;
 
 /**
@@ -35,6 +35,8 @@ public class RoleViewController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	RoleService roleService;
+	@Autowired
+	SysMenuService sysMenuService;
 
 	/**
 	 * @方法:角色列表页面跳转
@@ -83,36 +85,64 @@ public class RoleViewController extends BaseController {
 	}
 
 	/**
-	 * @方法描述: 我的权限页面
+	 * @方法描述 : 角色权限
 	 * @return
 	 */
-	@RequestMapping(params = "mypermission", method = RequestMethod.GET)
-	public ModelAndView mypermission() {
-		return new ModelAndView("permission/mypermission");
+	@RequestMapping(value = "roleAccessConfig", params = "roleMenu")
+	public ModelAndView roleMenu(
+			@RequestParam(name = "roleCode", defaultValue = "-1", required = true) int roleCode) {
+		ModelAndView mv = this.getModelAndView();
+		mv.addObject("roleCode", roleCode);
+		mv.setViewName("system/sysRole/roleMenu");
+		return mv;
 	}
 
 	/**
-	 * @方法描述: 我的权限 bootstrap tree data
+	 * @方法描述 : 角色权限列表数据
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(params = "getPermissionTree", method = RequestMethod.POST)
-	public List<Map<String, Object>> getPermissionTree() {
-		List<Map<String, Object>> resultList = Lists.newArrayList();
-		// 查询我所有的角色 ---> 权限
-		// 把查询出来的roles 转换成bootstarp 的 tree数据
-		return resultList;
+	@RequestMapping(value = "roleAccessConfig", params = "roleMenuList")
+	public List<Map<String, Object>> roleMenuList(
+			@RequestParam(name = "roleCode", defaultValue = "-1", required = true) int roleCode) {
+		try {
+			return sysMenuService.getMenuZTree(roleCode);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	/**
-	 * @方法描述: 根据角色ID查询权限
-	 * @param roleId
+	 * @方法描述 : 角色用户
+	 * @return
+	 */
+	@RequestMapping(value = "roleAccessConfig", params = "roleUser")
+	public ModelAndView roleUser(
+			@RequestParam(name = "roleCode", defaultValue = "-1", required = true) int roleCode) {
+		ModelAndView mv = this.getModelAndView();
+		mv.addObject("roleCode", roleCode);
+		mv.setViewName("system/sysRole/roleUser");
+		return mv;
+	}
+
+	/**
+	 * @方法描述 : 角色用户列表
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(params = "selectPermissionById")
-	public List<SysMenu> selectPermissionById(int roleId) {
-		List<SysMenu> sysMenuList = Lists.newArrayList();
-		return sysMenuList;
+	@RequestMapping(value = "roleAccessConfig", params = "roleUserList")
+	public Map<String, Object> roleUserList(
+			@RequestParam(name = "roleId", required = true, defaultValue = "-1") int roleId) {
+		Map<String, Object> resultMap = Maps.newConcurrentMap();
+		try {
+			List<SysUser> sysUserList = roleService.getUserByRole(roleId);
+			resultMap.put("rows", sysUserList);
+			resultMap.put("total", sysUserList.size());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			resultMap.put("rows", null);
+			resultMap.put("total", 0);
+		}
+		return resultMap;
 	}
 }
