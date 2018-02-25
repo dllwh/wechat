@@ -76,10 +76,11 @@ public class SQLFilter extends BaseClass implements Filter {
 			return false;
 		}
 		// 统一转为小写
-		sql = sql.toLowerCase().trim();
+		sql = sql.toLowerCase();
 		// 判断是否包含非法字符
 		for (String keyword : FilterHelper.keywords) {
-			if (sql.indexOf(keyword) != -1) {
+			if (sql.indexOf(" "+keyword+" ") != -1) {
+				System.out.println("------------------------"+keyword);
 				return true;
 			}
 		}
