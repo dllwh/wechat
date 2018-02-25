@@ -396,11 +396,12 @@ public class GlobalExceptionHandler {
 		return result;
 	}
 	
-	
+	/**
 	@ExceptionHandler(value = Exception.class)
 	public void defaultExceptionHandler(HttpServletRequest request, Exception e){
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
 		}
 	}
+	*/
 }
