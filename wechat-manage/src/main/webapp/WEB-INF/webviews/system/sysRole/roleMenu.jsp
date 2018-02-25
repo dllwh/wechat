@@ -14,11 +14,14 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
-			<div class="col-xs-12">
-				<div id="roleMenu" class="ztree"></div>
-				<button id="checkAllNodes" type="button" class="btn btn-warning">全选</button>
-				<button id="cleanAllNodes" type="button" class="btn btn-warning">清除</button>
-			</div>
+			<i class="fa fa-info-circle" style="text-indent: 1em;">
+				选中复选框即可授予相应权限，取消选中则回收相应权限
+			</i>
+		</div>
+		<div class="row">
+			<div id="roleMenu" class="ztree"></div>
+			<button id="checkAllNodes" type="button" class="btn btn-warning">全选</button>
+			<button id="cleanAllNodes" type="button" class="btn btn-warning">清除</button>
 		</div>
 	</div>
 </body>
