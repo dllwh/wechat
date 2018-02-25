@@ -159,4 +159,30 @@
 		INNER JOIN sys_role sr ON sr.id = srm.roleId
 		WHERE sr.isEnabled = 1 AND sr.isVisible = 1 AND srm.menuId = #{id}
 	</select>
+	
+	<select id="getAllMenuIdByRole" parameterType="int" resultType="java.lang.Integer">
+		SELECT DISTINCT menuId FROM sys_role_menu WHERE roleId = #{roleId}
+	</select>
+	
+	<select id="getMenuPermsByParentCode" resultType="com.cdeledu.model.rbac.SysMenu">
+		SELECT * 
+		FROM 
+			sys_menu 
+		WHERE 
+				isEnabled = 1 
+			AND isVisible = 1 
+			AND parentCode = #{parentCode}
+			ORDER BY sequence 
+	</select>
+	
+	<select id="getMenuByType" resultType="com.cdeledu.model.rbac.SysMenu">
+		SELECT * 
+		FROM 
+			sys_menu 
+		WHERE 
+				isEnabled = 1 
+			AND isVisible = 1 
+			AND type = #{type}
+			ORDER BY sequence 
+	</select>
 </mapper>
