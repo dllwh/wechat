@@ -16,8 +16,29 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>角色名称:${roleName }</h5>
+					</div>
+					<div class="ibox-content">
+						从左边的列表中选择用户后，点击向右箭头即可为角色添加用户或者双击选中的用户
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="ibox float-e-margins">
 					<div class="ibox-content">
 						<table id="roleUserTable" 
+							class="table table-striped table-bordered table-hover">
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<table id="roleUserTable1" 
 							class="table table-striped table-bordered table-hover">
 						</table>
 					</div>
@@ -36,6 +57,7 @@
 		function initTable(){
 			//先销毁表格  
 			$("#roleUserTable").bootstrapTable('destroy');
+			$("#roleUserTable1").bootstrapTable('destroy');
 			
 			$("#roleUserTable").bootstrapTableEx({
 				showRefresh:false,
@@ -51,12 +73,24 @@
 				},{
 					field : 'userName',
 					title : '用户名称'
+				}]
+			});
+			
+			$("#roleUserTable1").bootstrapTableEx({
+				showRefresh:false,
+				showColumns: false,
+				title:"1",
+				url :"${_currConText }/roleView/roleAccessConfig.shtml?roleUserList&roleId=${roleCode}",
+				columns : [ { 
+					field: "cb", 
+					checkbox : true, 
+					hidden:true
 				},{
-					field : 'nickName',
-					title : '昵称'
+					field : 'id',
+					title : '用户ID'
 				},{
-					field : 'realName',
-					title : '真实姓名'
+					field : 'userName',
+					title : '用户名称'
 				}]
 			});
 		}

@@ -107,19 +107,26 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "deleteUser")
-	public AjaxJson delUser(@RequestParam(value = "id", required = true) Integer id) {
+	public AjaxJson delUser(@RequestParam(value = "id", required = true,defaultValue = "-1") Integer id) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			SysUser sysUser = new SysUser();
-			sysUser.setId(id);
-			List<SysUserRole> userRoleList = manageruserService.getUserRole(sysUser);
-			if (userRoleList == null || userRoleList.isEmpty() || userRoleList.size() == 0) {
-				manageruserService.delete(id);
-				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			if(id != 1 ){
+				SysUser sysUser = new SysUser();
+				sysUser.setId(id);
+				List<SysUserRole> userRoleList = manageruserService.getUserRole(sysUser);
+				if (userRoleList == null || userRoleList.isEmpty() || userRoleList.size() == 0) {
+					manageruserService.delete(id);
+					resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+				} else {
+					resultMsg.setSuccess(false);
+					resultMsg.setMsg("删除失败，该用户已分配角色");
+				}
 			} else {
 				resultMsg.setSuccess(false);
-				resultMsg.setMsg("删除失败，该用户已分配角色");
+				resultMsg.setResultCode(403);
+				resultMsg.setMsg("无法删除超级管理员账号");
 			}
+			
 		} catch (Exception e) {
 			resultMsg.setSuccess(false);
 			resultMsg.setResultCode(10001);

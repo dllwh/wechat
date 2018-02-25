@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
@@ -66,22 +66,10 @@ public class RoleViewController extends BaseController {
 			resultMap.put("rows", roleService.findForJdbcParam(role));
 			resultMap.put("total", roleService.getCountForJdbcParam(role));
 		} catch (Exception e) {
-			e.printStackTrace();
 			resultMap.put("rows", null);
 			resultMap.put("total", 0);
 		}
 		return resultMap;
-	}
-
-	/**
-	 * @方法描述: 检查角色
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(params = "checkRole")
-	public AjaxJson checkRole() {
-		AjaxJson ajaxJson = new AjaxJson();
-		return ajaxJson;
 	}
 
 	/**
@@ -120,8 +108,14 @@ public class RoleViewController extends BaseController {
 	public ModelAndView roleUser(
 			@RequestParam(name = "roleCode", defaultValue = "-1", required = true) int roleCode) {
 		ModelAndView mv = this.getModelAndView();
-		mv.addObject("roleCode", roleCode);
-		mv.setViewName("system/sysRole/roleUser");
+		try {
+			mv.addObject("roleCode", roleCode);
+			mv.addObject("roleName", roleService.getRoleById(roleCode).getRoleName());
+			mv.setViewName("system/sysRole/roleUser");
+		} catch (Exception e) {
+			mv.setViewName(GlobalConstants.ERROR_PAGE_404);
+		}
+		
 		return mv;
 	}
 

@@ -27,7 +27,15 @@
 				and roleCode  LIKE CONCAT(CONCAT('%', #{roleCode}),'%') 
 			</if>
 		</where>
-		ORDER BY sequence  ASC
+		ORDER BY
+		<choose>
+			<when test="sortName != null and sortName != '' ">${sortName}</when>
+			<otherwise>sequence</otherwise>
+		</choose>
+		<choose>
+			<when test="sortOrder != null and sortOrder != '' ">${sortOrder}</when>
+			<otherwise>ASC</otherwise>
+		</choose>
 	</sql>
 	
 	<select id="findForJdbcParam" parameterType="com.cdeledu.model.rbac.SysRole"
@@ -45,7 +53,7 @@
 	</select>
 	
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from sys_role where id = #{id}
+		delete from sys_role where id = #{id} and id != 1 and allowDelete = 1 and isEnabled = 0
 	</delete>
 	
 	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.SysRole">

@@ -303,10 +303,14 @@
 							<th>修改日期</th>
 							<td><span id="s_updateTime"></span></td>
 						</tr>
+						<tr>
+							<th>说明</th>
+							<td colspan="3"><span id="s_remark"></span></td>
+						</tr>
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-white" data-dismiss="modal">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">
 						关闭
 					</button>
 				</div>
@@ -393,7 +397,6 @@
 		$("#roleTable").bootstrapTableEx({
 			toolbar: '#roleTableToolbar',
 			url :"${_currConText}/roleView.shtml?getList",
-			queryParams: queryParams,			// 传递参数（*）
 			columns : [ { 
 				field: "cb", 
 				checkbox : true, 
@@ -403,9 +406,37 @@
 				title : '角色名称'
 			}, {
 				field : 'roleCode',
+				align: "center",
 				title : '角色编码'
+			}, {
+				field : 'allowEdit',
+				visible:false,
+				width:"8%",
+				title : '编辑状态',
+				formatter : function(value,rowData,rowIndex){
+					if(value == 1){
+						return "<span class='label label-info radius'>允许</span>";
+					} else {
+						return "<span class='label label-danger radius'>不允许</span>";
+					}
+				}
+			}, {
+				field : 'allowDelete',
+				width:"8%",
+				visible:false,
+				title : '删除状态',
+				formatter : function(value,rowData,rowIndex){
+					if(value == 1){
+						return "<span class='label label-info radius'>允许</span>";
+					} else {
+						return "<span class='label label-danger radius'>不允许</span>";
+					}
+				}
 			},{
 				field: 'categoryCode',
+				align: "center",
+				width:"10%",
+				sortable: true, // 开启排序功能
 				title: '角色类型',
 				formatter : function(value,rowData,rowIndex){
 					if(value == 1){
@@ -416,6 +447,8 @@
 				}
 			},{
 				field: 'isVisible',
+				align: "center",
+				sortable: true, // 开启排序功能
 				title: '使用状态',
 				formatter : function(value,rowData,rowIndex){
 					if(value == 1){
@@ -426,20 +459,24 @@
 				}
 			},{
 				field: 'sequence',
+				align: "center",
+				sortable: true, // 开启排序功能
 				title: '排序'
+			},{
+				field: 'createTime',
+				title: '创建时间',
+				visible:false,
+				formatter : function(value,rowData,rowIndex){
+					return dllwh.genStrDateTime(value);
+				}
 			},{
 				field: 'updateTime',
 				title: '最后修改时间',
+				visible:true,
 				formatter : function(value,rowData,rowIndex){
 					return dllwh.genStrDateTime(value);
 				}
 			}],
-			onLoadSuccess: function(){  // 加载成功时执行  
-				
-			},
-			onLoadError: function(){  // 加载失败时执行
-				
-			},
 			onClickRow : function(row){ // 当用户点击某一行的时候触发
 				
 			},
@@ -469,6 +506,8 @@
 		var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 			rows : params.pageSize, //页面大小
 			page : params.pageNumber,
+			sortName: params.sortName,
+			sortOrder: params.sortOrder,
 			roleName : $("#txtSearchKey").val().trim()
 		};
 		return temp;
@@ -579,14 +618,14 @@
 				});
 			}
 		},
-		UserClickFun : function() {// 角色用户
+		UserClickFun : function() {// 角色用户关联
 			if(RoleController.check()){
 				var roleCode = this.setItem.id;
 				dialogOpen({
-					title: '角色用户',
-					width: '50%',
+					title: '角色用户关联',
+					width: '80%',
 					height: '90%',
-					maxmin: true,
+					maxmin: false,
 					url: '${_currConText }/roleView/roleAccessConfig.shtml?roleUser&roleCode='+roleCode,
 					success: function(){
 						
@@ -678,6 +717,8 @@
 		$("#s_createTime").text(dllwh.genStrDateTime(selectContent.createTime));
 		$("#s_modifier").text(selectContent.modifier);
 		$("#s_updateTime").text(dllwh.genStrDateTime(selectContent.updateTime));
+		$("#s_remark").text(selectContent.remark);
+		
 		$('#showRoleMode').modal('show');
 	}
 

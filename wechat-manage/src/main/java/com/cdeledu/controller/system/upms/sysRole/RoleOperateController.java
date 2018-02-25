@@ -74,8 +74,11 @@ public class RoleOperateController extends BaseController {
 			if (null != role) {
 				String roleCode = role.getRoleCode();
 				SysRole seacherRole = roleService.getRoleById(role.getId());
-				if (seacherRole != null) {
+				if (seacherRole != null && seacherRole.getAllowEdit() == 1) {// 角色允许编辑
 					if (seacherRole.getRoleCode().equalsIgnoreCase(roleCode)) {
+						if(seacherRole.getId() == 1){
+							role.setRoleCode("");//超级管理员不允许更新角色代码
+						}
 						roleService.update(role);
 					} else {
 						if (roleService.existRoleWithRoleCode(roleCode)) {
@@ -85,10 +88,13 @@ public class RoleOperateController extends BaseController {
 							roleService.update(role);
 						}
 					}
+				} else {
+					resultMsg.setSuccess(false);
+					resultMsg.setResultCode(201);
+					resultMsg.setMsg("该角色不允许更新");
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			resultMsg.setSuccess(false);
 			resultMsg.setResultCode(500);
 			msg = MessageConstant.MSG_OPERATION_FAILED;
@@ -105,24 +111,37 @@ public class RoleOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "delRole")
 	@SystemLog(desc = "角色删除", opType = SysOpType.DEL, tableName = "sys_role")
-	public AjaxJson delRole(@RequestParam(name="delId",required=false) int roleId) {
+	public AjaxJson delRole(@RequestParam(name="delId",required=true,defaultValue="-1") int roleId) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			if (roleService.hasMenuByRole(roleId)) {
-				resultMsg.setSuccess(false);
-				resultMsg.setResultCode(201);
-				resultMsg.setMsg("该角色下尚有权限未解除");
-			} else {
-				if (roleService.hasUserByRole(roleId)) {
+			if(roleId !=1 ){
+				SysRole seacherRole = roleService.getRoleById(roleId);
+				if(seacherRole!= null && seacherRole.getAllowDelete() == 1){ // 角色允许删除
+					if (roleService.hasMenuByRole(roleId)) {
+						resultMsg.setSuccess(false);
+						resultMsg.setResultCode(201);
+						resultMsg.setMsg("该角色已经含有权限,无法直接删除!");
+					} else {
+						if (roleService.hasUserByRole(roleId)) {
+							resultMsg.setSuccess(false);
+							resultMsg.setResultCode(201);
+							resultMsg.setMsg("该角色已被使用，无法直接删除！");
+						} else {
+							roleService.delete(roleId);
+							resultMsg.setSuccess(true);
+							resultMsg.setResultCode(200);
+							resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+						}
+					}
+				} else {
 					resultMsg.setSuccess(false);
 					resultMsg.setResultCode(201);
-					resultMsg.setMsg("该角色下尚有用户未解除");
-				} else {
-					roleService.delete(roleId);
-					resultMsg.setSuccess(true);
-					resultMsg.setResultCode(200);
-					resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+					resultMsg.setMsg("该角色不允许删除");
 				}
+			} else {
+				resultMsg.setSuccess(false);
+				resultMsg.setResultCode(201);
+				resultMsg.setMsg("无法删除超级管理员");
 			}
 		} catch (Exception e) {
 			resultMsg.setSuccess(false);
@@ -178,7 +197,7 @@ public class RoleOperateController extends BaseController {
 		role.setIsVisible(visible);
 		try {
 			if(!roleService.hasMenuByRole(id) && ! roleService.hasUserByRole(id) && id != 1){				
-				roleService.update(role);	
+				roleService.update(role);
 				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 			} else {
 				resultMsg.setSuccess(false);
