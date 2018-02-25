@@ -7,13 +7,16 @@ var dialogOpen = function(opt){
 	var defaults = {
 		id : 'layerForm',
 		title : '',
-		width: '',
-		height: '',
+		width : '',
+		height : '',
 		url : null,
 		scroll : false,
 		data : {},
-		success: function(){},
-		yes: function(){}
+		maxmin : false,
+		success : function() {
+		},
+		yes : function() {
+		}
 	}
 	
 	var option = $.extend({}, defaults, opt);
@@ -24,24 +27,25 @@ var dialogOpen = function(opt){
 		content = [opt.url, 'no']
 	}
 	
+
 	layer.open({
 		id : option.id,
-		type: 2,
+		type : 2,
 		title : option.title,
-		shadeClose: true,
+		shadeClose : true,
 		move : false,
-		shade: 0.3,
-		anim: -1,
-		isOutAnim: false,
-		resize :false,
+		shade : 0.3,
+		anim : -1,
+		isOutAnim : false,
+		resize : false,
 		shadeClose : false,
-		closeBtn :2,
-		area : [option.width, option.height],
-		btn: ['确定', '取消'],
-		maxmin: true,
+		closeBtn : 2,
+		area : [ option.width, option.height ],
+		btn : [ '确定', '取消' ],
+		maxmin : option.maxmin,
 		content : content,
-		success:option.success,
-		yes:option.yes
+		success : option.success,
+		yes : option.yes
 	}); 
 }
 
