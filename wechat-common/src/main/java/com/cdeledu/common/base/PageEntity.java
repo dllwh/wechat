@@ -1,7 +1,6 @@
 package com.cdeledu.common.base;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,20 +27,6 @@ public class PageEntity implements Serializable {
 	/** 按什么排序(asc,desc) */
 	protected String order;
 	protected String sortOrder;
-
-	public boolean hasField(String fieldName) {
-		if (null == fieldName) {
-			return false;
-		}
-		Field[] fields = this.getClass().getDeclaredFields();
-		for (int i = 0; i < fields.length; i++) {
-			Field field = fields[i];
-			if (field.getName().equalsIgnoreCase(fieldName)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	public int getPage() {
 		if (page == null) {
@@ -106,11 +91,7 @@ public class PageEntity implements Serializable {
 	}
 
 	public void setSort(String sort) {
-		if (hasField(sort)) {
-			this.sort = sort;
-		} else {
-			this.sort = "";
-		}
+		this.sort = sort;
 	}
 
 	public String getSortName() {
@@ -121,11 +102,7 @@ public class PageEntity implements Serializable {
 	}
 
 	public void setSortName(String sortName) {
-		if (hasField(sortName)) {
-			this.sortName = sortName;
-		} else {
-			this.sort = "";
-		}
+		this.sortName = sortName;
 	}
 
 	public String getOrder() {
