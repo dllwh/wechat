@@ -95,7 +95,10 @@
 		<%-- 实时交易记录 --%>
 		<div class="clearfix">
 			<div class="t_Record">
-				<div id="main" style="height:300px; overflow:hidden;overflow:auto" ></div> 
+				<div id="main" style="height:300px; overflow:hidden;overflow:auto" ></div>
+				<hr> 
+				<div id="sysOplog" style="height:300px; overflow:hidden;overflow:auto" ></div> 
+				<hr>
 			</div>
 			<div class="news_style">
 				<div class="title_name">最新消息</div>
@@ -122,64 +125,68 @@
 </body>
 <%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 <script type="text/javascript">
-$(function(){
-	$(".t_Record").width($(window).width()-320);
-	//当文档窗口发生改变时 触发  
-	$(window).resize(function(){
+	$(function(){
 		$(".t_Record").width($(window).width()-320);
+		//当文档窗口发生改变时 触发  
+		$(window).resize(function(){
+			$(".t_Record").width($(window).width()-320);
+		});
 	});
-});
 
 	require.config({
 		paths : {
 			echarts : '${_currConText }/plug-in/echarts2'
 		}
 	});
-	require([ 'echarts', 'echarts/theme/macarons', 'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
-	'echarts/chart/bar' ], function(ec, theme) {
-        var myChart = ec.init(document.getElementById('main'),theme);
-       option = {
-			title : {
-				text : '月用户登录记录',
-				subtext : '实时获取用户登录记录'
-			},
-			tooltip : {
-				trigger : 'axis'
-			},
-			legend : {
-				data : [ '所有记录', '成功记录', '失败记录' ]
-			},
-			toolbox : {
-				show : true,
-				feature : {
-					mark : {
-						show : true
-					},
-					dataView : {
-						show : true,
-						readOnly : false
-					},
-					magicType : {
-						show : true,
-						type : [ 'line', 'bar' ]
-					},
-					restore : {
-						show : true
-					},
-					saveAsImage : {
-						show : true
+	require([ 
+		'echarts', 
+		'echarts/theme/macarons', 
+		'echarts/chart/line', // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+		'echarts/chart/bar' ], 
+		function(ec, theme) {
+			var myChart = ec.init(document.getElementById('main'),theme);
+			option = {
+				title : {
+					text : '月用户登录记录',
+					subtext : '实时获取用户登录记录'
+				},
+				tooltip : {
+					trigger : 'axis'
+				},
+				legend : {
+					data : [ '所有记录', '成功记录', '失败记录' ]
+				},
+				toolbox : {
+					show : true,
+					feature : {
+						mark : {
+							show : true
+						},
+						dataView : {
+							show : true,
+							readOnly : false
+						},
+						magicType : {
+							show : true,
+							type : [ 'line', 'bar' ]
+						},
+						restore : {
+							show : true
+						},
+						saveAsImage : {
+							show : true
+						}
 					}
-				}
-			},
-			calculable : true,
-			xAxis : [ {
-				type : 'category',
-				data : [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月','10月', '11月', '12月' ]
-			} ],
-			yAxis : [ {
-				type : 'value'
-			} ],
-			series : [
+				},
+				calculable : true,
+				xAxis : [ {
+					type : 'category',
+					data : [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月','10月', '11月', '12月' ]
+				} ],
+				yAxis : [ {
+					type : 'value'
+				} ],
+				series : [
 					{
 						name : '所有记录',
 						type : 'bar',
@@ -197,8 +204,7 @@ $(function(){
 					{
 						name : '成功记录',
 						type : 'bar',
-						data : [ 26, 59, 30, 84, 27, 77, 176, 1182, 487, 188,
-								60, 23 ],
+						data : [ 26, 59, 30, 84, 27, 77, 176, 1182, 487, 188, 60, 23 ],
 						markPoint : {
 							data : [ {
 								name : '年最高',
@@ -213,13 +219,12 @@ $(function(){
 								yAxis : 3
 							} ]
 						},
-
+		
 					},
 					{
 						name : '失败记录',
 						type : 'bar',
-						data : [ 26, 59, 60, 264, 287, 77, 176, 122, 247, 148,
-								60, 23 ],
+						data : [ 26, 59, 60, 264, 287, 77, 176, 122, 247, 148,60, 23 ],
 						markPoint : {
 							data : [ {
 								name : '年最高',
@@ -234,11 +239,36 @@ $(function(){
 								yAxis : 3
 							} ]
 						},
-
-					} ]
-		};
-
-		myChart.setOption(option);
+					} 
+				]
+			};
+			myChart.setOption(option);
+			
+			var sysOplogChart = ec.init(document.getElementById('sysOplog'),theme);
+			var sysOplogOption = {
+				title : {
+					text : '用户操作日志'
+				},
+				tooltip : {
+					trigger : 'axis'
+				},
+				calculable : true,
+				xAxis : [ {
+					type : 'category',
+					data : [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月','10月', '11月', '12月' ]
+				} ],
+				yAxis : [ {
+					type : 'value'
+				} ],
+				series : [
+					{
+						name : '所有记录',
+						type : 'bar',
+						data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 35.6, 62.2, 32.6, 20.0, 6.4, 3.3]
+					}
+				]
+			};
+		sysOplogChart.setOption(sysOplogOption);
 	});
 </script>
 </html>
