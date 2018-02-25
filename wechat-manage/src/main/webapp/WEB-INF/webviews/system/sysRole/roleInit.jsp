@@ -157,6 +157,14 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="sequence" class="control-label col-xs-12 col-sm-2">
+								排序
+							</label>
+							<div class="col-xs-12 col-sm-9">
+								<input type="number" value="1" name="sequence" min="1">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-2 control-label">角色描述：</label>
 							<div class="col-sm-9">
 								<textarea class="form-control" rows="3" name=remark></textarea>
@@ -224,6 +232,14 @@
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<i class="fa fa-info-circle"></i>注：选中则启用该角色
 								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="sequence" class="control-label col-xs-12 col-sm-2">
+								排序
+							</label>
+							<div class="col-xs-12 col-sm-9">
+								<input type="number" value="1" name="sequence" min="1">
 							</div>
 						</div>
 						<div class="form-group">

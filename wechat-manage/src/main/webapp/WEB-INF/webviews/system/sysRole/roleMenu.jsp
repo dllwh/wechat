@@ -92,6 +92,7 @@
 			},
 			success : function(result) {
 				if(result.success){
+					dialogMsg("授权成功");
 					parent.layer.closeAll();
 				} else{
 					dialogMsg(result.msg, "error");
