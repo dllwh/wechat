@@ -13,6 +13,7 @@ var dialogOpen = function(opt){
 		scroll : false,
 		data : {},
 		maxmin : false,
+		btn : [ '确定', '取消' ],
 		success : function() {
 		},
 		yes : function() {
@@ -41,7 +42,7 @@ var dialogOpen = function(opt){
 		shadeClose : false,
 		closeBtn : 2,
 		area : [ option.width, option.height ],
-		btn : [ '确定', '取消' ],
+		btn : option.btn,
 		maxmin : option.maxmin,
 		content : content,
 		success : option.success,
