@@ -20,7 +20,14 @@ public interface RoleService extends BaseService<SysRole> {
 	SysRole getRoleById(Integer roleId) throws Exception;
 
 	/** 通过角色获取用户列表 */
-	List<SysUser> getUserByRole(Integer roleId) throws Exception;
+	List<SysUser> getUserByRole(SysRole role) throws Exception;
+
+	Integer countUserByRole(SysRole role) throws Exception;
+
+	/** 没有拥有特定角色的用户列表 */
+	List<SysUser> getUserNoExistRoleByRole(SysRole role) throws Exception;
+
+	Integer countUserNoExistRoleByRole(SysRole role) throws Exception;
 
 	/** 角色授权 */
 	Integer saveRoleAccess(Integer roleId, Integer menuID) throws Exception;

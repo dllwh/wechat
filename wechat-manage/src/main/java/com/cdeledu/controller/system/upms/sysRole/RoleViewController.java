@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysRole;
-import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.RoleService;
 import com.cdeledu.service.sys.SysMenuService;
 import com.google.common.collect.Maps;
@@ -125,15 +124,31 @@ public class RoleViewController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "roleAccessConfig", params = "roleUserList")
-	public Map<String, Object> roleUserList(
-			@RequestParam(name = "roleId", required = true, defaultValue = "-1") int roleId) {
-		Map<String, Object> resultMap = Maps.newConcurrentMap();
+	public Map<String, Object> roleUserList(SysRole role) {
+		Map<String, Object> resultMap = Maps.newHashMap();
 		try {
-			List<SysUser> sysUserList = roleService.getUserByRole(roleId);
-			resultMap.put("rows", sysUserList);
-			resultMap.put("total", sysUserList.size());
+			resultMap.put("rows", roleService.getUserByRole(role));
+			resultMap.put("total", roleService.countUserByRole(role));
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			resultMap.put("rows", null);
+			resultMap.put("total", 0);
+		}
+		return resultMap;
+	}
+	
+	/**
+	 * @方法描述 : 角色用户列表
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "roleAccessConfig", params = "noExistRoleUserList")
+	public Map<String, Object> getUserNoExistRole(SysRole role) {
+		Map<String, Object> resultMap = Maps.newHashMap();
+		try {
+			resultMap.put("rows", roleService.getUserNoExistRoleByRole(role));
+			resultMap.put("total", roleService.countUserNoExistRoleByRole(role));
+		} catch (Exception ex) {
 			resultMap.put("rows", null);
 			resultMap.put("total", 0);
 		}

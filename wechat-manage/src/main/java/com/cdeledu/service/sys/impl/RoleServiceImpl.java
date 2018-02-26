@@ -103,16 +103,38 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 		}
 		return sysRole;
 	}
-
 	
 	@Override
-	public List<SysUser> getUserByRole(Integer roleId) throws Exception {
-		if(roleId != null){
-			return (List<SysUser>) baseDao.findListForJdbcParam(prefix+"getUserByRole", roleId);
+	public List<SysUser> getUserByRole(SysRole role) throws Exception {
+		if(role != null && role.getId() != null){
+			return (List<SysUser>) baseDao.findListForJdbcParam(prefix+"getUserByRole", role);
 		}
 		return null;
 	}
-
+	
+	@Override
+	public Integer countUserByRole(SysRole role) throws Exception {
+		if(role != null && role.getId() != null){
+			return (Integer) baseDao.getCountForJdbcParam(prefix+"countUserByRole", role);
+		}
+		return 0;
+	}
+	
+	@Override
+	public List<SysUser> getUserNoExistRoleByRole(SysRole role) throws Exception {
+		if(role != null && role.getId() != null){
+			return (List<SysUser>) baseDao.findListForJdbcParam(prefix+"getUserNoExistRoleByRole", role);
+		}
+		return null;
+	}
+	@Override
+	public Integer countUserNoExistRoleByRole(SysRole role) throws Exception {
+		if(role != null && role.getId() != null){
+			return (Integer) baseDao.getCountForJdbcParam(prefix+"countUserNoExistRoleByRole", role);
+		}
+		return 0;
+	}
+	
 	@Override
 	public Integer saveRoleAccess(Integer roleId, Integer menuID) throws Exception {
 		SysRoleMenu sysRoleMenu = new SysRoleMenu();

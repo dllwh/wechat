@@ -62,7 +62,7 @@
 			$("#roleUserTable").bootstrapTableEx({
 				showRefresh:false,
 				showColumns: false,
-				url :"${_currConText }/roleView/roleAccessConfig.shtml?roleUserList&roleId=${roleCode}",
+				url :"${_currConText }/roleView/roleAccessConfig.shtml?noExistRoleUserList&id=${roleCode}",
 				columns : [ { 
 					field: "cb", 
 					checkbox : true, 
@@ -79,8 +79,7 @@
 			$("#roleUserTable1").bootstrapTableEx({
 				showRefresh:false,
 				showColumns: false,
-				title:"1",
-				url :"${_currConText }/roleView/roleAccessConfig.shtml?roleUserList&roleId=${roleCode}",
+				url :"${_currConText }/roleView/roleAccessConfig.shtml?roleUserList&id=${roleCode}",
 				columns : [ { 
 					field: "cb", 
 					checkbox : true, 

@@ -18,6 +18,14 @@ public class SysRole extends DataEntity {
 	// 角色分类
 	private Integer categoryCode;
 
+	public SysRole() {
+		super();
+	}
+
+	public SysRole(Integer id) {
+		this.id = id;
+	}
+
 	public String getRoleName() {
 		return roleName;
 	}

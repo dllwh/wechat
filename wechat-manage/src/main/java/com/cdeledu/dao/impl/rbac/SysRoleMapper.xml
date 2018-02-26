@@ -133,18 +133,52 @@
 		INSERT INTO sys_role_menu(roleId,menuId) VALUES (#{roleId},#{powerId});
 	</insert>
 	
-	<select id="getUserByRole" parameterType="java.lang.Integer" 
-		resultType="com.cdeledu.model.rbac.SysUser">
+	<!-- 拥有特定角色的用户 -->
+	<sql id="getUserByRole_body">
 		SELECT
-			su.id,
-			su.userName,
-			su.realName,
-			su.nickName
+			su.id,su.userName,su.realName,su.nickName
 		FROM
 			sys_user su
 		INNER JOIN sys_user_role sur ON sur.userId = su.id
 		WHERE
-			sur.roleId = #{roleId}
+			sur.roleId = #{id}
+	</sql>
+	<select id="getUserByRole" parameterType="com.cdeledu.model.rbac.SysRole" 
+		resultType="com.cdeledu.model.rbac.SysUser">
+		select * from (
+			<include refid="getUserByRole_body"/>
+		) as myTable LIMIT #{startRow},#{rows}
+	</select>
+	
+	<select id="countUserByRole" parameterType="java.lang.Integer" 
+		resultType="java.lang.Integer">
+		select count(*) from (
+			<include refid="getUserByRole_body"/>
+		) as myTable
+	</select>
+	
+	<!-- 没有拥有特定角色的用户 -->
+	<sql id="getUserNoExistRoleByRole_body">
+		SELECT
+			su.id,su.userName,su.realName,su.nickName
+		FROM
+			sys_user su
+		WHERE 
+			su.id NOT IN(SELECT DISTINCT userId FROM sys_user_role WHERE roleId = #{id} )
+	</sql>
+	
+	<select id="getUserNoExistRoleByRole" parameterType="com.cdeledu.model.rbac.SysRole" 
+		resultType="com.cdeledu.model.rbac.SysUser">
+		select * from (
+			<include refid="getUserNoExistRoleByRole_body"/>
+		) as myTable LIMIT #{startRow},#{rows}
+	</select>
+	
+	<select id="countUserNoExistRoleByRole" parameterType="java.lang.Integer" 
+		resultType="java.lang.Integer">
+		select count(*) from (
+			<include refid="getUserNoExistRoleByRole_body"/>
+		) as myTable
 	</select>
 	
 	<delete id="delRoleAccess" parameterType="int">
