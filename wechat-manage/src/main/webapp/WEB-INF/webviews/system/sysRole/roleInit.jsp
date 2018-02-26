@@ -623,9 +623,11 @@
 				var roleCode = this.setItem.id;
 				dialogOpen({
 					title: '角色用户关联',
-					width: '80%',
+					width: '100%',
 					height: '90%',
 					maxmin: false,
+					scroll : true,
+					btn : [ '关闭'],
 					url: '${_currConText }/roleView/roleAccessConfig.shtml?roleUser&roleCode='+roleCode,
 					success: function(){
 						

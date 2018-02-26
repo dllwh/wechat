@@ -20,29 +20,21 @@
 						<h5>角色名称:${roleName }</h5>
 					</div>
 					<div class="ibox-content">
-						从左边的列表中选择用户后，点击向右箭头即可为角色添加用户或者双击选中的用户
+						从左边的列表中选择用户后，双击选中的用户即可为角色添加用户
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-6">
-				<div class="ibox float-e-margins">
-					<div class="ibox-content">
-						<table id="roleUserTable" 
-							class="table table-striped table-bordered table-hover">
-						</table>
-					</div>
-				</div>
+				<table id="noExistRoleUserList" 
+					class="table table-striped table-bordered table-hover">
+				</table>
 			</div>
 			<div class="col-xs-6">
-				<div class="ibox float-e-margins">
-					<div class="ibox-content">
-						<table id="roleUserTable1" 
-							class="table table-striped table-bordered table-hover">
-						</table>
-					</div>
-				</div>
+				<table id="roleUserTable" 
+					class="table table-striped table-bordered table-hover">
+				</table>
 			</div>
 		</div>
 	</div>
@@ -56,10 +48,10 @@
 		
 		function initTable(){
 			//先销毁表格  
+			$("#noExistRoleUserList").bootstrapTable('destroy');
 			$("#roleUserTable").bootstrapTable('destroy');
-			$("#roleUserTable1").bootstrapTable('destroy');
 			
-			$("#roleUserTable").bootstrapTableEx({
+			$("#noExistRoleUserList").bootstrapTableEx({
 				showRefresh:false,
 				showColumns: false,
 				url :"${_currConText }/roleView/roleAccessConfig.shtml?noExistRoleUserList&id=${roleCode}",
@@ -73,10 +65,13 @@
 				},{
 					field : 'userName',
 					title : '用户名称'
-				}]
+				}],
+				formatRecordsPerPage : function(a) {
+					return "";
+				}
 			});
 			
-			$("#roleUserTable1").bootstrapTableEx({
+			$("#roleUserTable").bootstrapTableEx({
 				showRefresh:false,
 				showColumns: false,
 				url :"${_currConText }/roleView/roleAccessConfig.shtml?roleUserList&id=${roleCode}",
@@ -90,7 +85,10 @@
 				},{
 					field : 'userName',
 					title : '用户名称'
-				}]
+				}],
+				formatRecordsPerPage : function(a) {
+					return "";
+				}
 			});
 		}
 	</script>
