@@ -73,7 +73,14 @@ $.fn.bootstrapTableEx = function(opt) {
  * 获取查询的参数 
  */
 function queryParams(params) {
-	return {};
+	//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+	var temp = {   
+		rows : params.pageSize, //页面大小
+		page : params.pageNumber,//页码
+		sortName: params.sortName,//排序列名  
+		sortOrder: params.sortOrder//排位命令（desc，asc） 
+	};
+	return temp;
 }
 
 /**
