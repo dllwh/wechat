@@ -19,7 +19,7 @@ public class SysMenu extends DataEntity {
 	private String menuName;
 	// 菜单链接地址
 	private String menuUrl;
-	/** 类型。1:目录，默认值；2：菜单；3：按钮； */
+	/** 类型。0:目录，默认值；1：菜单；2：按钮；3：窗体；4：链接*/
 	private Integer type;
 	/** 父菜单编号 */
 	private Integer parentCode;

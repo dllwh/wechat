@@ -8,81 +8,90 @@
 		useGeneratedKeys="true" keyProperty="id" >
 		insert into sys_menu
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="menuName != null"> menuName, </if>
-			<if test="menuUrl != null"> menuUrl, </if>
+			<if test="menuName != null and menuName !='' "> menuName, </if>
+			<if test="menuUrl != null and menuUrl !='' "> menuUrl, </if>
 			<if test="type != null"> `type`, </if>
 			<if test="parentCode != null"> parentCode, </if>
 			<if test="isVisible != null"> isVisible, </if>
 			<if test="isEnabled != null"> isEnabled, </if>
 			<if test="allowEdit != null"> allowEdit, </if>
 			<if test="allowDelete != null"> allowDelete,</if>
-			<if test="iconClass != null"> iconClass, </if>
+			<if test="iconClass != null and iconClass !='' "> iconClass, </if>
 			<if test="sequence != null"> `sequence`, </if>
-			<if test="creater != null"> creater, </if>
+			<if test="creator != null"> creator, </if>
 			<if test="modifier != null"> modifier, </if>
-			<if test="remark != null"> remark, </if>
+			<if test="remark != null and remark !='' "> remark, </if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="menuName != null"> #{menuName},  </if>
-			<if test="menuUrl != null"> #{menuUrl}, </if>
+			<if test="menuName != null and menuName !='' "> #{menuName},  </if>
+			<if test="menuUrl != null and menuUrl !='' "> #{menuUrl}, </if>
 			<if test="type != null"> #{type}, </if>
 			<if test="parentCode != null"> #{parentCode},  </if>
 			<if test="isVisible != null"> #{isVisible}, </if>
 			<if test="isEnabled != null"> #{isEnabled}, </if>
 			<if test="allowEdit != null"> #{allowedit}, </if>
 			<if test="allowDelete != null"> #{allowdelete}, </if>
-			<if test="iconClass != null"> #{iconClass}, </if>
+			<if test="iconClass != null and iconClass !='' "> #{iconClass}, </if>
 			<if test="sequence != null"> #{sequence}, </if>
-			<if test="creater != null"> #{creater},</if>
+			<if test="creator != null"> #{creator},</if>
 			<if test="modifier != null"> #{modifier}, </if>
-			<if test="remark != null"> #{remark}, </if>
+			<if test="remark != null and remark !='' "> #{remark}, </if>
 		</trim>
 	</insert>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from sys_menu where id = #{id}
+		<!-- delete from sys_menu where id = #{id}  -->
+		 update sys_menu set isEnabled = 0 where id = #{id}
 	</delete>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.cdeledu.model.rbac.SysMenu">
 		update sys_menu
 		<set>
-			<if test="menuname != null"> menuName = #{menuName},</if>
-			<if test="menuurl != null"> menuUrl = #{menuUrl}, </if>
+			<if test="menuName != null and menuName != '' "> menuName = #{menuName},</if>
+			<if test="menuUrl != null and menuUrl != '' "> menuUrl = #{menuUrl}, </if>
 			<if test="type != null"> `type` = #{type}, </if>
-			<if test="parentcode != null"> parentCode = #{parentCode}, </if>
-			<if test="isvisible != null"> isVisible = #{isVisible},</if>
-			<if test="isenabled != null"> isEnabled = #{isEnabled}, </if>
-			<if test="allowedit != null"> allowEdit = #{allowEdit},</if>
-			<if test="allowdelete != null"> allowDelete = #{allowDelete}, </if>
-			<if test="iconclass != null">iconClass = #{iconClass},</if>
+			<if test="parentCode != null"> parentCode = #{parentCode}, </if>
+			<if test="isVisible != null"> isVisible = #{isVisible},</if>
+			<if test="isEnabled != null"> isEnabled = #{isEnabled}, </if>
+			<if test="allowEdit != null"> allowEdit = #{allowEdit},</if>
+			<if test="allowDelete != null"> allowDelete = #{allowDelete}, </if>
+			<if test="iconClass != null and iconClass != '' ">iconClass = #{iconClass},</if>
 			<if test="sequence != null"> `sequence` = #{sequence},</if>
 			<if test="modifier != null">modifier = #{modifier},</if>
-			<if test="remark != null">remark = #{remark},</if>
+			<if test="remark != null and remark != '' ">remark = #{remark},</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 
 	<sql id="findForJdbc_body">
 		SELECT * from sys_menu
-		<where>
-			<if test="menuname != null"> menuName = #{menuName},</if>
-			<if test="menuurl != null"> menuUrl = #{menuUrl}, </if>
-			<if test="type != null"> `type` = #{type}, </if>
-			<if test="parentcode != null"> parentCode = #{parentCode}, </if>
-			<if test="isvisible != null"> isVisible = #{isVisible},</if>
-			<if test="isenabled != null"> isEnabled = #{isEnabled}, </if>
-			<if test="allowedit != null"> allowEdit = #{allowEdit},</if>
-			<if test="allowdelete != null"> allowDelete = #{allowDelete}, </if>
-			<if test="iconclass != null">iconClass = #{iconClass},</if>
-			<if test="sequence != null"> `sequence` = #{sequence},</if>
-			<if test="modifier != null">modifier = #{modifier},</if>
-		</where>
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null"> id = #{id} </if>
+			<if test="menuName != null and menuName !='' "> 
+				and menuName LIKE CONCAT(CONCAT('%', #{menuName}),'%') 
+			</if>
+			<if test="menuUrl != null and menuUrl !='' "> 
+				and menuUrl LIKE CONCAT(CONCAT('%', #{menuUrl}),'%')
+			</if>
+			<if test="type != null"> and `type` = #{type} </if>
+			<if test="parentCode != null">and parentCode = #{parentCode} </if>
+			<if test="isVisible != null">and isVisible = #{isVisible} </if>
+			<if test="allowEdit != null">and allowEdit = #{allowEdit} </if>
+			<if test="allowDelete != null"> and allowDelete = #{allowDelete} </if>
+			<if test="iconClass != null and iconClass !='' ">and iconClass = #{iconClass} </if>
+			<if test="sequence != null">and `sequence` = #{sequence} </if>
+			<if test="modifier != null">and modifier = #{modifier} </if>
+			and isEnabled = 1
+		</trim>
 	</sql>
 	<select id="findForJdbc" parameterType="com.cdeledu.model.rbac.SysMenu"
 		resultType="com.cdeledu.model.rbac.SysMenu">
 		select * from (
 			<include refid="findForJdbc_body"/>
-		) as myTable LIMIT #{startRow},#{rows}
+		) as myTable 
+		<if test="page != -1">
+			LIMIT #{startRow},#{rows}
+		</if>
 	</select>
 
 	<select id="getCountForJdbcParam" parameterType="com.cdeledu.model.rbac.SysMenu"
@@ -96,7 +105,7 @@
 		resultType="com.cdeledu.model.rbac.SysMenu">
 		select * from(
 			<include refid="findForJdbc_body"/>
-		) as myTable LIMIT 1
+		) as myTable
 	</select>
 	
 	<select id="getAllMenuIdByUser" parameterType="com.cdeledu.model.rbac.SysUser" 
@@ -157,7 +166,7 @@
 		FROM
 			sys_role_menu srm
 		INNER JOIN sys_role sr ON sr.id = srm.roleId
-		WHERE sr.isEnabled = 1 AND sr.isVisible = 1 AND srm.menuId = #{id}
+		WHERE sr.isEnabled = 1 AND sr.isVisible = 1 AND srm.roleId != 1 AND srm.menuId = #{id}
 	</select>
 	
 	<select id="getAllMenuIdByRole" parameterType="int" resultType="java.lang.Integer">

@@ -15,6 +15,7 @@ import com.cdeledu.model.easyui.EasyUITreeNode;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SysMenuService;
+import com.cdeledu.util.WebUtilHelper;
 import com.cdeledu.util.apache.collection.ListUtilHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -29,6 +30,15 @@ public class SysMenuServiceImpl implements SysMenuService {
 
 	@Override
 	public Integer insert(SysMenu record) throws Exception {
+		String accessAddress = record.getMenuUrl();
+		if (StringUtils.isNoneEmpty(accessAddress)) {
+			if (accessAddress.startsWith("/")) {
+				accessAddress = accessAddress.substring(1);
+			}
+		}
+		record.setMenuUrl(accessAddress);
+		record.setCreate(WebUtilHelper.getCurrentUserId());
+		record.setModifier(WebUtilHelper.getCurrentUserId());
 		return baseDao.insert(prefix + "insertSelective", record);
 	}
 
@@ -49,6 +59,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
 	@Override
 	public Integer update(SysMenu record) throws Exception {
+		record.setModifier(WebUtilHelper.getCurrentUserId());
 		return baseDao.update(prefix + "updateByPrimaryKeySelective", record);
 	}
 
@@ -104,10 +115,19 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * @方法描述: 是否有子菜单
 	 * @return
 	 */
-	public boolean hasChildren(int id) throws Exception {
+	public boolean hasChildren(Integer id) throws Exception {
 		return baseDao.getCountForJdbcParam(prefix + "countMenuChildren", id) > 0 ? true : false;
 	}
 
+	/**
+	 * @方法描述: 根据用户ID查询操作按钮权限
+	 * @return
+	 */
+	public List<String> getButtonPermsByUserId(SysUser sysUser) throws Exception {
+		return (List<String>) baseDao.findListForJdbcParam(prefix + "getButtonPermsByUserId",
+				sysUser);
+	}
+	
 	@Override
 	public List<SysMenu> getMenuPermsByParentCode(Integer parentId) throws Exception {
 		return (List<SysMenu>) baseDao.findListForJdbcParam(prefix + "getMenuPermsByParentCode",
@@ -122,7 +142,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	@Override
-	public boolean hasRole(int id) throws Exception {
+	public boolean hasRole(Integer id) throws Exception {
 		return baseDao.getCountForJdbcParam(prefix + "hasRole", id) > 0 ? true : false;
 	}
 
@@ -197,7 +217,6 @@ public class SysMenuServiceImpl implements SysMenuService {
 				} else {
 					userMenuList.add(menu);
 				}
-				// userMenuList.add(menu);
 			}
 		}
 		return userMenuList;

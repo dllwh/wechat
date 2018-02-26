@@ -20,14 +20,17 @@ public interface SysMenuService extends BaseService<SysMenu> {
 
 	/** 根据用户ID查询权限菜单（permission） */
 	List<String> getMenuPermsByUserId(SysUser sysUser) throws Exception;
+	
+	/** 根据用户ID查询权限按钮（permission） */
+	List<String> getButtonPermsByUserId(SysUser sysUser) throws Exception;
 
 	/** 是否有子菜单 */
-	boolean hasChildren(int id) throws Exception;
+	boolean hasChildren(Integer id) throws Exception;
 
 	SysMenu findOneById(Integer id) throws Exception;
 
 	/** 是否有角色 */
-	boolean hasRole(int id) throws Exception;
+	boolean hasRole(Integer id) throws Exception;
 
 	/** 获取全部菜单数据-EasyUITree */
 	List<EasyUITreeNode> getMenuEasyUITree() throws Exception;
