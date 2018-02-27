@@ -63,6 +63,21 @@
 		<example>${fns:getMenuList()}</example>
 	</function>
 	
+	<function>
+		<description>统计用户</description>
+		<name>countUser</name>
+		<function-class>com.cdeledu.util.WebUtilHelper</function-class>
+		<function-signature>java.lang.Integer countUser()</function-signature>
+		<example>${fns:countUser()}</example>
+	</function>
+	
+	<function>
+		<description>按角色统计用户</description>
+		<name>countRoleUser</name>
+		<function-class>com.cdeledu.util.WebUtilHelper</function-class>
+		<function-signature>java.util.List countRoleUser()</function-signature>
+		<example>${fns:countRoleUser()}</example>
+	</function>
 	<!-- ==================================sysyUtils=============================================== -->
 	
 	<function>
