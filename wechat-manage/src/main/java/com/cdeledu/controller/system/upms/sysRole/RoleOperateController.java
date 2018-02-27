@@ -17,6 +17,7 @@ import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.rbac.SysRole;
+import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.RoleService;
 
 /**
@@ -76,8 +77,8 @@ public class RoleOperateController extends BaseController {
 				SysRole seacherRole = roleService.getRoleById(role.getId());
 				if (seacherRole != null && seacherRole.getAllowEdit() == 1) {// 角色允许编辑
 					if (seacherRole.getRoleCode().equalsIgnoreCase(roleCode)) {
-						if(seacherRole.getId() == 1){
-							role.setRoleCode("");//超级管理员不允许更新角色代码
+						if (seacherRole.getId() == 1) {
+							role.setRoleCode("");// 超级管理员不允许更新角色代码
 						}
 						roleService.update(role);
 					} else {
@@ -111,12 +112,13 @@ public class RoleOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "delRole")
 	@SystemLog(desc = "角色删除", opType = SysOpType.DEL, tableName = "sys_role")
-	public AjaxJson delRole(@RequestParam(name="delId",required=true,defaultValue="-1") int roleId) {
+	public AjaxJson delRole(
+			@RequestParam(name = "delId", required = true, defaultValue = "-1") int roleId) {
 		AjaxJson resultMsg = new AjaxJson();
 		try {
-			if(roleId !=1 ){
+			if (roleId != 1) {
 				SysRole seacherRole = roleService.getRoleById(roleId);
-				if(seacherRole!= null && seacherRole.getAllowDelete() == 1){ // 角色允许删除
+				if (seacherRole != null && seacherRole.getAllowDelete() == 1) { // 角色允许删除
 					if (roleService.hasMenuByRole(roleId)) {
 						resultMsg.setSuccess(false);
 						resultMsg.setResultCode(201);
@@ -156,9 +158,9 @@ public class RoleOperateController extends BaseController {
 	@SystemLog(desc = "更新角色的权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
 	public AjaxJson updateMenuByRole(Integer roleId, String ids) {
 		AjaxJson ajaxJson = new AjaxJson();
-		if(roleId != null && StringUtils.isNoneBlank(ids)){
-			if(roleId != 1){
-				roleService.delRoleAccess(roleId);	
+		if (roleId != null && StringUtils.isNoneBlank(ids)) {
+			if (roleId != 1) {
+				roleService.delRoleAccess(roleId);
 				String str[] = ids.split(",");
 				for (int i = 0; i < str.length; i++) {
 					try {
@@ -167,7 +169,7 @@ public class RoleOperateController extends BaseController {
 						e.printStackTrace();
 					}
 				}
-				
+
 			} else {
 				ajaxJson.setSuccess(false);
 				ajaxJson.setResultCode(10005);
@@ -180,11 +182,7 @@ public class RoleOperateController extends BaseController {
 		}
 		return ajaxJson;
 	}
-	/**
-	 * 
-	 * @方法描述: 启用、禁用账户
-	 * @return
-	 */
+
 	@ResponseBody
 	@RequestMapping("roleVisibleButton")
 	@SystemLog(desc = "启用、禁用账户", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
@@ -196,17 +194,66 @@ public class RoleOperateController extends BaseController {
 		role.setId(id);
 		role.setIsVisible(visible);
 		try {
-			if(!roleService.hasMenuByRole(id) && ! roleService.hasUserByRole(id) && id != 1){				
+			if (!roleService.hasMenuByRole(id) && !roleService.hasUserByRole(id) && id != 1) {
 				roleService.update(role);
 				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 			} else {
 				resultMsg.setSuccess(false);
-				resultMsg.setMsg("当前所选数据有子节点数据！");
+				resultMsg.setMsg("错误提示：该角色下尚有用户未解除！");
 			}
 		} catch (Exception e) {
 			resultMsg.setSuccess(false);
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
+		return resultMsg;
+	}
+
+	@ResponseBody
+	@RequestMapping("updateRoleUser")
+	@SystemLog(desc = "角色用户管理", opType = SysOpType.UPDATE, tableName = "sys_user_role")
+	public AjaxJson updateRoleUser(SysUserRole sysUserRole,
+			@RequestParam(name = "opType", required = true, defaultValue = "0") int opType) {
+		AjaxJson resultMsg = new AjaxJson();
+		int userCode = sysUserRole.getUserId();
+		boolean result = false;
+		String msg = "";
+		SysRole sysRole = new SysRole(sysUserRole.getRoleId());
+		SysRole sysRole2 = null;
+		try {
+			sysRole2  = roleService.findOneForJdbc(sysRole);
+		} catch (Exception e) {
+			
+		}
+		if(sysRole2 != null && sysRole2.getIsVisible() == 1){
+			if ((opType == 1 || opType == -1) && (userCode > 0)) {
+				if (opType == 1) {
+					if (roleService.saveRoleUser(sysUserRole)) {
+						result = true;
+						msg = MessageConstant.MSG_OPERATION_SUCCESS;
+					} else {
+						msg = MessageConstant.MSG_OPERATION_FAILED;
+					}
+				} else {
+					if (sysUserRole.getRoleId() == 1 && sysUserRole.getUserId() == 1) {
+						msg = "错误提示：超级管理员账号不能删除";
+					} else {
+						if (roleService.delRoleUser(sysUserRole)) {
+							result = true;
+							msg = MessageConstant.MSG_OPERATION_SUCCESS;
+						} else {
+							msg = MessageConstant.MSG_OPERATION_FAILED;
+						}
+					}
+				}
+			}
+		} else {
+			msg = "错误提示：该角色尚未使用，无法操作";
+		}
+		
+
+		resultMsg.setSuccess(result);
+		resultMsg.setMsg(msg);
+
 		return resultMsg;
 	}
 }

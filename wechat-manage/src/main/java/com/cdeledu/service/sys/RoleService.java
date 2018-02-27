@@ -5,6 +5,7 @@ import java.util.List;
 import com.cdeledu.common.base.BaseService;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.rbac.SysUserRole;
 
 public interface RoleService extends BaseService<SysRole> {
 	/** 该角色下是否有菜单 */
@@ -34,4 +35,10 @@ public interface RoleService extends BaseService<SysRole> {
 
 	/** 删除权限 */
 	Integer delRoleAccess(Integer roleId);
+
+	/** 保存角色用户 */
+	boolean saveRoleUser(SysUserRole sysUserRole);
+
+	/** 删除角色用户 */
+	boolean delRoleUser(SysUserRole sysUserRole);
 }

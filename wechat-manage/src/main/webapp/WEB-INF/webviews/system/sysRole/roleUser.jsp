@@ -66,8 +66,11 @@
 					field : 'userName',
 					title : '用户名称'
 				}],
-				formatRecordsPerPage : function(a) {
+				formatRecordsPerPage : function(pageNumber) {
 					return "";
+				},
+				onDblClickRow :function(row){
+					roleUserController(row.id, 1);
 				}
 			});
 			
@@ -86,8 +89,31 @@
 					field : 'userName',
 					title : '用户名称'
 				}],
-				formatRecordsPerPage : function(a) {
+				formatRecordsPerPage : function(pageNumber) {
 					return "";
+				},
+				onDblClickRow :function(row){
+					roleUserController(row.id, -1);
+				}
+			});
+		}
+		
+		var roleUserController = function(userCode,opType){
+			$.ajax({
+				url : "${_currConText }/roleOperate/updateRoleUser.shtml",
+				type : "POST",
+				data : {
+					userId : userCode,
+					roleId : '${roleCode}',
+					opType:opType
+				},
+				success : function(result) {
+					if (result.success) {
+						dialogMsg("操作成功");
+						initTable();
+					} else {
+						dialogMsg(result.msg, "error");
+					}
 				}
 			});
 		}

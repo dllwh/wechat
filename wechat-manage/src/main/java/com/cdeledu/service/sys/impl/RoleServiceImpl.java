@@ -12,6 +12,7 @@ import com.cdeledu.dao.BaseDaoSupport;
 import com.cdeledu.model.rbac.SysRole;
 import com.cdeledu.model.rbac.SysRoleMenu;
 import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.RoleService;
 import com.cdeledu.util.WebUtilHelper;
 
@@ -149,6 +150,28 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 			return baseDao.delete(prefix + "delRoleAccess", roleId);
 		} catch (Exception e) {
 			return -1;
+		}
+	}
+
+	@Override
+	public boolean saveRoleUser(SysUserRole sysUserRole) {
+		try {
+			baseDao.insert(prefix + "saveRoleUser", sysUserRole);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean delRoleUser(SysUserRole sysUserRole) {
+		try {
+			baseDao.delete(prefix + "delRoleUser", sysUserRole);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 }

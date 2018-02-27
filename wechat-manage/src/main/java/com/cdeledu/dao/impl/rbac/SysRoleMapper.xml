@@ -184,4 +184,18 @@
 	<delete id="delRoleAccess" parameterType="int">
 		DELETE FROM sys_role_menu WHERE roleId !=1 AND roleId = #{roleId}
 	</delete>
+	
+	<insert id="saveRoleUser" parameterType="com.cdeledu.model.rbac.SysUserRole">
+		INSERT INTO sys_user_role(userId,roleId) SELECT #{userId},#{roleId} FROM DUAL  
+		WHERE 
+			NOT EXISTS (SELECT 1 FROM sys_user_role WHERE userId=#{userId} AND roleId=#{roleId})
+			AND EXISTS (SELECT 1 FROM sys_user WHERE id=#{userId})
+	</insert>
+
+	<delete id="delRoleUser" parameterType="com.cdeledu.model.rbac.SysUserRole">
+		DELETE FROM 
+			sys_user_role 
+		WHERE 
+			userId=#{userId} AND roleId=#{roleId}
+	</delete>
 </mapper>
