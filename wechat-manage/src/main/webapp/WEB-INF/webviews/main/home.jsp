@@ -30,8 +30,8 @@
 						<i class="icon-user"></i>
 					</div>
 					<div class="value">
-						<h1>34522</h1>
-						<p>网站会员</p>
+						<h1>${fns:countUser()}</h1>
+						<p>网站管理员</p>
 					</div>
 				</section>
 			</div>
