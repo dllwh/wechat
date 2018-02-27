@@ -15,6 +15,8 @@ public class SysUserRole extends BaseEntity {
 	private Integer userId;
 	/** 登录名 */
 	private String userName;
+	/** 用户个数 */
+	private Integer userCount;
 	/** 角色id */
 	private Integer roleId;
 	/** 角色名称 */
@@ -36,6 +38,14 @@ public class SysUserRole extends BaseEntity {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public Integer getUserCount() {
+		return userCount;
+	}
+
+	public void setUserCount(Integer userCount) {
+		this.userCount = userCount;
 	}
 
 	public Integer getRoleId() {
@@ -60,12 +70,6 @@ public class SysUserRole extends BaseEntity {
 
 	public void setRoleCode(String roleCode) {
 		this.roleCode = roleCode;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "\n SysUserRole [userId=" + userId + ", userName=" + userName
-				+ ", roleId=" + roleId + ", roleName=" + roleName + ", roleCode=" + roleCode + "]";
 	}
 
 }

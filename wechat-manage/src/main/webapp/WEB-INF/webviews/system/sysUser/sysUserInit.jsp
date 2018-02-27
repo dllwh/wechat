@@ -68,16 +68,14 @@
 										<ul class="b_P_Sort_list">
 											<li>
 												<i class="fa fa-users green"></i>
-												<a href="#">全部管理员（6）</a>
+												<a href="#">全部管理员（${fns:countUser()}）</a>
 											</li>
-											<li>
-												<i class="fa fa-users orange"></i>
-												<a>超级管理员（1）</a>
-											</li>
-											<li>
-												<i class="fa fa-users orange"></i> 
-												<a >普通管理员（5）</a>
-											</li>
+											<c:forEach items="${fns:countRoleUser()}" var="roleUser">
+												<li>
+													<i class="fa fa-users orange"></i> 
+													<a>${roleUser.roleName }（${roleUser.userCount }）</a>
+												</li>
+											</c:forEach>
 										</ul>
 									</div>
 								</div>

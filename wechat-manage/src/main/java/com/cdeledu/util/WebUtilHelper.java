@@ -16,6 +16,7 @@ import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.rbac.SysUserRole;
 import com.cdeledu.service.sys.ManagerUserService;
+import com.cdeledu.service.sys.RoleService;
 import com.cdeledu.service.sys.SysMenuService;
 
 /**
@@ -29,6 +30,7 @@ public class WebUtilHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static ManagerUserService userService = ConstantFactory.userService;
 	private static SysMenuService sysMenuService = ConstantFactory.sysMenuService;
+	private static RoleService sysRoleService= ConstantFactory.roleService;
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -191,12 +193,35 @@ public class WebUtilHelper {
 	 * 获取当前用户授权菜单
 	 */
 	public static List<SysMenu> getMenuList() {
-		List<SysMenu> menuList = null;
 		try {
-			menuList = sysMenuService.getUserMenu(getCurrenLoginUser());
+			return sysMenuService.getUserMenu(getCurrenLoginUser());
 		} catch (Exception e) {
-
+			return null;
 		}
-		return menuList;
+		
+	}
+	
+	/**
+	 * 按角色统计用户
+	 */
+	public static Integer countUser() {
+		try {
+			SysUser sysUser = new SysUser();
+			sysUser.setIsVisible(1);
+			return userService.getCountForJdbcParam(sysUser);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * 按角色统计用户
+	 */
+	public static List<SysUserRole> countRoleUser() {
+		try {
+			return sysRoleService.countRoleUser();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

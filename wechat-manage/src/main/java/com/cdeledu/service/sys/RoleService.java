@@ -41,4 +41,7 @@ public interface RoleService extends BaseService<SysRole> {
 
 	/** 删除角色用户 */
 	boolean delRoleUser(SysUserRole sysUserRole);
+
+	/** 按角色统计用户数 */
+	List<SysUserRole> countRoleUser() throws Exception;
 }

@@ -174,4 +174,8 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 			return false;
 		}
 	}
+	@Override
+	public List<SysUserRole> countRoleUser() throws Exception{
+		return (List<SysUserRole>) baseDao.findListForJdbcParam(prefix+"countRoleUser");
+	}
 }

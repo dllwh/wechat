@@ -34,6 +34,7 @@
 			<if test="isVisible != null "> and isVisible=#{isVisible} </if>
 			<if test="loginFlag != null "> and loginFlag=#{loginFlag} </if>
 			<if test="isEnabled != null "> and isEnabled=#{isEnabled} </if>
+			<if test="isEnabled == null "> and isEnabled=1 </if>
 		</where>
 	</sql>
 	

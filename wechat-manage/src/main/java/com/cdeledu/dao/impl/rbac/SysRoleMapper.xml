@@ -198,4 +198,22 @@
 		WHERE 
 			userId=#{userId} AND roleId=#{roleId}
 	</delete>
+	
+	<!-- 按角色统计用户数 -->
+	<select id="countRoleUser" resultType="com.cdeledu.model.rbac.SysUserRole">
+		SELECT 
+			sr.id as roleId,sr.roleName,sr.roleCode, 
+			IFNULL(
+				(SELECT 
+					COUNT(*) 
+				FROM 
+					sys_user_role 
+				WHERE 
+					roleId = sr.id AND isEnabled =1 
+				GROUP BY roleId),0
+			)
+			as userCount 
+		FROM 
+			sys_role sr 
+	</select>
 </mapper>
