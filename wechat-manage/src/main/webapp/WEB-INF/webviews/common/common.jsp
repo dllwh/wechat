@@ -17,6 +17,8 @@
 <%@ taglib prefix="easyui" uri="/easyui-tags"%>
 <%-- 自定义标签:字典接口 --%>
 <%@ taglib prefix="dict" uri="/dict-tags"%>
+<%-- 自定义标签:首页相关统计 --%>
+<%@ taglib prefix="homePage" uri="/homePage-tags"%>
 
 <%-- 这3句每个页面必须添加 --%>
 <meta http-equiv="content-type" content="text/html;chartset=UTF-8">

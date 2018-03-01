@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.impl.sys.CountDaoImpl">
+	<!--统计管理员个数 -->
+	<select id="countUserTotal" resultType="int">
+		SELECT COUNT(*) FROM sys_user WHERE isEnabled = 1
+	</select>
+	<!--统计管理员登录记录 -->
+	<select id="countloginLogTotal" resultType="int">
+		SELECT COUNT(*) FROM sys_log_login
+	</select>
+	<!-- 统计操作记录数 -->
+	<select id="countOperateLogTotal" resultType="int">
+		SELECT COUNT(*) FROM sys_log
+	</select>
+	
+	<select id="getOperateLogCountByMonth" resultType="java.util.HashMap" parameterType="int">
+		select   
+			sum(case month(sys_log.createTime) when '1' then 1 else 0 end) as 一月份,  
+			sum(case month(sys_log.createTime) when '2' then 1 else 0 end) as 二月份,  
+			sum(case month(sys_log.createTime) when '3' then 1 else 0 end) as 三月份,  
+			sum(case month(sys_log.createTime) when '4' then 1 else 0 end) as 四月份,  
+			sum(case month(sys_log.createTime) when '5' then 1 else 0 end) as 五月份,  
+			sum(case month(sys_log.createTime) when '6' then 1 else 0 end) as 六月份,  
+			sum(case month(sys_log.createTime) when '7' then 1 else 0 end) as 七月份,  
+			sum(case month(sys_log.createTime) when '8' then 1 else 0 end) as 八月份,  
+			sum(case month(sys_log.createTime) when '9' then 1 else 0 end) as 九月份,  
+			sum(case month(sys_log.createTime) when '10' then 1 else 0 end) as 十月份,  
+			sum(case month(sys_log.createTime) when '11' then 1 else 0 end) as 十一月份,  
+			sum(case month(sys_log.createTime) when '12' then 1 else 0 end) as 十二月份  
+			from 
+		sys_log  
+		<where>
+			<choose>
+				<when test="_parameter != null">
+					year(sys_log.createTime) = #{_parameter};
+				</when>
+				<otherwise>
+					year(sys_log.createTime) = YEAR (curdate());
+				</otherwise>
+			</choose> 
+		</where>
+	</select>
+</mapper>

@@ -30,7 +30,7 @@
 						<i class="icon-user"></i>
 					</div>
 					<div class="value">
-						<h1>${fns:countUser()}</h1>
+						<h1>${homePage:countUserTotal()}</h1>
 						<p>网站管理员</p>
 					</div>
 				</section>
@@ -41,7 +41,7 @@
 						<i class="icon-bar-chart"></i>
 					</div>
 					<div class="value">
-						<h1>34522</h1>
+						<h1>${homePage:countLoginLogTotal()}</h1>
 						<p>登录记录</p>
 					</div>
 				</section>
@@ -52,7 +52,7 @@
 						<i class="icon-bar-chart"></i>
 					</div>
 					<div class="value">
-						<h1>34522</h1>
+						<h1>${homePage:countOperateLogTotal()}</h1>
 						<p>操作记录</p>
 					</div>
 				</section>

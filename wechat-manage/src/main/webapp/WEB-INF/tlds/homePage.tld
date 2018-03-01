@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance http://www.springmodules.org/schema/cache/springmodules-cache.xsd http://www.springmodules.org/schema/cache/springmodules-ehcache.xs"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.4">
+	<tlib-version>1.2</tlib-version>
+	<short-name>homePage</short-name>
+	<uri>/homePage-tags</uri>
+
+	<function>
+		<description>统计用户</description>
+		<name>countUserTotal</name>
+		<function-class>com.cdeledu.util.CountHelper</function-class>
+		<function-signature>java.lang.Integer countUserTotal()</function-signature>
+		<example>${homePage:countUserTotal()}</example>
+	</function>
+
+	<function>
+		<description>统计登录记录数</description>
+		<name>countLoginLogTotal</name>
+		<function-class>com.cdeledu.util.CountHelper</function-class>
+		<function-signature>java.lang.Integer countLoginLogTotal()</function-signature>
+		<example>${homePage:countLoginLogTotal()}</example>
+	</function>
+
+	<function>
+		<description>统计操作记录数</description>
+		<name>countOperateLogTotal</name>
+		<function-class>com.cdeledu.util.CountHelper</function-class>
+		<function-signature>java.lang.Integer countOperateLogTotal()</function-signature>
+		<example>${homePage:countloginLogTotal()}</example>
+	</function>
+	
+	<function>
+		<description>统计当前年操作记录数</description>
+		<name>getCurrentYearOperateLogCountByMonth</name>
+		<function-class>com.cdeledu.util.CountHelper</function-class>
+		<function-signature>java.lang.Integer getCurrentYearOperateLogCountByMonth()</function-signature>
+		<example>${homePage:getCurrentYearOperateLogCountByMonth()}</example>
+	</function>
+	
+	<function>
+		<description>按照月份统计操作记录数</description>
+		<name>getOperateLogCountByMonth</name>
+		<function-class>com.cdeledu.util.CountHelper</function-class>
+		<function-signature>java.lang.Integer getOperateLogCountByMonth(java.lang.Integer)</function-signature>
+		<example>${homePage:getOperateLogCountByMonth(key)}</example>
+	</function>
+
+</taglib>

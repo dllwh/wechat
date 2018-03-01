@@ -68,7 +68,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="bottom">Copyright &copy; 2016 - <span id="curentYear"></span> </div>
+		<div class="bottom">Copyright &copy; 2014 - <span id="curentYear"></span> </div>
 	</div>
 </div>
 

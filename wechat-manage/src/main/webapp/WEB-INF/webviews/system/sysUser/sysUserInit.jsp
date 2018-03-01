@@ -9,7 +9,6 @@
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 <link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
 
-
 <script src="${_currConText }/plug-in/tools/lrtk.js"></script>
 
 <title>管理员用户管理</title>
@@ -68,7 +67,7 @@
 										<ul class="b_P_Sort_list">
 											<li>
 												<i class="fa fa-users green"></i>
-												<a href="#">全部管理员（${fns:countUser()}）</a>
+												<a href="#">全部管理员（${homePage:countUserTotal()}}）</a>
 											</li>
 											<c:forEach items="${fns:countRoleUser()}" var="roleUser">
 												<li>

@@ -204,19 +204,6 @@ public class WebUtilHelper {
 	/**
 	 * 按角色统计用户
 	 */
-	public static Integer countUser() {
-		try {
-			SysUser sysUser = new SysUser();
-			sysUser.setIsVisible(1);
-			return userService.getCountForJdbcParam(sysUser);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-	
-	/**
-	 * 按角色统计用户
-	 */
 	public static List<SysUserRole> countRoleUser() {
 		try {
 			return sysRoleService.countRoleUser();
