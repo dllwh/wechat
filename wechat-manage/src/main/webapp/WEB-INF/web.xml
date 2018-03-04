@@ -75,6 +75,7 @@
 		设置Spring容器加载所有的配置文件的路径,否则Spring会默认从WEB-INF下寻找配置文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
+		<!-- maven构建项目的时候classpath指的是resources文件夹位置 -->
 		<param-value>
 			classpath:systemConfig/spring-applicationContext.xml
 		</param-value>
@@ -124,7 +125,7 @@
 	</servlet-mapping>
 
 	<!-- ====================================================================== 
-		过滤器配置 -->
+		字符编码过滤器配置 -->
 	<filter>
 		<!--处理从页面传递中文到后台而出现的中文乱码问题 -->
 		<description>编码(字符集)过滤器 </description>
@@ -136,6 +137,7 @@
 			<param-value>UTF-8</param-value>
 		</init-param>
 		<init-param>
+			<description>强制设置请求编码格式为上面设置的utf-8</description>
 			<param-name>forceEncoding</param-name>
 			<param-value>true</param-value>
 		</init-param>
