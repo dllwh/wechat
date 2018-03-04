@@ -110,36 +110,36 @@ final class ExcelImportUtil {
 						continue;
 					}
 
-					Field Field = fields[cellNum];
+					Field field = fields[cellNum];
 					String cellValue = getCellFormatValue(cell);
-					Field.setAccessible(true);
-					Class<?> type = Field.getType();
+					field.setAccessible(true);
+					Class<?> type = field.getType();
 					if (type == String.class) {
 						if (StringUtils.isNotBlank(cellValue)) {
-							Field.set(instance, cellValue);
+							field.set(instance, cellValue);
 						}
 					} else if (type == double.class || type == Double.class) {
 						if (StringUtils.isNotBlank(cellValue)) {
-							Field.set(instance, Double.parseDouble(cellValue));
+							field.set(instance, Double.parseDouble(cellValue));
 						}
 					} else if (type == int.class || type == Integer.class) {
 						if (StringUtils.isNotBlank(cellValue)) {
-							Field.set(instance, Integer.parseInt(cellValue));
+							field.set(instance, Integer.parseInt(cellValue));
 						}
 					} else if (type == float.class || type == Float.class) {
 						if (StringUtils.isNotBlank(cellValue)) {
-							Field.set(instance, Float.parseFloat(cellValue));
+							field.set(instance, Float.parseFloat(cellValue));
 						}
 					} else if (type == long.class || type == Long.class) {
 						if (StringUtils.isNotBlank(cellValue)) {
-							Field.set(instance, Long.parseLong(cellValue));
+							field.set(instance, Long.parseLong(cellValue));
 						}
 					} else if (type == Date.class) {
 						if (StringUtils.isNotBlank(cellValue)) {
-							Field.set(instance, Format.parse(cellValue));
+							field.set(instance, Format.parse(cellValue));
 						}
 					} else {
-						Field.set(instance, null);
+						field.set(instance, null);
 					}
 				}
 				result.add(instance);

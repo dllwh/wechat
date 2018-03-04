@@ -272,7 +272,7 @@ public class XmlUtils {
 	 * @param clazz
 	 * @return
 	 */
-	public static <T> T XmlToBean(String xml, Class<T> clazz) {
+	public static <T> T xmlToBean(String xml, Class<T> clazz) {
 		return null;
 	}
 

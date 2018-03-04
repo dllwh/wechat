@@ -32,8 +32,9 @@ public class LoggerHelper {
 	 *            输出信息
 	 */
 	public static void debug(Class<? extends Object> clazz, String message) {
-		if (!isDebug)
+		if (!isDebug) {
 			return;
+		}
 		Logger logger = Logger.getLogger(clazz);
 		logger.debug(message);
 	}
@@ -49,8 +50,9 @@ public class LoggerHelper {
 	 *            输出信息value
 	 */
 	public static void fmtDebug(Class<? extends Object> clazz, String fmtString, Object... value) {
-		if (!isDebug)
+		if (!isDebug) {
 			return;
+		}
 		if (StringUtils.isBlank(fmtString)) {
 			return;
 		}

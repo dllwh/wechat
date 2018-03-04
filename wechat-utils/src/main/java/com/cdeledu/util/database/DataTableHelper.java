@@ -32,7 +32,7 @@ import com.mysql.jdbc.Statement;
 
 /**
  * @类描述:
- *       <ul>
+ * 		<ul>
  *       <li>是 Apache 组织提供的一个开源 JDBC工具类库,是轻量级的ORM工具</li>
  *       <li>提供了数据库操作的简单实现,包含增、删、改、查、批量以及事务等操作</li>
  *       <li>ResultSetHandler实现类介绍</li>
@@ -68,7 +68,7 @@ public class DataTableHelper {
 	/** SQL执行工具 :实例化查询接口 */
 	private static DataTableHelper instance;
 	/** 数据库连接 */
-	private Connection m_dbcon = null;
+	private Connection myDbcon = null;
 
 	/** ----------------------------------------------------- Fields end */
 	/** ----------------------------------------------------- 私有方法 开始 */
@@ -149,10 +149,10 @@ public class DataTableHelper {
 	 * @throws SQLException
 	 */
 	public synchronized Connection getConnection() throws SQLException {
-		if (null == m_dbcon) {
+		if (null == myDbcon) {
 			return getDataSource().getConnection();
 		}
-		return m_dbcon;
+		return myDbcon;
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class DataTableHelper {
 	 */
 	public boolean beginTransaction() {
 		try {
-			this.m_dbcon.setAutoCommit(false);
+			this.myDbcon.setAutoCommit(false);
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -199,8 +199,8 @@ public class DataTableHelper {
 	 */
 	public boolean commitTransaction() {
 		try {
-			this.m_dbcon.commit();
-			this.m_dbcon.setAutoCommit(true);
+			this.myDbcon.commit();
+			this.myDbcon.setAutoCommit(true);
 			return true;
 		} catch (SQLException e) {
 			return false;
@@ -211,10 +211,10 @@ public class DataTableHelper {
 	 * @方法描述: 回滚事物
 	 * @return
 	 */
-	public boolean RollbackTransaction() {
+	public boolean rollbackTransaction() {
 		try {
-			this.m_dbcon.rollback();
-			this.m_dbcon.setAutoCommit(true);
+			this.myDbcon.rollback();
+			this.myDbcon.setAutoCommit(true);
 			return true;
 		} catch (SQLException e) {
 			return false;
@@ -263,7 +263,7 @@ public class DataTableHelper {
 
 	/**
 	 * @方法描述:
-	 *        <ul>
+	 * 		<ul>
 	 *        <li>根据已经存在SQL文件初始化数据库</li>
 	 *        <li>从SQL文件中读取SQL语句，每行一条，末尾没有分号</li>
 	 *        </ul>
@@ -513,9 +513,11 @@ public class DataTableHelper {
 			if (StringUtils.isNoneBlank(isAutoIncrement)
 					&& !"null".equalsIgnoreCase(isAutoIncrement)) {
 
-				if ("yes".equalsIgnoreCase(isAutoIncrement))
+				if ("yes".equalsIgnoreCase(isAutoIncrement)) {
 					resultMap.setAutoIncrement(true);
-				resultMap.setAutoIncrement(false);
+				} else {
+					resultMap.setAutoIncrement(false);
+				}
 			}
 			resList.add(resultMap);
 		}

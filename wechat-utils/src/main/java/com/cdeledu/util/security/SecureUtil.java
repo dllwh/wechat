@@ -86,7 +86,7 @@ public class SecureUtil {
 		case MD4:
 			break;
 		case MD5:
-			result = Md5Helper.Md5(dataSource, length);
+			result = Md5Helper.md5(dataSource, length);
 			break;
 		case DES:{
 			if(StringUtils.isBlank(fillType)){

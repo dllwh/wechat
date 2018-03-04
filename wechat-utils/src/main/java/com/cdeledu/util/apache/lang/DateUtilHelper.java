@@ -15,7 +15,7 @@ import org.apache.commons.lang3.time.DateUtils;
  * 
  * @ClassName: DateHelper
  * @Description:
- *               <ul>
+ * 				<ul>
  *               <li>日期时间工具类</li>
  *               <li>继承与org.apache.commons.lang3.time.DateUtils</li>
  *               </ul>
@@ -39,7 +39,7 @@ public class DateUtilHelper extends DateUtils {
 
 	/** 时间格式01 ：yyyy-MM-dd HH:mm */
 	public final static String NORM_TIME_PATTERN_ONE = "yyyy-MM-dd HH:mm";
-	/** 时间格式02 : MM-dd HH:mm*/
+	/** 时间格式02 : MM-dd HH:mm */
 	public final static String NORM_TIME_PATTERN_TWO = "MM-dd HH:mm";
 	/** 时间格式03 : HH:mm" */
 	public final static String NORM_TIME_PATTERN_THREE = "HH:mm";
@@ -243,8 +243,9 @@ public class DateUtilHelper extends DateUtils {
 		String result = "当前时间所在是:";
 		Calendar c = Calendar.getInstance(Locale.CHINA);
 		String week = Integer.toString(c.get(Calendar.WEEK_OF_YEAR));
-		if (week.length() == 1)
+		if (week.length() == 1) {
 			week = "0" + week;
+		}
 		String year = Integer.toString(c.get(Calendar.YEAR));
 		return result + year + "年,第 " + week + "周";
 	}
@@ -488,7 +489,8 @@ public class DateUtilHelper extends DateUtils {
 	 *        </ul>
 	 * @创建者: 皇族灬战狼
 	 * @创建时间: 2016年3月7日 下午3:36:50
-	 * @param time 秒数
+	 * @param time
+	 *            秒数
 	 * @return
 	 */
 	public static String secToTime(long time) {
@@ -511,7 +513,8 @@ public class DateUtilHelper extends DateUtils {
 
 	/**
 	 * @方法描述: 整数(秒数)转换为时分秒格式(xx:xx:xx)
-	 * @param seconds 秒数
+	 * @param seconds
+	 *            秒数
 	 * @return
 	 */
 	public static String formatSeconds(long seconds) {
@@ -532,7 +535,8 @@ public class DateUtilHelper extends DateUtils {
 			}
 		}
 		return timeStr;
-	} 
+	}
+
 	/**
 	 * @方法描述: 根据日期获取星期
 	 * @param strdate
@@ -550,8 +554,9 @@ public class DateUtilHelper extends DateUtils {
 		}
 		calendar.setTime(date);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		if (dayOfWeek < 0)
+		if (dayOfWeek < 0) {
 			dayOfWeek = 0;
+		}
 		return dayNames[dayOfWeek];
 	}
 
@@ -568,12 +573,12 @@ public class DateUtilHelper extends DateUtils {
 			Calendar now = Calendar.getInstance();
 			long ms = 1000 * (now.get(Calendar.HOUR_OF_DAY) * 3600 + now.get(Calendar.MINUTE) * 60
 					+ now.get(Calendar.SECOND));// 毫秒数
-			long ms_now = now.getTimeInMillis();
-			if (ms_now - create < ms) {
+			long msNow = now.getTimeInMillis();
+			if (msNow - create < ms) {
 				ret = "今天";
-			} else if (ms_now - create < (ms + 24 * 3600 * 1000)) {
+			} else if (msNow - create < (ms + 24 * 3600 * 1000)) {
 				ret = "昨天";
-			} else if (ms_now - create < (ms + 24 * 3600 * 1000 * 2)) {
+			} else if (msNow - create < (ms + 24 * 3600 * 1000 * 2)) {
 				ret = "前天";
 			} else {
 				ret = "更早";

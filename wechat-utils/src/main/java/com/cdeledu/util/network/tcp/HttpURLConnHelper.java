@@ -45,7 +45,7 @@ import com.cdeledu.util.network.IpUtilHelper;
 
 /**
  * @描述:
- *      <ul>
+ * 		<ul>
  *      <li>HttpURLConnection模拟HTTP请求网页内容</li>
  *      <li>Https协议工具类:封装了采用HttpURLConnection发送HTTP请求的GET\POST方法</li>
  *      <li>get请求可以获取静态页面，也可以把参数放在URL字串后面</li>
@@ -411,8 +411,9 @@ public class HttpURLConnHelper {
 	 * @return
 	 */
 	public String FileUpload(String url, File file) {
-		if (!file.exists())
+		if (!file.exists()) {
 			return "";
+		}
 		BufferedReader br = null; // 请求后的返回信息的读取对象。
 		OutputStream out = null;
 		DataInputStream datain = null;
@@ -460,8 +461,9 @@ public class HttpURLConnHelper {
 
 		} catch (FileNotFoundException fe) {
 			InputStream err = ((HttpURLConnection) httpConn).getErrorStream();
-			if (err == null)
+			if (err == null) {
 				br = new BufferedReader(new InputStreamReader(err));
+			}
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		} finally {
@@ -475,8 +477,9 @@ public class HttpURLConnHelper {
 		StringBuffer response = new StringBuffer();
 		String line;
 		try {
-			while ((line = br.readLine()) != null)
+			while ((line = br.readLine()) != null) {
 				response.append(line + "\n");
+			}
 			br.close();
 		} catch (IOException ioe) {
 			ioe.getStackTrace();
@@ -499,8 +502,9 @@ public class HttpURLConnHelper {
 		int count = 0;
 		HttpURLConnection httpConn = null;
 
-		if (StringUtils.isEmpty(url))
+		if (StringUtils.isEmpty(url)) {
 			return false;
+		}
 
 		while (count < 5) {
 			try {
@@ -533,8 +537,9 @@ public class HttpURLConnHelper {
 			if (StringUtils.isNotBlank(temp)) {
 
 				Matcher matcher = pattern.matcher(temp);
-				if (matcher.find())
+				if (matcher.find()) {
 					return matcher.group(1);
+				}
 			}
 
 			httpConn = (HttpURLConnection) url.openConnection();
@@ -545,15 +550,17 @@ public class HttpURLConnHelper {
 			httpConn.connect();
 			br = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
 			String line = br.readLine();
-			while (line != null && (line.indexOf("charset=") == -1))
+			while (line != null && (line.indexOf("charset=") == -1)) {
 				line = br.readLine();
+			}
 			if (line != null) {
 				line = line.trim();
 				if (line.indexOf("<script") == -1) {
 
 					Matcher matcher = pattern.matcher(line);
-					if (matcher.find())
+					if (matcher.find()) {
 						return matcher.group(1);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -622,8 +629,9 @@ public class HttpURLConnHelper {
 				con.disconnect();
 			}
 			try {
-				if (reader != null)
+				if (reader != null) {
 					reader.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

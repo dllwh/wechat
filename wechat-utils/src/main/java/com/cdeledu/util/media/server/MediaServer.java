@@ -22,7 +22,7 @@ public interface MediaServer {
 	 * @param Repeat
 	 *            是否重复播放
 	 */
-	public void playClick(String soundFileName, boolean Repeat);
+	public void playClick(String soundFileName, boolean repeat);
 
 	/**
 	 * @方法描述: 得到当前播放位置

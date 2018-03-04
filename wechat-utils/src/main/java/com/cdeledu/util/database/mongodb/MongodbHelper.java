@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -33,10 +32,10 @@ import com.mongodb.WriteResult;
 /**
  * @类描述: 使用Java操作Mongodb
  *       <ul>
- *       <li>
- *       DBCollection类:指定数据库中指定集合的实例,提供了增删改查等一系列操作.在关系型数据库中,对数据的增删改查操作是建立在表的基础上的
- *       ,在mongodb中是建立在集合的基础上进行的</li>
- *       <li>DBObject接口:DBObject是键值的映射.因此,可以将DBObject的实现类作为查询的返回结果,也可以作为查询条件</li>
+ *       <li>DBCollection类:指定数据库中指定集合的实例,提供了增删改查等一系列操作.在关系型数据库中,
+ *       对数据的增删改查操作是建立在表的基础上的 ,在mongodb中是建立在集合的基础上进行的</li>
+ *       <li>DBObject接口:DBObject是键值的映射.因此,可以将DBObject的实现类作为查询的返回结果,也可以作为查询条件
+ *       </li>
  *       <li>DBCursor:游标，返回结果的集合,是DBObject的迭代器</li>
  *       </ul>
  * @创建者: 独泪了无痕
@@ -71,8 +70,7 @@ public class MongodbHelper {
 
 		try {
 			// 从配置文件中获取属性值
-			config.addConfiguration(new PropertiesConfiguration(
-					"datasource/mongodb.properties"));
+			config.addConfiguration(new PropertiesConfiguration("datasource/mongodb.properties"));
 
 			serverAddrs = config.getString("mongodb.serverAddrs");
 			serverAddr = config.getString("mongodb.serverAddr");
@@ -125,8 +123,8 @@ public class MongodbHelper {
 				} else {
 					logger.info("-----启动单机数据库：: " + serverAddr);
 					isShard = false;
-					mongoClient = new MongoClient(new ServerAddress(serverAddr,
-							serverPort), myOptions);
+					mongoClient = new MongoClient(new ServerAddress(serverAddr, serverPort),
+							myOptions);
 				}
 
 				// 获取指定的数据库 :如果默认没有创建,mongodb会自动创建
@@ -139,11 +137,13 @@ public class MongodbHelper {
 			}
 		} catch (Exception e) {
 			String msg = "连接mongodb失败, 服务器地址:%s , 端口: %s";
-			if (isShard)
+			if (isShard) {
 				String.format(msg, serverAddrs, serverPort);
-			String.format(msg, serverAddr, serverPort);
+			} else {
+				String.format(msg, serverAddr, serverPort);
+			}
 			logger.error(msg);
-			throw new RuntimeException(e.getClass().getName() + ": " + e.getMessage(),e);
+			throw new RuntimeException(e.getClass().getName() + ": " + e.getMessage(), e);
 		}
 	}
 
@@ -159,7 +159,7 @@ public class MongodbHelper {
 			mongodbHelper = new MongodbHelper();
 		}
 	}
-	
+
 	/**
 	 * @方法描述: 对象销毁，清除内存
 	 * @创建者: 皇族灬战狼
@@ -241,9 +241,11 @@ public class MongodbHelper {
 			try {
 				while (cursor.hasNext()) {
 					DBObject dbObject = (DBObject) cursor.next();
-					if (null != clazz)
+					if (null != clazz) {
 						bean = clazz.newInstance();
-					bean = dB2Bean(dbObject, bean);
+					} else {
+						bean = dB2Bean(dbObject, bean);
+					}
 					resultList.add(bean);
 				}
 			} catch (Exception e) {
@@ -265,8 +267,8 @@ public class MongodbHelper {
 	 * @param limit
 	 * @return
 	 */
-	public <T> List<T> findListByPage(String connName, Class<T> clazz,
-			DBObject query, int skip, int limit) {
+	public <T> List<T> findListByPage(String connName, Class<T> clazz, DBObject query, int skip,
+			int limit) {
 		// 创建返回的结果集
 		List<T> resultList = new ArrayList<T>();
 		conn = getDBCollection(connName);
@@ -279,9 +281,11 @@ public class MongodbHelper {
 			try {
 				while (cursor.hasNext()) {
 					DBObject dbObject = (DBObject) cursor.next();
-					if (null != clazz)
+					if (null != clazz) {
 						bean = clazz.newInstance();
-					bean = dB2Bean(dbObject, bean);
+					} else {
+						bean = dB2Bean(dbObject, bean);
+					}
 					resultList.add(bean);
 				}
 			} catch (Exception e) {
@@ -309,9 +313,8 @@ public class MongodbHelper {
 	 *            : 1或-1来指定排序方式是升序或降序:如果没有指定排序方式，默认按照升序排列
 	 * @return
 	 */
-	public <T> List<T> findListByPage(String connName, Class<T> clazz,
-			DBObject query, int skip, int limit, String orderByColumn,
-			Integer order) {
+	public <T> List<T> findListByPage(String connName, Class<T> clazz, DBObject query, int skip,
+			int limit, String orderByColumn, Integer order) {
 		// 创建返回的结果集
 		List<T> resultList = new ArrayList<T>();
 
@@ -321,18 +324,21 @@ public class MongodbHelper {
 		T bean = null;
 
 		if (null != conn) {
-			if (order == 1 || order == -1)
+			if (order == 1 || order == -1) {
 				sort = new BasicDBObject(orderByColumn, order);
-			else
+			} else {
 				sort = new BasicDBObject(orderByColumn, 1);
+			}
 			// 返回集合中所有的文档
 			cursor = conn.find(query).sort(sort).skip(skip).limit(limit);
 			try {
 				while (cursor.hasNext()) {
 					DBObject dbObject = (DBObject) cursor.next();
-					if (null != clazz)
+					if (null != clazz) {
 						bean = clazz.newInstance();
-					bean = dB2Bean(dbObject, bean);
+					} else {
+						bean = dB2Bean(dbObject, bean);
+					}
 					resultList.add(bean);
 				}
 			} catch (Exception e) {
@@ -358,8 +364,8 @@ public class MongodbHelper {
 	 *            : 排序字段
 	 * @return
 	 */
-	public <T> List<T> findListByPage(String connName, Class<T> clazz,
-			DBObject query, int skip, int limit, String orderByColumn) {
+	public <T> List<T> findListByPage(String connName, Class<T> clazz, DBObject query, int skip,
+			int limit, String orderByColumn) {
 		// 创建返回的结果集
 		List<T> resultList = new ArrayList<T>();
 		T bean = null;
@@ -368,14 +374,16 @@ public class MongodbHelper {
 
 		if (null != conn) {
 			// 返回集合中所有的文档
-			cursor = conn.find(query).sort(new BasicDBObject(orderByColumn, 1))
-					.limit(limit).skip(skip);
+			cursor = conn.find(query).sort(new BasicDBObject(orderByColumn, 1)).limit(limit)
+					.skip(skip);
 			try {
 				while (cursor.hasNext()) {
 					DBObject dbObject = (DBObject) cursor.next();
-					if (null != clazz)
+					if (null != clazz) {
 						bean = clazz.newInstance();
-					bean = dB2Bean(dbObject, bean);
+					} else {
+						bean = dB2Bean(dbObject, bean);
+					}
 					resultList.add(bean);
 				}
 			} catch (Exception e) {
@@ -406,9 +414,11 @@ public class MongodbHelper {
 		if (null != conn) {
 			// 返回集合中一条文档
 			try {
-				if (null != clazz)
+				if (null != clazz) {
 					bean = clazz.newInstance();
-				bean = dB2Bean(conn.findOne(query), bean);
+				} else {
+					bean = dB2Bean(conn.findOne(query), bean);
+				}
 			} catch (Exception e) {
 				logger.error("根据指定条件获取 " + connName + " 中的部分数据异常", e);
 				e.printStackTrace();
@@ -434,9 +444,11 @@ public class MongodbHelper {
 		if (null != conn) {
 			result = conn.findOne(new ObjectId(id));
 			try {
-				if (null != clazz)
+				if (null != clazz) {
 					bean = clazz.newInstance();
-				bean = dB2Bean(result, bean);
+				} else {
+					bean = dB2Bean(result, bean);
+				}
 			} catch (Exception e) {
 				logger.error("根据指定条件获取 " + connName + " 中的部分数据异常", e);
 				e.printStackTrace();
@@ -563,8 +575,8 @@ public class MongodbHelper {
 	 *            可选.默认是false,只更新找到的第一条记录;如果这个参数为true,就把按条件查出来多条记录全部更新
 	 * @return
 	 */
-	public boolean update(String connName, DBObject query, DBObject update,
-			boolean upsert, boolean multi) {
+	public boolean update(String connName, DBObject query, DBObject update, boolean upsert,
+			boolean multi) {
 		boolean result = false;
 		conn = getDBCollection(connName);
 		// 返回结果
@@ -581,8 +593,7 @@ public class MongodbHelper {
 	/**
 	 * @方法描述: 更新数据:只能是单条记录
 	 *        <ul>
-	 *        <li>
-	 *        如果在collection内已经存在一个和x对象相同的"_id"的记录,
+	 *        <li>如果在collection内已经存在一个和x对象相同的"_id"的记录,
 	 *        mongodb就会把x对象替换collection内已经存在的记录
 	 *        ,否则将会插入x对象,如果x内没有_id,系统会自动生成一个再插入</li>
 	 *        </ul>
@@ -708,9 +719,9 @@ public class MongodbHelper {
 		}
 		try {
 			// 获取对象对应类中的所有属性域
-			Field[] Fields = bean.getClass().getDeclaredFields();
+			Field[] fields = bean.getClass().getDeclaredFields();
 
-			for (Field field : Fields) {
+			for (Field field : fields) {
 				// 获取属性名
 				String varName = field.getName();
 				Object object = dbObject.get(varName);
@@ -736,8 +747,8 @@ public class MongodbHelper {
 	 * @throws IllegalArgumentException
 	 */
 	@SuppressWarnings("unused")
-	private <T> DBObject bean2DBObject(T bean) throws IllegalArgumentException,
-			IllegalAccessException {
+	private <T> DBObject bean2DBObject(T bean)
+			throws IllegalArgumentException, IllegalAccessException {
 		if (null == bean) {
 			return null;
 		}
@@ -784,5 +795,7 @@ public class MongodbHelper {
 		return dbObject;
 	}
 
-	/** ----------------------------- 类型转换 end ------------------------------- */
+	/**
+	 * ----------------------------- 类型转换 end -------------------------------
+	 */
 }

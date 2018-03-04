@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cdeledu.common.constant.ConstantHelper;
 
-
 /**
  * 
  * @ClassName: FileUtilHelper
@@ -30,18 +29,19 @@ import com.cdeledu.common.constant.ConstantHelper;
 public class FileUtilHelper extends FileUtils {
 	/** -------------------------- 属性 start ------------------------------- */
 	private static final Logger logger = LoggerFactory.getLogger(FileUtilHelper.class);
+
 	/** -------------------------- 属性 end ------------------------------- */
 	/** -------------------------- 私有方法 start ------------------------------- */
-	
+
 	@SuppressWarnings("unused")
-	private static String[] splitt(String str){
-        String strr = str.trim();
-        String[] abc = strr.split("[\\p{Space}]+");
-        	for (int i = 0; i < abc.length; i++) {
-        		System.out.println(abc[i]);
-			}
-        return abc;
-    }
+	private static String[] splitt(String str) {
+		String strr = str.trim();
+		String[] abc = strr.split("[\\p{Space}]+");
+		for (int i = 0; i < abc.length; i++) {
+			System.out.println(abc[i]);
+		}
+		return abc;
+	}
 	/** -------------------------- 属性 end ------------------------------- */
 
 	/**
@@ -113,8 +113,9 @@ public class FileUtilHelper extends FileUtils {
 	public static boolean saveFile(String path, MultipartFile file, String uuid) {
 		try {
 			File newFile = new File(path);
-			if (!newFile.exists())
+			if (!newFile.exists()) {
 				newFile.mkdir();
+			}
 			// 上传文件名
 			String fileName = file.getOriginalFilename();
 			// 检查文件后缀格式
@@ -197,6 +198,7 @@ public class FileUtilHelper extends FileUtils {
 	public static String readFile(String filePath) {
 		return readFile(filePath, ConstantHelper.UTF_8.name());
 	}
+
 	/**
 	 * @方法描述: 读取文件内容(i/o进行读取htm模版)
 	 * @创建者: 独泪了无痕
@@ -211,9 +213,10 @@ public class FileUtilHelper extends FileUtils {
 	 */
 	public static String readFile(String filePath, String encoding) {
 		String fileContent = "";
-		if (StringUtils.isBlank(encoding))
+		if (StringUtils.isBlank(encoding)) {
 			return fileContent;
-		
+		}
+
 		if (StringUtils.isBlank(encoding) || StringUtils.equalsIgnoreCase(encoding, "null")) {
 			encoding = ConstantHelper.UTF_8.name();
 		}
@@ -236,7 +239,7 @@ public class FileUtilHelper extends FileUtils {
 		}
 		return fileContent;
 	}
-	
+
 	/**
 	 * @方法描述: 删除文件夹以及其子文件
 	 * @创建者: 皇族灬战狼

@@ -37,8 +37,8 @@ public final class BankCordHelperUtils {
 	 * @param CheckCodeCardId
 	 * @return
 	 */
-	private final static char getBankCardCheckCode(String CheckCodeCardId) {
-		char[] chs = CheckCodeCardId.trim().toCharArray();
+	private final static char getBankCardCheckCode(String checkCodeCardId) {
+		char[] chs = checkCodeCardId.trim().toCharArray();
 		int luhmSum = 0;
 		// 前15或18位倒序存进数组
 		for (int i = chs.length - 1, j = 0; i >= 0; i--, j++) {

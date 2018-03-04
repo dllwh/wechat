@@ -15,12 +15,15 @@ import org.apache.commons.lang3.StringUtils;
 public class MoneyUtilHelper {
 	/** -------------------------- 属性 begin ------------------------------- */
 	// 不考虑分隔符的正确性
-	private static final Pattern AMOUNT_PATTERN = Pattern.compile("^(0|[1-9]\\d{0,11})\\.(\\d\\d)$");
+	private static final Pattern AMOUNT_PATTERN = Pattern
+			.compile("^(0|[1-9]\\d{0,11})\\.(\\d\\d)$");
 	// 将数字转化为汉字的数组,因为各个实例都要使用所以设为静态
-	private static final char[] CN_UPPER_NUMBER = { '零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖' };
+	private static final char[] CN_UPPER_NUMBER = { '零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌',
+			'玖' };
 
 	// 供分级转化的数组,因为各个实例都要使用所以设为静态
-	private static final char[] CN_UPPER_MONETRAY_UNIT = { '元', '拾', '百', '仟', '万', '拾', '百', '仟', '亿' };
+	private static final char[] CN_UPPER_MONETRAY_UNIT = { '元', '拾', '百', '仟', '万', '拾', '百', '仟',
+			'亿' };
 
 	/** -------------------------- 属性 end ------------------------------- */
 	/** -------------------------- 私有方法 begin ------------------------------- */
@@ -40,8 +43,9 @@ public class MoneyUtilHelper {
 	 * @return
 	 */
 	public static String format(String money) {
-		if (StringUtils.isBlank(money))
+		if (StringUtils.isBlank(money)) {
 			return "0.00";
+		}
 		StringBuffer sb = new StringBuffer();
 
 		int index = money.indexOf(".");
@@ -136,10 +140,10 @@ public class MoneyUtilHelper {
 	 */
 	public static String toChineseNumberCase(int n) {
 		String chineseNumber = "";
-		if(n>=0&&n<10){
+		if (n >= 0 && n < 10) {
 			chineseNumber = String.valueOf(CN_UPPER_NUMBER[n]);
 		}
-		
+
 		return chineseNumber;
 	}
 	/** -------------------------- 公有方法 end ------------------------------- */

@@ -317,12 +317,13 @@ public final class OperateImageHelper {
 				Graphics2D g = image.createGraphics();
 				g.setColor(Color.white);
 				g.fillRect(0, 0, width, height);
-				if (width == itemp.getWidth(null))
+				if (width == itemp.getWidth(null)) {
 					g.drawImage(itemp, 0, (height - itemp.getHeight(null)) / 2,
 							itemp.getWidth(null), itemp.getHeight(null), Color.white, null);
-				else
+				} else {
 					g.drawImage(itemp, (width - itemp.getWidth(null)) / 2, 0, itemp.getWidth(null),
 							itemp.getHeight(null), Color.white, null);
+				}
 				g.dispose();
 				itemp = image;
 			}
@@ -480,6 +481,7 @@ public final class OperateImageHelper {
 			return false;
 		}
 	}
+
 	/**
 	 * @方法描述: 全屏截图
 	 * @param fileName

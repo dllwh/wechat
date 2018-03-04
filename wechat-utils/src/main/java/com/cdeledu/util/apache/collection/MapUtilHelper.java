@@ -85,14 +85,13 @@ public class MapUtilHelper extends MapUtils {
 	 *            要转化的JavaBean 对象
 	 * @return 转化出来的 Map 对象
 	 */
-	public static Map<String, Object> BeanToMap(Object bean) {
+	public static Map<String, Object> beanToMap(Object bean) {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		Class<? extends Object> type = bean.getClass();
 		try {
 			BeanInfo beanInfo = Introspector.getBeanInfo(type);
 			// 获取类属性
-			PropertyDescriptor[] propertyDescriptors = beanInfo
-					.getPropertyDescriptors();
+			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 			for (int i = 0; i < propertyDescriptors.length; i++) {
 				PropertyDescriptor descriptor = propertyDescriptors[i];
 				// 获取Bean 各个属性名称
@@ -101,10 +100,11 @@ public class MapUtilHelper extends MapUtils {
 					Method readMethod = descriptor.getReadMethod();
 					// 获取 属性值
 					Object result = readMethod.invoke(bean, new Object[0]);
-					if (StringUtils.isNoneBlank(String.valueOf(result)))
+					if (StringUtils.isNoneBlank(String.valueOf(result))) {
 						resMap.put(propertyName, result);
-					else
+					} else {
 						resMap.put(propertyName, "");
+					}
 				}
 			}
 		} catch (IntrospectionException e) { // 如果分析类属性失败
@@ -127,7 +127,7 @@ public class MapUtilHelper extends MapUtils {
 	 *            要转化的类型
 	 * @return 转化出来的 JavaBean 对象
 	 */
-	public static <T, K, V> Object MapToBean(Map<K, V> map, Class<T> clazz) {
+	public static <T, K, V> Object mapToBean(Map<K, V> map, Class<T> clazz) {
 		Object obj = null;
 		try {
 			// 获取类属性
@@ -136,8 +136,7 @@ public class MapUtilHelper extends MapUtils {
 			obj = clazz.newInstance();
 
 			// 给 JavaBean 对象的属性赋值
-			PropertyDescriptor[] propertyDescriptors = beanInfo
-					.getPropertyDescriptors();
+			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 			for (int i = 0; i < propertyDescriptors.length; i++) {
 				PropertyDescriptor descriptor = propertyDescriptors[i];
 				String propertyName = descriptor.getName();
@@ -174,10 +173,9 @@ public class MapUtilHelper extends MapUtils {
 		paras.append("{");
 		Iterator<Map.Entry<String, String>> ite = map.entrySet().iterator();
 		while (ite.hasNext()) {
-			Map.Entry<String, String> entry = (Map.Entry<String, String>) ite
-					.next();
-			paras.append("\"").append(entry.getKey()).append("\":\"")
-					.append(entry.getValue()).append("\"");
+			Map.Entry<String, String> entry = (Map.Entry<String, String>) ite.next();
+			paras.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue())
+					.append("\"");
 			if (ite.hasNext()) {
 				paras.append(",");
 			}

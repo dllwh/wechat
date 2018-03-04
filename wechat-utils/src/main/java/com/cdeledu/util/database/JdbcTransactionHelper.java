@@ -43,8 +43,9 @@ public class JdbcTransactionHelper {
 	public static Connection getConnection() throws SQLException {
 		// 获取当前线程的事务连接
 		Connection conn = tl.get();
-		if (conn != null)
+		if (conn != null) {
 			return conn;
+		}
 		return ds.getConnection();
 	}
 
@@ -79,8 +80,9 @@ public class JdbcTransactionHelper {
 	public static void commitTransaction() throws SQLException {
 		// 获取当前线程的事务连接
 		Connection conn = tl.get();
-		if (conn == null)
+		if (conn == null) {
 			throw new SQLException("没有事务不能提交！");
+		}
 		// 提交事务
 		conn.commit();
 		// 关闭连接
@@ -100,8 +102,9 @@ public class JdbcTransactionHelper {
 	public static void rollbackTransaction() throws SQLException {
 		// 获取当前线程的事务连接
 		Connection conn = tl.get();
-		if (conn == null)
+		if (conn == null) {
 			throw new SQLException("没有事务不能回滚！");
+		}
 		// 回滚事务
 		conn.rollback();
 		// 关闭连接
@@ -120,8 +123,7 @@ public class JdbcTransactionHelper {
 	 * @throws SQLException
 	 * @return：void 返回类型
 	 */
-	public static void releaseConnection(Connection connection)
-			throws SQLException {
+	public static void releaseConnection(Connection connection) throws SQLException {
 		// 获取当前线程的事务连接
 		Connection conn = tl.get();
 		/** 如果参数连接，与当前事务连接不同，说明这个连接不是当前事务，可以关闭！ */

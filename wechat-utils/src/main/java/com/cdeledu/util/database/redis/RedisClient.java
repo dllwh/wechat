@@ -80,8 +80,9 @@ public class RedisClient {
 	public static RedisClient getRedisClient() {
 		if (redisClient == null) {
 			synchronized (RedisClient.class) {
-				if (redisClient == null)
+				if (redisClient == null) {
 					redisClient = new RedisClient();
+				}
 			}
 		}
 		return redisClient;
@@ -182,7 +183,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.setnx(key, value);
-			if (SUCCESS_STATUS_LONG == statusCode) {
+			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
 				return true;
 			}
 		} finally {
@@ -365,7 +366,7 @@ public class RedisClient {
 	 * @param key
 	 * @return
 	 */
-	public Long StrLength(String key) throws Exception {
+	public Long strLength(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -397,7 +398,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.expire(key, seconds);
-			if (SUCCESS_STATUS_LONG == statusCode) {
+			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
 				return true;
 			}
 		} finally {
@@ -516,7 +517,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.persist(key);
-			if (SUCCESS_STATUS_LONG == statusCode) {
+			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
 				return true;
 			}
 		} finally {
@@ -585,7 +586,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.renamenx(oldkey, newKey);
-			if (SUCCESS_STATUS_LONG == statusCode) {
+			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
 				return true;
 			}
 		} finally {
@@ -616,6 +617,7 @@ public class RedisClient {
 	/******************* redis Key-Value操作结束 ************************/
 
 	/******************* redis Hash操作 ************************/
+
 	/*******************
 	 * Redis hash 是一个 string 类型的 field 和 value 的映射表.它的添加、删除操作都是 O(1) （平均）。 hash
 	 * 特别适合用于存储对象。相较于将对象的每个字段存成单个 string 类型。将一个对象存 储在 hash
@@ -659,7 +661,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.hsetnx(key, field, value);
-			if (SUCCESS_STATUS_LONG == statusCode) {
+			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
 				return true;
 			}
 		} finally {
@@ -1922,10 +1924,10 @@ public class RedisClient {
 
 						for (String info : infoArr) {
 							clientInfo = new ClientInfo();
-							String[] _infoArr = info.split("=");
-							if (_infoArr != null && _infoArr.length > 1) {
-								clientInfo.setKey(_infoArr[0]);
-								clientInfo.setValue(_infoArr[1]);
+							String[] inFoArr2 = info.split("=");
+							if (inFoArr2 != null && inFoArr2.length > 1) {
+								clientInfo.setKey(inFoArr2[0]);
+								clientInfo.setValue(inFoArr2[1]);
 								clientList.add(clientInfo);
 							}
 						}
@@ -1992,7 +1994,7 @@ public class RedisClient {
 			if (detail[0].equals("used_memory")) {
 				map = new HashMap<String, Object>();
 				map.put("used_memory", detail[1].substring(0, detail[1].length() - 1));
-				map.put("create_time", new Date().getTime());
+				map.put("create_time", System.currentTimeMillis());
 				break;
 			}
 		}
@@ -2037,9 +2039,11 @@ public class RedisClient {
 	 * @return
 	 */
 	private static boolean isEmpty(final CharSequence... key) {
-		if (StringUtils.isNoneBlank(key))
+		if (StringUtils.isNoneBlank(key)) {
 			return false;
-		return true;
+		} else {
+			return true;
+		}
 	}
 
 	/**

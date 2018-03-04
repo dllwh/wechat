@@ -55,7 +55,7 @@ public class DosHelper {
 	 * @方法描述: 异步方式执行ＤＯＳ命令
 	 * @param command
 	 */
-	public void ExecuteCommandAsync(Object command){
+	public void executeCommandAsync(Object command){
 		
 	}
 }

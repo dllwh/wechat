@@ -68,9 +68,9 @@ public class RegexUtil {
 	public static String getKeyWords(String regex, String content, int groupIndex) {
 		Matcher matcher = Pattern.compile(regex, Pattern.MULTILINE).matcher(content);
 		if (matcher.find()) {
-			if(groupIndex == 0 ){
+			if (groupIndex == 0) {
 				return matcher.replaceAll("").trim();
-			}else {
+			} else {
 				return matcher.group(groupIndex);
 			}
 		}
@@ -281,8 +281,9 @@ public class RegexUtil {
 			T collection) {
 		while (true) {
 			String result = getKeyWords(regex, content, group);
-			if (result == null)
+			if (result == null) {
 				break;
+			}
 			collection.add(result);
 			content = delPreLocation(regex, content);
 		}

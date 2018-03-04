@@ -124,9 +124,10 @@ final class ExcelExportUtil {
 	 */
 	public static <T> byte[] export(String title, String[][] cellNames, List<T> dbList)
 			throws Exception {
-		if (CollectionUtils.isEmpty(dbList) || dbList.size() < 0)
+		if (CollectionUtils.isEmpty(dbList) || dbList.size() < 0) {
 			return null;
-		
+		}
+
 		// 创建Excel的工作书册 Workbook,对应到一个excel文档
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		Map<String, CellStyle> getStyle = createStyles(workbook);
@@ -146,9 +147,9 @@ final class ExcelExportUtil {
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, cellNames.length - 1));
 		// 给合并后的单元格加上样式
 		for (int j = 0; j <= cellNames.length - 1; j++) {
-			HSSFCell cell_temp = row.getCell(j);
-			if (cell_temp == null) {
-				cell_temp = row.createCell(j);
+			HSSFCell celTemp = row.getCell(j);
+			if (celTemp == null) {
+				celTemp = row.createCell(j);
 			}
 		}
 		// 给Excel的单元格设置样式和赋值
@@ -282,10 +283,11 @@ final class ExcelExportUtil {
 		/**
 		 * 2.工作表设置
 		 */
-		if (StringUtils.isNoneBlank(title))
+		if (StringUtils.isNoneBlank(title)) {
 			hSheet = hssfWorkbook.createSheet(title);
-		else
+		} else {
 			hSheet = hssfWorkbook.createSheet();
+		}
 
 		// 指示是否符合页面打印选项是启用标志
 		hSheet.setFitToPage(true);

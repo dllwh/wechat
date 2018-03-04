@@ -58,8 +58,9 @@ class SendMailHelper {
 			boolean debug) {
 		Properties prop = new Properties();
 		// 指定主机
-		if (StringUtils.isNoneEmpty(host))
+		if (StringUtils.isNoneEmpty(host)) {
 			prop.setProperty("mail.host", host);
+		}
 		// 指定验证为true
 		prop.setProperty("mail.smtp.auth", "true");
 

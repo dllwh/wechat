@@ -102,7 +102,8 @@ public class RegexPlugins extends GuiJPanel {
 			String key = expsSortAndNamesList.get(i - 1);
 			String[] keySplit = key.split("_");
 			// 避免表达式名字存在多个"_"的情况
-			expNames[i] = keySplit.length > 1 ? key.substring(keySplit[0].length() + 1) : keySplit[0];
+			expNames[i] = keySplit.length > 1 ? key.substring(keySplit[0].length() + 1)
+					: keySplit[0];
 			expsMap.put(expNames[i], expressionsMap.get(key));
 		}
 	}
@@ -172,9 +173,11 @@ public class RegexPlugins extends GuiJPanel {
 
 				public void actionPerformed(ActionEvent event) {
 					@SuppressWarnings("unchecked")
-					String exp = expsMap.get(((JComboBox<String>) event.getSource()).getSelectedItem().toString());
-					if (StringUtils.isNoneBlank(exp))
+					String exp = expsMap.get(
+							((JComboBox<String>) event.getSource()).getSelectedItem().toString());
+					if (StringUtils.isNoneBlank(exp)) {
 						regexTextArea.setText(exp);
+					}
 				}
 			}, BorderLayout.CENTER);
 		}

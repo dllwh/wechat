@@ -86,8 +86,7 @@ public class AccessControl {
 			String group = user.attributeValue("group");
 			if (groups.contains(group)) {
 				// 用户必须在组中
-				users.put(buildKey(name, pass, group), new Connector(name,
-						pass, group));
+				users.put(buildKey(name, pass, group), new Connector(name, pass, group));
 			} else {
 				logger.error("【Access】Bad group {}", group);
 				continue;
@@ -129,8 +128,7 @@ public class AccessControl {
 	public boolean isAuthorized(String username, String pass, String group) {
 		Connector connector = users.get(buildKey(username, pass, group));
 		if (connector != null) {
-			if (connector.getUser().equals(username)
-					&& connector.getPassword().equals(pass)
+			if (connector.getUser().equals(username) && connector.getPassword().equals(pass)
 					&& connector.getGroup().equals(group)) {
 				return true;
 			}
@@ -180,8 +178,7 @@ public class AccessControl {
 	 *            IP段
 	 * @return 是否允许
 	 */
-	public boolean isAuthorizedWithIP(String username, String pass,
-			String group, String ip) {
+	public boolean isAuthorizedWithIP(String username, String pass, String group, String ip) {
 		return isPermit(ip) && isAuthorized(username, pass, group);
 	}
 
@@ -196,8 +193,9 @@ public class AccessControl {
 		long ipLong = NetworkUtil.ipv4ToLong(ip);
 		if (ipLong != 0) {
 			for (Span ipSection : ipSections) {
-				if (ipSection.isInBetween(ipLong))
+				if (ipSection.isInBetween(ipLong)) {
 					return true;
+				}
 			}
 		}
 		return false;

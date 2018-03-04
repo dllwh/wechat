@@ -23,7 +23,7 @@ class Md5Helper {
 	 * @param num
 	 * @return
 	 */
-	public static String Md5(String plainText, int num) {
+	public static String md5(String plainText, int num) {
 		StringBuffer buf = new StringBuffer();
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -32,10 +32,12 @@ class Md5Helper {
 			int i;
 			for (int offset = 0; offset < b.length; offset++) {
 				i = b[offset];
-				if (i < 0)
+				if (i < 0) {
 					i += 256;
-				if (i < 16)
+				}
+				if (i < 16) {
 					buf.append("0");
+				}
 				buf.append(Integer.toHexString(i));
 			}
 		} catch (Exception e) {

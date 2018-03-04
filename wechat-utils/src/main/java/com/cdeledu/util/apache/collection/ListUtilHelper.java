@@ -126,8 +126,9 @@ public class ListUtilHelper extends ListUtils {
 	 * @return
 	 */
 	public static String join(List<String> list, String split) {
-		if (list == null)
+		if (list == null){
 			return null;
+		}
 		String[] array = list.toArray(new String[] {});
 		StringBuilder s = new StringBuilder(128);
 		for (int i = 0; i < array.length; i++) {

@@ -173,14 +173,16 @@ public class CookieUtilHelper {
 	public static String buildCurrentURL(HttpServletRequest request) {
 
 		StringBuffer url = new StringBuffer("");
-		if (request.getScheme().startsWith("http"))
+		if (request.getScheme().startsWith("http")) {
 			url.append("http://");
-		else
+		} else {
 			url.append("https://");
+		}
 		url.append(request.getHeader("host"));
 
-		if (request.getServerPort() != 80)
+		if (request.getServerPort() != 80) {
 			url.append(":" + request.getServerPort());
+		}
 
 		url.append(request.getRequestURI());
 

@@ -34,15 +34,16 @@ public class IdcardUtils {
 	public static final int CHINA_ID_MAX_LENGTH = 18;
 
 	/** 省、直辖市代码表 */
-	public static final String cityCode[] = { "11", "12", "13", "14", "15", "21", "22", "23", "31", "32", "33", "34",
-			"35", "36", "37", "41", "42", "43", "44", "45", "46", "50", "51", "52", "53", "54", "61", "62", "63", "64",
-			"65", "71", "81", "82", "91" };
+	public static final String cityCode[] = { "11", "12", "13", "14", "15", "21", "22", "23", "31",
+			"32", "33", "34", "35", "36", "37", "41", "42", "43", "44", "45", "46", "50", "51",
+			"52", "53", "54", "61", "62", "63", "64", "65", "71", "81", "82", "91" };
 
 	/** 每位加权因子 */
 	public static final int power[] = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
 
 	/** 第18位校检码 */
-	public static final String verifyCode[] = { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };
+	public static final String verifyCode[] = { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3",
+			"2" };
 	/** 最低年限 */
 	public static final int MIN = 1930;
 	/** 设置地区编码 */
@@ -194,8 +195,9 @@ public class IdcardUtils {
 				e.printStackTrace();
 			}
 			Calendar cal = Calendar.getInstance();
-			if (birthDate != null)
+			if (birthDate != null) {
 				cal.setTime(birthDate);
+			}
 			if (!valiDate(cal.get(Calendar.YEAR), Integer.valueOf(birthCode.substring(2, 4)),
 					Integer.valueOf(birthCode.substring(4, 6)))) {
 				return false;
@@ -351,7 +353,8 @@ public class IdcardUtils {
 			datePerMonth = 30;
 			break;
 		case 2:
-			boolean dm = ((iYear % 4 == 0 && iYear % 100 != 0) || (iYear % 400 == 0)) && (iYear > MIN && iYear < year);
+			boolean dm = ((iYear % 4 == 0 && iYear % 100 != 0) || (iYear % 400 == 0))
+					&& (iYear > MIN && iYear < year);
 			datePerMonth = dm ? 29 : 28;
 			break;
 		default:
@@ -401,10 +404,12 @@ public class IdcardUtils {
 		Integer sum = 0;
 		if (card.length() == 9) {
 			sum = (Integer.valueOf(card.substring(0, 1).toUpperCase().toCharArray()[0]) - 55) * 9
-					+ (Integer.valueOf(card.substring(1, 2).toUpperCase().toCharArray()[0]) - 55) * 8;
+					+ (Integer.valueOf(card.substring(1, 2).toUpperCase().toCharArray()[0]) - 55)
+							* 8;
 			card = card.substring(1, 9);
 		} else {
-			sum = 522 + (Integer.valueOf(card.substring(0, 1).toUpperCase().toCharArray()[0]) - 55) * 8;
+			sum = 522 + (Integer.valueOf(card.substring(0, 1).toUpperCase().toCharArray()[0]) - 55)
+					* 8;
 		}
 		String mid = card.substring(1, 7);
 		String end = card.substring(7, 8);
@@ -471,8 +476,9 @@ public class IdcardUtils {
 				e.printStackTrace();
 			}
 			Calendar cal = Calendar.getInstance();
-			if (birthDate != null)
+			if (birthDate != null) {
 				cal.setTime(birthDate);
+			}
 			// 获取出生年(完全表现形式,如：2010)
 			String sYear = String.valueOf(cal.get(Calendar.YEAR));
 			idCard18 = idCard.substring(0, 6) + sYear + idCard.substring(8);

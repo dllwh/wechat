@@ -170,8 +170,8 @@ public class ScriptOpCode {
 		resultMap.put(152, "Cannot delete a parent row");
 	}
 
-	public static String getErrorMsg(Integer ErrorCode) {
-		String errorMsg = resultMap.get(ErrorCode);
+	public static String getErrorMsg(Integer errorCode) {
+		String errorMsg = resultMap.get(errorCode);
 		if (StringUtils.isBlank(errorMsg)) {
 			errorMsg = "unknown error";
 		}

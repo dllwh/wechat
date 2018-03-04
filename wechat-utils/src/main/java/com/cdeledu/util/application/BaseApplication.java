@@ -19,7 +19,7 @@ public class BaseApplication {
 	 * @7: print(File file)使用关联应用程序的打印命令，用本机桌面打印设施来打印文件
 	 * @8: mail(URI mailtoURI):启动用户默认邮件客户端的邮件组合窗口
 	 */
-	public static void DeskTopDoc() {
+	public static void deskTopDoc() {
 
 	}
 }

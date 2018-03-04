@@ -44,8 +44,8 @@ public class ImageUtilHelper {
 	/** -------------------------- 私有属性 end ------------------------------- */
 	/** -------------------------- 私有方法 begin ------------------------------- */
 
-
 	/** -------------------------- 私有方法 end ------------------------------- */
+
 	/** -------------------------- 公有方法 begin ------------------------------- */
 	/** 判断文件是否是图片 */
 	public static boolean isImage(File file) {
@@ -71,13 +71,16 @@ public class ImageUtilHelper {
 	/** 判断文件是否是图片 */
 	public static boolean isImage(String filePath) {
 		File file = new File(filePath);
-		if (!file.exists())
+		if (!file.exists()) {
 			return false;
+		}
 		try {
 			BufferedImage bi = ImageIO.read(file);
-			if (bi == null)
+			if (bi == null) {
 				return false;
-			return true;
+			} else {
+				return true;
+			}
 		} catch (Exception e) {
 			return false;
 		}

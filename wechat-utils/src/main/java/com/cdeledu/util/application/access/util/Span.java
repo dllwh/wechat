@@ -114,8 +114,9 @@ public class Span {
 	 * @return 切割后的区间对象集合
 	 */
 	public List<Span> cut(int partCount) {
-		if (partCount == 0)
+		if (partCount == 0) {
 			return null;
+		}
 		List<Span> list = new ArrayList<Span>();
 
 		// 数据不足以分开，则只返回一份
@@ -156,10 +157,12 @@ public class Span {
 	 *            被检查的数字
 	 */
 	public void compareToReplace(long number) {
-		if (number > max)
+		if (number > max) {
 			max = number;
-		if (number < min)
+		}
+		if (number < min) {
 			min = number;
+		}
 	}
 
 	/**

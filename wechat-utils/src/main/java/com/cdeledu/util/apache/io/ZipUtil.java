@@ -48,9 +48,11 @@ public class ZipUtil {
 	private static String getEntryName(String base, File file) {
 		File baseFile = new File(base);
 		String filename = file.getPath();
-		if (baseFile.getParentFile().getParentFile() == null)
+		if (baseFile.getParentFile().getParentFile() == null) {
 			return filename.substring(baseFile.getParent().length());
-		return filename.substring(baseFile.getParent().length() + 1);
+		} else {
+			return filename.substring(baseFile.getParent().length() + 1);
+		}
 	}
 
 	/*--------------------------私有方法 end   -------------------------------*/
@@ -67,11 +69,9 @@ public class ZipUtil {
 	 * @throws Exception
 	 * @return：void 返回类型
 	 */
-	public static void unZipFiles(String zipPath, String targetPath)
-			throws Exception {
+	public static void unZipFiles(String zipPath, String targetPath) throws Exception {
 		if (StringUtilHelper.isBlank(zipPath)) {
-			ExceptionHelper.getExceptionHint("ZipUtil", "unZipFiles",
-					"目标文件的路径不能为空!");
+			ExceptionHelper.getExceptionHint("ZipUtil", "unZipFiles", "目标文件的路径不能为空!");
 		}
 
 		if (StringUtilHelper.isBlank(targetPath)) {
@@ -105,23 +105,20 @@ public class ZipUtil {
 		try {
 			zip = new ZipFile(zipFile);
 
-			for (Enumeration<?> entries = zip.getEntries(); entries
-					.hasMoreElements();) {
+			for (Enumeration<?> entries = zip.getEntries(); entries.hasMoreElements();) {
 				ZipEntry zipEntry = (ZipEntry) entries.nextElement();
 				String zipEntryName = zipEntry.getName();
 				InputStream in = zip.getInputStream(zipEntry);
-				String outPath = FilenameUtils.concat(targetPath, zipEntryName)
-						.replaceAll("\\*", "/");
+				String outPath = FilenameUtils.concat(targetPath, zipEntryName).replaceAll("\\*",
+						"/");
 				outPath = new String(outPath.getBytes("utf-8"), "ISO8859-1");
 
 				// 判断路径是否存在,不存在则创建文件路径
 				File file = null;
 				if (outPath.indexOf("/") > 0) {
-					file = new File(outPath.substring(0,
-							outPath.lastIndexOf('/')));
+					file = new File(outPath.substring(0, outPath.lastIndexOf('/')));
 				} else {
-					file = new File(outPath.substring(0,
-							outPath.lastIndexOf('\\')));
+					file = new File(outPath.substring(0, outPath.lastIndexOf('\\')));
 				}
 				if (!file.exists()) {
 					file.mkdirs();
@@ -173,8 +170,8 @@ public class ZipUtil {
 	public static void zip(String zipFileName, String source, String directory) {
 		ZipOutputStream zos = null;
 		BufferedInputStream bis = null;
-		String fileName = StringUtils.isBlank(zipFileName) ? FilenameUtils
-				.getName(source) : zipFileName;
+		String fileName = StringUtils.isBlank(zipFileName) ? FilenameUtils.getName(source)
+				: zipFileName;
 		byte[] buffere = new byte[BUFFEREDSIZE];
 		File temp = new File(source);
 
@@ -187,12 +184,11 @@ public class ZipUtil {
 					if (temp.isDirectory()) {
 						directory = source + ".zip";
 					} else {
-						if (source.indexOf(".") > 0)
-							directory = source.substring(0,
-									source.lastIndexOf("."))
-									+ ".zip";
-						else
+						if (source.indexOf(".") > 0) {
+							directory = source.substring(0, source.lastIndexOf(".")) + ".zip";
+						} else {
 							directory = source + ".zip";
+						}
 					}
 				} else {
 					// 判断目标文件是否存在,若不存在则创建
@@ -209,8 +205,7 @@ public class ZipUtil {
 			// 递归获得该文件下所有文件名(不包括目录名)
 			List<File> fileList = FileUtilHelper.loadFileName(new File(source));
 
-			zos = new ZipOutputStream(new FileOutputStream(directory),
-					ConstantHelper.GBK);
+			zos = new ZipOutputStream(new FileOutputStream(directory), ConstantHelper.GBK);
 
 			for (int i = 0; i < fileList.size(); i++) {
 				File file = (File) fileList.get(i);

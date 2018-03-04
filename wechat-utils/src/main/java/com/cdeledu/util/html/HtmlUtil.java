@@ -37,12 +37,8 @@ public class HtmlUtil {
 		if (StringUtils.isBlank(htmlStr)) {
 			return htmlStr;
 		}
-		return htmlStr.replace("&lt;", "<")
-				.replace("&gt;", ">")
-				.replace("&amp;", "&")
-				.replace("&quot;", "\"")
-				.replace("&#39;", "'")
-				.replace("<br/>", "\n")
+		return htmlStr.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+				.replace("&quot;", "\"").replace("&#39;", "'").replace("<br/>", "\n")
 				.replace("&nbsp;", " ") // 替换空格
 				.replace("&nbsp;&nbsp;", "\t");// 替换跳格
 	}
@@ -65,8 +61,9 @@ public class HtmlUtil {
 	 * @return
 	 */
 	public static String getText(String html) {
-		if (html == null)
+		if (StringUtils.isBlank(html)) {
 			return null;
+		}
 		return Jsoup.clean(html, Whitelist.none());
 	}
 
@@ -78,14 +75,15 @@ public class HtmlUtil {
 	 * @return
 	 */
 	public static String getSimpleHtml(String html) {
-		if (html == null)
+		if (StringUtils.isBlank(html)) {
 			return null;
+		}
 		return Jsoup.clean(html, Whitelist.simpleText());
 	}
 
 	/**
 	 * @方法描述:
-	 *        <ul>
+	 * 		<ul>
 	 *        <li>以下标签可以通过</li>
 	 *        <li>a, b, blockquote, br, cite, code, dd, dl, dt, em, i, li, ol,
 	 *        p, pre, q,small, strike, strong, sub, sup, u, ul</li>
@@ -96,8 +94,9 @@ public class HtmlUtil {
 	 * @return
 	 */
 	public static String getBasicHtml(String html) {
-		if (html == null)
+		if (StringUtils.isBlank(html)) {
 			return null;
+		}
 		return Jsoup.clean(html, Whitelist.basic());
 	}
 
@@ -109,17 +108,20 @@ public class HtmlUtil {
 	 * @return
 	 */
 	public static String getBasicHtmlandimage(String html) {
-		if (html == null)
+		if (StringUtils.isBlank(html)) {
 			return null;
+		}
 		return Jsoup.clean(html, Whitelist.basicWithImages());
 	}
 
 	/**
 	 * @方法描述:
-	 *        <ul>
+	 * 		<ul>
 	 *        <li>以下标签可以通过</li>
-	 *        <li>a, b, blockquote, br, caption, cite, code, col, colgroup, dd, dl, dt, em,</li>
-	 *        <li>h1, h2, h3, h4, h5, h6, i, img, li, ol, p, pre, q, small, strike, strong,</li>
+	 *        <li>a, b, blockquote, br, caption, cite, code, col, colgroup, dd,
+	 *        dl, dt, em,</li>
+	 *        <li>h1, h2, h3, h4, h5, h6, i, img, li, ol, p, pre, q, small,
+	 *        strike, strong,</li>
 	 *        <li>sub, sup, table, tbody, td, tfoot, th, thead, tr, u, ul</li>
 	 *        </ul>
 	 * @创建者: 皇族灬战狼
@@ -128,8 +130,9 @@ public class HtmlUtil {
 	 * @return
 	 */
 	public static String getFullHtml(String html) {
-		if (html == null)
+		if (StringUtils.isBlank(html)) {
 			return null;
+		}
 		return Jsoup.clean(html, Whitelist.relaxed());
 	}
 
