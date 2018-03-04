@@ -3,6 +3,7 @@ package com.cdeledu.common.enumresource;
 import com.cdeledu.common.baseInterface.EnumMessage;
 
 public enum SexEnum implements EnumMessage {
+	/** 性别 */
 	MEN("1", "男"), WOMEN("2", "女"), UNKNOWN("0", "保密");
 
 	private final String code;

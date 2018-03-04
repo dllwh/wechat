@@ -30,8 +30,10 @@ public abstract class BaseClass extends TagSupport implements Serializable {
 	 *            输出信息
 	 */
 	public void debug(Class<? extends Object> clazz, String message) {
-		if (!logger.isDebugEnabled())
+		if (!logger.isDebugEnabled()){
 			return;
+		}
+			
 		Logger logger = LoggerFactory.getLogger(clazz);
 		logger.debug(message);
 	}
@@ -46,8 +48,10 @@ public abstract class BaseClass extends TagSupport implements Serializable {
 	 *            输出信息value
 	 */
 	public void fmtDebug(Class<? extends Object> clazz, String fmtString, Object... value) {
-		if (!logger.isDebugEnabled())
+		if (!logger.isDebugEnabled()){
 			return;
+		}
+			
 		if (StringUtils.isBlank(fmtString)) {
 			return;
 		}

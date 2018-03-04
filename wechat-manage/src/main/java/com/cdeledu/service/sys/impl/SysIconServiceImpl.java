@@ -14,11 +14,11 @@ import com.cdeledu.service.sys.SysIconService;
 public class SysIconServiceImpl implements SysIconService {
 	@Resource
 	private BaseDaoSupport<?> baseDao;
-	private final static String prefix = "manageUserDaoImpl.";
+	private final static String PREFIX = "manageUserDaoImpl.";
 
 	@Override
 	public Integer insert(SysIcon record) throws Exception {
-		return baseDao.insert(prefix + "insertSelective", record);
+		return baseDao.insert(PREFIX + "insertSelective", record);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class SysIconServiceImpl implements SysIconService {
 
 	@Override
 	public Integer delete(Object record) throws Exception {
-		return baseDao.delete(prefix + "deleteByPrimaryKey", record);
+		return baseDao.delete(PREFIX + "deleteByPrimaryKey", record);
 	}
 
 	@Override
@@ -47,17 +47,18 @@ public class SysIconServiceImpl implements SysIconService {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<SysIcon> findForJdbcParam(SysIcon record) throws Exception {
-		return (List<SysIcon>) baseDao.findListForJdbcParam(prefix + "findForJdbc", record);
+		return (List<SysIcon>) baseDao.findListForJdbcParam(PREFIX + "findForJdbc", record);
 	}
 
 	@Override
 	public Integer getCountForJdbcParam(SysIcon record) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "getCountForJdbcParam", record);
+		return baseDao.getCountForJdbcParam(PREFIX + "getCountForJdbcParam", record);
 	}
 
 	@Override
 	public SysIcon findOneForJdbc(SysIcon record) throws Exception {
-		return (SysIcon) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", record);
+		return (SysIcon) baseDao.findOneForJdbcParam(PREFIX + "findOneForJdbc", record);
 	}
 }

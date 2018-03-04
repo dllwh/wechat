@@ -13,7 +13,6 @@ import com.cdeledu.common.base.BaseEntity;
  */
 public class SysIcon extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-	private Integer id;
 	/** 显示名称 */
 	private String displayName;
 	/** class 名字 */
@@ -22,14 +21,6 @@ public class SysIcon extends BaseEntity {
 	private String sourceType;
 	/** */
 	private Date createTime;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getDisplayName() {
 		return displayName;

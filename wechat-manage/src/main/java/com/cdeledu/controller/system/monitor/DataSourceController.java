@@ -32,6 +32,6 @@ public class DataSourceController extends BaseController {
 	 */
 	@RequestMapping(params = "goDruid")
 	public void goDruid(HttpServletRequest request,HttpServletResponse response) throws Exception{
-		WebUtils.issueRedirect(request, response, FilterHelper.Druid_Monitor);
+		WebUtils.issueRedirect(request, response, FilterHelper.DRUID_MONITOR);
 	}
 }

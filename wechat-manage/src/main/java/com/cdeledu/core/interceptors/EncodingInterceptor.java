@@ -17,6 +17,7 @@ public class EncodingInterceptor implements HandlerInterceptor {
 	/** ----------------------------------------------------- Fields start */
 
 	/** ----------------------------------------------------- Fields end */
+	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object object) throws Exception {
 		request.setCharacterEncoding("UTF-8");
@@ -24,10 +25,12 @@ public class EncodingInterceptor implements HandlerInterceptor {
 		return true;
 	}
 
+	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object object,
 			ModelAndView modelAndView) throws Exception {
 	}
 
+	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
 			Object object, Exception exception) throws Exception {
 	}

@@ -19,12 +19,12 @@ public class SysAreaServiceImpl implements SysAreaService {
 	/** ----------------------------------------------------- Fields start */
 	@Resource
 	private BaseDaoSupport<?> baseDao;
-	private final static String prefix = "com.cdeledu.dao.impl.sys.SysDictAreaDaoImpl.";
+	private final static String PREFIX = "com.cdeledu.dao.impl.sys.SysDictAreaDaoImpl.";
 
 	/** ----------------------------------------------------- Fields end */
 	@Override
 	public Integer insert(SysArea record) throws Exception {
-		return baseDao.insert(prefix + "insertSelective", record);
+		return baseDao.insert(PREFIX + "insertSelective", record);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class SysAreaServiceImpl implements SysAreaService {
 
 	@Override
 	public Integer delete(Object record) throws Exception {
-		return baseDao.delete(prefix + "deleteByPrimaryKey", record);
+		return baseDao.delete(PREFIX + "deleteByPrimaryKey", record);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class SysAreaServiceImpl implements SysAreaService {
 
 	@Override
 	public Integer update(SysArea record) throws Exception {
-		return baseDao.update(prefix + "updateByPrimaryKeySelective", record);
+		return baseDao.update(PREFIX + "updateByPrimaryKeySelective", record);
 	}
 
 	@Override
@@ -54,18 +54,18 @@ public class SysAreaServiceImpl implements SysAreaService {
 
 	@Override
 	public List<SysArea> findForJdbcParam(SysArea record) throws Exception {
-		return (List<SysArea>) baseDao.findListForJdbcParam(prefix + "findListForJdbcParam",
+		return (List<SysArea>) baseDao.findListForJdbcParam(PREFIX + "findListForJdbcParam",
 				record);
 	}
 
 	@Override
 	public Integer getCountForJdbcParam(SysArea record) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "getCountForJdbcParam", record);
+		return baseDao.getCountForJdbcParam(PREFIX + "getCountForJdbcParam", record);
 	}
 
 	@Override
 	public SysArea findOneForJdbc(SysArea record) throws Exception {
-		return (SysArea) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", record);
+		return (SysArea) baseDao.findOneForJdbcParam(PREFIX + "findOneForJdbc", record);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class SysAreaServiceImpl implements SysAreaService {
 
 	@Override
 	public List<SysArea> getArealistByParentCode(int parentId) throws Exception {
-		return (List<SysArea>) baseDao.findListForJdbcParam(prefix + "getArealistByParentCode",
+		return (List<SysArea>) baseDao.findListForJdbcParam(PREFIX + "getArealistByParentCode",
 				parentId);
 	}
 

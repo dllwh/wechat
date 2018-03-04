@@ -369,7 +369,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(ConversionNotSupportedException.class)
-	public AjaxJson ConversionNotSupportedException(ConversionNotSupportedException e) {
+	public AjaxJson conversionNotSupportedException(ConversionNotSupportedException e) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
@@ -385,7 +385,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(HttpMessageNotWritableException.class)
-	public AjaxJson HttpMessageNotWritableException(HttpMessageNotWritableException e) {
+	public AjaxJson httpMessageNotWritableException(HttpMessageNotWritableException e) {
 		AjaxJson result = new AjaxJson();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);

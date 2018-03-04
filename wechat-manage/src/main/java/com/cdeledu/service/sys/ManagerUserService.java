@@ -22,7 +22,7 @@ public interface ManagerUserService extends BaseService<SysUser> {
 	List<SysUserRole> getUserRole(SysUser sysUser) throws Exception;
 
 	/** 尚未分配的角色 */
-	List<SysUserRole> GetNotMyRoles(Integer userCode) throws Exception;
+	List<SysUserRole> getNotMyRoles(Integer userCode) throws Exception;
 
 	/** 保存用户-角色关联关系 */
 	void saveRoleUser(SysUserRole sysUserRole) throws Exception;

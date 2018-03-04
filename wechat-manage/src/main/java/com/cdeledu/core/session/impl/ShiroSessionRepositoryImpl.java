@@ -40,6 +40,6 @@ public class ShiroSessionRepositoryImpl extends BaseClass implements ShiroSessio
 	}
 
 	private String getKey(Serializable sessionId) {
-		return CacheConstans.redis_shiro_session + sessionId;
+		return CacheConstans.REDIS_SHIRO_SESSION + sessionId;
 	}
 }

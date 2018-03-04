@@ -85,7 +85,7 @@ public class AliPayController extends BaseController {
 	 * @param response
 	 * @throws Exception
 	 */
-	public void alipay_notify(HttpServletRequest request, HttpServletResponse response)
+	public void alipayNotify(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
 	}

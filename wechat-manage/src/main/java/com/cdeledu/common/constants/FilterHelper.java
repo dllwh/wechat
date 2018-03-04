@@ -29,7 +29,7 @@ public class FilterHelper {
 	/** 超级管理员角色代码 */
 	public final static String ADMIN_ROLE_CODE = "administrator";
 	/** Druid Monitor监控 */
-	public static final String Druid_Monitor = "/system/druid/";
+	public static final String DRUID_MONITOR = "/system/druid/";
 	/** 支付自定义错误页面 */
 	public static final String PAY_ERROR_WEIXIN_H5 = "https://github.com/dllwh/";
 

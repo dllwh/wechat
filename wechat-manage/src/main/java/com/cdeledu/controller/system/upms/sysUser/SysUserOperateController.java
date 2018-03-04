@@ -144,7 +144,7 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "bathDelUser")
-	public AjaxJson BathDelUser(@RequestParam(value = "delIds", required = true) String delIds) {
+	public AjaxJson bathDelUser(@RequestParam(value = "delIds", required = true) String delIds) {
 		AjaxJson reslutMsg = new AjaxJson();
 		if (StringUtils.isNotBlank(delIds)) {
 			List<Integer> ids = Arrays.asList();
@@ -333,13 +333,13 @@ public class SysUserOperateController extends BaseController {
 				resultMsg.setSuccess(false);
 				resultMsg.setMsg("无法授予权限");
 			}
-			SysUser TSUser = manageruserService.findOneForJdbc(user);
-			if (null == TSUser) {
+			SysUser tSUser = manageruserService.findOneForJdbc(user);
+			if (null == tSUser) {
 				resultMsg.setMsg("不存在");
 				resultMsg.setSuccess(false);
 			} else {
 				SysUserRole managerUserRole = new SysUserRole();
-				managerUserRole.setUserId(TSUser.getId());
+				managerUserRole.setUserId(tSUser.getId());
 				managerUserRole.setRoleId(roleID);
 				manageruserService.saveRoleUser(managerUserRole);
 			}

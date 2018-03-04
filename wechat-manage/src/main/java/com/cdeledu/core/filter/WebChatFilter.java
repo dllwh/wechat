@@ -23,15 +23,18 @@ import com.cdeledu.common.base.BaseClass;
 public class WebChatFilter extends BaseClass implements Filter {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public void destroy() {
 		logger.info("WebChatFilter已经销毁");
 	}
 
+	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
 		filterChain.doFilter(request, response);
 	}
 
+	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		logger.info("WebChatFilter已经启动！");
 	}

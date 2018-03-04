@@ -14,6 +14,7 @@ import com.cdeledu.common.baseInterface.ReturnCode;
  * @since: JDK 1.7
  */
 public enum SysStatusType implements ReturnCode {
+	/** 系统通用状态 */
 	SHOW(1, "显示"), HIDDEN(0, "隐藏"), ENABLE(1, "启用"), DISABLE(0, "禁用");
 	private final Integer code;
 	private final String value;

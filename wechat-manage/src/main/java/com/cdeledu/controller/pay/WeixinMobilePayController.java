@@ -68,10 +68,10 @@ public class WeixinMobilePayController extends BaseController {
 	@RequestMapping(value = "h5pay", method = RequestMethod.POST)
 	public String h5pay(ModelMap map) {
 		logger.info("纯H5支付(不建议在APP端使用)");
-		String mweb_url = weixinPayService.weixinPayH5();
+		String mwebUrl = weixinPayService.weixinPayH5();
 		// mweb_url为拉起微信支付收银台的中间页面，可通过访问该url来拉起微信客户端，完成支付,mweb_url的有效期为5分钟。
-		if (StringUtils.isNotBlank(mweb_url)) {
-			return "redirect:" + mweb_url;
+		if (StringUtils.isNotBlank(mwebUrl)) {
+			return "redirect:" + mwebUrl;
 		} else {
 			return "redirect:" + FilterHelper.PAY_ERROR_WEIXIN_H5;// 自定义错误页面
 		}
@@ -95,7 +95,7 @@ public class WeixinMobilePayController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "WXPayBack", method = RequestMethod.POST)
-	public void WXPayBack(HttpServletRequest request, HttpServletResponse response) {
+	public void wXPayBack(HttpServletRequest request, HttpServletResponse response) {
 
 	}
 	/** ----------------------------------------------- [公共方法] */

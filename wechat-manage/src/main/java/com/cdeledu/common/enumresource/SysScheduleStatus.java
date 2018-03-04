@@ -14,6 +14,7 @@ import com.cdeledu.common.baseInterface.ReturnCode;
  * @since: JDK 1.7
  */
 public enum SysScheduleStatus implements ReturnCode {
+	/** 定时任务状态 */
 	NORMAL(1, "正常"), PAUSE(0, "暂停");
 
 	private final Integer code;

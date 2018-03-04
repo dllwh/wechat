@@ -19,60 +19,70 @@ import com.cdeledu.service.sys.DictService;
  * @since: JDK 1.7
  */
 @Service("dictService")
+@SuppressWarnings("unchecked")
 public class DictServiceImpl implements DictService {
 	@Resource
 	private BaseDaoSupport<?> baseDao;
-	private final static String prefix = "sysDictDaoImpl.";
+	private final static String PREFIX = "sysDictDaoImpl.";
 
+	@Override
 	@Transactional(readOnly = false)
 	public Integer insert(SysDict record) throws Exception {
-		return baseDao.insert(prefix + "insertSelective", record);
+		return baseDao.insert(PREFIX + "insertSelective", record);
 	}
 
+	@Override
 	public Integer batchInsert(List<SysDict> parameter) throws Exception {
 		return null;
 	}
 
+	@Override
 	@Transactional(readOnly = false)
 	public Integer delete(Object record) throws Exception {
-		return baseDao.delete(prefix + "deleteByPrimaryKey", record);
+		return baseDao.delete(PREFIX + "deleteByPrimaryKey", record);
 	}
 
+	@Override
 	public Integer batchUpdate(List<SysDict> parameter) throws Exception {
 		return null;
 	}
 
+	@Override
 	@Transactional(readOnly = false)
 	public Integer update(SysDict record) throws Exception {
-		return baseDao.update(prefix + "updateByPrimaryKey", record);
+		return baseDao.update(PREFIX + "updateByPrimaryKey", record);
 	}
 
+	@Override
 	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
 	@Transactional(readOnly = true)
 	public List<SysDict> findForJdbcParam(SysDict record) throws Exception {
-		return (List<SysDict>) baseDao.findListForJdbcParam(prefix + "findOneForJdbc", record);
+		return (List<SysDict>) baseDao.findListForJdbcParam(PREFIX + "findOneForJdbc", record);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public Integer getCountForJdbcParam(SysDict record) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "getCountForJdbcParam", record);
+		return baseDao.getCountForJdbcParam(PREFIX + "getCountForJdbcParam", record);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public SysDict findOneForJdbc(SysDict record) throws Exception {
-		return (SysDict) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", record);
+		return (SysDict) baseDao.findOneForJdbcParam(PREFIX + "findOneForJdbc", record);
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
 	@Transactional(readOnly = true)
 	public List<SysDict> findAllList(SysDict dict) throws Exception {
-		return (List<SysDict>) baseDao.findListForJdbcParam(prefix + "findAllList", dict);
+		return (List<SysDict>) baseDao.findListForJdbcParam(PREFIX + "findAllList", dict);
 	}
 
+	@Override
 	@Transactional(readOnly = true)
 	public List<String> findTypeList(SysDict dict) throws Exception {
 		return null;

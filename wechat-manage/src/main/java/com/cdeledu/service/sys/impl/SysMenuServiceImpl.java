@@ -26,7 +26,7 @@ import com.google.common.collect.Maps;
 public class SysMenuServiceImpl implements SysMenuService {
 	@Autowired
 	private BaseDaoSupport<?> baseDao;
-	private final static String prefix = "com.cdeledu.dao.SysMenuMapper.";
+	private final static String PREFIX = "com.cdeledu.dao.SysMenuMapper.";
 
 	@Override
 	public Integer insert(SysMenu record) throws Exception {
@@ -39,7 +39,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 		record.setMenuUrl(accessAddress);
 		record.setCreate(WebUtilHelper.getCurrentUserId());
 		record.setModifier(WebUtilHelper.getCurrentUserId());
-		return baseDao.insert(prefix + "insertSelective", record);
+		return baseDao.insert(PREFIX + "insertSelective", record);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
 	@Override
 	public Integer delete(Object record) throws Exception {
-		return baseDao.delete(prefix + "deleteByPrimaryKey", record);
+		return baseDao.delete(PREFIX + "deleteByPrimaryKey", record);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	@Override
 	public Integer update(SysMenu record) throws Exception {
 		record.setModifier(WebUtilHelper.getCurrentUserId());
-		return baseDao.update(prefix + "updateByPrimaryKeySelective", record);
+		return baseDao.update(PREFIX + "updateByPrimaryKeySelective", record);
 	}
 
 	@Override
@@ -70,24 +70,24 @@ public class SysMenuServiceImpl implements SysMenuService {
 
 	@Override
 	public List<SysMenu> findForJdbcParam(SysMenu record) throws Exception {
-		return (List<SysMenu>) baseDao.findListForJdbcParam(prefix + "findForJdbc", record);
+		return (List<SysMenu>) baseDao.findListForJdbcParam(PREFIX + "findForJdbc", record);
 	}
 
 	@Override
 	public Integer getCountForJdbcParam(SysMenu record) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "getCountForJdbcParam", record);
+		return baseDao.getCountForJdbcParam(PREFIX + "getCountForJdbcParam", record);
 	}
 
 	@Override
 	public SysMenu findOneForJdbc(SysMenu record) throws Exception {
-		return (SysMenu) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", record);
+		return (SysMenu) baseDao.findOneForJdbcParam(PREFIX + "findOneForJdbc", record);
 	}
 
 	@Override
 	public List<SysMenu> getUserMenu(SysUser sysUser) throws Exception {
 		// 1. 获取用户下的所有菜单ID
 		List<Integer> userMenuIdList = (List<Integer>) baseDao
-				.findListForJdbcParam(prefix + "getAllMenuIdByUser", sysUser);
+				.findListForJdbcParam(PREFIX + "getAllMenuIdByUser", sysUser);
 		return getAllMenuList(userMenuIdList);
 	}
 
@@ -96,8 +96,9 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * @param parentId
 	 * @return
 	 */
+	@Override
 	public List<SysMenu> getMenuByParentCode(Integer parentId) throws Exception {
-		return (List<SysMenu>) baseDao.findListForJdbcParam(prefix + "getMenuByParentCode",
+		return (List<SysMenu>) baseDao.findListForJdbcParam(PREFIX + "getMenuByParentCode",
 				parentId);
 	}
 
@@ -106,8 +107,9 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * @param sysUser
 	 * @return
 	 */
+	@Override
 	public List<String> getMenuPermsByUserId(SysUser sysUser) throws Exception {
-		return (List<String>) baseDao.findListForJdbcParam(prefix + "getPermissionByUserId",
+		return (List<String>) baseDao.findListForJdbcParam(PREFIX + "getPermissionByUserId",
 				sysUser);
 	}
 
@@ -115,22 +117,24 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * @方法描述: 是否有子菜单
 	 * @return
 	 */
+	@Override
 	public boolean hasChildren(Integer id) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "countMenuChildren", id) > 0 ? true : false;
+		return baseDao.getCountForJdbcParam(PREFIX + "countMenuChildren", id) > 0 ? true : false;
 	}
 
 	/**
 	 * @方法描述: 根据用户ID查询操作按钮权限
 	 * @return
 	 */
+	@Override
 	public List<String> getButtonPermsByUserId(SysUser sysUser) throws Exception {
-		return (List<String>) baseDao.findListForJdbcParam(prefix + "getButtonPermsByUserId",
+		return (List<String>) baseDao.findListForJdbcParam(PREFIX + "getButtonPermsByUserId",
 				sysUser);
 	}
 	
 	@Override
 	public List<SysMenu> getMenuPermsByParentCode(Integer parentId) throws Exception {
-		return (List<SysMenu>) baseDao.findListForJdbcParam(prefix + "getMenuPermsByParentCode",
+		return (List<SysMenu>) baseDao.findListForJdbcParam(PREFIX + "getMenuPermsByParentCode",
 				parentId);
 	}
 
@@ -143,7 +147,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
 	@Override
 	public boolean hasRole(Integer id) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "hasRole", id) > 0 ? true : false;
+		return baseDao.getCountForJdbcParam(PREFIX + "hasRole", id) > 0 ? true : false;
 	}
 
 	@Override
@@ -164,7 +168,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	@Override
 	public List<Map<String, Object>> getMenuZTree(Integer roleId) throws Exception {
 		List<Integer> roleList = (List<Integer>) baseDao
-				.findListForJdbcParam(prefix + "getAllMenuIdByRole", roleId);
+				.findListForJdbcParam(PREFIX + "getAllMenuIdByRole", roleId);
 		return getMenuZTreeByParentId(-1, roleList);
 	}
 

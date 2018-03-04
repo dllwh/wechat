@@ -16,13 +16,13 @@ public class CountServiceImpl implements CountService {
 	/** ----------------------------------------------------- Fields start */
 	@Resource
 	private BaseDaoSupport<?> baseDao;
-	private final static String prefix = "com.cdeledu.dao.impl.sys.CountDaoImpl.";
+	private final static String PREFIX = "com.cdeledu.dao.impl.sys.CountDaoImpl.";
 
 	/** ----------------------------------------------------- Fields end */
 	@Override
 	public Integer countUserTotal() {
 		try {
-			return baseDao.getCountForJdbcParam(prefix + "countUserTotal", null);
+			return baseDao.getCountForJdbcParam(PREFIX + "countUserTotal", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -32,7 +32,7 @@ public class CountServiceImpl implements CountService {
 	@Override
 	public Integer countLoginLogTotal() {
 		try {
-			return baseDao.getCountForJdbcParam(prefix + "countloginLogTotal", null);
+			return baseDao.getCountForJdbcParam(PREFIX + "countloginLogTotal", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -42,7 +42,7 @@ public class CountServiceImpl implements CountService {
 	@Override
 	public Integer countOperateLogTotal() {
 		try {
-			return baseDao.getCountForJdbcParam(prefix + "countOperateLogTotal", null);
+			return baseDao.getCountForJdbcParam(PREFIX + "countOperateLogTotal", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -52,7 +52,7 @@ public class CountServiceImpl implements CountService {
 	@Override
 	public List<Map<String, Object>> getOperateLogCountByMonth(Integer year) {
 		try {
-			return (List<Map<String, Object>>) baseDao.findListForJdbcParam(prefix+"getOperateLogCountByMonth", year);
+			return (List<Map<String, Object>>) baseDao.findListForJdbcParam(PREFIX+"getOperateLogCountByMonth", year);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

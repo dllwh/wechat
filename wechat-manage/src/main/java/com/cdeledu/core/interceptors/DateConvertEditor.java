@@ -9,8 +9,10 @@ import org.springframework.util.StringUtils;
 public class DateConvertEditor extends PropertyEditorSupport {
 	/** ----------------------------------------------------- Fields start */
 	private SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");	
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	/** ----------------------------------------------------- Fields end */
+	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 		if (StringUtils.hasText(text)) {
 			try {
@@ -18,11 +20,13 @@ public class DateConvertEditor extends PropertyEditorSupport {
 					setValue(this.dateFormat.parse(text));
 				} else if (text.indexOf(":") > 0 && text.length() == 19) {
 					setValue(this.datetimeFormat.parse(text));
-				//update-begin----author:zhangdaihao----------------------date:20130312 ------- for:时间格式化-------
+					// update-begin----author:zhangdaihao----------------------date:20130312
+					// ------- for:时间格式化-------
 				} else if (text.indexOf(":") > 0 && text.length() == 21) {
 					text = text.replace(".0", "");
 					setValue(this.datetimeFormat.parse(text));
-				//update-end----author:zhangdaihao----------------------date:20130312 ------- for:时间格式化-------
+					// update-end----author:zhangdaihao----------------------date:20130312
+					// ------- for:时间格式化-------
 				} else {
 					throw new IllegalArgumentException(
 							"Could not parse date, date format is error ");
