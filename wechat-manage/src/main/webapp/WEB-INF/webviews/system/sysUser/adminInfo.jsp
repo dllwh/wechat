@@ -118,6 +118,8 @@
 					<div class="Button_operation clearfix">
 						<button onclick="modify();" class="btn btn-danger radius"
 							type="submit">修改信息</button>
+						<button onclick="cancel();" class="btn btn-success radius"
+							type="button">修改取消</button>
 						<button onclick="save_info();" class="btn btn-success radius"
 							type="button">保存修改</button>
 					</div>
@@ -182,15 +184,42 @@
 		</ul>
 	</div>
 	<script type="text/javascript">
-		//按钮点击事件
+	
+		//初始化宽度、高度    
+		$(".admin_modify_style").height($(window).height());
+		$(".recording_style").width($(window).width() - 400);
+		//当文档窗口发生改变时 触发  
+		$(window).resize(function() {
+			$(".admin_modify_style").height($(window).height());
+			$(".recording_style").width($(window).width() - 400);
+		});
+	
+		// 修改按钮点击事件
 		function modify() {
 			$('.text_info').attr("disabled", false);
 			$('.text_info').addClass("add");
 			$('#Personal').find('.xinxi').addClass("hover");
+			$('#Personal').find('.btn-info').css({
+				'display' : 'block'
+			});
 			$('#Personal').find('.btn-success').css({
 				'display' : 'block'
 			});
 		};
+		
+		// 取消按钮点击事件
+		function cancel (){
+			$('#Personal').find('.xinxi').removeClass("hover");
+			$('#Personal').find('.text_info').removeClass("add").attr("disabled", true);
+			$('#Personal').find('.btn-info').css({
+				'display' : 'none'
+			});
+			$('#Personal').find('.btn-success').css({
+				'display' : 'none'
+			});
+		}
+		
+		// 保存按钮点击事件
 		function save_info() {
 			var num = 0;
 			var str = "";
@@ -209,26 +238,28 @@
 			if (num > 0) {
 				return false;
 			} else {
-				layer.alert('修改成功！', {
-					title : '提示框',
-					icon : 1,
+				$.ajax({
+					type : "post",
+					url: '${_currConText }/loginController/updateUser.shtml',
+					dataType : "json",
+					success : function(result) {
+						if (result.success) {
+							layer.alert('修改成功！', {
+								title : '提示框',
+								icon : 1,
+							});
+							cancel();
+						} else {
+							layer.alert(result.msg, {
+								title : '提示框',
+								icon : 2,
+							});
+						}	
+					}
 				});
-				$('#Personal').find('.xinxi').removeClass("hover");
-				$('#Personal').find('.text_info').removeClass("add").attr("disabled", true);
-				$('#Personal').find('.btn-success').css({
-					'display' : 'none'
-				});
-				layer.close(index);
 			}
 		};
-		//初始化宽度、高度    
-		$(".admin_modify_style").height($(window).height());
-		$(".recording_style").width($(window).width() - 400);
-		//当文档窗口发生改变时 触发  
-		$(window).resize(function() {
-			$(".admin_modify_style").height($(window).height());
-			$(".recording_style").width($(window).width() - 400);
-		});
+		
 		//修改密码
 		function change_Password() {
 			layer.open({

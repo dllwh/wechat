@@ -17,6 +17,7 @@
 	<div class="page-content clearfix">
 		<div class="administrator">
 			<div class="d_Confirm_Order_style">
+				<input type="hidden" id="seachRole" value="0"/>
 				<!-- 数据查询 -->
 				<div class="search_style">
 					<div class="title_names">搜索查询</div>
@@ -67,12 +68,16 @@
 										<ul class="b_P_Sort_list">
 											<li>
 												<i class="fa fa-users green"></i>
-												<a href="#">全部管理员（${homePage:countUserTotal()}}）</a>
+												<a onclick="seachByRole('0')">
+													全部管理员（${homePage:countUserTotal()}）
+												</a>
 											</li>
 											<c:forEach items="${fns:countRoleUser()}" var="roleUser">
 												<li>
 													<i class="fa fa-users orange"></i> 
-													<a>${roleUser.roleName }（${roleUser.userCount }）</a>
+													<a onclick="seachByRole('${roleUser.roleId }')">
+														${roleUser.roleName }（${roleUser.userCount }）
+													</a>
 												</li>
 											</c:forEach>
 										</ul>
@@ -127,20 +132,40 @@
 										</td>
 										<td class="td-manage">
 											<a style="text-decoration:none" class="btn btn-xs " 
-												title="启用" onclick="sysUsereEnable()">
+												title="启用" onclick="sysUserController.enableClick()">
 												<i class="fa fa-close bigger-120"></i>
 											</a>   
-											<a title="停用" onclick="sysUsereDisable()" 
+											<a title="停用" onclick="sysUserController.disableClick()" 
 												class="btn btn-xs btn-success">
 												<i class="fa fa-check  bigger-120"></i>
 											</a>   
-        									<a title="编辑" onclick="editClickFun()" 
+        									<a title="编辑" onclick="sysUserController.openChangeDig()" 
         										class="btn btn-xs btn-info" >
         										<i class="fa fa-edit bigger-120"></i>
         									</a>      
-        									<a title="删除" onclick="delClickFun()" 
+        									<a title="删除" onclick="sysUserController.delClickFun()" 
         										class="btn btn-xs btn-warning" >
         										<i class="fa fa-trash  bigger-120"></i>
+        									</a>
+        									<a title="重置密码" onclick="sysUserController.resetPwdFun()" 
+        										class="btn btn-xs btn-danger" >
+        										<i class="fa fa-history bigger-120"></i>
+        									</a>
+        									<a title="锁定" onclick="sysUserController.lockClick()"
+        										class="btn btn-xs btn-danger" >
+        										<i class="fa fa-pause bigger-120"></i>
+        									</a>
+        									<a title="解锁" onclick="sysUserController.unlockClick()"
+        										class="btn btn-xs btn-warning" >
+        										<i class="fa fa-play bigger-120"></i>
+        									</a>
+        									<a title="禁止登录" onclick="sysUserController.freezeAccountClick()"
+        										class="btn btn-xs btn-danger" >
+        										<i class="fa fa-pencil bigger-120"></i>
+        									</a>
+        									<a title="允许登录" onclick="sysUserController.unfreezeClick()"
+        										class="btn btn-xs btn-warning" >
+        										<i class="fa fa-pencil bigger-120"></i>
         									</a>
 										</td>
 									</tr>
@@ -153,23 +178,12 @@
 		</div>
 		 <!--添加管理员-->
 		<div id="add_administrator_style" class="add_menber" style="display:none">
-		
 		</div>
 	</div>
 </body>
+<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 <script type="text/javascript">
 	
-	$(function() { 
-		$("#administrator").fix({
-			float : 'left',
-			//minStatue : true,
-			skin : 'green',	
-			durationTime :false,
-			spacingw:50, //设置隐藏时的距离
-			spacingh:270 //设置显示时间距
-		});
-	});
-
 	//初始化宽度、高度  
 	$(".widget-box").height($(window).height()-215); 
 	$(".table_menu_list").width($(window).width()-260);
@@ -184,6 +198,23 @@
 	laydate({
 		elem: '#start',
 		event: 'focus' 
+	});
+	
+	//调用函数，初始化表格  
+	initTable(); 
+	
+	//当点击查询按钮的时候执行  
+	$(".btn_search").bind("click", initTable);
+	
+	$(function() { 
+		$("#administrator").fix({
+			float : 'left',
+			//minStatue : true,
+			skin : 'green',	
+			durationTime :false,
+			spacingw:50, //设置隐藏时的距离
+			spacingh:270 //设置显示时间距
+		});
 	});
 	
 	//字数限制
@@ -204,6 +235,18 @@
 			return true;
 		}
 	};
+	
+	function initTable(){
+		var seachRole =  $("#seachRole").val();
+	}
+	
+	function seachByRole(key){
+		if(dllwh.isNullOrEmpty(key)){
+			$("#seachRole").val(0);	
+		} else {
+			$("#seachRole").val(key);
+		}
+	}
 	
 	/*添加管理员*/
 	$('#administrator_add').on('click', function(){
@@ -259,7 +302,6 @@
 			}
 		},
 		openAddDig : function() {// 点击添加
-
 		},
 		openChangeDig : function() {// 点击修改按钮时
 			if (this.check()) {
@@ -276,7 +318,8 @@
 
 		},
 		resetPwdFun : function() {// 重置密码
-
+			if (this.check()) {
+			}
 		},
 		enableClick : function() {// 启用
 			if (this.check()) {
