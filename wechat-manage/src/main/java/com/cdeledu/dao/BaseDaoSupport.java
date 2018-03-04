@@ -15,46 +15,57 @@ public class BaseDaoSupport<T> implements BaseDao<T> {
 	@Resource(name = "sqlSessionTemplate")
 	private SqlSessionTemplate sqlSessionTemplate;
 
+	@Override
 	public Integer insert(String statement, Object parameter) throws Exception {
 		return sqlSessionTemplate.insert(statement, parameter);
 	}
 
+	@Override
 	public Integer delete(String statement) throws Exception {
 		return sqlSessionTemplate.delete(statement);
 	}
 
+	@Override
 	public Integer delete(String statement, Object parameter) throws Exception {
 		return sqlSessionTemplate.delete(statement, parameter);
 	}
 
+	@Override
 	public Integer update(String statement) throws Exception {
 		return sqlSessionTemplate.update(statement);
 	}
 
+	@Override
 	public Integer update(String statement, Object parameter) throws Exception {
 		return sqlSessionTemplate.update(statement, parameter);
 	}
 
+	@Override
 	public Object findOneForJdbcParam(String statement) throws Exception {
 		return sqlSessionTemplate.selectOne(statement);
 	}
 
+	@Override
 	public Object findOneForJdbcParam(String statement, Object parameter) throws Exception {
 		return sqlSessionTemplate.selectOne(statement, parameter);
 	}
 
+	@Override
 	public Object findListForJdbcParam(String statement) throws Exception {
 		return sqlSessionTemplate.selectList(statement);
 	}
 
+	@Override
 	public Object findListForJdbcParam(String statement, Object parameter) throws Exception {
 		return sqlSessionTemplate.selectList(statement, parameter);
 	}
 
+	@Override
 	public Integer getCountForJdbcParam(String statement, Object parameter) throws Exception {
 		return (Integer) sqlSessionTemplate.selectOne(statement, parameter);
 	}
 
+	@Override
 	public Object findForMap(String statement, Object parameter, String key) throws Exception {
 		return sqlSessionTemplate.selectMap(statement, parameter, key);
 	}

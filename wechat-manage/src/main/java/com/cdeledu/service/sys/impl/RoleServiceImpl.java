@@ -21,55 +21,63 @@ import com.cdeledu.util.WebUtilHelper;
 public class RoleServiceImpl extends BaseClass implements RoleService {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
-	private final static String prefix = "com.cdeledu.dao.SysRoleMapper.";
+	private final static String PREFIX = "com.cdeledu.dao.SysRoleMapper.";
 	@Resource
 	private BaseDaoSupport<?> baseDao;
 
 	/** ----------------------------------------------------- Fields end */
-
+	@Override
 	public Integer insert(SysRole record) throws Exception {
 		record.setCreate(WebUtilHelper.getCurrentUserId());
 		record.setModifier(WebUtilHelper.getCurrentUserId());
-		return baseDao.insert(prefix + "insertSelective", record);
+		return baseDao.insert(PREFIX + "insertSelective", record);
 	}
 
+	@Override
 	public Integer batchInsert(List<SysRole> parameter) throws Exception {
 		return null;
 	}
 
+	@Override
 	public Integer delete(Object record) throws Exception {
-		return baseDao.delete(prefix + "deleteByPrimaryKey", record);
+		return baseDao.delete(PREFIX + "deleteByPrimaryKey", record);
 	}
 
+	@Override
 	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
 	}
 
+	@Override
 	public Integer update(SysRole record) throws Exception {
 		record.setModifier(WebUtilHelper.getCurrentUserId());
-		return baseDao.update(prefix + "updateByPrimaryKey", record);
+		return baseDao.update(PREFIX + "updateByPrimaryKey", record);
 	}
 
+	@Override
 	public Integer batchUpdate(List<SysRole> parameter) throws Exception {
 		return null;
 	}
 
+	@Override
 	public List<SysRole> findForJdbcParam(SysRole record) throws Exception {
-		return (List<SysRole>) baseDao.findListForJdbcParam(prefix + "findForJdbcParam", record);
+		return (List<SysRole>) baseDao.findListForJdbcParam(PREFIX + "findForJdbcParam", record);
 	}
 
+	@Override
 	public Integer getCountForJdbcParam(SysRole record) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "getCountForJdbcParam", record);
+		return baseDao.getCountForJdbcParam(PREFIX + "getCountForJdbcParam", record);
 	}
 
+	@Override
 	public SysRole findOneForJdbc(SysRole record) throws Exception {
-		return (SysRole) baseDao.findOneForJdbcParam(prefix + "selectByPrimaryKey", record.getId());
+		return (SysRole) baseDao.findOneForJdbcParam(PREFIX + "selectByPrimaryKey", record.getId());
 	}
 
 	@Override
 	public boolean hasMenuByRole(int roleID) {
 		try {
-			return baseDao.getCountForJdbcParam(prefix + "hasMenuByRole", roleID) > 1 ? true
+			return baseDao.getCountForJdbcParam(PREFIX + "hasMenuByRole", roleID) > 1 ? true
 					: false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,7 +88,7 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 	@Override
 	public boolean hasUserByRole(int roleID) {
 		try {
-			return baseDao.getCountForJdbcParam(prefix + "hasUserByRole", roleID) > 1 ? true
+			return baseDao.getCountForJdbcParam(PREFIX + "hasUserByRole", roleID) > 1 ? true
 					: false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,9 +101,10 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 		if (StringUtils.isBlank(roleCode)) {
 			return true;
 		}
-		return baseDao.getCountForJdbcParam(prefix + "selectByRocode", roleCode) > 0 ? true : false;
+		return baseDao.getCountForJdbcParam(PREFIX + "selectByRocode", roleCode) > 0 ? true : false;
 	}
 
+	@Override
 	public SysRole getRoleById(Integer roleId) throws Exception {
 		SysRole sysRole = new SysRole();
 		if (roleId != null) {
@@ -104,50 +113,53 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 		}
 		return sysRole;
 	}
-	
+
 	@Override
 	public List<SysUser> getUserByRole(SysRole role) throws Exception {
-		if(role != null && role.getId() != null){
-			return (List<SysUser>) baseDao.findListForJdbcParam(prefix+"getUserByRole", role);
+		if (role != null && role.getId() != null) {
+			return (List<SysUser>) baseDao.findListForJdbcParam(PREFIX + "getUserByRole", role);
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Integer countUserByRole(SysRole role) throws Exception {
-		if(role != null && role.getId() != null){
-			return (Integer) baseDao.getCountForJdbcParam(prefix+"countUserByRole", role);
+		if (role != null && role.getId() != null) {
+			return (Integer) baseDao.getCountForJdbcParam(PREFIX + "countUserByRole", role);
 		}
 		return 0;
 	}
-	
+
 	@Override
 	public List<SysUser> getUserNoExistRoleByRole(SysRole role) throws Exception {
-		if(role != null && role.getId() != null){
-			return (List<SysUser>) baseDao.findListForJdbcParam(prefix+"getUserNoExistRoleByRole", role);
+		if (role != null && role.getId() != null) {
+			return (List<SysUser>) baseDao.findListForJdbcParam(PREFIX + "getUserNoExistRoleByRole",
+					role);
 		}
 		return null;
 	}
+
 	@Override
 	public Integer countUserNoExistRoleByRole(SysRole role) throws Exception {
-		if(role != null && role.getId() != null){
-			return (Integer) baseDao.getCountForJdbcParam(prefix+"countUserNoExistRoleByRole", role);
+		if (role != null && role.getId() != null) {
+			return (Integer) baseDao.getCountForJdbcParam(PREFIX + "countUserNoExistRoleByRole",
+					role);
 		}
 		return 0;
 	}
-	
+
 	@Override
 	public Integer saveRoleAccess(Integer roleId, Integer menuID) throws Exception {
 		SysRoleMenu sysRoleMenu = new SysRoleMenu();
 		sysRoleMenu.setRoleId(roleId);
 		sysRoleMenu.setPowerId(menuID);
-		return baseDao.insert(prefix + "saveRoleAccess", sysRoleMenu);
+		return baseDao.insert(PREFIX + "saveRoleAccess", sysRoleMenu);
 	}
 
 	@Override
 	public Integer delRoleAccess(Integer roleId) {
 		try {
-			return baseDao.delete(prefix + "delRoleAccess", roleId);
+			return baseDao.delete(PREFIX + "delRoleAccess", roleId);
 		} catch (Exception e) {
 			return -1;
 		}
@@ -156,7 +168,7 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 	@Override
 	public boolean saveRoleUser(SysUserRole sysUserRole) {
 		try {
-			baseDao.insert(prefix + "saveRoleUser", sysUserRole);
+			baseDao.insert(PREFIX + "saveRoleUser", sysUserRole);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -167,15 +179,16 @@ public class RoleServiceImpl extends BaseClass implements RoleService {
 	@Override
 	public boolean delRoleUser(SysUserRole sysUserRole) {
 		try {
-			baseDao.delete(prefix + "delRoleUser", sysUserRole);
+			baseDao.delete(PREFIX + "delRoleUser", sysUserRole);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
+
 	@Override
-	public List<SysUserRole> countRoleUser() throws Exception{
-		return (List<SysUserRole>) baseDao.findListForJdbcParam(prefix+"countRoleUser");
+	public List<SysUserRole> countRoleUser() throws Exception {
+		return (List<SysUserRole>) baseDao.findListForJdbcParam(PREFIX + "countRoleUser");
 	}
 }

@@ -82,10 +82,10 @@ public class JedisManager extends BaseClass {
 	 * @param jedis
 	 */
 	public void recycleJedis(Jedis jedis) {
-		if (jedis == null)
-			return;
-		jedis.quit();
-		jedis.close();
+		if (jedis != null) {
+			jedis.quit();
+			jedis.close();
+		}
 	}
 
 	/**

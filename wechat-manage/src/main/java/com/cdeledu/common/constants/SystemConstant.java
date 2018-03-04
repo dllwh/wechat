@@ -90,8 +90,8 @@ public class SystemConstant {
 		}
 	}
 
-	/** 日志级别 */
 	public enum SysLogLeavel {
+		/** 日志级别 */
 		info, warn, error;
 	}
 }

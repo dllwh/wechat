@@ -89,7 +89,7 @@ public class UnionPayController extends BaseController {
 	 * @param response
 	 * @throws Exception
 	 */
-	public void union_notify(HttpServletRequest request, HttpServletResponse response)
+	public void unionNotify(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.info("银联接收后台通知开始");
 	}

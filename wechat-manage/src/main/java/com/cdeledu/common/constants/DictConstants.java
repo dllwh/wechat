@@ -13,14 +13,14 @@ package com.cdeledu.common.constants;
  */
 public final class DictConstants {
 	/** 系统管理员字典 */
-	public final static String UserDict = "manageUserDict";
+	public final static String USERDICT = "manageUserDict";
 
 	/** 角色管理员字典 */
-	public final static String RoleDict = "RoleDict";
+	public final static String ROLEDICT = "RoleDict";
 
 	/** 菜单管理业务的字典 */
-	public final static String MenuDict = "MenuDict";
+	public final static String MENUDICT = "MenuDict";
 
 	/** 字典管理业务的字典 */
-	public final static String DictMap = "DictMap";
+	public final static String DICTMAP = "DictMap";
 }

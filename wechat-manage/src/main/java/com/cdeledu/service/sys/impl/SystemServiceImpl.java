@@ -21,9 +21,9 @@ import com.cdeledu.util.database.model.TableProperty;
 public class SystemServiceImpl extends BaseClass implements SystemService {
 
 	private static final long serialVersionUID = 1L;
-	private static final String sysTable = "com.cdeledu.model.system.SysLogEntity.";
 	@Resource
 	private BaseDaoSupport<?> baseDao;
+	private static final String sysTable = "com.cdeledu.model.system.SysLogEntity.";
 
 	@Override
 	public void addLog(SysLogEntity syslog) {

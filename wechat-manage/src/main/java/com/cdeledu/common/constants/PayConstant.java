@@ -12,8 +12,9 @@ package com.cdeledu.common.constants;
  * @since: JDK 1.7
  */
 public class PayConstant {
-	/** 支付类型 */
+
 	public enum PayType {
+		/** 支付类型 */
 		ALI("支付宝", (short) 1), WECHAT("微信", (short) 2), UNION("银联", (short) 3);
 
 		private Short code;
@@ -50,8 +51,8 @@ public class PayConstant {
 		}
 	}
 
-	/** 支付途径 */
 	public enum PayWay {
+		/** 支付途径 */
 		PC("PC,平板", (short) 1), MOBILE("手机", (short) 2);
 
 		private Short code;

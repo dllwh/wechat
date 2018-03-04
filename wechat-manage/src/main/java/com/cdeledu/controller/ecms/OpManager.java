@@ -137,6 +137,6 @@ public class OpManager {
 	 * @param apiKey
 	 *            访问OpManager服务器的API密钥
 	 */
-	public void GetSystemInformation(String apiKey) {
+	public void getSystemInformation(String apiKey) {
 	}
 }

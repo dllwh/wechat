@@ -36,6 +36,7 @@ public class RoleFilter extends RolesAuthorizationFilter {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/** ----------------------------------------------------- Fields end */
+	@Override
 	public boolean isAccessAllowed(ServletRequest request, ServletResponse response,
 			Object mappedValue) {
 		if (logger.isDebugEnabled()) {

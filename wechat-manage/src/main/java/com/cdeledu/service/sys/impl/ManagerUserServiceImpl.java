@@ -28,7 +28,7 @@ import com.cdeledu.util.security.PasswordUtil;
 @SuppressWarnings("unchecked")
 public class ManagerUserServiceImpl extends BaseClass implements ManagerUserService {
 	private static final long serialVersionUID = 1L;
-	private final static String prefix = "manageUserDaoImpl.";
+	private final static String PREFIX = "manageUserDaoImpl.";
 	/** ----------------------------------------------------- Fields start */
 	@Resource
 	private BaseDaoSupport<?> baseDao;
@@ -37,6 +37,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	/**
 	 * 保存用户基本信息
 	 */
+	@Override
 	@Transactional(readOnly = false)
 	public Integer insert(SysUser record) throws Exception {
 		logger.info("保存用户基本信息");
@@ -44,12 +45,13 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 		record.setPassword(newPassWord);
 		record.setCreate(WebUtilHelper.getCurrentUserId());
 		record.setModifier(WebUtilHelper.getCurrentUserId());
-		return baseDao.insert(prefix + "insertSelective", record);
+		return baseDao.insert(PREFIX + "insertSelective", record);
 	}
 
 	/**
 	 * 批量保存
 	 */
+	@Override
 	@Transactional(readOnly = false)
 	public Integer batchInsert(List<SysUser> record) throws Exception {
 		return null;
@@ -58,14 +60,16 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	/**
 	 * 删除用户
 	 */
+	@Override
 	@Transactional(readOnly = false)
 	public Integer delete(Object record) throws Exception {
 		SysUser sysUser = new SysUser();
 		sysUser.setId((Integer) record);
 		sysUser.setIsEnabled(0);
-		return baseDao.update(prefix + "updateByPrimaryKey", sysUser);
+		return baseDao.update(PREFIX + "updateByPrimaryKey", sysUser);
 	}
 
+	@Override
 	@Transactional(readOnly = false)
 	public Integer batchDelete(List<Object> parameter) throws Exception {
 		return null;
@@ -74,11 +78,13 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	/**
 	 * 更新用户信息
 	 */
+	@Override
 	@Transactional(readOnly = false)
 	public Integer update(SysUser sysUser) throws Exception {
-		return baseDao.update(prefix + "updateByPrimaryKey", sysUser);
+		return baseDao.update(PREFIX + "updateByPrimaryKey", sysUser);
 	}
 
+	@Override
 	@Transactional(readOnly = false)
 	public Integer batchUpdate(List<SysUser> parameter) throws Exception {
 		return null;
@@ -87,38 +93,43 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	/**
 	 * 返回用户列表
 	 */
+	@Override
 	@Transactional(readOnly = true)
 	public List<SysUser> findForJdbcParam(SysUser record) throws Exception {
-		return (List<SysUser>) baseDao.findListForJdbcParam(prefix + "findForJdbc", record);
+		return (List<SysUser>) baseDao.findListForJdbcParam(PREFIX + "findForJdbc", record);
 	}
 
 	/**
 	 * 获取用户列表的个数
 	 */
+	@Override
 	@Transactional(readOnly = true)
 	public Integer getCountForJdbcParam(SysUser record) throws Exception {
-		return baseDao.getCountForJdbcParam(prefix + "getCountForJdbcParam", record);
+		return baseDao.getCountForJdbcParam(PREFIX + "getCountForJdbcParam", record);
 	}
 
 	/**
 	 * 获取用户信息(单独一个)
 	 */
+	@Override
 	@Transactional(readOnly = true)
 	public SysUser findOneForJdbc(SysUser record) throws Exception {
-		return (SysUser) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", record);
+		return (SysUser) baseDao.findOneForJdbcParam(PREFIX + "findOneForJdbc", record);
 	}
 
 	/**
 	 * 检查用户是否存在
 	 */
+	@Override
 	@Transactional(readOnly = true)
 	public SysUser checkUserExits(SysUser sysUser) throws Exception {
-		return (SysUser) baseDao.findOneForJdbcParam(prefix + "checkUserExits", sysUser);
+		return (SysUser) baseDao.findOneForJdbcParam(PREFIX + "checkUserExits", sysUser);
 	}
 
 	/**
 	 * 检查用户是否存在
 	 */
+	@Override
 	@Transactional(readOnly = true)
 	public SysUser checkUserExits(String userName, String passWord) throws Exception {
 		SysUser managerUser = new SysUser();
@@ -130,14 +141,16 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	/**
 	 * 获取用户的角色
 	 */
+	@Override
 	@Transactional(readOnly = true)
 	public List<SysUserRole> getUserRole(SysUser sysUser) throws Exception {
-		return (List<SysUserRole>) baseDao.findListForJdbcParam(prefix + "getUserRole", sysUser);
+		return (List<SysUserRole>) baseDao.findListForJdbcParam(PREFIX + "getUserRole", sysUser);
 	}
 
 	/**
 	 * 保存管理员登录信息
 	 */
+	@Override
 	@Transactional(readOnly = false)
 	public void saveLoginInfo(SysUser sysUser) {
 
@@ -146,6 +159,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	/**
 	 * admin账户初始化
 	 */
+	@Override
 	@Transactional(readOnly = false)
 	public void pwdInit(SysUser sysUser) {
 	}
@@ -153,15 +167,16 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	/**
 	 * 保存用户-角色关联关系
 	 */
+	@Override
 	@Transactional(readOnly = false)
 	public void saveRoleUser(SysUserRole userRole) throws Exception {
-		baseDao.insert(prefix + "saveRoleUser", userRole);
+		baseDao.insert(PREFIX + "saveRoleUser", userRole);
 	}
 
 	@Override
-	public List<SysUserRole> GetNotMyRoles(Integer userCode) throws Exception {
+	public List<SysUserRole> getNotMyRoles(Integer userCode) throws Exception {
 		if (userCode != null) {
-			return (List<SysUserRole>) baseDao.findListForJdbcParam(prefix + "GetNotMyRoles",
+			return (List<SysUserRole>) baseDao.findListForJdbcParam(PREFIX + "GetNotMyRoles",
 					userCode);
 		}
 		return null;
@@ -169,7 +184,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 
 	@Override
 	public void deleteUserRole(SysUserRole sysUserRole) throws Exception {
-		baseDao.delete(prefix + "deleteUserRole", sysUserRole);
+		baseDao.delete(PREFIX + "deleteUserRole", sysUserRole);
 	}
 
 	@Override
@@ -177,10 +192,9 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 		if (StringUtils.isNotBlank(userName)) {
 			SysUser user = new SysUser();
 			user.setUserName(userName);
-			return (SysUser) baseDao.findOneForJdbcParam(prefix + "findOneForJdbc", user);
+			return (SysUser) baseDao.findOneForJdbcParam(PREFIX + "findOneForJdbc", user);
 		} else {
 			return null;
 		}
 	}
-
 }

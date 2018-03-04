@@ -62,7 +62,7 @@ public class WeixinPayController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "pay", method = RequestMethod.POST)
-	public void weixin_notify(HttpServletRequest request, HttpServletResponse response)
+	public void weixinNotify(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
 	}

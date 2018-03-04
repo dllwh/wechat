@@ -14,14 +14,14 @@ import com.cdeledu.common.base.BaseClass;
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年12月8日 下午3:36:24
  * @版本: V1.0
- * @since: JDK 1.7	
+ * @since: JDK 1.7
  */
 public class StopPage extends BaseClass {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
 
 	/** ----------------------------------------------------- Fields end */
-
+	@Override
 	public int doEndTag() throws JspException {
 		return SKIP_PAGE;// 让服务器不要处理剩余的页面
 	}

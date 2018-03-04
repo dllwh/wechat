@@ -13,9 +13,9 @@ package com.cdeledu.common.constants;
  */
 public final class CacheConstans {
 	/** shiro 缓存的前缀 */
-	public static final String redis_shiro_cache = "redis_shiro-cache:";
+	public static final String REDIS_SHIRO_CACHE = "redis_shiro-cache:";
 	/** Redis session Key 的前缀 */
-	public static final String redis_shiro_session = "redis_shiro-session:";
+	public static final String REDIS_SHIRO_SESSION = "redis_shiro-session:";
 	/** session status */
 	public static final String SESSION_STATUS = "session-online-status";
 	/** Redis cache 名 */
