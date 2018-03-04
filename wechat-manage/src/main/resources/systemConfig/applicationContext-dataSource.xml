@@ -10,7 +10,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<!-- 自动扫描dao和service包(自动注入) -->
+	<!-- 业务逻辑组件自动扫描dao和service包(自动注入) -->
 	<!-- 加载service,此时要排除要controller,因为controller已经spring-servlet-context中加载过了 -->
 	<context:component-scan base-package="com.cdeledu">
 		<context:exclude-filter type="annotation"
@@ -60,8 +60,17 @@
 	<!-- ====================================================================== 
 		配置mybatis模板 -->
 	<!-- 配置sqlSessionFactory -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
-		p:dataSource-ref="dataSource" p:mapperLocations="classpath:com/cdeledu/dao/impl/*/*.xml" />
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- mybaits的全局配置文件 -->
+		<!-- 
+		<property name="configLocation" value="classpath:systemConfig/applicationContext-mybatis.xml" />
+		 -->
+		<!-- 指定数据库的数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 指定mybatis，mapper文件的位置 -->
+		<property name="mapperLocations" value="classpath:com/cdeledu/dao/impl/*/*.xml" />
+	</bean>
+	
 
 	<!-- 配置mapper扫描器 -->
 	<!-- 扫描basePackage下所有以@Repository标识的 接口进行自动生成代理的Dao -->
@@ -117,8 +126,10 @@
 
 	<!-- 配置哪些类的方法需要进行事务管理 -->
 	<!-- <aop:config>
+		切入表达式（所有返回值类型的service包下或者子包下的所有类中任意多的参数的方法都可以切入） -
 		<aop:pointcut id="baseServiceMethods"
-			expression="execution(* com.cdeledu..service..*.*(..))" />
+			expression="execution(* com.cdeledu.service..*.*(..))" />
+		指定事务增强的规则
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="baseServiceMethods" />
 	</aop:config> -->
 	

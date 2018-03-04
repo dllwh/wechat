@@ -46,9 +46,11 @@ public class RoleFilter extends RolesAuthorizationFilter {
 		String[] arra = (String[]) mappedValue;
 		Subject subject = getSubject(request, response);
 
-		for (String role : arra) {
-			if (subject.hasRole(role)) {
-				return Boolean.TRUE;
+		if(arra != null && arra.length > 0){
+			for (String role : arra) {
+				if (subject.hasRole(role)) {
+					return Boolean.TRUE;
+				}
 			}
 		}
 

@@ -165,4 +165,12 @@ public class LoginController extends BaseController {
 		}
 		return FilterHelper.LOGIN_SHORT;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "updateUser")
+	public AjaxJson updateUser() {
+		AjaxJson result = new AjaxJson();
+		return result;
+	}
+	
 }

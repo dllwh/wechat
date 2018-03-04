@@ -92,10 +92,11 @@
 		<constructor-arg>
 			<value>
 				/loginController** = anon
+				/loginController/** = anon
 				/sysPage/** = anon,kickoutFilter
 				/homeController/** = loginFilter
 				/dataSourceController** = authc,roleFilter[administrator]
-				/** = authc,loginFilter,permissionFilter,kickoutFilter
+				/** = loginFilter,permissionFilter,kickoutFilter,authc
 			</value>
 		</constructor-arg>
 	</bean>

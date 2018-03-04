@@ -3,7 +3,9 @@ package com.cdeledu.controller.system.monitor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.annotation.SystemLog;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -22,10 +24,16 @@ public class SysSessionController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields end */
+	/** ----------------------------------------------------- Fields end */
+	@SystemLog(desc = "查询会话", opType = SysOpType.SELECT, tableName = "sys_session")
+	@RequestMapping(value = "getList")
+	public void getList() {
 
-	/** ----------------------------------------------- [私有方法] */
-	/** ----------------------------------------------- [私有方法] */
+	}
 
-	/** ----------------------------------------------- [测试方法] */
-	/** ----------------------------------------------- [测试方法] */
+	@SystemLog(desc = "删除会话", opType = SysOpType.SELECT, tableName = "sys_session")
+	@RequestMapping(value = "delete")
+	public void delete() {
+
+	}
 }

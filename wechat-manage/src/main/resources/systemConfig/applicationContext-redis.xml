@@ -59,11 +59,11 @@
 	
 	<!--  spring data redis -->
 	<bean id="jeidsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<constructor-arg ref="jedisPoolConfig"/>
 		<property name="usePool" value="true" />
 		<property name="hostName" value="${redis.host}" />
 		<property name="port" value="${redis.port}" />
 		<property name="password" value="${redis.password}"/>
+		<property name="poolConfig" ref="jedisPoolConfig"/>
 	</bean>
 
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
