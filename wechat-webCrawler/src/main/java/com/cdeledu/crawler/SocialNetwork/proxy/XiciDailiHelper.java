@@ -89,7 +89,7 @@ public class XiciDailiHelper {
 					}
 					proxyIP.setPosition(tdData.get(3).text());
 					proxyIP.setProtocolType(tdData.get(5).text().toLowerCase().split(","));
-					resultList.add(MapUtilHelper.BeanToMap(proxyIP));
+					resultList.add(MapUtilHelper.beanToMap(proxyIP));
 				} catch (Exception e) {
 					if (logger.isDebugEnabled()) {
 						e.printStackTrace();

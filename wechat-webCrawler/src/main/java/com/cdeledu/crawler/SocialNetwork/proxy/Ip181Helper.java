@@ -72,7 +72,7 @@ public class Ip181Helper {
 				.first().select("tr");
 		for (int i = 1; i < dataTable.size(); i++) {
 			try {
-				resultList.add(MapUtilHelper.BeanToMap(getDetailInfo(dataTable.get(i))));
+				resultList.add(MapUtilHelper.beanToMap(getDetailInfo(dataTable.get(i))));
 			} catch (Exception e) {
 				if (logger.isDebugEnabled()) {
 					e.printStackTrace();

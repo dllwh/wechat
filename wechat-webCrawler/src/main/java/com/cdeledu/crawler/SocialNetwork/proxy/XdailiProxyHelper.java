@@ -81,7 +81,7 @@ public class XdailiProxyHelper {
 							proxyIP.setPosition(position[0]);
 							proxyIP.setIsp(position[1]);
 							proxyIP.setProtocolType(job.getString("type").split("/"));
-							resultList.add(MapUtilHelper.BeanToMap(proxyIP));
+							resultList.add(MapUtilHelper.beanToMap(proxyIP));
 						} catch (Exception e) {
 							logger.error(e);
 						}

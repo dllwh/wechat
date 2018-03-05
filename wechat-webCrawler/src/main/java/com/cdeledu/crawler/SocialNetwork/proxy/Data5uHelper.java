@@ -104,7 +104,7 @@ public class Data5uHelper {
 				proxyIP.setCountry(spanData.get(3).text());
 				proxyIP.setPosition(spanData.get(4).text() + spanData.get(5).text());
 				proxyIP.setIsp(spanData.get(6).text());
-				resultList.add(MapUtilHelper.BeanToMap(proxyIP));
+				resultList.add(MapUtilHelper.beanToMap(proxyIP));
 			} catch (Exception e) {
 				if (logger.isDebugEnabled()) {
 					e.printStackTrace();
