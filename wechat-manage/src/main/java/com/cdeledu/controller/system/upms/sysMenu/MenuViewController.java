@@ -1,5 +1,8 @@
 package com.cdeledu.controller.system.upms.sysMenu;
 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.model.rbac.SysMenu;
+import com.cdeledu.service.sys.SysMenuService;
+import com.google.common.collect.Maps;
 
 /**
  * @类描述: 菜单数据控制类
@@ -21,7 +27,8 @@ import com.cdeledu.controller.BaseController;
 public class MenuViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
-
+	@Autowired
+	SysMenuService sysMenuService;
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法:菜单权限列表页面跳转
@@ -36,8 +43,23 @@ public class MenuViewController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "list")
-	public void list(ModelMap map) {
+	@RequestMapping(params = "getList")
+	public Map<String, Object> list(ModelMap map,SysMenu sysMenu) {
+		Map<String, Object> resultMap = Maps.newConcurrentMap();
+		try {
+			int count  = sysMenuService.getCountForJdbcParam(sysMenu);
+			if(count > 0){
+				resultMap.put("rows", sysMenuService.findForJdbcParam(sysMenu));
+			}else {
+				resultMap.put("rows", "");
+			}
+			resultMap.put("total", count);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultMap.put("rows", "");
+			resultMap.put("total", 0);
+		}
+		return resultMap;
 
 	}
 
