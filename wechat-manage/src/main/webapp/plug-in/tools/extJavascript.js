@@ -132,21 +132,35 @@ dllwh.gotoUrl = function(href) {
 }
 
 /** 毫秒数转日期格式 */
-dllwh.genStrDateTime = function(data){
-	if(data == null){
+dllwh.genStrDateTime = function(data) {
+	if (data == null) {
 		return "";
-	}else{
-		var c = new Date(); 
+	} else {
+		var c = new Date();
 		c.setTime(data);
-		var mon = c.getMonth()+1;
-		if(mon<10){
+		var mon = c.getMonth() + 1;
+		if (mon < 10) {
 			mon = "0" + mon;
 		}
 		var dat = c.getDate();
-		if(dat<10){
+		if (dat < 10) {
 			dat = "0" + dat;
 		}
-		return c.getFullYear()+"-"+mon+"-"+dat+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds();
+
+		var hours = c.getHours();
+		if (hours < 10) {
+			hours = "0" + hours;
+		}
+		var minutes = c.getMinutes();
+		if (minutes < 10) {
+			minutes = "0" + minutes;
+		}
+		var seconds = c.getSeconds();
+		if (seconds < 10) {
+			seconds = "0" + seconds;
+		}
+		return c.getFullYear() + "-" + mon + "-" + dat + " " + hours + ":"
+				+ minutes + ":" + seconds;
 	}
 }
 
