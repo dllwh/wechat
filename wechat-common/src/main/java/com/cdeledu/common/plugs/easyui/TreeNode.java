@@ -1,6 +1,7 @@
 package com.cdeledu.common.plugs.easyui;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 
@@ -16,38 +17,39 @@ import java.io.Serializable;
  * @see <a href="http://www.jeasyui.com/">jQueryEasyUI树节点视图数据模型类</a>
  */
 public class TreeNode implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	/** 绑定节点的标识值 */
-	private String id;
+	private Integer id;
 	/** 绑定节点父节点的标识值 */
-	private String pid;
+	private Integer pid;
 	/** 显示的节点文本 */
 	private String text;
 	/** 节点状态，'open' 或 'closed'。 */
-	private String state;
+	private String state = "open";
 	/** 显示的节点图标CSS类ID */
 	private String iconCls;
 	/** 该节点是否被选中 */
 	private boolean checked;
+	/** 绑定该节点的自定义属性参数 */
+	private Object attributes;
+	/** 子节点 */
+	private List<TreeNode> children;
 
 	/** ----------------------------------------------------- Fields end */
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public String getPid() {
+	public Integer getPid() {
 		return pid;
 	}
 
-	public void setPid(String pid) {
+	public void setPid(Integer pid) {
 		this.pid = pid;
 	}
 
@@ -81,5 +83,21 @@ public class TreeNode implements Serializable {
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+	}
+
+	public Object getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Object attributes) {
+		this.attributes = attributes;
+	}
+
+	public List<TreeNode> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<TreeNode> children) {
+		this.children = children;
 	}
 }
