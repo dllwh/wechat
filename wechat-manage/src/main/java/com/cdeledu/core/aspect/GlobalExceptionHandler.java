@@ -351,23 +351,6 @@ public class GlobalExceptionHandler {
 	 * 500 - Internal Server Error
 	 */
 	@ResponseBody
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(Exception.class)
-	public AjaxJson handleException(final Exception e) {
-		AjaxJson result = new AjaxJson();
-		if (logger.isDebugEnabled()) {
-			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
-		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(500);
-		return result;
-	}
-
-	/**
-	 * 500 - Internal Server Error
-	 */
-	@ResponseBody
 	@ExceptionHandler(ConversionNotSupportedException.class)
 	public AjaxJson conversionNotSupportedException(ConversionNotSupportedException e) {
 		AjaxJson result = new AjaxJson();
@@ -404,4 +387,18 @@ public class GlobalExceptionHandler {
 		}
 	}
 	*/
+
+	@ResponseBody
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(Exception.class)
+	public AjaxJson defaultExceptionHandler(final Exception e) {
+		AjaxJson result = new AjaxJson();
+		if (logger.isDebugEnabled()) {
+			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
+		}
+		result.setSuccess(false);
+		result.setMsg(e.getMessage());
+		result.setResultCode(500);
+		return result;
+	}
 }
