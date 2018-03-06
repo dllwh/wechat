@@ -18,9 +18,8 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h5>菜单列表</h5>
-					
 						<div class="ibox-content">
-							
+							<ul id="menuTree" ></ul>
 						</div>
 					</div>
 				</div>
@@ -120,6 +119,33 @@
 		$("#btnSearch").bind("click", sysMenuController.searchClick);
 		$("#resetSearch").bind("click", sysMenuController.resetSearch);
 		initButton();
+		
+		$("#menuTree").tree({
+			url:"${_currConText}/menuView.shtml?menuTreeList",
+			animate : true, // 定义节点在展开或折叠的时候是否显示动画效果。
+			lines : true,// 定义是否显示树控件上的虚线。
+			dnd : false,// 定义是否启用拖拽功能。
+			onClick : function(node){// 在用户点击一个节点的时候触发。
+				var leaf = $(this).tree('isLeaf', node.target);
+				var concept_id = node.attributes.concept_id;
+				var tree_id=node.attributes.tree_id;
+				var flag = false;
+				if(leaf){//如果为子节点
+					
+				} else {//如果为父节点
+					
+				}
+			},
+			onContextMenu : function(e, node){// 在右键点击节点的时候触发
+				e.preventDefault();
+			},
+			onLoadError:function(node, data){// 在数据加载失败的时候触发
+				
+            },
+			onLoadSuccess:function(node, data){// 在数据加载成功以后触发。
+				$('#menuTree').tree('expandAll');//展开所有的节点
+            }
+        });
 	});
 	
 	function initButton(){
@@ -197,6 +223,20 @@
 						return "<span class='label label-danger radius'>禁用</span>";
 					}
 				}
+			},{
+				field: 'createTime',
+				title: '创建日期',
+				visible:false,
+				formatter : function(value,rowData,rowIndex){
+					return dllwh.genStrDateTime(value);
+				}
+			},{
+				field: 'updateTime',
+				visible:false,
+				title: '修改日期',
+				formatter : function(value,rowData,rowIndex){
+					return dllwh.genStrDateTime(value);
+				}
 			}
 			],
 			onCheck: function (row) {
@@ -267,16 +307,59 @@
 			if (this.check()) {
 			}
 		},
-		deleteClick : function() { // 删除
-			if (this.check()) {
+		isVisibleClick : function(){// 使用状态
+			if(this.check()){
+				var id = this.setItem.id;
+				var isVisible = this.setItem.isVisible;
+				if(isVisible == 1){
+					isVisible = 0;
+				} else {
+					isVisible = 1
+				}
+				
+				dialogConfirm("您确认要操作此数据吗?", function() {
+					$.ajax({
+						url : "${_currConText }/sysMenuOperate/updateMenu.shtml?visibleState",
+						type : "POST",
+						data : {
+							id : id,
+							isVisible:isVisible
+						},
+						success : function(result) {
+							if (result.success) {
+								dialogMsg("删除成功");
+								initTable();
+							} else {
+								dialogMsg(result.msg, "error");
+							}
+						}
+					});
+				});
 			}
 		},
-		enableClick : function() {// 启用
-			if (this.check()) {
-			}
+		editDisable : function(){// 编辑状态
+			
 		},
-		disableClick : function() {// 禁用
-			if (this.check()) {
+		deleteClick : function(){// 删除状态
+			if(this.check()){
+				var id = this.setItem.id;
+				dialogConfirm("您确认要操作此数据吗?", function() {
+					$.ajax({
+						url : "${_currConText }/sysMenuOperate/updateMenu.shtml?delDisable",
+						type : "POST",
+						data : {
+							id : id
+						},
+						success : function(result) {
+							if (result.success) {
+								dialogMsg("删除成功");
+								initTable();
+							} else {
+								dialogMsg(result.msg, "error");
+							}
+						}
+					});
+				});
 			}
 		},
 		searchClick : function() { // 搜索角色

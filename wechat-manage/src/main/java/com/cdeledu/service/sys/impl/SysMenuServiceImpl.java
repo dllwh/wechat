@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.common.constants.SystemConstant.SysMenuType;
+import com.cdeledu.common.plugs.easyui.TreeNode;
 import com.cdeledu.dao.BaseDaoSupport;
-import com.cdeledu.model.easyui.EasyUITreeNode;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.service.sys.SysMenuService;
@@ -131,7 +131,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 		return (List<String>) baseDao.findListForJdbcParam(PREFIX + "getButtonPermsByUserId",
 				sysUser);
 	}
-	
+
 	@Override
 	public List<SysMenu> getMenuPermsByParentCode(Integer parentId) throws Exception {
 		return (List<SysMenu>) baseDao.findListForJdbcParam(PREFIX + "getMenuPermsByParentCode",
@@ -151,14 +151,10 @@ public class SysMenuServiceImpl implements SysMenuService {
 	}
 
 	@Override
-	public List<EasyUITreeNode> getMenuEasyUITree() throws Exception {
-		List<EasyUITreeNode> results = null;
+	public List<TreeNode> getMenuEasyUITree() throws Exception {
+		List<TreeNode> results = null;
 		try {
 			results = getMenuEasyUITreeByParentId(-1);
-			EasyUITreeNode rootNode = new EasyUITreeNode();
-			rootNode.setId(-1);
-			rootNode.setText("无");
-			results.add(0, rootNode);
 		} catch (Exception ex) {
 
 		}
@@ -248,27 +244,22 @@ public class SysMenuServiceImpl implements SysMenuService {
 		}
 		return subMenuList;
 	}
-	
-	private List<EasyUITreeNode> getMenuEasyUITreeByParentId(int parentId) {
-		List<EasyUITreeNode> results = Lists.newArrayList();
+
+	private List<TreeNode> getMenuEasyUITreeByParentId(int parentId) {
+		List<TreeNode> results = Lists.newArrayList();
 		try {
 			List<SysMenu> rootMenuList = getMenuByParentCode(parentId);
-			EasyUITreeNode treeNode = null;
+			TreeNode treeNode = null;
 			for (SysMenu sysMenu : rootMenuList) {
 				int treeId = sysMenu.getId();
-				treeNode = new EasyUITreeNode();
+				treeNode = new TreeNode();
 				treeNode.setId(treeId);
 				treeNode.setText(sysMenu.getMenuName());
-				if (hasChildren(treeId)) {
-
-					if (sysMenu.getType() == SysMenuType.CATALOG.getValue()) {
-						treeNode.setState("closed");
-						treeNode.setChildren(getMenuEasyUITreeByParentId(treeId));
-					} else {
-						treeNode.setState("open");
-					}
-
+				if (hasChildren(treeId) && sysMenu.getType() == SysMenuType.CATALOG.getValue()) {
+					treeNode.setState("closed");
+					treeNode.setChildren(getMenuEasyUITreeByParentId(treeId));
 				} else {
+					treeNode.setIconCls("fa fa-leaf");
 					treeNode.setState("open");
 				}
 				results.add(treeNode);
@@ -278,13 +269,13 @@ public class SysMenuServiceImpl implements SysMenuService {
 		}
 		return results;
 	}
-	
+
 	private List<Map<String, Object>> getMenuZTreeByParentId(int parentId, List<Integer> authIds) {
 		List<Map<String, Object>> results = Lists.newArrayList();
 		try {
 			List<SysMenu> rootMenuList = getMenuPermsByParentCode(parentId);
 			Map<String, Object> resultMap = null;
-			Integer authId = null; 
+			Integer authId = null;
 			for (SysMenu sysMenu : rootMenuList) {
 				authId = sysMenu.getId();
 				resultMap = Maps.newConcurrentMap();
@@ -298,7 +289,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 				} else {
 					resultMap.put("open", true);
 				}
-				
+
 				results.add(resultMap);
 			}
 		} catch (Exception e) {

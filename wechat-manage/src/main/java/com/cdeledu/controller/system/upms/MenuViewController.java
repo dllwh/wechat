@@ -1,5 +1,6 @@
 package com.cdeledu.controller.system.upms;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cdeledu.common.plugs.easyui.TreeNode;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.service.sys.SysMenuService;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -69,9 +72,15 @@ public class MenuViewController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "menuTreeList")
-	public void menuTreeList(ModelMap map) {
-
+	@RequestMapping(params = "menuTreeList")
+	public List<TreeNode> menuTreeList(ModelMap map) {
+		List<TreeNode> resultList = Lists.newArrayList();
+		try {
+			resultList =  sysMenuService.getMenuEasyUITree();
+		} catch (Exception e) {
+			
+		}
+		return resultList;
 	}
 
 	/**

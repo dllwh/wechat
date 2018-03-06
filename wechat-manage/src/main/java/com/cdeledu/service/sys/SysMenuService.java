@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cdeledu.common.base.BaseService;
-import com.cdeledu.model.easyui.EasyUITreeNode;
+import com.cdeledu.common.plugs.easyui.TreeNode;
 import com.cdeledu.model.rbac.SysMenu;
 import com.cdeledu.model.rbac.SysUser;
 
@@ -33,7 +33,7 @@ public interface SysMenuService extends BaseService<SysMenu> {
 	boolean hasRole(Integer id) throws Exception;
 
 	/** 获取全部菜单数据-EasyUITree */
-	List<EasyUITreeNode> getMenuEasyUITree() throws Exception;
+	List<TreeNode> getMenuEasyUITree() throws Exception;
 
 	/** 角色权限 */
 	List<Map<String, Object>> getMenuZTree(Integer roleId) throws Exception;
