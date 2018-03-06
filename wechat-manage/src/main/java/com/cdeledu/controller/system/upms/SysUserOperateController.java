@@ -1,4 +1,4 @@
-package com.cdeledu.controller.system.upms.sysUser;
+package com.cdeledu.controller.system.upms;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.cdeledu.controller.system.upms.sysRole;
+package com.cdeledu.controller.system.upms;
 
 import java.util.List;
 import java.util.Map;

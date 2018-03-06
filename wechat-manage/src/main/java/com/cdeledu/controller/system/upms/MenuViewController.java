@@ -1,4 +1,4 @@
-package com.cdeledu.controller.system.upms.sysMenu;
+package com.cdeledu.controller.system.upms;
 
 import java.util.Map;
 
