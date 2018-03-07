@@ -22,12 +22,37 @@ import com.cdeledu.controller.BaseController;
 @Controller
 @RequestMapping("memberView")
 public class MemberViewController extends BaseController {
-
-	private static final long serialVersionUID = 1L;
-
 	/** ----------------------------------------------------- Fields start */
+	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields end */
 
+	/**
+	 * @方法描述: 用户列表管理
+	 * @return
+	 */
+	@RequestMapping("")
+	public String index(ModelMap modelMap) {
+		return "/ucenter/member/memberInit";
+	}
+	
+	/**
+	 * @方法描述: 等级管理
+	 * @return
+	 */
+	@RequestMapping(value = "gradeInit")
+	public String gradeInit(ModelMap modelMap) {
+		return "/ucenter/member/gradeInit";
+	}
+	
+	/**
+	 * @方法描述: 会员记录管理
+	 * @return
+	 */
+	@RequestMapping(value = "recordInit")
+	public String recordInit(ModelMap modelMap) {
+		return "/ucenter/member/recordInit";
+	}
+	
 	/**
 	 * @方法描述: 用户列表管理
 	 * @return
@@ -37,11 +62,4 @@ public class MemberViewController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		return mv;
 	}
-	
-	
-	/** ----------------------------------------------- [私有方法] */
-	/** ----------------------------------------------- [私有方法] */
-
-	/** ----------------------------------------------- [测试方法] */
-	/** ----------------------------------------------- [测试方法] */
 }
