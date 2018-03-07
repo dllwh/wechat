@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="${_currConText }/static/style/style.css"/>
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/simple-line-icons.min.css" />
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.css" />
 <link rel="stylesheet" href="${_currConText }/plug-in/font/css/icon-font.min.css" />
 <link rel="stylesheet" href="${_currConText }/plug-in/assets/css/codemirror.css" />
 <!--[if IE 7]>
@@ -18,6 +19,10 @@
 <!--[if lte IE 8]>
 	<script src="${_currConText }/assets/js/excanvas.min.js"></script>
 <![endif]-->
-
+<script src="${_currConText }/plug-in/assets/js/typeahead-bs2.min.js"></script>   
+<script src="${_currConText }/plug-in/tools/lrtk.js" type="text/javascript" ></script>	
 <script src="${_currConText }/plug-in/assets/js/jquery.dataTables.min.js"></script>
 <script src="${_currConText }/plug-in/assets/js/jquery.dataTables.bootstrap.js"></script>
+
+<script src="${_currConText }/plug-in/assets/layer/layer.js" type="text/javascript" ></script>     
+<script src="${_currConText }/plug-in/assets/dist/echarts.js"></script> 
