@@ -151,6 +151,32 @@ public class DateUtilHelper extends DateUtils {
 	}
 
 	/**
+	 * @方法描述 : 获取当天的0点
+	 * @return
+	 */
+	public static Date todayFirstDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
+
+	/**
+	 * @方法描述 : 获取当天的23点59分59秒
+	 * @return
+	 */
+	public static Long todayLastDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+		return calendar.getTime().getTime();
+	}
+
+	/**
 	 * 获取当前小时
 	 */
 	public static int getCurrHour() {
