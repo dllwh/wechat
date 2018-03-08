@@ -77,7 +77,7 @@ public class SecureUtil {
 	 *            长度
 	 * @return 返回加密后的数据
 	 */
-	public String encrypt(String dataSource, String key, String algorithmName,  String fillType,Integer length)
+	public static String encrypt(String dataSource, String key, String algorithmName,  String fillType,Integer length)
 			throws Exception {
 		String result = "";
 		switch (algorithmName) {
@@ -118,7 +118,7 @@ public class SecureUtil {
 	 *            长度
 	 * @return 返回解密后的数据
 	 */
-	public String decrypt(String dataSource, String key, String algorithmName, String fillType,Integer length)
+	public static String decrypt(String dataSource, String key, String algorithmName, String fillType,Integer length)
 			throws Exception {
 		String result = "";
 		switch (algorithmName) {
