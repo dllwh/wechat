@@ -194,26 +194,24 @@
 		</ul>
 	</div>
 	<script type="text/javascript">
-		$(function(){
-			//初始化宽度、高度    
+		//初始化宽度、高度    
+		$(".admin_modify_style").height($(window).height());
+		$(".recording_style").width($(window).width() - 400);
+		//当文档窗口发生改变时 触发  
+		$(window).resize(function() {
 			$(".admin_modify_style").height($(window).height());
 			$(".recording_style").width($(window).width() - 400);
-			//当文档窗口发生改变时 触发  
-			$(window).resize(function() {
-				$(".admin_modify_style").height($(window).height());
-				$(".recording_style").width($(window).width() - 400);
-			});
-		
-			$('#userLoginLogTable th input:checkbox').on('click' , function(){
-				var that = this;
-				$(this).closest('table').find('tr > td:first-child input:checkbox')
-				.each(function(){
-					this.checked = that.checked;
-					$(this).closest('tr').toggleClass('selected');
-				});
-					
-			});	
 		});
+			
+		$('#userLoginLogTable th input:checkbox').on('click' , function(){
+			var that = this;
+			$(this).closest('table').find('tr > td:first-child input:checkbox')
+			.each(function(){
+				this.checked = that.checked;
+				$(this).closest('tr').toggleClass('selected');
+			});
+				
+		});	
 		
 		// 修改按钮点击事件
 		function modify() {
