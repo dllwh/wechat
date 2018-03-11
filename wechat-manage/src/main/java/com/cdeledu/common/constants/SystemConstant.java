@@ -75,6 +75,8 @@ public class SystemConstant {
 		UPLOAD("upload"),
 		/** 选择、查询 */
 		SELECT("select"),
+		/** 重置 */
+		RESET("reset"),
 		/** 下载 */
 		DOWNLOAD("download"),
 		/** 其他 */

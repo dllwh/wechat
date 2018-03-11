@@ -49,7 +49,7 @@ public class LogTaskFactory {
 			@Override
 			public void run() {
 				try {
-					loginLogService.addLoginLog(
+					loginLogService.insert(
 							LogFactory.createLoginLog(userCode, content, status, ip, browser));
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);

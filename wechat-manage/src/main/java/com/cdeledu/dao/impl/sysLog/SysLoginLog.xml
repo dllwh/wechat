@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdeledu.dao.impl.sysLog.SysLoginLog">
+	<sql id="getLoginLog_body">
+		SELECT * FROM sys_log_login
+		<where>
+			<if test="userCode != null">
+				and userCode LIKE CONCAT(CONCAT('%', #{userCode}),'%')
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getLoginLogList" parameterType="com.cdeledu.model.system.SysLoginLog"
+		resultType="com.cdeledu.model.system.SysLoginLog">
+		select * from(
+			<include refid="getLoginLog_body"/>
+		) as myTable 
+		<if test="page != -1">
+			LIMIT #{startRow},#{rows}
+		</if>
+	</select>	
+	
+	<select id="countLoginLog" parameterType="com.cdeledu.model.system.SysLoginLog"
+		resultType="java.lang.Integer">
+		select count(*) from(
+			<include refid="getLoginLog_body"/>
+		) as myTable
+	</select>
+	
 	<!-- 保存管理员登录信息 -->
 	<insert id="saveLoginInfo" parameterType="com.cdeledu.model.system.SysLoginLog"
 		useGeneratedKeys="true" keyProperty="id">
