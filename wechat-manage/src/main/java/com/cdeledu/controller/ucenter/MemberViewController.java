@@ -32,7 +32,7 @@ public class MemberViewController extends BaseController {
 	 */
 	@RequestMapping("")
 	public String index(ModelMap modelMap) {
-		return "/ucenter/member/memberInit";
+		return "/ucenter/memberInit";
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class MemberViewController extends BaseController {
 	 */
 	@RequestMapping(value = "gradeInit")
 	public String gradeInit(ModelMap modelMap) {
-		return "/ucenter/member/gradeInit";
+		return "/ucenter/gradeInit";
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class MemberViewController extends BaseController {
 	 */
 	@RequestMapping(value = "recordInit")
 	public String recordInit(ModelMap modelMap) {
-		return "/ucenter/member/recordInit";
+		return "/ucenter/recordInit";
 	}
 	
 	/**
