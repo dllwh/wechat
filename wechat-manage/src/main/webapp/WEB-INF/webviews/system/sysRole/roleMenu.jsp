@@ -64,15 +64,19 @@
 	};
 	
 	$(function(){
+		dialogLoading(true);
 		$.ajax({
 			type : "post",
 			url: '${_currConText }/roleView/roleAccessConfig.shtml?roleMenuList&roleCode=${roleCode}',
 			dataType : "json",
 			success : function(jsonData) {
+				dialogLoading(false);
 				if (jsonData != null) {
 					ztree = $.fn.zTree.init($("#roleMenu"), setting, jsonData);
 					ztree.expandAll(true);
 					getZTreeObj = $.fn.zTree.getZTreeObj("roleMenu");
+				} else {
+					dialogAlert("无法获取响应数据，请稍后重试！","error");
 				}
 			}
 		});

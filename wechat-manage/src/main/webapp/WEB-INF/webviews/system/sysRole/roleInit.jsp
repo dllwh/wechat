@@ -607,7 +607,9 @@
 					width: '30%',
 					height: '100%',
 					scroll:true,
-					maxmin: true,
+					maxmin: false,
+					showCloseBtn:false,
+					btn : [ '保存并提交','取消'],
 					url: '${_currConText }/roleView/roleAccessConfig.shtml?roleMenu&roleCode='+roleCode,
 					success: function(){
 						
@@ -627,6 +629,7 @@
 					height: '90%',
 					maxmin: false,
 					scroll : true,
+					showCloseBtn:false,
 					btn : [ '关闭'],
 					url: '${_currConText }/roleView/roleAccessConfig.shtml?roleUser&roleCode='+roleCode,
 					success: function(){
