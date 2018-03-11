@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
+import com.cdeledu.common.constants.MessageConstant;
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.core.factory.LogTaskFactory;
 import com.cdeledu.core.log.LogManager;
 import com.cdeledu.core.shiro.token.ShiroHelper;
@@ -165,12 +169,53 @@ public class LoginController extends BaseController {
 		}
 		return FilterHelper.LOGIN_SHORT;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "updateUser")
+	@SystemLog(desc = "更新当前登录用户用户", opType = SysOpType.UPDATE, tableName = "sys_user")
 	public AjaxJson updateUser() {
 		AjaxJson result = new AjaxJson();
 		return result;
 	}
-	
+
+	@ResponseBody
+	@RequestMapping(value = "resetPwd")
+	@SystemLog(desc = "重置密码", opType = SysOpType.UPDATE, tableName = "sys_user")
+	public AjaxJson resetPwd(String oldPassWord, String newPassWord) {
+		AjaxJson result = new AjaxJson();
+		SysUser currenLoginUser = ShiroHelper.getPrincipal();
+		// 判断用户是否为空,不为空,则清空session中的用户object
+		if (currenLoginUser != null) {
+			if (StringUtils.isNoneBlank(oldPassWord) && StringUtils.isNoneBlank(newPassWord)) {
+				String password = PasswordUtil.encrypt(currenLoginUser.getUserName(),
+						oldPassWord.trim());
+				if (currenLoginUser.getPassword().equalsIgnoreCase(password)) {
+					SysUser sysUser = new SysUser();
+					sysUser.setId(currenLoginUser.getId());
+					sysUser.setPassword(PasswordUtil.encrypt(currenLoginUser.getUserName(),
+							newPassWord.trim()));
+					try {
+						userService.update(sysUser);
+						result.setSuccess(true);
+						result.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+					} catch (Exception e) {
+						e.printStackTrace();
+						result.setSuccess(false);
+						result.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+					}
+				} else {
+					result.setSuccess(false);
+					result.setMsg("错误提示:请输入正确的原密码");
+				}
+			} else {
+				result.setSuccess(false);
+				result.setMsg("错误提示:旧密码或新密码不能为空");
+			}
+		} else {
+			result.setSuccess(false);
+			result.setMsg("当前用户尚未登录，请重新登录");
+		}
+		return result;
+	}
+
 }

@@ -108,9 +108,9 @@
 	<update id="updateByPrimaryKey" parameterType="com.cdeledu.model.rbac.SysUser" >
 		update sys_user
 		<trim prefix="SET" suffix="" suffixOverrides=",">
-			<if test="userName != null and userName != " > userName = #{userName}, </if>
+			<if test="userName != null and userName != '' " > userName = #{userName}, </if>
 			<if test="password != null and password != '' " > password = #{password}, </if>
-			<if test="usertype != null " > userType = #{usertype}, </if>
+			<if test="userType != null " > userType = #{usertype}, </if>
 			<if test="nickName != null and nickName != '' "> nickName = #{nickName}, </if>
 			<if test="realName != null and realName != '' "> realName = #{realName}, </if>
 			<if test="email != null and email != '' " > email = #{email}, </if>
@@ -124,7 +124,7 @@
 			<if test="loginFlag != null " >loginFlag = #{loginFlag}, </if>
 			<if test="isEnabled != null " > isEnabled = #{isEnabled}, </if>
 			<if test="modifier != null " > modifier = #{modifier}, </if>
-			<if test="remark != null AND remark != '' " >  remark = #{remark}, </if>
+			<if test="remark != null and remark != '' " >  remark = #{remark}, </if>
 		</trim>
 		where id = #{id}
 	</update>
