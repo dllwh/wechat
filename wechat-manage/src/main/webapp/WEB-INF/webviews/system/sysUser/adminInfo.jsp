@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/webviews/common/common.jsp"%>
-<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="renderer" content="webkit|ie-comp|ie-stand" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<%@ include file="/WEB-INF/webviews/common/common.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/header.jsp"%>
+<%@ include file="/WEB-INF/webviews/common/context/ace.jsp"%>
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
+<link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
 <title>个人信息管理</title>
 </head>
 <c:set var="currentUser" value="${fns:getCurrenLoginUser() }" />
@@ -128,37 +126,49 @@
 			<div class="recording_style">
 				<div class="type_title">管理员登陆记录</div>
 				<div class="recording_list">
-					<table class="table table-border table-bordered table-bg table-hover table-sort" id="sample-table">
+					<table class="table table-border table-bordered table-bg table-hover table-sort" id="userLoginLogTable">
 						<thead>
 							<tr class="text-c">
-								<th width="25">
-									<label>
-										<input type="checkbox" class="ace"/>
-										<span class="lbl"></span>
-									</label>
-								</th>
+								<th width="25"><label><input type="checkbox" class="ace"><span class="lbl"></span></label></th>
 								<th width="80">ID</th>
 								<th width="100">类型</th>
 								<th>内容</th>
 								<th width="17%">登陆地点</th>
+								<th width="10%">用户名</th>
 								<th width="120">客户端IP</th>
 								<th width="150">时间</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>
-									<label>
-										<input type="checkbox" class="ace"/>
-										<span class="lbl"></span>
-									</label>
-								</td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
+								<td>15686</td>
+								<td>1</td>
+								<td>登录成功!</td>
+								<td>江苏南京</td>
+								<td>admin</td>
+								<td>61.233.7.80</td>
+								<td>2014-6-11 11:11:42</td>      
+							</tr>
+							<tr>
+								<td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
+								<td>15686</td>
+								<td>1</td>
+								<td>登录成功!</td>
+								<td>江苏南京</td>
+								<td>admin</td>
+								<td>61.233.7.80</td>
+								<td>2014-6-11 11:11:42</td>      
+							</tr>
+							<tr>
+								<td><label><input type="checkbox" class="ace"><span class="lbl"></span></label></td>
+								<td>15686</td>
+								<td>1</td>
+								<td>登录成功!</td>
+								<td>江苏南京</td>
+								<td>admin</td>
+								<td>61.233.7.80</td>
+								<td>2014-6-11 11:11:42</td>      
 							</tr>
 						</tbody>
 					</table>
@@ -184,16 +194,27 @@
 		</ul>
 	</div>
 	<script type="text/javascript">
-	
-		//初始化宽度、高度    
-		$(".admin_modify_style").height($(window).height());
-		$(".recording_style").width($(window).width() - 400);
-		//当文档窗口发生改变时 触发  
-		$(window).resize(function() {
+		$(function(){
+			//初始化宽度、高度    
 			$(".admin_modify_style").height($(window).height());
 			$(".recording_style").width($(window).width() - 400);
+			//当文档窗口发生改变时 触发  
+			$(window).resize(function() {
+				$(".admin_modify_style").height($(window).height());
+				$(".recording_style").width($(window).width() - 400);
+			});
+		
+			$('#userLoginLogTable th input:checkbox').on('click' , function(){
+				var that = this;
+				$(this).closest('table').find('tr > td:first-child input:checkbox')
+				.each(function(){
+					this.checked = that.checked;
+					$(this).closest('tr').toggleClass('selected');
+				});
+					
+			});	
 		});
-	
+		
 		// 修改按钮点击事件
 		function modify() {
 			$('.text_info').attr("disabled", false);
@@ -271,44 +292,50 @@
 				btn : [ '确认修改' ],
 				yes : function(index, layero) {
 					if ($("#password").val() == "") {
-						layer.alert('原密码不能为空!', {
-							title : '提示框',
-							icon : 0,
-
-						});
+						dialogAlert("原密码不能为空!", "warn");
 						return false;
 					}
 					if ($("#Nes_pas").val() == "") {
-						layer.alert('新密码不能为空!', {
-							title : '提示框',
-							icon : 0,
-
-						});
+						dialogAlert("新密码不能为空!", "warn");
 						return false;
 					}
 
 					if ($("#c_mew_pas").val() == "") {
-						layer.alert('确认新密码不能为空!', {
-							title : '提示框',
-							icon : 0,
-
-						});
+						dialogAlert("确认新密码不能为空!", "warn");
 						return false;
 					}
 					if (!$("#c_mew_pas").val
 							|| $("#c_mew_pas").val() != $("#Nes_pas").val()) {
-						layer.alert('密码不一致!', {
-							title : '提示框',
-							icon : 0,
-
-						});
+						dialogAlert("密码不一致!", "warn");
 						return false;
 					} else {
-						layer.alert('修改成功！', {
-							title : '提示框',
-							icon : 1,
+						$.ajax({
+							url : "${_currConText }/loginController/resetPwd.shtml",
+							type : "POST",
+							data : {
+								oldPassWord : $("#password").val(),
+								newPassWord : $("#Nes_pas").val()
+							},
+							success : function(data) {
+								var result = eval("("+data+")");
+								if (result.success) {
+									
+									layer.msg('修改成功！2秒后将重新登录', {
+										title : '提示框',
+										icon: 1,
+										time: 2000 //2秒关闭（如果不配置，默认是3秒）
+									}, function(){
+										location.href="${_currConText }/loginController.shtml?doLogout";
+									});
+									layer.close(index);
+								} else {
+									layer.alert(result.msg, {
+										title : '提示框',
+										icon : 0,
+									});
+								}
+							}
 						});
-						layer.close(index);
 					}
 				}
 			});
