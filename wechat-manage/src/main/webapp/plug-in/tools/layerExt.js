@@ -2,8 +2,7 @@
  * 基于layer的封装
  */
 
-
-var dialogOpen = function(opt){
+var dialogOpen = function(opt) {
 	var defaults = {
 		id : 'layerForm',
 		title : '',
@@ -13,21 +12,27 @@ var dialogOpen = function(opt){
 		scroll : false,
 		data : {},
 		maxmin : false,
+		showCloseBtn : true, // 是否显示右上角的关闭按钮
 		btn : [ '确定', '取消' ],
 		success : function() {
 		},
 		yes : function() {
 		}
 	}
-	
+
 	var option = $.extend({}, defaults, opt);
-	
-	if(option.scroll){
-		content = [opt.url]
-	}else{
-		content = [opt.url, 'no']
+
+	if (option.scroll) {
+		content = [ opt.url ];
+	} else {
+		content = [ opt.url, 'no' ]
 	}
-	
+
+	if (option.scroll) {
+		closeBtn = 1;
+	} else {
+		closeBtn = 0;
+	}
 
 	layer.open({
 		id : option.id,
@@ -40,14 +45,14 @@ var dialogOpen = function(opt){
 		isOutAnim : false,
 		resize : false,
 		shadeClose : false,
-		closeBtn : 2,
+		closeBtn : closeBtn,
 		area : [ option.width, option.height ],
 		btn : option.btn,
 		maxmin : option.maxmin,
 		content : content,
 		success : option.success,
 		yes : option.yes
-	}); 
+	});
 }
 
 /**
