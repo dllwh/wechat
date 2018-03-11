@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cdeledu.core.log.LogManager;
-import com.cdeledu.service.sys.SystemService;
+import com.cdeledu.service.log.LoginLogService;
+import com.cdeledu.service.log.OperateLogService;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -22,17 +23,19 @@ import com.cdeledu.service.sys.SystemService;
  */
 public class LogTaskFactory {
 	private static Logger logger = LoggerFactory.getLogger(LogManager.class);
-	private static SystemService systemService = ConstantFactory.systemService;
+	private static OperateLogService operateLogService = ConstantFactory.operateLogService;
+	private static LoginLogService loginLogService = ConstantFactory.loginLogService;
 
 	/** ----------------------------------------------- [公共方法] */
 
 	public static TimerTask operateLog(final JoinPoint point, final long time, final Throwable e,
-			final Object opResult,final String ip,final String browser) {
+			final Object opResult, final String ip, final String browser) {
 		return new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					systemService.addLog(LogFactory.createOperateLog(point, time, e, opResult,ip,browser));
+					operateLogService.addLog(
+							LogFactory.createOperateLog(point, time, e, opResult, ip, browser));
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);
 				}
@@ -46,7 +49,7 @@ public class LogTaskFactory {
 			@Override
 			public void run() {
 				try {
-					systemService.addLoginLog(
+					loginLogService.addLoginLog(
 							LogFactory.createLoginLog(userCode, content, status, ip, browser));
 				} catch (Exception e) {
 					logger.error("创建退出日志异常!", e);

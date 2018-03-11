@@ -1,5 +1,7 @@
 package com.cdeledu.service.log;
 
+import com.cdeledu.model.system.SysLoginLog;
+
 /**
  * @类描述: 登录日志
  * @创建者: 皇族灬战狼
@@ -9,4 +11,9 @@ package com.cdeledu.service.log;
  */
 public interface LoginLogService {
 
+	/**
+	 * @方法: 登录\退出日志
+	 * @创建人:独泪了无痕
+	 */
+	void addLoginLog(SysLoginLog loginLog);
 }

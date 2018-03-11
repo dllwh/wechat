@@ -2,8 +2,6 @@ package com.cdeledu.service.sys;
 
 import java.util.List;
 
-import com.cdeledu.model.system.SysLogEntity;
-import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.util.database.model.TableProperty;
 
 /**
@@ -19,18 +17,6 @@ import com.cdeledu.util.database.model.TableProperty;
  * @since: JDK 1.7
  */
 public interface SystemService {
-	/**
-	 * @方法: 日志添加
-	 * @创建人:独泪了无痕
-	 */
-	void addLog(SysLogEntity syslog);
-
-	/**
-	 * @方法: 登录\退出日志
-	 * @创建人:独泪了无痕
-	 */
-	void addLoginLog(SysLoginLog loginLog);
-
 	/** 获取数据库 表 */
 	List<TableProperty> getTablesList();
 

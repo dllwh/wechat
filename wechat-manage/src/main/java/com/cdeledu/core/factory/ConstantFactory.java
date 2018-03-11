@@ -1,6 +1,8 @@
 package com.cdeledu.core.factory;
 
 import com.cdeledu.core.shiro.service.ShiroService;
+import com.cdeledu.service.log.LoginLogService;
+import com.cdeledu.service.log.OperateLogService;
 import com.cdeledu.service.sys.CountService;
 import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.service.sys.RoleService;
@@ -38,4 +40,8 @@ public final class ConstantFactory {
 	public static RoleService roleService = SpringContextUtil.getBean("roleService");
 	/** 系统统计业务处理层 */
 	public static CountService countService = SpringContextUtil.getBean("countService");
+	/** 操作日志处理层 */
+	public static OperateLogService operateLogService = SpringContextUtil.getBean("operateLogService");
+	/** 登录、退出日志处理层 */
+	public static LoginLogService loginLogService = SpringContextUtil.getBean("loginLogService");
 }

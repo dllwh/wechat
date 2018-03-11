@@ -1,5 +1,7 @@
 package com.cdeledu.service.log;
 
+import com.cdeledu.model.system.SysLogEntity;
+
 /**
  * @类描述: 操作日志
  * @创建者: 皇族灬战狼
@@ -8,5 +10,9 @@ package com.cdeledu.service.log;
  * @since: JDK 1.7
  */
 public interface OperateLogService {
-
+	/**
+	 * @方法: 日志添加
+	 * @创建人:独泪了无痕
+	 */
+	void addLog(SysLogEntity syslog);
 }
