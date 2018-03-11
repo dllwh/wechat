@@ -36,17 +36,17 @@ public class LogFactory {
 	 * @方法描述 : 创建操作日志
 	 */
 	public static SysLogEntity createOperateLog(JoinPoint joinPoint, long time, Throwable throwable,
-			Object opResult,String ip,String browser) {
+			Object opResult, String ip, String browser) {
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 		Method method = signature.getMethod();
 		SysLogEntity sysLog = new SysLogEntity();
 		SystemLog systemLog = method.getAnnotation(SystemLog.class);
 		if (systemLog != null) {
-			//注解上的描述 
+			// 注解上的描述
 			sysLog.setRemark(systemLog.desc());
-			//注解上的操作相关表
+			// 注解上的操作相关表
 			sysLog.setTableName(StringUtils.join(systemLog.tableName(), ","));
-			//注解上的操作类型
+			// 注解上的操作类型
 			sysLog.setOpType(systemLog.opType().getValue());
 		}
 
@@ -65,7 +65,6 @@ public class LogFactory {
 			userId = WebUtilHelper.getCurrentUserId();
 		}
 		sysLog.setUserCode(userId);
-		
 
 		if (opResult != null) {
 			sysLog.setOpResult(JsonMapper.toJsonString(opResult));
@@ -100,10 +99,21 @@ public class LogFactory {
 		loginLog.setLoginStatus(status);
 		if (status == 1) {
 			loginLog.setLogLeavel(SysLogLeavel.info.name());
-		} else {
+			loginLog.setOpType(SysOpType.LOGIN.getValue());
+		} else if (status == 2) {
 			loginLog.setLogLeavel(SysLogLeavel.warn.name());
+			loginLog.setOpType(SysOpType.LOGIN_FAIL.getValue());
+		} else if (status == -1) {
+			loginLog.setLogLeavel(SysLogLeavel.info.name());
+			loginLog.setOpType(SysOpType.EXIT.getValue());
+		} else if (status == -2) {
+			loginLog.setLogLeavel(SysLogLeavel.error.name());
+			loginLog.setOpType(SysOpType.EXIT_FAIL.getValue());
+		} else {
+			loginLog.setLogLeavel(SysLogLeavel.error.name());
+			loginLog.setOpType(SysOpType.UNKNOWN.getValue());
 		}
-		loginLog.setOpType(SysOpType.LOGIN.getValue());
+
 		loginLog.setIpAddress(ip);
 		loginLog.setBrowser(browser);
 		return loginLog;

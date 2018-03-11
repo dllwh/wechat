@@ -65,7 +65,7 @@ public class LoginController extends BaseController {
 		try {
 			String password = PasswordUtil.encrypt(userName, user.getPassword().trim());
 			AjaxJson loginResult = ShiroHelper.login(userName, password);
-			int loginStatus = 0;
+			int loginStatus = 2;
 			if (loginResult.isSuccess()) {
 				loginStatus = 1;
 				session.removeAttribute(GlobalConstants.IMAGECAPTCHA);
@@ -148,7 +148,15 @@ public class LoginController extends BaseController {
 			// 保存退出日志
 			HttpSession session = request.getSession();
 			session.removeAttribute(GlobalConstants.USER_SESSION);
-			ShiroHelper.logout();
+			String userName = currenLoginUser.getUserName();
+			String ip = getIp(request);
+			String browser = getBrowser(request);
+			try {
+				ShiroHelper.logout();
+				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,"成功退出系统", -1, ip,browser));
+			} catch (Exception e) {
+				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,"退出失败，原因:"+e.getMessage(), -2, ip,browser));
+			}
 		}
 		return FilterHelper.LOGIN_SHORT;
 	}

@@ -60,7 +60,8 @@ public class SystemConstant {
 		/** 登录失败日志 */
 		LOGIN_FAIL("登录失败日志"),
 		/** 退出日志 */
-		EXIT("退出日志"),
+		EXIT("退出成功"),
+		EXIT_FAIL("退出失败"),
 		/** 异常日志 */
 		EXCEPTION("异常日志"),
 		/** 业务日志 */
@@ -80,7 +81,9 @@ public class SystemConstant {
 		/** 下载 */
 		DOWNLOAD("download"),
 		/** 其他 */
-		OTHER("other");
+		OTHER("other"),
+		/** 未知 */
+		UNKNOWN("Unknown");
 		String value;
 
 		SysOpType(String value) {
