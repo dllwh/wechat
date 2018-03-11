@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.impl.sysLog.OperateLog">
+	<insert id="insertSyslog" parameterType="com.cdeledu.model.system.SysLogEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userCode != null">userCode,</if>
+			<if test="ipAddress != null and ipAddress != '' ">ipAddress,</if>
+			<if test="opType != null and opType != '' ">opType,</if>
+			<if test="time != null">`time`,</if>
+			<if test="method != null and method != '' ">`method`,</if>
+			<if test="browser != null and browser != '' ">browser,</if>
+			<if test="params != null and params != '' ">params,</if>
+			<if test="tableName != null and tableName !='' ">tableName,</if>
+			<if test="logType != null">logType,</if>
+			<if test="exceptionCode != null and exceptionCode != '' ">exceptionCode,	</if>
+			<if test="exceptionDetail != null and exceptionDetail != '' ">exceptionDetail,</if>
+			<if test="remark != null and remark != '' ">remark,</if>
+			<if test="opResult != null and opResult != '' "> opResult,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userCode != null">#{userCode},</if>
+			<if test="ipAddress != null and ipAddress != '' "> #{ipAddress},</if>
+			<if test="opType != null and opType != '' "> #{opType},</if>
+			<if test="time != null"> #{time},</if>
+			<if test="method != null and method != '' "> #{method},</if>
+			<if test="browser != null and browser != '' "> #{browser},</if>
+			<if test="params != null and browser != '' "> #{params},</if>
+			<if test="tableName != null and tableName !='' "> #{tableName},</if>
+			<if test="logType != null"> #{logType},</if>
+			<if test="exceptionCode != null and exceptionCode != '' "> #{exceptionCode},</if>
+			<if test="exceptionDetail != null and exceptionDetail != '' "> #{exceptionDetail},</if>
+			<if test="remark != null and remark != '' "> #{remark},</if>
+			<if test="opResult != null and opResult != '' "> #{opResult},	</if>
+		</trim>
+	</insert>
+</mapper>

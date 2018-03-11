@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.impl.sysLog.SysLoginLog">
+	<!-- 保存管理员登录信息 -->
+	<insert id="saveLoginInfo" parameterType="com.cdeledu.model.system.SysLoginLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_log_login
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userCode != null"> userCode, </if>
+			<if test="ipAddress != null"> ipAddress, </if>
+			<if test="loginStatus != null"> loginStatus, </if>
+			<if test="browser != null and browser !='' "> browser, </if>
+			<if test="logLeavel != null"> logLeavel, </if>
+			<if test="opType != null"> opType, </if>
+			<if test="logContent != null"> logContent, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userCode != null"> #{userCode}, </if>
+			<if test="ipAddress != null"> #{ipAddress}, </if>
+			<if test="loginStatus != null"> #{loginStatus}, </if>
+			<if test="browser != null and browser != '' "> #{browser}, </if>
+			<if test="logLeavel != null"> #{logLeavel}, </if>
+			<if test="opType != null"> #{opType}, </if>
+			<if test="logContent != null"> #{logContent}, </if>
+		</trim>
+	</insert>
+</mapper>
