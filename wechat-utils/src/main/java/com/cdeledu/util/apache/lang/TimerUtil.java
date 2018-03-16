@@ -68,4 +68,36 @@ public class TimerUtil {
 		sdf.applyPattern(DateUtilHelper.NORM_TIME_PATTERN_ONE);
 		return sdf.format(date);
 	}
+
+	/**
+	 * @方法描述 :获取当前毫秒数
+	 * @return
+	 */
+	public static Long getMills() {
+		return System.currentTimeMillis();
+	}
+
+	/**
+	 * @方法描述 :获取当前Unix时间戳
+	 * @return
+	 */
+	public static String getUnixTime() {
+		return Long.toHexString(System.currentTimeMillis());
+	}
+
+	/**
+	 * @方法描述 :网宿CDN Unix时间戳
+	 * @return
+	 */
+	public static String getWsCdnTime() {
+		return Long.toHexString(System.currentTimeMillis() / 1000 - 30);
+	}
+
+	/**
+	 * @方法描述 :腾讯CDN Unix时间戳
+	 * @return
+	 */
+	public static String getTxCdnTime() {
+		return Long.toHexString(System.currentTimeMillis() / 1000 + 600);
+	}
 }
