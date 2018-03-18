@@ -32,7 +32,6 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:properties/dbConfig.properties</value>
 				<value>classpath:properties/redis.properties</value>
 				<value>classpath:properties/shiro-config.properties</value>
 			</list>
