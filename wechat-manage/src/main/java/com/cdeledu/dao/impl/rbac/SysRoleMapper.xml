@@ -3,7 +3,7 @@
 <mapper namespace="com.cdeledu.dao.SysRoleMapper">
 	
 	<sql id="Base_Column_List">
-		id, roleCode, roleName, categoryCode, isVisible, allowEdit,
+		id, roleCode, roleName, categoryCode, ifVisible, allowEdit,
 		allowDelete,
 		`sequence`, creator, createTime, modifier, updateTime, remark
 	</sql>
@@ -53,7 +53,7 @@
 	</select>
 	
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from sys_role where id = #{id} and id != 1 and allowDelete = 1 and isEnabled = 0
+		delete from sys_role where id = #{id} and id != 1 and allowDelete = 1 and ifEnabled = 0
 	</delete>
 	
 	<insert id="insertSelective" parameterType="com.cdeledu.model.rbac.SysRole">
@@ -62,7 +62,7 @@
 			<if test="roleCode != null and roleCode != '' ">roleCode,</if>
 			<if test="roleName != null and roleName != '' ">roleName,</if>
 			<if test="categoryCode != null">categoryCode,</if>
-			<if test="isVisible != null">isVisible,</if>
+			<if test="ifVisible != null">ifVisible,</if>
 			<if test="allowEdit != null">allowEdit,</if>
 			<if test="allowDelete != null">allowDelete,</if>
 			<if test="sequence != null">`sequence`,</if>
@@ -74,7 +74,7 @@
 			<if test="roleCode != null and roleCode != '' ">#{roleCode},</if>
 			<if test="roleName != null and roleName != '' ">#{roleName},</if>
 			<if test="categoryCode != null">#{categoryCode},</if>
-			<if test="isVisible != null">#{isVisible},</if>
+			<if test="ifVisible != null">#{ifVisible},</if>
 			<if test="allowEdit != null">#{allowEdit},</if>
 			<if test="allowDelete != null">#{allowDelete},</if>
 			<if test="sequence != null">#{sequence},</if>
@@ -90,8 +90,8 @@
 			<if test="roleCode != null and roleName != '' "> roleCode = #{roleCode}, </if>
 			<if test="roleName != null and roleName != '' "> roleName = #{roleName}, </if>
 			<if test="categoryCode != null"> categoryCode = #{categoryCode}, </if>
-			<if test="isVisible != null"> isVisible = #{isVisible}, </if>
-			<if test="isEnabled != null"> isEnabled = #{isEnabled}, </if>
+			<if test="ifVisible != null"> ifVisible = #{ifVisible}, </if>
+			<if test="ifEnabled != null"> ifEnabled = #{ifEnabled}, </if>
 			<if test="allowEdit != null"> allowEdit = #{allowEdit}, </if>
 			<if test="allowDelete != null"> allowDelete = #{allowDelete}, </if>
 			<if test="sequence != null"> `sequence` = #{sequence}, </if>
@@ -109,7 +109,7 @@
 			sys_role_menu srm
 		INNER JOIN sys_menu sm ON sm.id = srm.menuId
 		WHERE
-			srm.roleId = #{id}  AND sm.isVisible = 1 AND sm.isEnabled = 1 
+			srm.roleId = #{id}  AND sm.ifVisible = 1 AND sm.ifEnabled = 1 
 	</select>
 	
 	<select id="hasUserByRole" parameterType="java.lang.Integer"
@@ -118,15 +118,15 @@
 			COUNT(*)
 		FROM
 			sys_user_role sur
-		INNER JOIN sys_user su ON su.isVisible = 1
-		AND su.isEnabled = 1
+		INNER JOIN sys_user su ON su.ifVisible = 1
+		AND su.ifEnabled = 1
 		WHERE
 			sur.roleId = #{id}  
 	</select>
 	
 	<select id="selectByRocode" parameterType="java.lang.String"
 		resultType="java.lang.Integer">
-		select count(*) from sys_role where roleCode = #{id} and isEnabled = 1
+		select count(*) from sys_role where roleCode = #{id} and ifEnabled = 1
 	</select>
 	
 	<insert id="saveRoleAccess" parameterType="com.cdeledu.model.rbac.SysRoleMenu">
@@ -209,7 +209,7 @@
 				FROM 
 					sys_user_role 
 				WHERE 
-					roleId = sr.id AND isEnabled =1 
+					roleId = sr.id AND ifEnabled =1 
 				GROUP BY roleId),0
 			)
 			as userCount 

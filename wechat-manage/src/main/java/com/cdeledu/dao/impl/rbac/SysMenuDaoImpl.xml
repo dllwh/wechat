@@ -12,8 +12,8 @@
 			<if test="menuUrl != null and menuUrl !='' "> menuUrl, </if>
 			<if test="type != null"> `type`, </if>
 			<if test="parentCode != null"> parentCode, </if>
-			<if test="isVisible != null"> isVisible, </if>
-			<if test="isEnabled != null"> isEnabled, </if>
+			<if test="ifVisible != null"> ifVisible, </if>
+			<if test="ifEnabled != null"> igEnabled, </if>
 			<if test="allowEdit != null"> allowEdit, </if>
 			<if test="allowDelete != null"> allowDelete,</if>
 			<if test="iconClass != null and iconClass !='' "> iconClass, </if>
@@ -27,8 +27,8 @@
 			<if test="menuUrl != null and menuUrl !='' "> #{menuUrl}, </if>
 			<if test="type != null"> #{type}, </if>
 			<if test="parentCode != null"> #{parentCode},  </if>
-			<if test="isVisible != null"> #{isVisible}, </if>
-			<if test="isEnabled != null"> #{isEnabled}, </if>
+			<if test="ifVisible != null"> #{ifVisible}, </if>
+			<if test="ifEnabled != null"> #{ifEnabled}, </if>
 			<if test="allowEdit != null"> #{allowedit}, </if>
 			<if test="allowDelete != null"> #{allowdelete}, </if>
 			<if test="iconClass != null and iconClass !='' "> #{iconClass}, </if>
@@ -41,7 +41,7 @@
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
 		<!-- delete from sys_menu where id = #{id}  -->
-		 update sys_menu set isEnabled = 0 where id = #{id}
+		 update sys_menu set ifEnabled = 0 where id = #{id}
 	</delete>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.cdeledu.model.rbac.SysMenu">
@@ -51,8 +51,8 @@
 			<if test="menuUrl != null and menuUrl != '' "> menuUrl = #{menuUrl}, </if>
 			<if test="type != null"> `type` = #{type}, </if>
 			<if test="parentCode != null"> parentCode = #{parentCode}, </if>
-			<if test="isVisible != null"> isVisible = #{isVisible},</if>
-			<if test="isEnabled != null"> isEnabled = #{isEnabled}, </if>
+			<if test="ifVisible != null"> ifVisible = #{ifVisible},</if>
+			<if test="ifEnabled != null"> ifEnabled = #{ifEnabled}, </if>
 			<if test="allowEdit != null"> allowEdit = #{allowEdit},</if>
 			<if test="allowDelete != null"> allowDelete = #{allowDelete}, </if>
 			<if test="iconClass != null and iconClass != '' ">iconClass = #{iconClass},</if>
@@ -75,13 +75,13 @@
 			</if>
 			<if test="type != null"> and `type` = #{type} </if>
 			<if test="parentCode != null">and parentCode = #{parentCode} </if>
-			<if test="isVisible != null">and isVisible = #{isVisible} </if>
+			<if test="ifVisible != null">and ifVisible = #{ifVisible} </if>
 			<if test="allowEdit != null">and allowEdit = #{allowEdit} </if>
 			<if test="allowDelete != null"> and allowDelete = #{allowDelete} </if>
 			<if test="iconClass != null and iconClass !='' ">and iconClass = #{iconClass} </if>
 			<if test="sequence != null">and `sequence` = #{sequence} </if>
 			<if test="modifier != null">and modifier = #{modifier} </if>
-			and isEnabled = 1
+			and ifEnabled = 1
 		</trim>
 	</sql>
 	<select id="findForJdbc" parameterType="com.cdeledu.model.rbac.SysMenu"
@@ -122,8 +122,8 @@
 		FROM 
 			sys_menu 
 		WHERE 
-				isEnabled = 1 
-			AND isVisible = 1 
+				ifEnabled = 1 
+			AND ifVisible = 1 
 			AND type != 2 
 			AND parentCode = #{parentCode}
 			ORDER BY sequence 
@@ -136,15 +136,15 @@
 		INNER JOIN sys_role_menu srm on srm.menuId =sm.id
 		INNER JOIN sys_user_role sur ON sur.roleId = srm.roleId
 		WHERE 
-				sm.isEnabled = 1 
-			AND sm.isVisible = 1 
+				sm.ifEnabled = 1 
+			AND sm.ifVisible = 1 
 			AND sm.type !=0  
 			AND sm.menuUrl != ''
 			AND sur.userId=#{id}
 	</select>
 	
 	<select id="countMenuChildren" resultType="int">
-		SELECT COUNT(1) FROM sys_menu WHERE isEnabled = 1 AND isVisible = 1 AND parentCode = #{id}
+		SELECT COUNT(1) FROM sys_menu WHERE ifEnabled = 1 AND ifVisible = 1 AND parentCode = #{id}
 	</select>
 	
 	<select id="getButtonPermsByUserId" parameterType="com.cdeledu.model.rbac.SysUser" 
@@ -154,8 +154,8 @@
 		INNER JOIN sys_role_menu srm ON srm.menuId = sm.id
 		INNER JOIN sys_user_role sur ON sur.roleId = srm.roleId
 		WHERE 
-				sm.isEnabled = 1 
-			AND sm.isVisible = 1
+				sm.ifEnabled = 1 
+			AND sm.ifVisible = 1
 			AND sm.perms != ''
 			AND sur.userId = #{id}
 	</select>
@@ -166,7 +166,7 @@
 		FROM
 			sys_role_menu srm
 		INNER JOIN sys_role sr ON sr.id = srm.roleId
-		WHERE sr.isEnabled = 1 AND sr.isVisible = 1 AND srm.roleId != 1 AND srm.menuId = #{id}
+		WHERE sr.ifEnabled = 1 AND sr.ifVisible = 1 AND srm.roleId != 1 AND srm.menuId = #{id}
 	</select>
 	
 	<select id="getAllMenuIdByRole" parameterType="int" resultType="java.lang.Integer">
@@ -178,8 +178,8 @@
 		FROM 
 			sys_menu 
 		WHERE 
-				isEnabled = 1 
-			AND isVisible = 1 
+				ifEnabled = 1 
+			AND ifVisible = 1 
 			AND parentCode = #{parentCode}
 			ORDER BY sequence 
 	</select>
@@ -189,8 +189,8 @@
 		FROM 
 			sys_menu 
 		WHERE 
-				isEnabled = 1 
-			AND isVisible = 1 
+				ifEnabled = 1 
+			AND ifVisible = 1 
 			AND type = #{type}
 			ORDER BY sequence 
 	</select>

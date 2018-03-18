@@ -30,11 +30,11 @@
 			<if test="userSex != null "> and usersex=#{userSex} </if>
 			<if test="mobile != null and mobile != '' "> and mobile like '%${mobile}$%' </if>
 			<if test="telephone != null "> and telephone like '%${telephone}$%' </if>
-			<if test="isLocked != null "> and isLocked=#{isLocked} </if>
-			<if test="isVisible != null "> and isVisible=#{isVisible} </if>
+			<if test="ifLocked != null "> and ifLocked=#{ifLocked} </if>
+			<if test="ifVisible != null "> and ifVisible=#{ifVisible} </if>
 			<if test="loginFlag != null "> and loginFlag=#{loginFlag} </if>
-			<if test="isEnabled != null "> and isEnabled=#{isEnabled} </if>
-			<if test="isEnabled == null "> and isEnabled=1 </if>
+			<if test="ifEnabled != null "> and ifEnabled=#{ifEnabled} </if>
+			<if test="ifEnabled == null "> and ifEnabled=1 </if>
 		</where>
 	</sql>
 	
@@ -62,7 +62,7 @@
 	<!-- 验证用户是否存在 -->
 	<select id="checkUserExits" parameterType="com.cdeledu.model.rbac.SysUser"
 		resultType="com.cdeledu.model.rbac.SysUser">
-			SELECT * from sys_user WHERE userName =#{userName} AND password = #{password} and isEnabled =1
+			SELECT * from sys_user WHERE userName =#{userName} AND password = #{password} and ifEnabled =1
 	</select>
 	
 	<!-- 创建新的用户 -->
@@ -119,10 +119,10 @@
 			<if test="mobile != null and mobile != '' "> mobile = #{mobile}, </if>
 			<if test="telephone != null and telephone != '' "> telephone = #{telephone}, </if>
 			<if test="signature != null and signature != '' " > signature = #{signature}, </if>
-			<if test="isLocked != null " >  isLocked = #{isLocked}, </if>
-			<if test="isVisible != null " > isVisible = #{isVisible}, </if>
+			<if test="ifLocked != null " >  ifLocked = #{ifLocked}, </if>
+			<if test="ifVisible != null " > ifVisible = #{ifVisible}, </if>
 			<if test="loginFlag != null " >loginFlag = #{loginFlag}, </if>
-			<if test="isEnabled != null " > isEnabled = #{isEnabled}, </if>
+			<if test="ifEnabled != null " > igEnabled = #{ifEnabled}, </if>
 			<if test="modifier != null " > modifier = #{modifier}, </if>
 			<if test="remark != null and remark != '' " >  remark = #{remark}, </if>
 		</trim>
@@ -151,7 +151,7 @@
 		INNER JOIN sys_role sr ON sur.roleId = sr.id
 		INNER JOIN sys_user su ON su.id = sur.userId
 		WHERE
-			sr.isVisible =1 AND sr.isEnabled=1 AND su.isVisible =1
+			sr.ifVisible =1 AND sr.ifEnabled=1 AND su.ifVisible =1
 		AND  su.userName =#{userName} 
 		<if test="id != null">
 			and su.id=#{id}
@@ -182,8 +182,8 @@
 		FROM
 			sys_role  
 		where
-			isEnabled =1 
-			AND isVisible=1 
+			ifEnabled =1 
+			AND ifVisible=1 
 			AND id not in (select roleid from sys_user_role where userId = #{userCode} )
 	</select>
 </mapper>

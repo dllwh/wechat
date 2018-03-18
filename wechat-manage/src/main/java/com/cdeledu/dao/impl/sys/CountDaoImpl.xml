@@ -3,7 +3,7 @@
 <mapper namespace="com.cdeledu.dao.impl.sys.CountDaoImpl">
 	<!--统计管理员个数 -->
 	<select id="countUserTotal" resultType="int">
-		SELECT COUNT(*) FROM sys_user WHERE isEnabled = 1
+		SELECT COUNT(*) FROM sys_user WHERE ifEnabled = 1
 	</select>
 	<!--统计管理员登录记录 -->
 	<select id="countloginLogTotal" resultType="int">

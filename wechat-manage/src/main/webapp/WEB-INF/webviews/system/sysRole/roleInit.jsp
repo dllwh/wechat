@@ -150,7 +150,7 @@
 							<label class="col-sm-2 control-label">有效性：</label>
 							<div class="col-sm-9">
 								<label class="radio-inline">
-									<input type="radio" value="1" name="isVisible">有效
+									<input type="radio" value="1" name="ifVisible">有效
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<i class="fa fa-info-circle"></i>注：选中则启用该角色
 								</label>
@@ -228,7 +228,7 @@
 							<label class="col-sm-2 control-label">有效性：</label>
 							<div class="col-sm-9">
 								<label class="radio-inline">
-									<input type="radio" value="1" name="isVisible">有效
+									<input type="radio" value="1" name="ifVisible">有效
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<i class="fa fa-info-circle"></i>注：选中则启用该角色
 								</label>
@@ -446,7 +446,7 @@
 					}
 				}
 			},{
-				field: 'isVisible',
+				field: 'ifVisible',
 				align: "center",
 				sortable: true, // 开启排序功能
 				title: '使用状态',
@@ -481,7 +481,7 @@
 				
 			},
 			onCheck: function (row) {
-				if(row.isVisible == 1){
+				if(row.ifVisible == 1){
 					$(".visibleButton").html('<a onclick="RoleController.roleVisibleButton(0)">角色禁用</a>');
 				} else {
 					$(".visibleButton").html('<a onclick="RoleController.roleVisibleButton(1)">角色启用</a>');
@@ -688,8 +688,8 @@
 			$("#s_categoryCode").text("-");
 		}
 
-		if (dllwh.isNotNullOrEmpty(selectContent.isVisible)) {
-			if (selectContent.isVisible == 1) {
+		if (dllwh.isNotNullOrEmpty(selectContent.ifVisible)) {
+			if (selectContent.ifVisible == 1) {
 				$("#s_isVisible").text("允许");
 			} else {
 				$("#s_isVisible").text("禁止");

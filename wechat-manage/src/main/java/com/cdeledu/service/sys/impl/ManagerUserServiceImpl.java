@@ -65,7 +65,7 @@ public class ManagerUserServiceImpl extends BaseClass implements ManagerUserServ
 	public Integer delete(Object record) throws Exception {
 		SysUser sysUser = new SysUser();
 		sysUser.setId((Integer) record);
-		sysUser.setIsEnabled(0);
+		sysUser.setIfEnabled(0);
 		return baseDao.update(PREFIX + "updateByPrimaryKey", sysUser);
 	}
 

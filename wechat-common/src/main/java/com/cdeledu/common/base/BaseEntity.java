@@ -17,11 +17,11 @@ public abstract class BaseEntity extends PageEntity {
 	/**
 	 * 是否可见;1:可见,默认值;0:不可见
 	 */
-	protected Integer isVisible;
+	protected Integer ifVisible;
 	/**
 	 * 是否有效;-1:删除;0:不可用,默认值;1:可用
 	 */
-	protected Integer isEnabled;
+	protected Integer ifEnabled;
 	/**
 	 * 是否允许编辑;1:允许,默认值;0:不允许
 	 */
@@ -47,20 +47,20 @@ public abstract class BaseEntity extends PageEntity {
 		this.id = id;
 	}
 
-	public Integer getIsVisible() {
-		return isVisible;
+	public Integer getIfVisible() {
+		return ifVisible;
 	}
 
-	public void setIsVisible(Integer isVisible) {
-		this.isVisible = isVisible;
+	public void setIfVisible(Integer ifVisible) {
+		this.ifVisible = ifVisible;
 	}
 
-	public Integer getIsEnabled() {
-		return isEnabled;
+	public Integer getIfEnabled() {
+		return ifEnabled;
 	}
 
-	public void setIsEnabled(Integer isEnabled) {
-		this.isEnabled = isEnabled;
+	public void setIfEnabled(Integer ifEnabled) {
+		this.ifEnabled = ifEnabled;
 	}
 
 	public Integer getAllowEdit() {
@@ -94,12 +94,4 @@ public abstract class BaseEntity extends PageEntity {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "\n BaseEntity [id=" + id + ", isVisible=" + isVisible
-				+ ", isEnabled=" + isEnabled + ", allowEdit=" + allowEdit + ", allowDelete="
-				+ allowDelete + ", sequence=" + sequence + ", remark=" + remark + "]";
-	}
-
 }

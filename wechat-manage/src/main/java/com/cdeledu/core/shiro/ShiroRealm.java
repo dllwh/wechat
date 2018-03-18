@@ -114,11 +114,11 @@ public class ShiroRealm extends AuthorizingRealm {
 		}
 		if (currentUser != null) {
 			// 账号未通过审核
-			if (currentUser.getIsEnabled() != 1) {
+			if (currentUser.getIfEnabled() != 1) {
 				throw new DisabledAccountException();
 			}
 			// 账号未通过审核
-			if (currentUser.getIsVisible() != 1) {
+			if (currentUser.getIfVisible() != 1) {
 				throw new DisabledAccountException("账号未通过审核");
 			}
 			// 账号不允许登录
@@ -127,7 +127,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			}
 
 			// 账号被锁定
-			if (currentUser.getIsLocked() != 1) {
+			if (currentUser.getIfLocked() != 1) {
 				throw new ExcessiveAttemptsException("账号被锁定");
 			}
 

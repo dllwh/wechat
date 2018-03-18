@@ -192,7 +192,7 @@ public class RoleOperateController extends BaseController {
 		AjaxJson resultMsg = new AjaxJson();
 		SysRole role = new SysRole();
 		role.setId(id);
-		role.setIsVisible(visible);
+		role.setIfVisible(visible);
 		try {
 			if (!roleService.hasMenuByRole(id) && !roleService.hasUserByRole(id) && id != 1) {
 				roleService.update(role);
@@ -224,7 +224,7 @@ public class RoleOperateController extends BaseController {
 		} catch (Exception e) {
 			
 		}
-		if(sysRole2 != null && sysRole2.getIsVisible() == 1){
+		if(sysRole2 != null && sysRole2.getIfVisible() == 1){
 			if ((opType == 1 || opType == -1) && (userCode > 0)) {
 				if (opType == 1) {
 					if (roleService.saveRoleUser(sysUserRole)) {

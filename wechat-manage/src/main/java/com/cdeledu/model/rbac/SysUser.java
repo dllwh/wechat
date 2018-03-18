@@ -41,7 +41,7 @@ public class SysUser extends DataEntity {
 	@NotBlank(message = "验证码")
 	private String imageCaptcha;
 	/** 是否锁定(1:不锁定;0：锁定) */
-	private Integer isLocked;
+	private Integer ifLocked;
 	/** 是否允许登陆;1:允许,默认值;0:不允许 */
 	private Integer loginFlag;
 
@@ -51,9 +51,9 @@ public class SysUser extends DataEntity {
 	public SysUser(SysUser sysUser) {
 		this.id = sysUser.getId();
 		this.userName = sysUser.getUserName();
-		this.isEnabled = sysUser.getIsEnabled();
-		this.isLocked = sysUser.getIsLocked();
-		this.isVisible = sysUser.getIsVisible();
+		this.ifEnabled = sysUser.getIfEnabled();
+		this.ifLocked = sysUser.getIfLocked();
+		this.ifVisible = sysUser.getIfVisible();
 	}
 
 	public String getUserName() {
@@ -152,12 +152,12 @@ public class SysUser extends DataEntity {
 		this.imageCaptcha = imageCaptcha;
 	}
 
-	public Integer getIsLocked() {
-		return isLocked;
+	public Integer getIfLocked() {
+		return ifLocked;
 	}
 
-	public void setIsLocked(Integer isLocked) {
-		this.isLocked = isLocked;
+	public void setIfLocked(Integer ifLocked) {
+		this.ifLocked = ifLocked;
 	}
 
 	public Integer getLoginFlag() {
@@ -174,7 +174,7 @@ public class SysUser extends DataEntity {
 				+ ", UserType=" + userType + ", nickName=" + nickName + ", realName=" + realName
 				+ ", email=" + email + ", emailstatus=" + emailstatus + ", userSex=" + userSex
 				+ ", mobile=" + mobile + ", telephone=" + telephone + ", signature=" + signature
-				+ ", imageCaptcha=" + imageCaptcha + ", isLocked=" + isLocked + ", loginFlag="
+				+ ", imageCaptcha=" + imageCaptcha + ", ifLocked=" + ifLocked + ", loginFlag="
 				+ loginFlag + "]";
 	}
 

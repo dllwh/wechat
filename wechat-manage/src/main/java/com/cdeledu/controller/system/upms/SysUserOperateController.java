@@ -178,7 +178,7 @@ public class SysUserOperateController extends BaseController {
 			// 超级管理员不能操作
 			if (sysUser != null && sysUser.getUserType() != -1
 					&& WebUtilHelper.getCurrentUserId() != userId) {
-				sysUser.setIsVisible(1);
+				sysUser.setIfVisible(1);
 				manageruserService.update(sysUser);
 			}
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
@@ -204,7 +204,7 @@ public class SysUserOperateController extends BaseController {
 			// 超级管理员不能操作
 			if (sysUser != null && sysUser.getUserType() != -1
 					&& WebUtilHelper.getCurrentUserId() != userId) {
-				sysUser.setIsVisible(0);
+				sysUser.setIfVisible(0);
 				manageruserService.update(sysUser);
 			}
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
@@ -262,7 +262,7 @@ public class SysUserOperateController extends BaseController {
 			SysUser sysUser = manageruserService.findOneForJdbc(user);
 			if (sysUser != null && sysUser.getUserType() != -1
 					&& WebUtilHelper.getCurrentUserId() != userId) {
-				sysUser.setIsLocked(0);
+				sysUser.setIfLocked(0);
 				manageruserService.update(sysUser);
 			}
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
@@ -286,7 +286,7 @@ public class SysUserOperateController extends BaseController {
 			SysUser sysUser = manageruserService.findOneForJdbc(user);
 			if (sysUser != null && sysUser.getUserType() != -1
 					&& WebUtilHelper.getCurrentUserId() != userId) {
-				sysUser.setIsLocked(1);
+				sysUser.setIfLocked(1);
 				manageruserService.update(sysUser);
 			}
 			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);

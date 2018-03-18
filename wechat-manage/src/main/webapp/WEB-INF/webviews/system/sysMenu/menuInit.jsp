@@ -214,7 +214,7 @@
 					}
 				}
 			},{
-				field: 'isVisible',
+				field: 'ifVisible',
 				title: '是否有效',
 				formatter : function(value,rowData,rowIndex){
 					if(value == 1){
@@ -251,7 +251,7 @@
 				} else {
 					$(".delBut").attr("disabled", false);
 				}
-				if(row.isVisible == 1 ){//
+				if(row.ifVisible == 1 ){//
 					$(".visibleButton").html('<span class="fa fa-warning">禁用</span>');
 				} else {
 					$(".visibleButton").html('<span class="fa fa-warning">启用</span>');
@@ -310,11 +310,11 @@
 		isVisibleClick : function(){// 使用状态
 			if(this.check()){
 				var id = this.setItem.id;
-				var isVisible = this.setItem.isVisible;
-				if(isVisible == 1){
-					isVisible = 0;
+				var ifVisible = this.setItem.ifVisible;
+				if(ifVisible == 1){
+					ifVisible = 0;
 				} else {
-					isVisible = 1
+					ifVisible = 1
 				}
 				
 				dialogConfirm("您确认要操作此数据吗?", function() {
@@ -323,7 +323,7 @@
 						type : "POST",
 						data : {
 							id : id,
-							isVisible:isVisible
+							ifVisible:ifVisible
 						},
 						success : function(result) {
 							if (result.success) {

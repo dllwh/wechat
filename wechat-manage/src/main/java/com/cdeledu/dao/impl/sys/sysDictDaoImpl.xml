@@ -5,7 +5,7 @@
 	<sql id="findForJdbc_body">
 		select * from sys_dict 
 		<where>
-			and isEnabled = 1 
+			and ifEnabled = 1 
 			<if test="id != null"> and id =#{id} </if>
 			<if test="itemName != null"> and itemName =#{itemName} </if>
 			<if test="itemCode != null"> and itemCode =#{itemCode} </if>
@@ -64,8 +64,8 @@
 			<if test="parentid != null">
 				parentId,
 			</if>
-			<if test="isenabled != null">
-				isEnabled,
+			<if test="ifEnabled != null">
+				ifEnabled,
 			</if>
 			<if test="allowedit != null">
 				allowEdit,
@@ -102,8 +102,8 @@
 			<if test="parentid != null">
 				#{parentid,jdbcType=INTEGER},
 			</if>
-			<if test="isenabled != null">
-				#{isenabled,jdbcType=BIT},
+			<if test="ifEnabled != null">
+				#{ifEnabled,jdbcType=BIT},
 			</if>
 			<if test="allowedit != null">
 				#{allowedit,jdbcType=BIT},
@@ -144,8 +144,8 @@
 			<if test="parentid != null">
 				parentId = #{parentid,jdbcType=INTEGER},
 			</if>
-			<if test="isenabled != null">
-				isEnabled = #{isenabled,jdbcType=BIT},
+			<if test="ifEnabled != null">
+				ifEnabled = #{ifEnabled,jdbcType=BIT},
 			</if>
 			<if test="allowedit != null">
 				allowEdit = #{allowedit,jdbcType=BIT},
