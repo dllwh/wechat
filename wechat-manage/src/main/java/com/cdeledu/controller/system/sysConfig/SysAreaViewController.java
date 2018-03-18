@@ -63,6 +63,7 @@ public class SysAreaViewController extends BaseController {
 			resultMap.put("rows", sysAreaService.findForJdbcParam(sysArea));
 			resultMap.put("total", sysAreaService.getCountForJdbcParam(sysArea));
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMap.put("rows", null);
 			resultMap.put("total",0);
 		}
@@ -76,7 +77,7 @@ public class SysAreaViewController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(params="getTreeList")
-	public List<ZtreeNode> select(@RequestParam(name="areaCode",defaultValue="100000") int  parentAreaId) {
+	public List<ZtreeNode> select(@RequestParam(name="id",defaultValue="100000") int  parentAreaId) {
 		return sysAreaService.getSysAreaTree(parentAreaId);
 	}
 }

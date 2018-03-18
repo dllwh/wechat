@@ -25,6 +25,8 @@ public class SysArea extends BaseEntity {
 	private Integer areaLevel;
 	/** 简称 */
 	private String shortName;
+	/** 点击访问地址 */
+	private String areaUrl;
 
 	public String getAreaCode() {
 		return areaCode;
@@ -66,10 +68,19 @@ public class SysArea extends BaseEntity {
 		this.shortName = shortName;
 	}
 
+	public String getAreaUrl() {
+		return areaUrl;
+	}
+
+	public void setAreaUrl(String areaUrl) {
+		this.areaUrl = areaUrl;
+	}
+
 	@Override
 	public String toString() {
 		return super.toString() + "\n\r SysArea [areaCode=" + areaCode + ", areaName=" + areaName
 				+ ", parentId=" + parentId + ", areaLevel=" + areaLevel + ", shortName=" + shortName
-				+ "]";
+				+ ", areaUrl=" + areaUrl + "]";
 	}
+
 }

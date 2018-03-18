@@ -107,21 +107,6 @@
 			}
 		});
 	}
-
-	function checkNode(event) {
-		var getZTreeObj = $.fn.zTree.getZTreeObj(event.data.treeId);
-		var type = event.data.type;// 获取类型
-		var nodes = getZTreeObj.getSelectedNodes();// 获取选中的节点
-
-		switch (type) {
-			case "checkAllNodes": // 全选
-				getZTreeObj.checkAllNodes(true);
-				break;
-			case "cleanAllNodes": // 清除
-				getZTreeObj.checkAllNodes(false);
-				break;
-		}
-	}
 	
 	$("#checkAllNodes").bind("click", {treeId:"roleMenu",type : "checkAllNodes"}, checkNode);
 	$("#cleanAllNodes").bind("click",{treeId:"roleMenu",type : "cleanAllNodes"},checkNode);

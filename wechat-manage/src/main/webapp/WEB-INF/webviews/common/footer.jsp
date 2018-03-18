@@ -5,3 +5,4 @@
 <script src="${_currConText }/plug-in/tools/validateFormExt.js?v=1.0.1"></script>
 <script src="${_currConText }/plug-in/tools/formExt.js?v=1.0.1"></script>
 <script src="${_currConText }/plug-in/tools/bootstrapExt.js?v=1.0.1"></script>
+<script src="${_currConText }/plug-in/tools/zTreeExt.js?v=1.0.1"></script>

@@ -86,8 +86,9 @@ public class SysAreaServiceImpl implements SysAreaService {
 				node.setId(sysArea.getId());
 				node.setName(sysArea.getAreaName());
 				if (hasChildren(sysArea.getId())) {
-					node.setParent("true");
-					node.setOpen(true);
+					node.setIsParent(true);
+					node.setOpen(false);
+					// node.setChildren(getSysAreaTree(sysArea.getId()));
 				}
 				resultList.add(node);
 			}

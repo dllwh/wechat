@@ -68,7 +68,7 @@ dllwh.getRootPath = function() {
  * 判断是否为空 不是一个空对象，或者未定义，或者不等于空字符串
  */
 dllwh.isNullOrEmpty = function(obj) {
-	if ((typeof (obj) == "string" && obj == "") || obj == null
+	if ((typeof (obj) == "string" && obj == "") || obj == null || obj == ''
 			|| typeof (obj) == undefined) {
 		return true;
 	} else {
