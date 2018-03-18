@@ -40,11 +40,11 @@ public class crawlerCityHelper {
 	private static QueryRunner runner = null;
 	private static DataTableHelper dataTableHelper = null;
 	/** SQL执行工具:执行SQL语句 */
-	private static String SQL = "INSERT INTO sys_dict_china_city"
-			+ "(areaName,areaCode,areaUrl,parentId,areaLevel,areaType)"
-			+ " VALUES ('%s', '%s','%s', %s, '%s','%s')";
-	private static String ISEXIST = "SELECT COUNT(1) FROM sys_dict_china_city WHERE areaCode = '%s'";
-	private static String EACHSQL = "SELECT id,areaUrl FROM sys_dict_china_city"
+	private static String SQL = "INSERT INTO sys_dict_area"
+			+ "(areaName,areaCode,areaUrl,parentId,areaLevel)"
+			+ " VALUES ('%s', '%s','%s', %s, '%s')";
+	private static String ISEXIST = "SELECT COUNT(1) FROM sys_dict_area WHERE areaCode = '%s'";
+	private static String EACHSQL = "SELECT id,areaUrl FROM sys_dict_area"
 			+ " WHERE areaLevel = '%s' and areaUrl !=''";
 
 	/** ----------------------------------------------------- Fields end */
@@ -115,7 +115,7 @@ public class crawlerCityHelper {
 			String code = eles02.get(0).text(); // 城市代码
 			String name = eles02.get(1).text();// 城市名称
 			String url = eles02.get(0).absUrl("href");
-			String inserSql = String.format(SQL, name, code, url, parentId, 2, "");
+			String inserSql = String.format(SQL, name, code, url, parentId, 2);
 			if (!isExist(code)) { // 查找是否已存在,不存在则插入
 				try {
 					saveDocument(inserSql);
@@ -146,7 +146,7 @@ public class crawlerCityHelper {
 			String name = eles02.get(1).text();// 县级名称
 			String url = eles02.get(0).absUrl("href");
 
-			String inserSql = String.format(SQL, name, code, url, parentId, 3, "");
+			String inserSql = String.format(SQL, name, code, url, parentId, 3);
 			if (!isExist(code)) { // 查找是否已存在,不存在则插入
 				try {
 					saveDocument(inserSql);
@@ -174,7 +174,7 @@ public class crawlerCityHelper {
 			String code = eles02.get(0).text();// 乡级行政区代码
 			String name = eles02.get(1).text();// 乡级行政区名称
 			String url = eles02.get(1).absUrl("href");
-			String inserSql = String.format(SQL, name, code, url, parentId, 4, "");
+			String inserSql = String.format(SQL, name, code, url, parentId, 4);
 			if (!isExist(code)) { // 查找是否已存在,不存在则插入
 				try {
 					saveDocument(inserSql);
@@ -201,8 +201,8 @@ public class crawlerCityHelper {
 			// 乡级行政区名称
 			String name = eles02.get(2).text();
 			// 城乡分类代码
-			String type = eles02.get(1).text();
-			String inserSql = String.format(SQL, name, code, null, parentId, 5, type);
+			// String type = eles02.get(1).text();
+			String inserSql = String.format(SQL, name, code, null, parentId, 5);
 			if (!isExist(code)) { // 查找是否已存在,不存在则插入
 				try {
 					saveDocument(inserSql);
@@ -252,7 +252,7 @@ public class crawlerCityHelper {
 	 */
 	public static void getProvinceInfo() {
 		/** 初始解析网页地址 */
-		String crawlerBaseUrl = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2015/index.html";
+		String crawlerBaseUrl = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2016/index.html";
 		Document document = getDocument(crawlerBaseUrl);
 		Elements eles01 = document.getElementsByAttributeValue("class", "provincetr");
 		for (Element ele01 : eles01) {
@@ -260,7 +260,7 @@ public class crawlerCityHelper {
 				String code = getProvinceCode(ele02.attr("href"));// 省份代码
 				String name = ele02.text();// 省份名称
 				String url = ele02.absUrl("href");// 省份地址
-				String inserSql = String.format(SQL, name, code, url, "100000", 1, "");
+				String inserSql = String.format(SQL, name, code, url, "100000", 1);
 				if (!isExist(code)) { // 查找是否已存在,不存在则插入
 					try {
 						saveDocument(inserSql);
@@ -345,10 +345,10 @@ public class crawlerCityHelper {
 	/**
 	 * @方法描述: 插入特别地区
 	 */
-	public static void getSpecialArea(){
+	public static void getSpecialArea() {
 		// 台湾省
-		if(!isExist("710000")){
-			String inserSql = String.format(SQL, "台湾省", "710000", "", "100000", 1, "");
+		if (!isExist("710000")) {
+			String inserSql = String.format(SQL, "台湾省", "710000", "", "100000", 1);
 			try {
 				saveDocument(inserSql);
 			} catch (Exception e) {
@@ -356,8 +356,8 @@ public class crawlerCityHelper {
 			}
 		}
 		// 香港特别行政区
-		if(!isExist("810000")){
-			String inserSql = String.format(SQL, "香港特别行政区", "810000", "", "100000", 1, "");
+		if (!isExist("810000")) {
+			String inserSql = String.format(SQL, "香港特别行政区", "810000", "", "100000", 1);
 			try {
 				saveDocument(inserSql);
 			} catch (Exception e) {
@@ -365,8 +365,8 @@ public class crawlerCityHelper {
 			}
 		}
 		// 澳门特别行政区
-		if(!isExist("820000")){
-			String inserSql = String.format(SQL, "澳门特别行政区", "820000", "", "100000", 1, "");
+		if (!isExist("820000")) {
+			String inserSql = String.format(SQL, "澳门特别行政区", "820000", "", "100000", 1);
 			try {
 				saveDocument(inserSql);
 			} catch (Exception e) {
@@ -374,8 +374,8 @@ public class crawlerCityHelper {
 			}
 		}
 		// 钓鱼岛
-		if(!isExist("900000")){
-			String inserSql = String.format(SQL, "钓鱼岛", "900000", "", "100000", 1, "");
+		if (!isExist("900000")) {
+			String inserSql = String.format(SQL, "钓鱼岛", "900000", "", "100000", 1);
 			try {
 				saveDocument(inserSql);
 			} catch (Exception e) {
@@ -383,9 +383,9 @@ public class crawlerCityHelper {
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
-		// getProvinceInfo();  // 省级行政区
+		// getProvinceInfo(); // 省级行政区
 		// getSpecialArea(); // 插入特别地区
 		// getCityInfo(); // 地级行政区划单位
 		// getCountyInfo();// 县级行政区划单位
