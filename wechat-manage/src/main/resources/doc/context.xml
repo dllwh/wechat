@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+	<Resource auth="Container" 
+	driverClassName="com.mysql.jdbc.Driver" 
+	factory="com.alibaba.druid.pool.DruidDataSourceFactory" 
+	filters="stat" 
+	initialSize="20"
+	maxActive="1024" 
+	maxWait="60000" 
+	minEvictableIdleTimeMillis="25000000" 
+	minIdle="10" 
+	name="jdbc/mysqlDB" 
+	password="" 
+	removeabandoned="true" 
+	removeabandonedtimeout="180000" 
+	testOnBorrow="false" 
+	testOnReturn="false" 
+	testWhileIdle="true" 
+	timeBetweenEvictionRunsMillis="60000" 
+	type="javax.sql.DataSource" 
+	url="jdbc:mysql://localhost:3306/db_wechat?useUnicode=true&amp;characterEncoding=UTF-8" 
+	username="root" 
+	validationQuery="SELECT 1"/> 
+</Context>

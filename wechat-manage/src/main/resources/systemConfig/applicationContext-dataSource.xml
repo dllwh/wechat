@@ -19,43 +19,9 @@
 	
 	<!-- ====================================================================== 
 		数据库映射 指定连接数据库的基本属性信息 -->
-
-	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
-		init-method="init" destroy-method="close">
-		<property name="url" value="${database.dbUrl}" />
-		<property name="username" value="${database.dbUserName}" />
-		<property name="password" value="${database.dbPassword}" />
-		<property name="driverClassName" value="${database.jdbcName}" />
-		
-		<property name="initialSize" value="0" />
-		<property name="maxActive" value="20" />
-		<property name="minIdle" value="0" />
-		
-		<property name="maxWait" value="10000" />
-		
-		<property name="poolPreparedStatements" value="false"/>
-		<property name="maxOpenPreparedStatements" value="-1"/>
-		
-		<property name="validationQuery" value="SELECT 1" />
-		<!-- 这里建议配置为TRUE，防止取到的连接不可用 --> 
-		<property name="testOnBorrow" value="true" />
-		<property name="testOnReturn" value="false" />
-		<property name="testWhileIdle" value="true" />
-		
-		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
-		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-		<property name="minEvictableIdleTimeMillis" value="25200000" />
-
-		<!-- 超过时间限制是否回收 -->  
-		<property name="removeAbandoned" value="true" />
-		<!-- 1800秒，也就是30分钟 -->
-		<property name="removeAbandonedTimeout" value="1800" />
-		<!-- 关闭abanded连接时输出错误日志 -->
-		<property name="logAbandoned" value="true" />
-
-		<!-- 开启Druid的监控统计功能,去掉后监控界面sql无法统计 -->
-		<property name="filters" value="stat" />
+	
+	<bean name="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/mysqlDB"/> 
 	</bean>
 	<!-- ====================================================================== 
 		配置mybatis模板 -->

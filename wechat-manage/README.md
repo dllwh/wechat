@@ -31,9 +31,9 @@ weinxin-manage
 > 1. 下载项目代码，安装jdk 1.7+、maven-3.0.1、mysql-5.6
 > 2. 在项目目录下运行mvn install，提示BUILD SUCCESS即可
 > 3. 创建mysql用户和数据库，运行/wechat-manage/src/main/resource/doc下对应db-wbchat.sql
-> 4. 数据库配置文件：/wechat-manage/src/main/resources/properties/dbConfig.properties
-> 5. 如果采用的是tomcat配置jndi数据源的话，在 {Tomcat_home}/conf/context.xml 文件中添加Resource元素 
-
+> 4. 数据库配置文件：采用的是tomcat配置jndi数据源的话，在 {Tomcat_home}/conf/context.xml 文件中添加Resource元素 
+![image](https://raw.githubusercontent.com/dllwh/wechat/master/static/wechat-manage/dbConfig.jpg)
+请参考/wechat-manage/src/main/resource/doc下对应context.xml文件 
 
 其他说明
 ------------------------
