@@ -8,6 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.cdeledu.util.security.SecureUtil;
 import com.google.common.base.Joiner;
 
@@ -27,6 +29,23 @@ import com.google.common.base.Joiner;
  */
 public class BokeccHelper {
 	/** ----------------------------------------------------- Fields start */
+	/** 观看基本地址 */
+	private static final String API_BASE_URL = "http://api.csslcloud.net/api/";
+	/** 观看基本地址 */
+	private static final String VIEW_BASE_URL = "https://view.csslcloud.net/api/view/";
+	/** 观众端直播自动登陆 */
+	private static String visitorAutoLogin = VIEW_BASE_URL
+			+ "index?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
+	/** 观众端回放自动登陆 */
+	private static String recordAutoLogin = VIEW_BASE_URL
+			+ "callback/login?recordid=%s&roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
+	/** 助教(管理员)直播自动登陆 */
+	private static String assistantAutoLogin = VIEW_BASE_URL
+			+ "assistant/login?roomid=%s&userid=%s&viewername=%s&viewertoken=%s";
+	/** 观众端直播自动登陆 */
+	private static String lecturerAutoLogin = VIEW_BASE_URL
+			+ "lecturer?roomid=%s&userid=%s&publishname=%s&publishpassword=%s";
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法描述 : HTTP通信加密算法
@@ -53,6 +72,49 @@ public class BokeccHelper {
 	}
 
 	/**
+	 * @方法描述 : 直播间自动登录方式
+	 * @param visitorType
+	 *            用户类型：1:讲师;2:助教;3:游客(观众或学员);默认是3
+	 * @param roomId
+	 *            直播间id
+	 * @param userId
+	 *            CC直播平台的账号ID
+	 * @param viewerName
+	 *            登陆用户名（自定义即可）
+	 * @param viewerToken
+	 *            登录检验码
+	 * @return 如果roomId 或者 userId 为空，返回结果 空
+	 */
+	public static String getAutoLogin(int visitorType, String roomId, String userId,
+			String viewerName, String viewerToken) {
+		String result = "";
+
+		if (StringUtils.isBlank(viewerToken)) {
+			viewerToken = "";
+		}
+
+		if (StringUtils.isBlank(userId) || StringUtils.isBlank(roomId)) {
+			return "";
+		}
+		if (visitorType == 1) {// 讲师端自动登陆
+			if (StringUtils.isNotBlank(viewerName) && StringUtils.isNotBlank(viewerToken)) {
+				result = String.format(lecturerAutoLogin, roomId, userId, viewerName, viewerToken);
+			}
+
+		} else if (visitorType == 2) { // 助教端自动登陆
+			if (StringUtils.isNotBlank(viewerName) && StringUtils.isNotBlank(viewerToken)) {
+				result = String.format(assistantAutoLogin, roomId, userId, viewerName, viewerToken);
+			}
+		} else if (visitorType == 3) { // 观众端自动登陆
+			result = String.format(visitorAutoLogin, roomId, userId, viewerName, viewerToken);
+		} else {
+			result = String.format(visitorAutoLogin, roomId, userId, viewerName, viewerToken);
+		}
+		return result;
+	}
+
+	/** ----------------------------------------------- [私有方法] */
+	/**
 	 * @方法描述 : 每个键值对按照键的字母顺序升序排序
 	 * @param paramMap
 	 * @return
@@ -78,4 +140,6 @@ public class BokeccHelper {
 		}
 		return sortedMap;
 	}
+
+	/** ----------------------------------------------- [私有方法] */
 }
