@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.system.ScheduleJob;
 import com.cdeledu.service.sys.ScheduleJobService;
 
@@ -41,6 +44,7 @@ public class ScheduledController extends BaseController {
 	/**
 	 * @方法描述 : 定时任务列表
 	 */
+	@ResponseBody
 	@RequestMapping("/list")
 	public void list() {
 
@@ -49,69 +53,64 @@ public class ScheduledController extends BaseController {
 	/**
 	 * @方法描述 :定时任务信息
 	 */
-	@RequestMapping("/info/{jobId}")
+	@ResponseBody
+	@RequestMapping("info")
 	public void info() {
 
 	}
 
-	/**
-	 * @方法描述 :保存定时任务
-	 */
-	@RequestMapping("save")
-	public AjaxJson save(@RequestBody ScheduleJob scheduleJob) {
+	@ResponseBody
+	@RequestMapping("create")
+	@SystemLog(desc = "创建定时任务", opType = SysOpType.INSERT, tableName = "sys_schedule_job")
+	public AjaxJson create(@RequestBody ScheduleJob scheduleJob) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.save(scheduleJob);
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法描述 :修改定时任务
-	 */
+	@ResponseBody
 	@RequestMapping("update")
+	@SystemLog(desc = "修改定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson update(@RequestBody ScheduleJob scheduleJob) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.update(scheduleJob);
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法描述 :删除定时任务
-	 */
+	@ResponseBody
 	@RequestMapping("delete")
+	@SystemLog(desc = "删除定时任务", opType = SysOpType.DEL, tableName = "sys_schedule_job")
 	public AjaxJson delete(@RequestBody Long[] jobIds) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.deleteBatch(jobIds);
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法描述 : 立即执行任务
-	 */
+	@ResponseBody
 	@RequestMapping("run")
+	@SystemLog(desc = "创建定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson run(@RequestBody Long[] jobIds) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.run(jobIds);
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法描述 : 暂停定时任务
-	 */
+	@ResponseBody
 	@RequestMapping("pause")
+	@SystemLog(desc = "暂停定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson pause(@RequestBody Long[] jobIds) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.pause(jobIds);
 		return ajaxJson;
 	}
 
-	/**
-	 * @方法描述 :恢复定时任务
-	 */
+	@ResponseBody
 	@RequestMapping("resume")
+	@SystemLog(desc = "恢复定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson resume(@RequestBody Long[] jobIds) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.resume(jobIds);
 		return ajaxJson;
 	}
-	
+
 }
