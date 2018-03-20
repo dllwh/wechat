@@ -1,5 +1,6 @@
 package com.cdeledu.util.openplatform.livevideo;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.util.security.SecureUtil;
 import com.google.common.base.Joiner;
 
@@ -115,7 +117,7 @@ public class BokeccHelper {
 
 	/** ----------------------------------------------- [私有方法] */
 	/**
-	 * @方法描述 : 每个键值对按照键的字母顺序升序排序
+	 * @方法描述 : 每个键值对按照键的字母顺序升序排序,并且 value 值都需要以 UTF-8 格式进行 URL Encode
 	 * @param paramMap
 	 * @return
 	 */
@@ -136,7 +138,13 @@ public class BokeccHelper {
 		Map.Entry<String, String> tmpEntry = null;
 		while (iter.hasNext()) {
 			tmpEntry = iter.next();
-			sortedMap.put(tmpEntry.getKey(), tmpEntry.getValue());
+			try {
+				sortedMap.put(tmpEntry.getKey(),
+						URLEncoder.encode(tmpEntry.getValue(), ConstantHelper.UTF_8.name()));
+			} catch (Exception e) {
+				sortedMap.put(tmpEntry.getKey(), tmpEntry.getValue());
+			}
+
 		}
 		return sortedMap;
 	}
