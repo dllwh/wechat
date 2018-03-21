@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.impl.scheduleJob.ScheduleJobLogDaoImpl">
+	<sql id="getScheduleJobLog_body">
+		select 
+    		id,jobId, beanName, methodName, params, status, error, times,createTime
+  		from 
+  			`sys_schedule_job_log`
+	</sql>
+	
+	<select id="getScheduleJobLogList" parameterType="com.cdeledu.model.system.ScheduleJobLog"
+		resultType="com.cdeledu.model.system.ScheduleJobLog">
+		selct * from (
+		<include refid="getScheduleJobLog_body" />
+		)as myTable
+	</select>
+
+	<select id="countScheduleJobLog" parameterType="com.cdeledu.model.system.ScheduleJobLog"
+		resultType="int">
+		selct count(*) from (
+		<include refid="getScheduleJobLog_body" />
+		)as myTable
+	</select>
+
+	<insert id="saveScheduleJobLog" parameterType="com.cdeledu.model.system.ScheduleJobLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into `sys_schedule_job_log`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="jobId != null">jobId,</if>
+			<if test=" beanName!= null and beanName != '' ">beanName,</if>
+			<if test="methodName != null and methodName != '' ">methodName,</if>
+			<if test="params != null and params != '' ">params,</if>
+			<if test="status != null">status,</if>
+			<if test="error != null and error != '' ">error,</if>
+			<if test="times != null">times,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="jobId != null">#{jobId},</if>
+			<if test=" beanName!= null and beanName != '' ">#{beanName},</if>
+			<if test="methodName != null and methodName != '' ">#{methodName},</if>
+			<if test="params != null and params != '' ">#{params},</if>
+			<if test="status != null">#{status,</if>
+			<if test="error != null and error != '' ">#{error},</if>
+			<if test="times != null">#{times,</if>
+		</trim>
+	</insert>
+</mapper>
