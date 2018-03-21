@@ -38,6 +38,8 @@ public class VerifyCodeHelper {
 	 * @return
 	 */
 	public static boolean verifyCode(String code) {
+		// 验证是否验证码，正确后清除验证码会话，防止重复利用攻击API
+		clearVerifyCode();
 		return false;
 	}
 
