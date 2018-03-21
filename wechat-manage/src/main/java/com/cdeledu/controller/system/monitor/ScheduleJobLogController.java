@@ -2,8 +2,8 @@ package com.cdeledu.controller.system.monitor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.system.ScheduleJobLog;
@@ -29,30 +29,26 @@ public class ScheduleJobLogController extends BaseController {
 	private ScheduleJobLogService scheduleJobLogService;
 	/** ----------------------------------------------------- Fields end */
 
-	/** ----------------------------------------------- [公共方法] */
+	/**
+	 * @方法:定时任务日志首页
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@RequestMapping(value = { "index.do" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public String index() {
+		return "/quartz/log/index";
+	}
+
 	/**
 	 * 定时任务日志列表
 	 */
-	@RequestMapping("/list")
-	public void list(ScheduleJobLog scheduleJobLog){
+	@RequestMapping(value = { "list" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public void list(ScheduleJobLog scheduleJobLog) {
 		try {
 			scheduleJobLogService.findForJdbcParam(scheduleJobLog);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * 定时任务日志信息
-	 */
-	@RequestMapping("/info/{logId}")
-	public void info(@PathVariable("logId") Long logId){
-		
-	}
-	/** ----------------------------------------------- [公共方法] */
 
-	/** ----------------------------------------------- [私有方法] */
-	/** ----------------------------------------------- [私有方法] */
-
-	/** ----------------------------------------------- [测试方法] */
-	/** ----------------------------------------------- [测试方法] */
 }

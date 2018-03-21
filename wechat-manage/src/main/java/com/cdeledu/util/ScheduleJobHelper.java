@@ -86,7 +86,7 @@ public class ScheduleJobHelper extends QuartzJobBean {
 
 		} finally {
 			try {
-				scheduleJobLogService.insert(log);
+				scheduleJobLogService.save(log);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

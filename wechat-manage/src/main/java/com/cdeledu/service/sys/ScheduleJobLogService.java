@@ -1,6 +1,7 @@
 package com.cdeledu.service.sys;
 
-import com.cdeledu.common.base.BaseService;
+import java.util.List;
+
 import com.cdeledu.model.system.ScheduleJobLog;
 
 /**
@@ -13,8 +14,11 @@ import com.cdeledu.model.system.ScheduleJobLog;
  * @创建时间: 2017年12月18日 下午2:39:16
  * @版本: V1.0
  * @since: JDK 1.7
- * @see <a href="">TODO(连接内容简介)</a>
  */
-public interface ScheduleJobLogService extends BaseService<ScheduleJobLog> {
+public interface ScheduleJobLogService {
+	List<ScheduleJobLog> findForJdbcParam(ScheduleJobLog log) throws Exception;
 
+	Integer getCountForJdbcParam(ScheduleJobLog log) throws Exception;
+
+	void save(ScheduleJobLog log) throws Exception;
 }
