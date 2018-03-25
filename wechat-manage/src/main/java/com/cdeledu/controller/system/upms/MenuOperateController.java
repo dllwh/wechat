@@ -80,11 +80,11 @@ public class MenuOperateController extends BaseController {
 			if (menu != null && menu.getAllowEdit() == 1) {
 				if (menu.getType() == sysMenu.getType()) {
 					sysMenuService.update(sysMenu);
-					ajaxJson.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+					ajaxJson.setMsg(MessageConstant.SUCCESS_UPDATE_MESSAGE);
 				} else {
 					if (!sysMenuService.hasChildren(sysMenu.getId())) {
 						sysMenuService.update(sysMenu);
-						ajaxJson.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+						ajaxJson.setMsg(MessageConstant.SUCCESS_UPDATE_MESSAGE);
 					} else {
 						ajaxJson.setSuccess(false);
 						ajaxJson.setMsg(MessageConstant.MSG_HAS_CHILD);
@@ -95,7 +95,7 @@ public class MenuOperateController extends BaseController {
 				ajaxJson.setMsg("不支持更新操作");
 			}
 		} catch (Exception e) {
-			ajaxJson.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			ajaxJson.setMsg(MessageConstant.FAILURE_UPDATE_MESSAGE);
 			ajaxJson.setSuccess(false);
 		}
 		return ajaxJson;
@@ -125,17 +125,17 @@ public class MenuOperateController extends BaseController {
 						ajaxJson.setMsg(MessageConstant.MSG_HAS_CHILD);
 					} else {
 						sysMenuService.delete(id);
-						ajaxJson.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+						ajaxJson.setMsg(MessageConstant.SUCCESS_DELETE_MESSAGE);
 					}
 				}
 			} else {
 				ajaxJson.setSuccess(false);
-				ajaxJson.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+				ajaxJson.setMsg(MessageConstant.SUCCESS_DELETE_MESSAGE);
 			}
 		} catch (Exception e) {
 			ajaxJson.setSuccess(false);
 			ajaxJson.setResultCode(500);
-			ajaxJson.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			ajaxJson.setMsg(MessageConstant.FAILURE_DELETE_MESSAGE);
 		}
 		return ajaxJson;
 	}
@@ -145,6 +145,7 @@ public class MenuOperateController extends BaseController {
 	@SystemLog(desc = "禁止编辑菜单", opType = SysOpType.UPDATE, tableName = "sys_menu")
 	public AjaxJson editDisable(SysMenu sysMenu) {
 		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setMsg(MessageConstant.SUCCESS_ENABLE_FALSE);
 		return ajaxJson;
 	}
 
@@ -153,6 +154,7 @@ public class MenuOperateController extends BaseController {
 	@SystemLog(desc = "禁止删除菜单", opType = SysOpType.UPDATE, tableName = "sys_menu")
 	public AjaxJson delDisable(SysMenu sysMenu) {
 		AjaxJson ajaxJson = new AjaxJson();
+		ajaxJson.setMsg(MessageConstant.SUCCESS_ENABLE_FALSE);
 		return ajaxJson;
 	}
 
@@ -161,6 +163,11 @@ public class MenuOperateController extends BaseController {
 	@SystemLog(desc = "有效、无效状态改变", opType = SysOpType.UPDATE, tableName = "sys_menu")
 	public AjaxJson visibleState(SysMenu sysMenu) {
 		AjaxJson ajaxJson = new AjaxJson();
+		try {
+			ajaxJson.setMsg(MessageConstant.SUCCESS_ENABLE_TRUE);
+		} catch (Exception e) {
+			ajaxJson.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+		}
 		return ajaxJson;
 	}
 }

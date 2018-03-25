@@ -58,7 +58,7 @@ public class RoleOperateController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultMsg.setSuccess(false);
-			resultMsg.setMsg("添加失败，请刷新后再试！");
+			resultMsg.setMsg(MessageConstant.FAILURE_SAVE_MESSAGE);
 			resultMsg.setResultCode(500);
 		}
 		return resultMsg;
