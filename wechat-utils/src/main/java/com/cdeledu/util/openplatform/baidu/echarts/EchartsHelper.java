@@ -16,6 +16,8 @@ import com.github.abel533.echarts.code.Orient;
 import com.github.abel533.echarts.code.SeriesType;
 import com.github.abel533.echarts.code.Tool;
 import com.github.abel533.echarts.code.Trigger;
+import com.github.abel533.echarts.code.X;
+import com.github.abel533.echarts.code.Y;
 import com.github.abel533.echarts.feature.DataView;
 import com.github.abel533.echarts.feature.MagicType;
 import com.github.abel533.echarts.feature.Mark;
@@ -140,9 +142,9 @@ public class EchartsHelper {
 			option.series(line);
 		}
 		/**
-		 * 图例，每个图表最多仅有一个图例
+		 * 图例，每个图表最多仅有一个图例,且居中底部显示，显示边框
 		 */
-		option.legend().data(legendList);
+		option.legend().data(legendList).x(X.center).y(Y.bottom).borderWidth(1);
 		return option;
 	}
 
