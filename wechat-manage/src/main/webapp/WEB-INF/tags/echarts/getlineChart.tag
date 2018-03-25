@@ -1,9 +1,13 @@
-<%@tag import="com.cdeledu.util.chart.echarts.EchartsHelper"%>
+
+<%@tag
+	import="com.cdeledu.util.openplatform.baidu.echarts.EchartsHelper"%>
+<%@tag import="com.cdeledu.util.openplatform.baidu.echarts.ChartsData"%>
+<%@tag import="com.cdeledu.util.openplatform.baidu.echarts.AxisEntity"%>
 <%@tag import="java.util.Arrays"%>
-<%@tag import="com.cdeledu.util.chart.echarts.ChartsData"%>
+
 <%@tag import="com.github.abel533.echarts.code.DataFilter"%>
 <%@tag import="com.google.common.collect.Lists"%>
-<%@tag import="com.cdeledu.util.chart.echarts.AxisEntity"%>
+
 <%@tag import="java.util.List"%>
 <%@tag import="com.github.abel533.echarts.Title"%>
 <%@tag import="com.cdeledu.util.network.IpUtilHelper"%>
