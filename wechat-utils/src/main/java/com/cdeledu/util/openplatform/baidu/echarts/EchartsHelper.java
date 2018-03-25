@@ -1,4 +1,4 @@
-package com.cdeledu.util.chart.echarts;
+package com.cdeledu.util.openplatform.baidu.echarts;
 
 import java.util.List;
 import java.util.Map;
