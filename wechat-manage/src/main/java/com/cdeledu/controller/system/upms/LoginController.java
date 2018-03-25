@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.constants.FilterHelper;
@@ -129,10 +128,16 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "register", method = RequestMethod.GET)
-	public ModelAndView register() {
-		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("login/register");
-		return mv;
+	public AjaxJson register(SysUser user) {
+		AjaxJson result = new AjaxJson();
+		boolean namestander = user.getUserName().trim().startsWith("qq") || user.getUserName().trim().startsWith("sina") || user.getUserName().trim().startsWith("github") || user.getUserName().trim().startsWith("baidu") || user.getUserName().trim().startsWith("weixin");
+		if (namestander) {
+			result.setSuccess(false);
+			result.setMsg("不能以qq、sina、weixin、baidu、github 开头注册");
+			return result;
+		}
+		
+		return result;
 	}
 
 	/**
