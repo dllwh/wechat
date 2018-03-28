@@ -100,7 +100,8 @@ public class MapUtilHelper extends MapUtils {
 					Method readMethod = descriptor.getReadMethod();
 					// 获取 属性值
 					Object result = readMethod.invoke(bean, new Object[0]);
-					if (StringUtils.isNoneBlank(String.valueOf(result))) {
+					if (!"null".equalsIgnoreCase(String.valueOf(result))
+							&& StringUtils.isNoneBlank(String.valueOf(result))) {
 						resMap.put(propertyName, result);
 					} else {
 						resMap.put(propertyName, "");
