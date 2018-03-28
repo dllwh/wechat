@@ -9,7 +9,7 @@ import java.security.MessageDigest;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-class Md5Helper {
+public class Md5Helper {
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */
 
