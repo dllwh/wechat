@@ -1,11 +1,11 @@
 package com.cdeledu.util.network.tcp;
 
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,7 +28,7 @@ import com.cdeledu.common.mapper.ClassUtilHelper;
 
 /**
  * @类描述:
- *       <ul>
+ * 		<ul>
  *       <li>封装了一些采用HttpClient发送HTTP请求的方法</li>
  *       <li>实现与 org.apache.http</li>
  *       <li>使用HttpClient步骤如下</li>
@@ -55,7 +55,7 @@ import com.cdeledu.common.mapper.ClassUtilHelper;
 public class HttpClientHelper {
 	/*-------------------------- 私有属性 begin -------------------------------*/
 	public static HttpClientContext context = new HttpClientContext();
-	private HttpClient httpClient =  HttpClients.createDefault(); ;
+	private HttpClient httpClient = HttpClients.createDefault();;
 	private static HttpClientHelper instance;
 	/** 请求编码，默认使用utf-8 */
 	private static String URLCHARSET = ConstantHelper.UTF_8.name();
@@ -196,7 +196,7 @@ public class HttpClientHelper {
 			if (MapUtils.isNotEmpty(headersMap)) {
 				for (String key : headersMap.keySet()) {
 					Object hKey = null == headersMap.get(key) ? "" : headersMap.get(key);
-					httpPost.setHeader(key, String.valueOf(hKey));
+					httpPost.setHeader(key, URLEncoder.encode(String.valueOf(hKey), URLCHARSET));
 				}
 			}
 			// nvps是包装请求参数的list
@@ -209,13 +209,10 @@ public class HttpClientHelper {
 			int statusCode = response.getStatusLine().getStatusCode();
 			// 请求和响应都成功了
 			// 判断网络连接状态码是否正常(0--200都数正常)
-			if (statusCode == HttpStatus.SC_OK) {
-				try {
-					result = getHttpResponseContent(response);
-				} catch (Exception ioe) {
-					ioe.printStackTrace();
-				}
-			} else {
+			try {
+				result = getHttpResponseContent(response);
+			} catch (Exception ioe) {
+				ioe.printStackTrace();
 				httpPost.abort();
 				throw new RuntimeException("HttpClient,error status code :" + statusCode);
 			}
@@ -268,20 +265,16 @@ public class HttpClientHelper {
 
 			statusCode = response.getStatusLine().getStatusCode();
 			// 判断网络连接状态码是否正常(0--200都数正常)
-			if (statusCode == HttpStatus.SC_OK) {
-				try {
-					result = getHttpResponseContent(response);
-				} catch (Exception ioe) {
-					ioe.printStackTrace();
-				}
-			} else {
+			try {
+				result = getHttpResponseContent(response);
+			} catch (Exception ioe) {
+				ioe.printStackTrace();
 				httpPost.abort();
 				throw new RuntimeException("HttpClient,error status code :" + statusCode);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-
 			// 释放资源
 			if (httpPost != null) {
 				httpPost.releaseConnection();
@@ -342,20 +335,17 @@ public class HttpClientHelper {
 			if (MapUtils.isNotEmpty(headersMap)) {
 				for (String key : headersMap.keySet()) {
 					Object hKey = null == headersMap.get(key) ? "" : headersMap.get(key);
-					httpGet.setHeader(key, String.valueOf(hKey));
+					httpGet.setHeader(key, URLEncoder.encode(String.valueOf(hKey), URLCHARSET));
 				}
 			}
 
 			response = httpClient.execute(httpGet);
 
 			statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode == 200) {
-				try {
-					result = getHttpResponseContent(response);
-				} catch (Exception ioe) {
-					ioe.printStackTrace();
-				}
-			} else {
+			try {
+				result = getHttpResponseContent(response);
+			} catch (Exception ioe) {
+				ioe.printStackTrace();
 				httpGet.abort();
 				throw new RuntimeException("HttpClient,error status code :" + statusCode);
 			}

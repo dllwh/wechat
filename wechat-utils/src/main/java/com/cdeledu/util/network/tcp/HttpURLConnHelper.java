@@ -17,7 +17,6 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,8 +56,6 @@ import com.cdeledu.util.network.IpUtilHelper;
  */
 public class HttpURLConnHelper {
 	protected static Logger logger = Logger.getLogger(HttpURLConnHelper.class.getName());
-	/** 异常原因 */
-	private static String IO_EXCEPTION_MEG = "Url无法正常连接,请检查是否网络连接正常或者请求地址不存在";
 	// 定义数据分隔线
 	private static final String BOUNDARY = "---------7d4a6d158c9";
 	private static final String POST_HTTP = HttpMethod.POST.getValue();
@@ -68,7 +65,6 @@ public class HttpURLConnHelper {
 	private static String URLCHARSET = ConstantHelper.UTF_8.name();
 	private static HttpURLConnHelper instance;
 
-	/*--------------------------私有方法 start-------------------------------*/
 	/** 转码 */
 	private void setUrlCharset(String urlCharset) {
 		URLCHARSET = urlCharset;
@@ -211,26 +207,18 @@ public class HttpURLConnHelper {
 			}
 
 			// HTTP 状态码(只有是200的时候才说明请求成功,其余皆失败)
-			if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				reader = new BufferedReader(
-						new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
-				String line;
-				StringBuffer sb = new StringBuffer();
+			reader = new BufferedReader(
+					new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
+			String line;
+			StringBuffer sb = new StringBuffer();
 
-				while ((line = reader.readLine()) != null) {
-					String str = CharsetHelper.UnicodeToString(line);
-					sb.append(str);
-				}
-
-				result = sb.toString();
-
-			} else if (httpConn.getResponseCode() >= 300) {
-				throw new RuntimeExceptionHelper("HTTP Request is not success, Response code is "
-						+ httpConn.getResponseCode());
-			} else {
-				logger.log(Level.ALL, IO_EXCEPTION_MEG);
-				throw new RuntimeException(IO_EXCEPTION_MEG);
+			while ((line = reader.readLine()) != null) {
+				String str = CharsetHelper.UnicodeToString(line);
+				sb.append(str);
 			}
+
+			result = sb.toString();
+
 		} catch (Exception e) {
 			ExceptionHelper.catchHttpUtilException(e, url);
 		} finally {
@@ -315,26 +303,19 @@ public class HttpURLConnHelper {
 			httpConn.connect();
 
 			// HTTP 状态码(只有是200的时候才说明请求成功,其余皆失败)
-			if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				// 定义 BufferedReader输入流来读取URL的响应
-				reader = new BufferedReader(
-						new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
-				String line;
-				StringBuffer sb = new StringBuffer();
+			// 定义 BufferedReader输入流来读取URL的响应
+			reader = new BufferedReader(
+					new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
+			String line;
+			StringBuffer sb = new StringBuffer();
 
-				while ((line = reader.readLine()) != null) {
-					String str = CharsetHelper.UnicodeToString(line);
-					sb.append(str);
-				}
-
-				result = sb.toString();
-
-			} else if (httpConn.getResponseCode() >= 300) {
-				throw new Exception("HTTP Request is not success, Response code is "
-						+ httpConn.getResponseCode());
-			} else {
-				throw new RuntimeException(IO_EXCEPTION_MEG);
+			while ((line = reader.readLine()) != null) {
+				String str = CharsetHelper.UnicodeToString(line);
+				sb.append(str);
 			}
+
+			result = sb.toString();
+
 		} catch (Exception e) {
 			ExceptionHelper.catchHttpUtilException(e, url);
 		} finally {
@@ -638,6 +619,4 @@ public class HttpURLConnHelper {
 		}
 		return result;
 	}
-
-	/*--------------------------公有方法 end-------------------------------*/
 }
