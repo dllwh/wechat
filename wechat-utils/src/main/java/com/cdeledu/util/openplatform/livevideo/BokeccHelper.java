@@ -65,6 +65,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 创建直播间
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_11">创建直播间</a>
 	 * @param bokeccLiveEntity
 	 * @return
 	 */
@@ -76,6 +77,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 编辑直播间的信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_12">编辑直播间</a>
 	 * @param roomid
 	 * @param bokeccLiveEntity
 	 * @return
@@ -89,6 +91,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 关闭直播间
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_13">关闭直播间</a>
 	 * @param roomId
 	 *            直播间id
 	 * @return
@@ -102,6 +105,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 获取用户的直播间列表信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_14">获取直播间列表</a>
 	 * @param pageNum
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
@@ -124,6 +128,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间的信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_15">获取直播间的信息
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param roomId
 	 *            直播间id
@@ -137,6 +143,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 获取指定直播间下历史直播信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_16">获取直播列表</a>
 	 * @param roomId
 	 *            直播间id
 	 * @param pageNum
@@ -166,6 +173,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取回放列表的信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_17">查询回放列表</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -201,6 +209,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取单个回放信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_18">查询回放信息</a>
 	 * @创建人:独泪了无痕
 	 * @param recordid
 	 *            回放id
@@ -215,6 +224,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取用户账号下所有正在进行直播的直播间列表
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_19">
+	 *      获取正在直播的直播间列表</a>
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
@@ -226,6 +237,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间直播状态
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_20">获取直播间直播状态
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param roomids
 	 *            直播间id（以英文逗号,区分)，批量查询直播间数量不能超过100个
@@ -241,6 +254,8 @@ public class BokeccHelper {
 	/**
 	 * 
 	 * @方法:获取直播间的连接数统计信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_21">获取直播间连接数
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -261,6 +276,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间各模板信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_22">获取直播间模板信息
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
@@ -272,6 +289,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间的代码信息，包括观看地址信息、客户端登陆地址、助教端登录地址、推流地址(只有第三方推流用户才可以获得)
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_23">获取直播间代码</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -286,6 +304,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间内用户进出信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_24">
+	 *      获取直播间内用户进出信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -306,6 +326,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取观看直播的统计信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_25">获取观看直播的统计信息
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param liveid
 	 *            直播id
@@ -320,6 +342,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取单个直播观看回放的用户登录，退出行为统计
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_26">
+	 *      获取单个直播回放的观看统计信息</a>
 	 * @创建人:独泪了无痕
 	 * @param recordId
 	 *            录制id
@@ -347,6 +371,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取观看直播回放的用户登录，退出行为统计
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_27">
+	 *      获取所有直播回放的观看统计信息</a>
 	 * @创建人:独泪了无痕
 	 * @param recordId
 	 *            录制id
@@ -376,6 +402,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:分页获取直播的聊天信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_28">获取聊天信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -406,6 +433,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取抽奖信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_29">获取抽奖信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -436,6 +464,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取问答信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_30">获取问答信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -465,6 +494,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取签到信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_31">获取签到信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -482,6 +512,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取签到用户信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_32">获取签到用户信息
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -502,21 +534,23 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取问卷信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_33">获取问卷信息</a>
 	 * @创建人:独泪了无痕
 	 * @param liveid
 	 *            直播id
 	 * @return
 	 */
-	public String getLiveRoomQuestionnaires(String liveid) {
+	public String getLiveRoomQuestionnaires(String liveId) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("liveid", liveid);
-		String url = API_BASE_URL + "live/questionnaires?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("liveid", liveId);
+		return API_BASE_URL + "live/questionnaires?" + createHashedQueryString(paramMap);
 	}
 
 	/**
 	 * @方法:获取用户答卷信息
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_34">获取用户答卷信息
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param liveid
 	 *            直播id
@@ -541,15 +575,17 @@ public class BokeccHelper {
 		paramMap.put("userid", platAccount);
 		paramMap.put("liveid", liveid);
 		paramMap.put("questionnaireid", questionnaireid);
-		paramMap.put("pagenum", Integer.toString(pageNum));
-		paramMap.put("pageindex", Integer.toString(pageIndex));
-		String url = API_BASE_URL + "live/questionnaire/viewers"
-				+ createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
+		return API_BASE_URL + "live/questionnaire/viewers" + createHashedQueryString(paramMap);
 	}
 
 	/**
 	 * @方法描述 : 直播自动登录方式
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_36">观众端自动登陆</a>
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_37">助教端自动登陆</a>
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_38">主持人自动登陆</a>
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_39">讲师端自动登陆</a>
 	 * @param visitorType
 	 *            用户类型：1:讲师;2:助教;3:主持人;4:游客(观众或学员);默认是4
 	 * @param roomId
@@ -590,10 +626,9 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 录播自动登录方式
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_36">观众端自动登陆</a>
 	 * @param roomId
 	 *            直播间id
-	 * @param userId
-	 *            CC直播平台的账号ID
 	 * @param recordid
 	 *            回放id
 	 * @param viewerName
@@ -602,16 +637,18 @@ public class BokeccHelper {
 	 *            登录检验码
 	 * @return 如果roomId 或者 userId 为空，返回结果 空
 	 */
-	public String getRecordAutoLogin(String roomId, String userId, String recordTd,
-			String viewerName, String viewerToken) {
+	public String getRecordAutoLogin(String roomId, String recordTd, String viewerName,
+			String viewerToken) {
 		String result = "";
-		result = String.format(recordAutoLogin, recordTd, roomId, userId, viewerName, viewerToken);
+		result = String.format(recordAutoLogin, recordTd, roomId, platAccount, viewerName,
+				viewerToken);
 		return result;
 	}
 
 	/** ----------------------------------------------- [私有方法] */
 	/**
 	 * @方法描述 : HTTP通信加密算法
+	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_40">加密算法</a>
 	 * @param queryMap
 	 * @param time
 	 *            当前时间的 Unix 时间戳,秒数
@@ -623,11 +660,12 @@ public class BokeccHelper {
 		Map<String, Object> map = new TreeMap<String, Object>(paramMap);
 		Map<String, Object> queryMap = createQueryString(map);
 		String result = "", hash = "", qs = "";
-		long time = System.currentTimeMillis() / 1000;
 		qs = Joiner.on("&").withKeyValueSeparator("=").join(queryMap);
 		if (StringUtils.isBlank(qs)) {
 			return "";
 		}
+		
+		long time = System.currentTimeMillis() / 1000;
 
 		hash = Md5Helper.md5(String.format("%s&time=%d&salt=%s", qs, time, appKey), 32)
 				.toUpperCase();
