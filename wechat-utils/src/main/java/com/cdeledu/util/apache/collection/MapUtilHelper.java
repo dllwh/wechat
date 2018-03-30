@@ -78,6 +78,88 @@ public class MapUtilHelper extends MapUtils {
 	}
 
 	/**
+	 * @方法描述 : 将一个 JavaBean 对象转化为一个 Map
+	 * @param bean
+	 * @param convertType
+	 *            转换类型，1:小写;2:大写;0:不转换,默认是0
+	 * @return
+	 * @throws IntrospectionException
+	 */
+	private static Map<String, Object> beanToMapByConvert(Object bean, Integer convertType)
+			throws IntrospectionException {
+		Map<String, Object> resMap = new HashMap<String, Object>();
+		Class<? extends Object> type = bean.getClass();
+		BeanInfo beanInfo = Introspector.getBeanInfo(type);
+		// 获取类属性
+		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+		PropertyDescriptor descriptor = null;
+		String propertyName = "";
+		for (int i = 0; i < propertyDescriptors.length; i++) {
+			try {
+				descriptor = propertyDescriptors[i];
+				// 获取Bean 各个属性名称
+				propertyName = descriptor.getName();
+				if (!StringUtils.equalsIgnoreCase(propertyName, "class")) {
+					Method readMethod = descriptor.getReadMethod();
+					// 获取 属性值
+					Object result = readMethod.invoke(bean, new Object[0]);
+					if ("null".equalsIgnoreCase(String.valueOf(result))
+							|| StringUtils.isBlank(String.valueOf(result))) {
+						result = "";
+					}
+					if (convertType == 1) {
+						resMap.put(propertyName.toLowerCase(), result);
+					} else if (convertType == 2) {
+						resMap.put(propertyName.toUpperCase(), result);
+					} else {
+						resMap.put(propertyName, result);
+					}
+
+				}
+			} catch (IllegalAccessException e) {// 如果实例化 JavaBean 失败
+				e.printStackTrace();
+			} catch (InvocationTargetException e) { // 如果调用属性的 setter 方法失败
+				e.printStackTrace();
+			}
+		}
+		return resMap;
+	}
+
+	/**
+	 * @方法名称: BeanToMap
+	 * @方法描述: 将一个 JavaBean 对象转化为一个 Map，其中的key要小写
+	 *
+	 * @param bean
+	 *            要转化的JavaBean 对象
+	 * @return 转化出来的 Map 对象
+	 */
+	public static Map<String, Object> beanToMapByLowerCase(Object bean) {
+		try {
+			return beanToMapByConvert(bean, 1);
+		} catch (IntrospectionException e) { // 如果分析类属性失败
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * @方法名称: BeanToMap
+	 * @方法描述: 将一个 JavaBean 对象转化为一个 Map，其中的key要大写
+	 *
+	 * @param bean
+	 *            要转化的JavaBean 对象
+	 * @return 转化出来的 Map 对象
+	 */
+	public static Map<String, Object> beanToMapByUpperCase(Object bean) {
+		try {
+			return beanToMapByConvert(bean, 2);
+		} catch (IntrospectionException e) { // 如果分析类属性失败
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
 	 * @方法名称: BeanToMap
 	 * @方法描述: 将一个 JavaBean 对象转化为一个 Map
 	 *
@@ -86,36 +168,12 @@ public class MapUtilHelper extends MapUtils {
 	 * @return 转化出来的 Map 对象
 	 */
 	public static Map<String, Object> beanToMap(Object bean) {
-		Map<String, Object> resMap = new HashMap<String, Object>();
-		Class<? extends Object> type = bean.getClass();
 		try {
-			BeanInfo beanInfo = Introspector.getBeanInfo(type);
-			// 获取类属性
-			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-			for (int i = 0; i < propertyDescriptors.length; i++) {
-				PropertyDescriptor descriptor = propertyDescriptors[i];
-				// 获取Bean 各个属性名称
-				String propertyName = descriptor.getName();
-				if (!StringUtils.equalsIgnoreCase(propertyName, "class")) {
-					Method readMethod = descriptor.getReadMethod();
-					// 获取 属性值
-					Object result = readMethod.invoke(bean, new Object[0]);
-					if (!"null".equalsIgnoreCase(String.valueOf(result))
-							&& StringUtils.isNoneBlank(String.valueOf(result))) {
-						resMap.put(propertyName, result);
-					} else {
-						resMap.put(propertyName, "");
-					}
-				}
-			}
+			return beanToMapByConvert(bean, null);
 		} catch (IntrospectionException e) { // 如果分析类属性失败
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {// 如果实例化 JavaBean 失败
-			e.printStackTrace();
-		} catch (InvocationTargetException e) { // 如果调用属性的 setter 方法失败
-			e.printStackTrace();
 		}
-		return resMap;
+		return null;
 	}
 
 	/**
