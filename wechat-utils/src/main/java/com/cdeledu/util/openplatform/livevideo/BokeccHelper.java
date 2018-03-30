@@ -1,20 +1,19 @@
 package com.cdeledu.util.openplatform.livevideo;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.common.constant.ConstantHelper;
+import com.cdeledu.util.apache.collection.MapUtilHelper;
 import com.cdeledu.util.application.QvoConditionUtil;
-import com.cdeledu.util.security.SecureUtil;
+import com.cdeledu.util.openplatform.livevideo.entity.BokeCcLiveRoomEntity;
+import com.cdeledu.util.security.Md5Helper;
 import com.google.common.base.Joiner;
 
 /**
@@ -40,15 +39,18 @@ public class BokeccHelper {
 	/** 观众端直播自动登陆 */
 	private String visitorAutoLogin = VIEW_BASE_URL
 			+ "index?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
+	/** 助教(管理员)直播自动登陆 */
+	private String assistantAutoLogin = VIEW_BASE_URL
+			+ "assistant/login?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
+	/** 讲师端自动登陆 */
+	private String lecturerAutoLogin = VIEW_BASE_URL
+			+ "lecturer?roomid=%s&userid=%s&publishname=%s&publishpassword=%s";
+	/** 主持人直播自动登陆 */
+	private String manageAutoLogin = VIEW_BASE_URL
+			+ "manage?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
 	/** 观众端回放自动登陆 */
 	private String recordAutoLogin = VIEW_BASE_URL
 			+ "callback/login?recordid=%s&roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
-	/** 助教(管理员)直播自动登陆 */
-	private String assistantAutoLogin = VIEW_BASE_URL
-			+ "assistant/login?roomid=%s&userid=%s&viewername=%s&viewertoken=%s";
-	/** 观众端直播自动登陆 */
-	private String lecturerAutoLogin = VIEW_BASE_URL
-			+ "lecturer?roomid=%s&userid=%s&publishname=%s&publishpassword=%s";
 
 	/** ----------------------------------------------------- Fields end */
 	/** 直播平台帐号对应的 API Key 值 */
@@ -56,127 +58,56 @@ public class BokeccHelper {
 	/** 平台账号 */
 	private String platAccount;
 
-	public BokeccHelper(String appKey, String platAccount) {
-		this.appKey = appKey;
+	public BokeccHelper(String platAccount, String appKey) {
 		this.platAccount = platAccount;
+		this.appKey = appKey;
 	}
 
 	/**
-	 * @方法:创建直播间
-	 * @创建人:独泪了无痕
-	 * @param name
-	 *            直播间名称
-	 * @param desc
-	 *            直播间描述
-	 * @param templateType
-	 *            直播模板类型，请求模板信息接口可获得模板类型的详细信息。
-	 * @param authType
-	 *            验证方式，0：接口验证，需要填写下面的checkurl；1：密码验证，需要填写下面的playpass；2：免密码验证
-	 * @param publisherPass
-	 *            推流端密码，即讲师密码
-	 * @param assistantPass
-	 *            助教端密码
-	 * @param playPass
-	 *            播放端密码
-	 * @param checkUrl
-	 *            验证地址
-	 * @param barrage
-	 *            是否开启弹幕。0：不开启；1：开启
-	 * @param foreignPublish
-	 *            是否开启第三方推流。0：不开启；1：开启
-	 * @param openLowdelayMode
-	 *            开启直播低延时模式。0为关闭；1为开启
-	 * @param showUserCount
-	 *            在页面显示当前在线人数。0表示不显示；1表示显示
-	 * @param openHostMode
-	 *            开启主持人模式，"0"表示不开启；"1"表示开启
-	 * @param warmVideoId
-	 *            插播暖场视频，填写同一账号下云点播视频vid
-	 * @param appKey
+	 * @方法描述 : 创建直播间
+	 * @param bokeccLiveEntity
+	 * @return
 	 */
-	public String createLiveRoom(String name, String desc, int templateType, int authType,
-			String publisherPass, String assistantPass, String playPass, String checkUrl,
-			boolean barrage, boolean foreignPublish, boolean openLowdelayMode,
-			boolean showUserCount, boolean openHostMode, String warmVideoId) {
-		String param = setLiveRoomInfo(null, name, desc, templateType, authType, publisherPass,
-				assistantPass, playPass, checkUrl, barrage, foreignPublish, openLowdelayMode,
-				showUserCount, openHostMode, warmVideoId);
-		String url = API_BASE_URL + "room/create?" + param;
-		return url;
+	public String createLiveRoom(BokeCcLiveRoomEntity bokeccLiveEntity) {
+		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(bokeccLiveEntity);
+		paramMap.put("userid", platAccount);
+		return API_BASE_URL + "room/create?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法:编辑直播间
-	 * @创建人:独泪了无痕
+	 * @方法描述 : 编辑直播间的信息
 	 * @param roomid
-	 *            直播间id
-	 * @param userId
-	 *            用户id
-	 * @param name
-	 *            直播间名称
-	 * @param desc
-	 *            直播间描述
-	 * @param templateType
-	 *            直播模板类型，请求模板信息接口可获得模板类型的详细信息。
-	 * @param authType
-	 *            验证方式，0：接口验证，需要填写下面的checkurl；1：密码验证，需要填写下面的playpass；2：免密码验证
-	 * @param publisherPass
-	 *            推流端密码，即讲师密码
-	 * @param assistantPass
-	 *            助教端密码
-	 * @param playPass
-	 *            播放端密码
-	 * @param checkUrl
-	 *            验证地址
-	 * @param barrage
-	 *            是否开启弹幕。0：不开启；1：开启
-	 * @param foreignPublish
-	 *            是否开启第三方推流。0：不开启；1：开启
-	 * @param openLowdelayMode
-	 *            开启直播低延时模式。0为关闭；1为开启
-	 * @param showUserCount
-	 *            在页面显示当前在线人数。0表示不显示；1表示显示
-	 * @param openHostMode
-	 *            开启主持人模式，"0"表示不开启；"1"表示开启
-	 * @param warmVideoId
-	 *            插播暖场视频，填写同一账号下云点播视频vid
-	 * @param appKey
+	 * @param bokeccLiveEntity
+	 * @return
 	 */
-	public String updateLiveRoom(String roomid, String name, String desc, int templateType,
-			int authType, String publisherPass, String assistantPass, String playPass,
-			String checkUrl, boolean barrage, boolean foreignPublish, boolean openLowdelayMode,
-			boolean showUserCount, boolean openHostMode, String warmVideoId) {
-		String param = setLiveRoomInfo(roomid, name, desc, templateType, authType, publisherPass,
-				assistantPass, playPass, checkUrl, barrage, foreignPublish, openLowdelayMode,
-				showUserCount, openHostMode, warmVideoId);
-		String url = API_BASE_URL + "room/update?" + param;
-		return url;
+	public String updateLiveRoom(BokeCcLiveRoomEntity bokeccLiveEntity) {
+		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(bokeccLiveEntity);
+		paramMap.put("userid", platAccount);
+		paramMap.put("roomid", bokeccLiveEntity.getId());
+		return API_BASE_URL + "room/update?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法:关闭直播间
-	 * @创建人:独泪了无痕
-	 * @param userId
-	 *            用户id
+	 * @方法描述 : 关闭直播间
+	 * @param roomId
+	 *            直播间id
+	 * @return
 	 */
 	public String closeLiveRoom(String roomId) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("roomid", roomId);
 		paramMap.put("userid", platAccount);
-		String url = API_BASE_URL + "room/close?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "room/close?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法描述 : 获取直播间列表
-	 * @param userId
-	 *            用户id
+	 * @方法描述 : 获取用户的直播间列表信息
 	 * @param pageNum
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 */
-	public String getLiveRoomList(int pageNum, int pageIndex) {
+	public String getLiveRoomList(Integer pageNum, Integer pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -184,42 +115,38 @@ public class BokeccHelper {
 			pageIndex = 1;
 		}
 
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("pagenum", Integer.toString(pageNum));
-		paramMap.put("pageindex", Integer.toString(pageIndex));
-		String url = API_BASE_URL + "room/info?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
+		return API_BASE_URL + "room/info?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法:获取直播间信息
+	 * @方法:获取直播间的信息
 	 * @创建人:独泪了无痕
 	 * @param roomId
 	 *            直播间id
 	 */
-	public String searchLiveRoom(String roomId) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRoomInfo(String roomId) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
-		String url = API_BASE_URL + "room/search?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "room/search?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法描述 : 获取直播列表
-	 * @param roomid
-	 * @param userId
+	 * @方法描述 : 获取指定直播间下历史直播信息
+	 * @param roomId
+	 *            直播间id
 	 * @param pageNum
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
-	 * @param starttime
-	 *            查询起始时间, 精确到分钟，例："2015-01-01 12:30"
-	 * @param endtime
+	 * @param endTime
 	 *            查询截止时间,精确到分钟，例："2015-01-02 12:30"
 	 */
-	public String getLiveInfoList(String roomid, int pageNum, int pageIndex, String startTime,
+	public String getLiveVideoList(String roomId, Integer pageNum, Integer pageIndex,
 			String endTime) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -228,15 +155,13 @@ public class BokeccHelper {
 			pageIndex = 1;
 		}
 
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
-		paramMap.put("pagenum", Integer.toString(pageNum));
-		paramMap.put("pageindex", Integer.toString(pageIndex));
-		paramMap.put("starttime", startTime);
+		paramMap.put("roomid", roomId);
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
 		paramMap.put("endtime", endTime);
-		String url = API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -253,10 +178,10 @@ public class BokeccHelper {
 	 * @param endtime
 	 *            查询截止时间, 精确到分钟，例："2015-01-02 12:30"
 	 * @param liveid
-	 *            直播id
+	 *            直播id,若为空,则查询该直播下的回放信息
 	 */
-	public String getLiveRecordList(String roomid, int pageNum, int pageIndex, String startTime,
-			String endTime, String liveid) {
+	public String getLiveRecordList(String roomId, Integer pageNum, Integer pageIndex,
+			String endTime, String liveId) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -264,43 +189,39 @@ public class BokeccHelper {
 			pageIndex = 1;
 		}
 
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
-		paramMap.put("pagenum", Integer.toString(pageNum));
-		paramMap.put("pageindex", Integer.toString(pageIndex));
-		paramMap.put("starttime", startTime);
+		paramMap.put("roomid", roomId);
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
 		paramMap.put("endtime", endTime);
-		paramMap.put("liveid", liveid);
-		String url = API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("liveid", liveId);
+		return API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法:查询回放信息
+	 * @方法:获取单个回放信息
 	 * @创建人:独泪了无痕
 	 * @param recordid
 	 *            回放id
 	 * @return
 	 */
-	public String getLiveRecordsearch(String recordid) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRecordInfo(String recordId) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("recordid", recordid);
-		String url = API_BASE_URL + "v2/record/search?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("recordid", recordId);
+		return API_BASE_URL + "v2/record/search?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法:获取正在直播的直播间列表
+	 * @方法:获取用户账号下所有正在进行直播的直播间列表
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	public String getBroadcastingLiveRoom() {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveBroadcastingList() {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		String url = API_BASE_URL + "rooms/broadcasting?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "rooms/broadcasting?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -311,11 +232,10 @@ public class BokeccHelper {
 	 * @return
 	 */
 	public String getLiveRoomPublish(String roomids) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomids", roomids);
-		String url = API_BASE_URL + "rooms/publishing?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "rooms/publishing?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -330,12 +250,13 @@ public class BokeccHelper {
 	 *            查询截止时间, 精确到分钟，例："2015-01-02 12:30"
 	 * @return
 	 */
-	public String getLiveRoomConnections(String roomid) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRoomConnections(String roomId, String startTime, String endTime) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
-		String url = API_BASE_URL + "statis/connections?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("roomid", roomId);
+		paramMap.put("starttime", startTime);
+		paramMap.put("endtime", endTime);
+		return API_BASE_URL + "statis/connections?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -344,25 +265,23 @@ public class BokeccHelper {
 	 * @return
 	 */
 	public String getLiveRoomViewtemplate() {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		String url = API_BASE_URL + "viewtemplate/info?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "viewtemplate/info?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法:获取直播间代码
+	 * @方法:获取直播间的代码信息，包括观看地址信息、客户端登陆地址、助教端登录地址、推流地址(只有第三方推流用户才可以获得)
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
 	 * @return
 	 */
-	public String getLiveRoomCode(String roomid) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRoomCode(String roomId) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
-		String url = API_BASE_URL + "rooms/code?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("roomid", roomId);
+		return API_BASE_URL + "room/code?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -376,13 +295,13 @@ public class BokeccHelper {
 	 *            查询截止时间, 精确到分钟，例："2015-01-02 12:30"
 	 * @return
 	 */
-	public String getLiveRoomUseraction(String roomid, String startTime, String endTime) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRoomUseraction(String roomId, String startTime, String endTime) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
+		paramMap.put("roomid", roomId);
 		paramMap.put("starttime", startTime);
 		paramMap.put("endtime", endTime);
-		String url = API_BASE_URL + "statis/useraction?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "statis/useraction?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -393,15 +312,70 @@ public class BokeccHelper {
 	 * @return
 	 */
 	public String getLiveRoomUserView(String liveid) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("liveid", liveid);
-		String url = API_BASE_URL + "statis/userview?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "statis/userview?" + createHashedQueryString(paramMap);
 	}
 
 	/**
-	 * @方法:获取聊天信息
+	 * @方法:获取单个直播观看回放的用户登录，退出行为统计
+	 * @创建人:独泪了无痕
+	 * @param recordId
+	 *            录制id
+	 * @param pageNum
+	 *            每页显示的个数，系统默认值为50
+	 * @param pageIndex
+	 *            页码，系统默认值为1
+	 * @return
+	 */
+	public String getLiveReplayUserAction(String recordId, Integer pageIndex, Integer pageNum) {
+		if (!QvoConditionUtil.checkInteger(pageNum)) {
+			pageNum = 50;
+		}
+		if (!QvoConditionUtil.checkInteger(pageIndex)) {
+			pageIndex = 1;
+		}
+
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("userid", platAccount);
+		paramMap.put("recordid", recordId);
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
+		return API_BASE_URL + "v2/statis/replay/useraction?" + createHashedQueryString(paramMap);
+	}
+
+	/**
+	 * @方法:获取观看直播回放的用户登录，退出行为统计
+	 * @创建人:独泪了无痕
+	 * @param recordId
+	 *            录制id
+	 * @param pageNum
+	 *            每页显示的个数，系统默认值为50
+	 * @param pageIndex
+	 *            页码，系统默认值为1
+	 * @return
+	 */
+	public String getLiveReplayList(String startTime, String endTime, Integer pageIndex,
+			Integer pageNum) {
+		if (!QvoConditionUtil.checkInteger(pageNum)) {
+			pageNum = 50;
+		}
+		if (!QvoConditionUtil.checkInteger(pageIndex)) {
+			pageIndex = 1;
+		}
+
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("userid", platAccount);
+		paramMap.put("starttime", startTime);
+		paramMap.put("endtime", endTime);
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
+		return API_BASE_URL + "v2/statis/replay?" + createHashedQueryString(paramMap);
+	}
+
+	/**
+	 * @方法:分页获取直播的聊天信息
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -413,8 +387,8 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomChatmsg(String roomid, String liveid, int pageNum, int pageIndex) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRoomChatmsg(String roomId, String liveid, int pageNum, int pageIndex) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -423,12 +397,11 @@ public class BokeccHelper {
 		}
 
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
+		paramMap.put("roomid", roomId);
 		paramMap.put("liveid", liveid);
-		paramMap.put("pagenum", Integer.toString(pageNum));
-		paramMap.put("pageindex", Integer.toString(pageIndex));
-		String url = API_BASE_URL + "live/chatmsg?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
+		return API_BASE_URL + "live/chatmsg?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -444,7 +417,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomLotterys(String roomid, String liveid, int pageNum, int pageIndex) {
+	public String getLiveRoomLotterys(String roomId, String liveid, int pageNum, int pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -452,14 +425,13 @@ public class BokeccHelper {
 			pageIndex = 1;
 		}
 
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
+		paramMap.put("roomid", roomId);
 		paramMap.put("liveid", liveid);
-		paramMap.put("pagenum", Integer.toString(pageNum));
-		paramMap.put("pageindex", Integer.toString(pageIndex));
-		String url = API_BASE_URL + "live/lotterys?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
+		return API_BASE_URL + "live/lotterys?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -475,8 +447,8 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomQas(String roomid, String liveid, int pageNum, int pageIndex) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRoomQas(String roomId, String liveid, int pageNum, int pageIndex) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -484,12 +456,11 @@ public class BokeccHelper {
 			pageIndex = 1;
 		}
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
+		paramMap.put("roomid", roomId);
 		paramMap.put("liveid", liveid);
-		paramMap.put("pagenum", Integer.toString(pageNum));
-		paramMap.put("pageindex", Integer.toString(pageIndex));
-		String url = API_BASE_URL + "live/qas?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("pagenum", pageNum);
+		paramMap.put("pageindex", pageIndex);
+		return API_BASE_URL + "live/qas?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -502,12 +473,11 @@ public class BokeccHelper {
 	 * @return
 	 */
 	public String getLiveRoomRollcall(String roomid, String liveid) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomid);
 		paramMap.put("liveid", liveid);
-		String url = API_BASE_URL + "live/rollcall?" + createHashedQueryString(paramMap);
-		return url;
+		return API_BASE_URL + "live/rollcall?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -521,14 +491,13 @@ public class BokeccHelper {
 	 *            签到ID
 	 * @return
 	 */
-	public String getLiveRoomRollcallviewers(String roomid, String liveid, String rollcallid) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+	public String getLiveRoomRollcallviewers(String roomId, String liveId, String rollcallId) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", roomid);
-		paramMap.put("liveid", liveid);
-		paramMap.put("rollcallid", rollcallid);
-		String url = API_BASE_URL + "live/rollcall/viewers?" + createHashedQueryString(paramMap);
-		return url;
+		paramMap.put("roomid", roomId);
+		paramMap.put("liveid", liveId);
+		paramMap.put("rollcallid", rollcallId);
+		return API_BASE_URL + "live/rollcall/viewers?" + createHashedQueryString(paramMap);
 	}
 
 	/**
@@ -539,7 +508,7 @@ public class BokeccHelper {
 	 * @return
 	 */
 	public String getLiveRoomQuestionnaires(String liveid) {
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("liveid", liveid);
 		String url = API_BASE_URL + "live/questionnaires?" + createHashedQueryString(paramMap);
@@ -568,7 +537,7 @@ public class BokeccHelper {
 			pageIndex = 1;
 		}
 
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("liveid", liveid);
 		paramMap.put("questionnaireid", questionnaireid);
@@ -582,7 +551,7 @@ public class BokeccHelper {
 	/**
 	 * @方法描述 : 直播自动登录方式
 	 * @param visitorType
-	 *            用户类型：1:讲师;2:助教;3:游客(观众或学员);默认是3
+	 *            用户类型：1:讲师;2:助教;3:主持人;4:游客(观众或学员);默认是4
 	 * @param roomId
 	 *            直播间id
 	 * @param userId
@@ -593,25 +562,28 @@ public class BokeccHelper {
 	 *            登录检验码
 	 * @return 如果roomId 或者 userId 为空，返回结果 空
 	 */
-	public String getLiveAutoLogin(int visitorType, String roomId, String userId, String viewerName,
+	public String getLiveAutoLogin(int visitorType, String roomId, String viewerName,
 			String viewerToken) {
+		if (StringUtils.isBlank(roomId)) {
+			return "";
+		}
 		String result = "";
 
 		if (StringUtils.isBlank(viewerToken)) {
 			viewerToken = "";
 		}
 
-		if (StringUtils.isBlank(userId) || StringUtils.isBlank(roomId)) {
-			return "";
-		}
 		if (visitorType == 1) {// 讲师端自动登陆
-			result = String.format(lecturerAutoLogin, roomId, userId, viewerName, viewerToken);
+			result = String.format(lecturerAutoLogin, roomId, platAccount, viewerName, viewerToken);
 		} else if (visitorType == 2) { // 助教端自动登陆
-			result = String.format(assistantAutoLogin, roomId, userId, viewerName, viewerToken);
-		} else if (visitorType == 3) { // 观众端自动登陆
-			result = String.format(visitorAutoLogin, roomId, userId, viewerName, viewerToken);
+			result = String.format(assistantAutoLogin, roomId, platAccount, viewerName,
+					viewerToken);
+		} else if (visitorType == 3) { // 主持人自动登陆
+			result = String.format(manageAutoLogin, roomId, platAccount, viewerName, viewerToken);
+		} else if (visitorType == 4) { // 观众端自动登陆
+			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken);
 		} else {
-			result = String.format(visitorAutoLogin, roomId, userId, viewerName, viewerToken);
+			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken);
 		}
 		return result;
 	}
@@ -638,69 +610,6 @@ public class BokeccHelper {
 	}
 
 	/** ----------------------------------------------- [私有方法] */
-	private String setLiveRoomInfo(String roomid, String name, String desc, int templateType,
-			int authType, String publisherPass, String assistantPass, String playPass,
-			String checkUrl, boolean barrage, boolean foreignPublish, boolean openLowdelayMode,
-			boolean showUserCount, boolean openHostMode, String warmVideoId) {
-		Map<String, String> paramMap = new HashMap<String, String>();
-		if (StringUtils.isNotBlank(roomid)) {
-			paramMap.put("roomid", roomid);
-		}
-		paramMap.put("userid", platAccount);
-
-		paramMap.put("name", name);
-		paramMap.put("desc", desc);
-		paramMap.put("templatetype", Integer.toString(templateType));
-		paramMap.put("authtype", Integer.toString(authType));
-		paramMap.put("publisherpass", publisherPass);
-		paramMap.put("assistantpass", assistantPass);
-		if (authType == 0) {
-			paramMap.put("checkurl", checkUrl);
-		}
-
-		if (authType == 1) {
-			paramMap.put("playpass", playPass);
-		}
-
-		if (barrage) {
-			paramMap.put("barrage", Integer.toString(1));
-		} else {
-			paramMap.put("barrage", Integer.toString(0));
-		}
-
-		if (foreignPublish) {
-			paramMap.put("foreignpublish", Integer.toString(1));
-		} else {
-			paramMap.put("foreignpublish", Integer.toString(0));
-		}
-
-		if (openLowdelayMode) {
-			paramMap.put("openlowdelaymode", Integer.toString(1));
-		} else {
-			paramMap.put("openlowdelaymode", Integer.toString(0));
-		}
-
-		if (showUserCount) {
-			paramMap.put("showusercount", Integer.toString(1));
-		} else {
-			paramMap.put("showusercount", Integer.toString(0));
-		}
-
-		if (openHostMode) {
-			paramMap.put("openhostmode", Integer.toString(1));
-		} else {
-			paramMap.put("openhostmode", Integer.toString(0));
-		}
-
-		if (StringUtils.isNotBlank(warmVideoId)) {
-			paramMap.put("warmvideoid", warmVideoId);
-		} else {
-			paramMap.put("warmvideoid", "");
-		}
-
-		return createHashedQueryString(paramMap);
-	}
-
 	/**
 	 * @方法描述 : HTTP通信加密算法
 	 * @param queryMap
@@ -710,18 +619,20 @@ public class BokeccHelper {
 	 * 
 	 * @return
 	 */
-	private String createHashedQueryString(Map<String, String> paramMap) {
-		Map<String, String> queryMap = sortMapByKey(paramMap);
+	private String createHashedQueryString(Map<String, Object> paramMap) {
+		Map<String, Object> map = new TreeMap<String, Object>(paramMap);
+		Map<String, Object> queryMap = createQueryString(map);
 		String result = "", hash = "", qs = "";
 		long time = System.currentTimeMillis() / 1000;
-		try {
-			qs = Joiner.on("&").withKeyValueSeparator("=").join(queryMap);
-			hash = SecureUtil.encrypt(String.format("%s&time=%d&salt=%s", qs, time, appKey), null,
-					SecureUtil.MD5, null, 32).toUpperCase();
-			result = String.format("%s&time=%d&hash=%s", qs, time, hash);
-		} catch (Exception e) {
-			e.printStackTrace();
+		qs = Joiner.on("&").withKeyValueSeparator("=").join(queryMap);
+		if (StringUtils.isBlank(qs)) {
+			return "";
 		}
+
+		hash = Md5Helper.md5(String.format("%s&time=%d&salt=%s", qs, time, appKey), 32)
+				.toUpperCase();
+		result = String.format("%s&time=%d&hash=%s", qs, time, hash);
+
 		return result;
 	}
 
@@ -730,33 +641,33 @@ public class BokeccHelper {
 	 * @param paramMap
 	 * @return
 	 */
-	private Map<String, String> sortMapByKey(Map<String, String> paramMap) {
-		List<Map.Entry<String, String>> entryList = new ArrayList<Map.Entry<String, String>>(
-				paramMap.entrySet());
-
-		// 排序方法
-		Collections.sort(entryList, new Comparator<Map.Entry<String, String>>() {
-			@Override
-			public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
-				return (o1.getKey()).toString().compareTo(o2.getKey());
-			}
-		});
-
-		Map<String, String> sortedMap = new LinkedHashMap<String, String>();
-		Iterator<Map.Entry<String, String>> iter = entryList.iterator();
-		Map.Entry<String, String> tmpEntry = null;
+	private Map<String, Object> createQueryString(Map<String, Object> paramMap) {
+		Map<String, Object> sortedMap = new LinkedHashMap<String, Object>();
+		Iterator<Map.Entry<String, Object>> iter = paramMap.entrySet().iterator();
+		Map.Entry<String, Object> tmpEntry = null;
+		String keyOfValue = "";
 		while (iter.hasNext()) {
 			tmpEntry = iter.next();
 			try {
+				keyOfValue = String.valueOf(tmpEntry.getValue());
 				sortedMap.put(tmpEntry.getKey(),
-						URLEncoder.encode(tmpEntry.getValue(), ConstantHelper.UTF_8.name()));
+						URLEncoder.encode(keyOfValue, ConstantHelper.UTF_8.name()));
 			} catch (Exception e) {
-				sortedMap.put(tmpEntry.getKey(), tmpEntry.getValue());
+				sortedMap.put(tmpEntry.getKey(), keyOfValue);
 			}
 
 		}
 		return sortedMap;
 	}
 
-	/** ----------------------------------------------- [私有方法] */
+	/**
+	 * ----------------------------------------------- [私有方法]
+	 * 
+	 * @throws Exception
+	 */
+
+	public static void main(String[] args) throws Exception {
+		// String platAccount = "3796854BCEEBFF20";
+		// String appKey = "cjWFUuZ4rZtCbRT2tcZJB1CUbX8B07zj";
+	}
 }
