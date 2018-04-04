@@ -45,42 +45,55 @@ public class GenseeHelper {
 		trainingUrl = String.format(trainingUrl, domain);
 	}
 
+	/***
+	 * @方法:鉴权
+	 * @创建人:独泪了无痕
+	 * @param paramMap
+	 * @return
+	 */
+	private Map<String, Object> getCommon(Map<String, Object> paramMap) {
+		paramMap.put("loginName", loginName);
+		paramMap.put("password", password);
+		paramMap.put("sec", sec);
+		return paramMap;
+	}
+
 	/**
 	 * @方法:创建实时课堂
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-0">创建实时课堂</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-0">
+	 *      创建实时课堂</a>
 	 * @创建人:独泪了无痕
 	 * @param trainingRoom
 	 * @return
 	 */
 	public String createTrainingRoom(TrainingRoomRequest trainingRoom) {
 		Map<String, Object> paramMap = MapUtilHelper.beanToMap(trainingRoom);
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "room/created?" + params;
 	}
 
 	/**
 	 * @方法:根据课堂ID修改实时课堂设置
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-1">修改实时课堂</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-1">
+	 *      修改实时课堂</a>
 	 * @创建人:独泪了无痕
 	 * @param trainingRoom
 	 * @return
 	 */
 	public String modifyTrainingRoom(TrainingRoomRequest trainingRoom) {
 		Map<String, Object> paramMap = MapUtilHelper.beanToMap(trainingRoom);
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("id", trainingRoom.getRoomId());
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "room/modify?" + params;
 	}
 
 	/**
 	 * @方法:根据课堂ID删除实时课堂
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-1">删除实时课堂</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-1">
+	 *      删除实时课堂</a>
 	 * @创建人:独泪了无痕
 	 * @param roomId
 	 *            实时课堂主题ID
@@ -88,17 +101,16 @@ public class GenseeHelper {
 	 */
 	public String deletedTrainingRoom(String roomId) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("roomId", roomId);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "room/deleted?" + params;
 	}
 
 	/**
 	 * @方法:根据课堂ID获取课堂详细信息
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-3">获取课堂信息</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-3">
+	 *      获取课堂信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomId
 	 *            实时课堂主题ID
@@ -106,17 +118,16 @@ public class GenseeHelper {
 	 */
 	public String getTrainingRoom(String roomId) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("roomId", roomId);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "room/info?" + params;
 	}
 
 	/**
 	 * @方法:根据课堂ID获取录制好的所有课件
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-4">获取课堂录制下的所有课件</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-4">
+	 *      获取课堂录制下的所有课件</a>
 	 * @创建人:独泪了无痕
 	 * @param roomId
 	 *            实时课堂主题ID
@@ -124,17 +135,16 @@ public class GenseeHelper {
 	 */
 	public String getTrainingCourseList(String roomId) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("roomId", roomId);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "courseware/list?" + params;
 	}
 
 	/**
 	 * @方法:根据课件ID获取课件的详细信息
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-5">获取课件详细信息</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-5">
+	 *      获取课件详细信息</a>
 	 * @创建人:独泪了无痕
 	 * @param coursewareId
 	 *            课件ID
@@ -142,17 +152,16 @@ public class GenseeHelper {
 	 */
 	public String getTrainingCourseInfo(String coursewareId) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("coursewareId", coursewareId);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "courseware/info?" + params;
 	}
 
 	/**
 	 * @方法:根据课件ID修改课件的基本属性
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-6">修改课件</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-6">
+	 *      修改课件</a>
 	 * @创建人:独泪了无痕
 	 * @param coursewareId
 	 *            课件ID
@@ -160,16 +169,15 @@ public class GenseeHelper {
 	 */
 	public String modifyTrainingCourseInfo(TrainingCourseware trainingCourseware) {
 		Map<String, Object> paramMap = MapUtilHelper.beanToMap(trainingCourseware);
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "courseware/modify?" + params;
 	}
 
 	/**
 	 * @方法:根据课件ID删除课件
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-7">删除课件</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-7">
+	 *      删除课件</a>
 	 * @创建人:独泪了无痕
 	 * @param coursewareId
 	 *            课件ID
@@ -177,17 +185,16 @@ public class GenseeHelper {
 	 */
 	public String deletedTrainingCourseInfo(String coursewareId) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("coursewareId", coursewareId);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "courseware/deleted?" + params;
 	}
 
 	/**
 	 * @方法:创建老师，老师主要起到调用接口所需要的账号作用
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-8">创建老师</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-8">
+	 *      创建老师</a>
 	 * @创建人:独泪了无痕
 	 * @param teacherLoginName
 	 *            登录名(长度：1-40)
@@ -197,18 +204,17 @@ public class GenseeHelper {
 	 */
 	public String createTrainingTeacher(String teacherLoginName, String teacherPassword) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("teacherLoginName", teacherLoginName);
 		paramMap.put("teacherPassword", teacherPassword);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "teacher/created?" + params;
 	}
 
 	/**
 	 * @方法:分页获取本站点保存的录制件数据。每页50条数据
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-9">分页同步录制件数据</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-9">
+	 *      分页同步录制件数据</a>
 	 * @创建人:独泪了无痕
 	 * @param pageNo
 	 *            指定第几页，默认为1
@@ -220,19 +226,18 @@ public class GenseeHelper {
 	 */
 	public String synTrainingRecord(int pageNo, String startTime, String endTime) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("pageNo", pageNo);
 		paramMap.put("startTime", startTime);
 		paramMap.put("endTime", endTime);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "record/syn?" + params;
 	}
 
 	/**
 	 * @方法:分页获取本站点中的课件数据。每页最大返回50条数据
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-10">分页同步课件数据</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-10">
+	 *      分页同步课件数据</a>
 	 * @创建人:独泪了无痕
 	 * @param pageNo
 	 *            指定第几页，默认为1
@@ -244,34 +249,33 @@ public class GenseeHelper {
 	 */
 	public String synTrainingCourseware(int pageNo, String startTime, String endTime) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("pageNo", pageNo);
 		paramMap.put("startTime", startTime);
 		paramMap.put("endTime", endTime);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "courseware/syn?" + params;
 	}
-	
+
 	/**
 	 * @方法:根据开始时间和结束时间，获取加入时间在此区域的学生参课记录,注意：开始时间和结束时间间隔不能超过7天
-	 * @see <a href="www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-17">导出课堂参会记录</a>
+	 * @see <a href=
+	 *      "www.gensee.com/doc_59d6bba8768611e7929d6b39db9e86c6.html?pos=toc-3-17">
+	 *      导出课堂参会记录</a>
 	 * @创建人:独泪了无痕
-	 * @param roomId 课堂ID
-	 * @param startTime 开始时间
-	 * @param endTime 结束时间
+	 * @param roomId
+	 *            课堂ID
+	 * @param startTime
+	 *            开始时间
+	 * @param endTime
+	 *            结束时间
 	 * @return
 	 */
 	public String getTrainingUserHistory(String roomId, String startTime, String endTime) {
 		Map<String, Object> paramMap = Maps.newConcurrentMap();
-		paramMap.put("loginName", loginName);
-		paramMap.put("password", password);
-		paramMap.put("sec", sec);
 		paramMap.put("roomId", roomId);
 		paramMap.put("startTime", startTime);
 		paramMap.put("endTime", endTime);
-		String params = Joiner.on("&").withKeyValueSeparator("=").join(paramMap);
+		String params = Joiner.on("&").withKeyValueSeparator("=").join(getCommon(paramMap));
 		return trainingUrl + "courseware/syn?" + params;
 	}
 }
