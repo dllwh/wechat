@@ -35,7 +35,7 @@ final class SecurityTokenHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static final String ENCODING = "UTF-8";
 	private final static String SEPARATOR = "&";
-	final static String ALGORITHM = "HmacSHA1";
+	private final static String ALGORITHM = "HmacSHA1";
 	/** 用户的访问服务所用的密钥,用于标识访问者的身份 */
 	private String accessKeyId;
 	/** 用于加密签名、验证签名字符串的密钥 */
@@ -57,7 +57,6 @@ final class SecurityTokenHelper {
 	 *            用户的访问服务所用的密钥ID
 	 * @param apiVersion
 	 *            API版本号，为日期形式：YYYY-MM-DD，不同产品的API版本号不一样
-	 * @throws UnsupportedEncodingException
 	 * @throws NoSuchAlgorithmException
 	 * @throws InvalidKeyException
 	 */
@@ -103,7 +102,7 @@ final class SecurityTokenHelper {
 			// paramsMap.put("Signature",
 			// percentEncode(getSignature(stringToSign.toString())));
 
-			urlSeq.append("https://rds.aliyuncs.com/").append("?Signature=")
+			urlSeq.append("Signature=")
 					.append(percentEncode(getSignature(stringToSign.toString())));
 			for (String key : sortedKeys) {
 				urlSeq.append("&").append(key).append("=").append(paramsMap.get(key));
