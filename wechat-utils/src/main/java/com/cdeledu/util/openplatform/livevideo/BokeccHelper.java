@@ -1,6 +1,7 @@
 package com.cdeledu.util.openplatform.livevideo;
 
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
+import com.cdeledu.util.apache.lang.DateUtilHelper;
 import com.cdeledu.util.application.QvoConditionUtil;
 import com.cdeledu.util.openplatform.livevideo.entity.BokeCcLiveRoomEntity;
 import com.cdeledu.util.security.Md5Helper;
@@ -167,7 +169,10 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		paramMap.put("endtime", endTime);
+		if(StringUtils.isNotBlank(endTime)){
+			paramMap.put("endtime", endTime);
+		}
+		
 		return API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
 	}
 
@@ -202,8 +207,12 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		paramMap.put("endtime", endTime);
-		paramMap.put("liveid", liveId);
+		if(StringUtils.isNotBlank(endTime)){			
+			paramMap.put("endtime", endTime);
+		}
+		if(StringUtils.isNotBlank(liveId)){
+			paramMap.put("liveid", liveId);
+		}
 		return API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
 	}
 
@@ -269,8 +278,12 @@ public class BokeccHelper {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
-		paramMap.put("starttime", startTime);
-		paramMap.put("endtime", endTime);
+		if(StringUtils.isNotBlank(startTime)){
+			paramMap.put("starttime", startTime);
+		}
+		if(StringUtils.isNotBlank(endTime)){
+			paramMap.put("endtime", endTime);
+		}
 		return API_BASE_URL + "statis/connections?" + createHashedQueryString(paramMap);
 	}
 
@@ -382,7 +395,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveReplayList(String startTime, String endTime, Integer pageIndex,
+	public String getLiveReplayList(Date startTime, Date endTime, Integer pageIndex,
 			Integer pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -393,8 +406,8 @@ public class BokeccHelper {
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("starttime", startTime);
-		paramMap.put("endtime", endTime);
+		paramMap.put("starttime", DateUtilHelper.formatDate(startTime, "yyyy-MM-dd HH:mm"));
+		paramMap.put("endtime", DateUtilHelper.formatDate(startTime, "yyyy-MM-dd HH:mm"));
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
 		return API_BASE_URL + "v2/statis/replay?" + createHashedQueryString(paramMap);
