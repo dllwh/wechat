@@ -1,7 +1,6 @@
 package com.cdeledu.util.openplatform.alibaba.aliyun;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -9,14 +8,13 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
+import com.aliyuncs.auth.AcsURLEncoder;
+import com.aliyuncs.auth.ShaHmac1;
 import com.aliyuncs.utils.ParameterHelper;
 
+// import com.cdeledu.util.openplatform.alibaba.constant.ParameterHelper;
 /**
  * 
  * 把今天最好的表现当作明天最新的起点．．～
@@ -33,9 +31,7 @@ import com.aliyuncs.utils.ParameterHelper;
  */
 final class SecurityTokenHelper {
 	/** ----------------------------------------------------- Fields start */
-	private static final String ENCODING = "UTF-8";
 	private final static String SEPARATOR = "&";
-	private final static String ALGORITHM = "HmacSHA1";
 	/** 用户的访问服务所用的密钥,用于标识访问者的身份 */
 	private String accessKeyId;
 	/** 用于加密签名、验证签名字符串的密钥 */
@@ -71,58 +67,60 @@ final class SecurityTokenHelper {
 		paramsMap.put("Version", apiVersion);// API版本号
 		paramsMap.put("AccessKeyId", accessKeyId);// 用户的访问服务所用的密钥ID
 		paramsMap.put("SignatureMethod", "HMAC-SHA1");// 签名方式
-		paramsMap.put("Timestamp", ParameterHelper.getISO8601Time(new Date())); // 请求的时间戳
+		paramsMap.put("Timestamp", ParameterHelper.getISO8601Time(new Date())); // 请求的时间戳,日期格式按照ISO8601标准表示，并需要使用UTC时间
 		paramsMap.put("SignatureVersion", "1.0");// 签名算法版本
 		paramsMap.put("SignatureNonce", UUID.randomUUID().toString());// 唯一随机数
 
-		// 对参数进行排序，注意严格区分大小写
-		String[] sortedKeys = paramsMap.keySet().toArray(new String[] {});
-		Arrays.sort(sortedKeys);
-
 		StringBuilder urlSeq = new StringBuilder();
 
-		StringBuilder canonicalizedQueryString = new StringBuilder();
 		try {
+			/**
+			 * ㈠ 对请求进行签名处理
+			 */
+			StringBuilder canonicalizedQueryString = new StringBuilder();
+			// 1、使用请求参数构造规范化的请求字符串
+			// 1.1、按照参数名称的字典顺序对请求中所有的请求参数进行排序，注意严格区分大小写
+			String[] sortedKeys = paramsMap.keySet().toArray(new String[] {});
+			Arrays.sort(sortedKeys);
 			for (String key : sortedKeys) {
-				// 这里注意对key和value进行转码
-				canonicalizedQueryString.append(SEPARATOR).append(percentEncode(key)).append("=")
-						.append(percentEncode(paramsMap.get(key)));
+				// 1.2、对每个请求参数的名称和值进行编码名称和值要使用UTF-8字符集进行URL编码
+				// 1.3、对编码后的参数名称和值使用英文等号（=）进行连接
+				// 1.4、再把英文等号连接得到的字符串按参数名称的字典顺序依次使用&符号连接
+				canonicalizedQueryString.append(SEPARATOR).append(AcsURLEncoder.percentEncode(key))
+						.append("=").append(AcsURLEncoder.percentEncode(paramsMap.get(key)));
 			}
 
-			// 生成stringToSign字符串
+			/**
+			 * ㈡ 构造用于计算签名的字符串
+			 */
 			StringBuilder stringToSign = new StringBuilder();
-			stringToSign.append(httpMethod);
+			stringToSign.append(httpMethod);// 提交请求用的HTTP方法，比GET
 			stringToSign.append(SEPARATOR);
-			stringToSign.append(percentEncode("/"));
+			stringToSign.append(AcsURLEncoder.percentEncode("/"));// 按照URL编码规则对字符“/”进行编码
 			stringToSign.append(SEPARATOR);
 			// 这里注意对canonicalizedQueryString 进行编码
-			stringToSign.append(percentEncode(canonicalizedQueryString.toString().substring(1)));
+			stringToSign.append(
+					AcsURLEncoder.percentEncode(canonicalizedQueryString.toString().substring(1)));
 
-			// 签名结果串
-			// paramsMap.put("Signature",
-			// percentEncode(getSignature(stringToSign.toString())));
-
-			urlSeq.append("Signature=")
-					.append(percentEncode(getSignature(stringToSign.toString())));
+			/**
+			 * ㈢ 按照RFC2104的定义，使用上面的用于签名的字符串计算签名HMAC值
+			 */
+			/**
+			 * ㈣ 按照Base64编码规则把上面的HMAC值编码成字符串，即得到签名值
+			 */
+			String signature =getSignature(stringToSign.toString()); 
+			/**
+			 * ㈤ 将得到的签名值作为Signature参数添加到请求参数中，即完成对请求签名的过程
+			 */
+			urlSeq.append("Signature=").append(AcsURLEncoder.percentEncode(signature));
 			for (String key : sortedKeys) {
 				urlSeq.append("&").append(key).append("=").append(paramsMap.get(key));
 			}
-
 		} catch (UnsupportedEncodingException exp) {
 			throw new RuntimeException("UTF-8 encoding is not supported.");
 		}
 		return urlSeq.toString();
 		// return Joiner.on("&").withKeyValueSeparator("=").join(paramsMap);
-	}
-
-	/**
-	 * @方法描述 : 编码规则
-	 * @param queryString
-	 * @return
-	 */
-	private String percentEncode(String value) throws UnsupportedEncodingException {
-		return value != null ? URLEncoder.encode(value, ENCODING).replace("+", "%20")
-				.replace("*", "%2A").replace("%7E", "~") : null;
 	}
 
 	/**
@@ -132,10 +130,14 @@ final class SecurityTokenHelper {
 	private String getSignature(String stringToSign)
 			throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
 		String urlSecretkey = accessKeySecret + SEPARATOR;
-		Mac mac = Mac.getInstance(ALGORITHM);
-		mac.init(new SecretKeySpec(urlSecretkey.getBytes(ENCODING), ALGORITHM));
-		byte[] signData = mac.doFinal(stringToSign.getBytes(ENCODING));
-		return new String(Base64.encodeBase64(signData));
+		return new ShaHmac1().signString(stringToSign, urlSecretkey);
+		// Mac mac = Mac.getInstance(ALGORITHM);
+		// SecretKeySpec signingKey = new
+		// SecretKeySpec(urlSecretkey.getBytes(ENCODING), ALGORITHM);
+		// mac.init(signingKey);
+		// byte[] signData = mac.doFinal(stringToSign.getBytes(ENCODING));
+		// return Base64Helper.encode(signData);
+		// return new String(Base64.encodeBase64(signData));
 		// return DatatypeConverter.printBase64Binary(signData);
 	}
 }
