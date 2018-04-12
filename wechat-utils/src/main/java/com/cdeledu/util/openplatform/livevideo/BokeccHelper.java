@@ -155,7 +155,7 @@ public class BokeccHelper {
 	 * @param endTime
 	 *            查询截止时间,精确到分钟，例："2015-01-02 12:30"
 	 */
-	public String getLiveVideoList(String roomId, Integer pageNum, Integer pageIndex,
+	public String getLiveRoomHistory(String roomId, Integer pageNum, Integer pageIndex,
 			String endTime) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
