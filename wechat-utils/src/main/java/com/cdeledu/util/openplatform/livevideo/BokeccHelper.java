@@ -40,7 +40,7 @@ public class BokeccHelper {
 	private final static String VIEW_BASE_URL = "https://view.csslcloud.net/api/view/";
 	/** 观众端直播自动登陆 */
 	private String visitorAutoLogin = VIEW_BASE_URL
-			+ "index?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
+			+ "index?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s&viewercustomua=%s";
 	/** 助教(管理员)直播自动登陆 */
 	private String assistantAutoLogin = VIEW_BASE_URL
 			+ "assistant/login?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
@@ -52,7 +52,7 @@ public class BokeccHelper {
 			+ "manage?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
 	/** 观众端回放自动登陆 */
 	private String recordAutoLogin = VIEW_BASE_URL
-			+ "callback/login?recordid=%s&roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
+			+ "callback/login?recordid=%s&roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s&viewercustomua=%s";
 
 	/** ----------------------------------------------------- Fields end */
 	/** 直播平台帐号对应的 API Key 值 */
@@ -169,10 +169,10 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		if(StringUtils.isNotBlank(endTime)){
+		if (StringUtils.isNotBlank(endTime)) {
 			paramMap.put("endtime", endTime);
 		}
-		
+
 		return API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
 	}
 
@@ -207,10 +207,10 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		if(StringUtils.isNotBlank(endTime)){			
+		if (StringUtils.isNotBlank(endTime)) {
 			paramMap.put("endtime", endTime);
 		}
-		if(StringUtils.isNotBlank(liveId)){
+		if (StringUtils.isNotBlank(liveId)) {
 			paramMap.put("liveid", liveId);
 		}
 		return API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
@@ -278,10 +278,10 @@ public class BokeccHelper {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
-		if(StringUtils.isNotBlank(startTime)){
+		if (StringUtils.isNotBlank(startTime)) {
 			paramMap.put("starttime", startTime);
 		}
-		if(StringUtils.isNotBlank(endTime)){
+		if (StringUtils.isNotBlank(endTime)) {
 			paramMap.put("endtime", endTime);
 		}
 		return API_BASE_URL + "statis/connections?" + createHashedQueryString(paramMap);
@@ -609,10 +609,12 @@ public class BokeccHelper {
 	 *            登陆用户名（自定义即可）
 	 * @param viewerToken
 	 *            登录检验码
+	 * @param viewerCustomua
+	 *            回调验证时会传递该参数
 	 * @return 如果roomId 或者 userId 为空，返回结果 空
 	 */
 	public String getLiveAutoLogin(int visitorType, String roomId, String viewerName,
-			String viewerToken) {
+			String viewerToken, String viewerCustomua) {
 		if (StringUtils.isBlank(roomId)) {
 			return "";
 		}
@@ -620,6 +622,10 @@ public class BokeccHelper {
 
 		if (StringUtils.isBlank(viewerToken)) {
 			viewerToken = "";
+		}
+
+		if (StringUtils.isBlank(viewerCustomua)) {
+			viewerCustomua = "";
 		}
 
 		if (visitorType == 1) {// 讲师端自动登陆
@@ -630,9 +636,11 @@ public class BokeccHelper {
 		} else if (visitorType == 3) { // 主持人自动登陆
 			result = String.format(manageAutoLogin, roomId, platAccount, viewerName, viewerToken);
 		} else if (visitorType == 4) { // 观众端自动登陆
-			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken);
+			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken,
+					viewerCustomua);
 		} else {
-			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken);
+			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken,
+					viewerCustomua);
 		}
 		return result;
 	}
@@ -648,13 +656,22 @@ public class BokeccHelper {
 	 *            登陆用户名（自定义即可）
 	 * @param viewerToken
 	 *            登录检验码
+	 * @param viewerCustomua
+	 *            回调验证时会传递该参数
 	 * @return 如果roomId 或者 userId 为空，返回结果 空
 	 */
 	public String getRecordAutoLogin(String roomId, String recordTd, String viewerName,
-			String viewerToken) {
+			String viewerToken, String viewerCustomua) {
 		String result = "";
+		if (StringUtils.isBlank(viewerToken)) {
+			viewerToken = "";
+		}
+
+		if (StringUtils.isBlank(viewerCustomua)) {
+			viewerCustomua = "";
+		}
 		result = String.format(recordAutoLogin, recordTd, roomId, platAccount, viewerName,
-				viewerToken);
+				viewerToken, viewerCustomua);
 		return result;
 	}
 
@@ -677,7 +694,7 @@ public class BokeccHelper {
 		if (StringUtils.isBlank(qs)) {
 			return "";
 		}
-		
+
 		long time = System.currentTimeMillis() / 1000;
 
 		hash = Md5Helper.md5(String.format("%s&time=%d&salt=%s", qs, time, appKey), 32)
