@@ -1,8 +1,20 @@
-package com.cdeledu.util.openplatform.livevideo.entity;
+package com.cdeledu.util.openplatform.livevideo.entity.bokecc;
 
 import java.io.Serializable;
 
-public class BokeCcLiveEntity implements Serializable {
+/**
+ * 把今天最好的表现当作明天最新的起点．．～
+ *
+ * Today the best performance as tomorrow newest starter!
+ *
+ * @类描述: 直播间的直播状态
+ * @创建者: 皇族灬战狼
+ * @联系方式: duleilewuhen@sina.com
+ * @创建时间: 2018年4月13日 下午5:36:32
+ * @版本: V1.0
+ * @since: JDK 1.7
+ */
+public class LiveRoomPublish implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/** 0：直播未开始，1：正在直播 */
 	private String liveStatus;
@@ -47,7 +59,7 @@ public class BokeCcLiveEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "BokeccLiveEntity [liveStatus=" + liveStatus + ", startTime=" + startTime
+		return "LiveRoomPublish [liveStatus=" + liveStatus + ", startTime=" + startTime
 				+ ", liveId=" + liveId + ", roomId=" + roomId + "]";
 	}
 }

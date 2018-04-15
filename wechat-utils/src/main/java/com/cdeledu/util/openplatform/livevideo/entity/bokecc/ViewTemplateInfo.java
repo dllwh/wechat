@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.livevideo.entity;
+package com.cdeledu.util.openplatform.livevideo.entity.bokecc;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @since: JDK 1.7
  * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_22">直播间模板信息</a>
  */
-public class BokeCcViewTemplates implements Serializable {	
+public class ViewTemplateInfo implements Serializable {	
 	private static final long serialVersionUID = 1L;
 	/** 模板类型 */
 	private String type;

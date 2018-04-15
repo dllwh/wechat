@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.livevideo.entity;
+package com.cdeledu.util.openplatform.livevideo.entity.bokecc;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class BokeCcLiveRoomEntity implements Serializable {
+public class LiveRoomEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/** 直播间id */
 	private String id;

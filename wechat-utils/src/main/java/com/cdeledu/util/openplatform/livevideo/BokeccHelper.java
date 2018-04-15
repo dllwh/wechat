@@ -14,9 +14,18 @@ import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 import com.cdeledu.util.apache.lang.DateUtilHelper;
 import com.cdeledu.util.application.QvoConditionUtil;
-import com.cdeledu.util.openplatform.livevideo.entity.BokeCcLiveRoomEntity;
+import com.cdeledu.util.network.tcp.HttpURLConnHelper;
+import com.cdeledu.util.openplatform.livevideo.entity.bokecc.LiveRoomEntity;
+import com.cdeledu.util.openplatform.livevideo.model.BoKeCCApiResult;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveHistoryResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomListResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoListResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoRecordResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveViewTemplateResponse;
 import com.cdeledu.util.security.Md5Helper;
 import com.google.common.base.Joiner;
+import com.google.gson.Gson;
 
 /**
  * 
@@ -30,7 +39,7 @@ import com.google.common.base.Joiner;
  * @创建时间: 2018年3月19日 下午7:15:27
  * @版本: V1.0
  * @since: JDK 1.7
- * @see <a href="http://www.bokecc.com/">CC视频</a>
+ * @see <a href="www.bokecc.com/">CC视频</a>
  */
 public class BokeccHelper {
 	/** ----------------------------------------------------- Fields start */
@@ -65,55 +74,85 @@ public class BokeccHelper {
 		this.appKey = appKey;
 	}
 
+	private static HttpURLConnHelper connHelper = null;
+	private static Gson gsonHelper = null;
+
+	static {
+		connHelper = HttpURLConnHelper.getInstance();
+		gsonHelper = new Gson();
+	}
+
 	/**
 	 * @方法描述 : 创建直播间
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_11">创建直播间</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_11">创建直播间</a>
 	 * @param bokeccLiveEntity
 	 * @return
 	 */
-	public String createLiveRoom(BokeCcLiveRoomEntity bokeccLiveEntity) {
-		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(bokeccLiveEntity);
+	public LiveRoomResponse createLiveRoom(LiveRoomEntity liveEntity) {
+		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(liveEntity);
 		paramMap.put("userid", platAccount);
-		return API_BASE_URL + "room/create?" + createHashedQueryString(paramMap);
+
+		LiveRoomResponse response = null;
+		try {
+			String url = API_BASE_URL + "room/create?" + createHashedQueryString(paramMap);
+			response = gsonHelper.fromJson(connHelper.sendGetRequest(url), LiveRoomResponse.class);
+		} catch (Exception lvlre) {
+			lvlre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法描述 : 编辑直播间的信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_12">编辑直播间</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_12">编辑直播间</a>
 	 * @param roomid
 	 * @param bokeccLiveEntity
 	 * @return
 	 */
-	public String updateLiveRoom(BokeCcLiveRoomEntity bokeccLiveEntity) {
-		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(bokeccLiveEntity);
+	public BoKeCCApiResult updateLiveRoom(LiveRoomEntity liveEntity) {
+		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(liveEntity);
 		paramMap.put("userid", platAccount);
-		paramMap.put("roomid", bokeccLiveEntity.getId());
-		return API_BASE_URL + "room/update?" + createHashedQueryString(paramMap);
+		paramMap.put("roomid", liveEntity.getId());
+		BoKeCCApiResult response = null;
+		try {
+			String url = API_BASE_URL + "room/update?" + createHashedQueryString(paramMap);
+			response = gsonHelper.fromJson(connHelper.sendGetRequest(url), BoKeCCApiResult.class);
+		} catch (Exception lvlre) {
+			lvlre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法描述 : 关闭直播间
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_13">关闭直播间</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_13">关闭直播间</a>
 	 * @param roomId
 	 *            直播间id
 	 * @return
 	 */
-	public String closeLiveRoom(String roomId) {
+	public BoKeCCApiResult closeLiveRoom(String roomId) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("roomid", roomId);
 		paramMap.put("userid", platAccount);
-		return API_BASE_URL + "room/close?" + createHashedQueryString(paramMap);
+		BoKeCCApiResult response = null;
+		try {
+			String url = API_BASE_URL + "room/close?" + createHashedQueryString(paramMap);
+			response = gsonHelper.fromJson(connHelper.sendGetRequest(url), BoKeCCApiResult.class);
+		} catch (Exception lvlre) {
+			lvlre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法描述 : 获取用户的直播间列表信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_14">获取直播间列表</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_14">获取直播间列表</a>
 	 * @param pageNum
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 */
-	public String getLiveRoomList(Integer pageNum, Integer pageIndex) {
+	public LiveRoomListResponse getLiveRoomList(Integer pageNum, Integer pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -125,27 +164,44 @@ public class BokeccHelper {
 		paramMap.put("userid", platAccount);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		return API_BASE_URL + "room/info?" + createHashedQueryString(paramMap);
+
+		LiveRoomListResponse response = null;
+		try {
+			String url = API_BASE_URL + "room/info?" + createHashedQueryString(paramMap);
+			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+					LiveRoomListResponse.class);
+		} catch (Exception lvlre) {
+			lvlre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法:获取直播间的信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_15">获取直播间的信息
-	 *      </a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_15">获取直播间的信息 </a>
 	 * @创建人:独泪了无痕
 	 * @param roomId
 	 *            直播间id
 	 */
-	public String getLiveRoomInfo(String roomId) {
+	public LiveRoomListResponse getLiveRoomInfo(String roomId) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
-		return API_BASE_URL + "room/search?" + createHashedQueryString(paramMap);
+
+		LiveRoomListResponse response = null;
+		try {
+			String url = API_BASE_URL + "room/search?" + createHashedQueryString(paramMap);
+			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+					LiveRoomListResponse.class);
+		} catch (Exception lvlre) {
+			lvlre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法描述 : 获取指定直播间下历史直播信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_16">获取直播列表</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_16">获取直播列表</a>
 	 * @param roomId
 	 *            直播间id
 	 * @param pageNum
@@ -155,7 +211,7 @@ public class BokeccHelper {
 	 * @param endTime
 	 *            查询截止时间,精确到分钟，例："2015-01-02 12:30"
 	 */
-	public String getLiveRoomHistory(String roomId, Integer pageNum, Integer pageIndex,
+	public LiveHistoryResponse getLiveRoomHistory(String roomId, int pageNum, int pageIndex,
 			String endTime) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -173,12 +229,20 @@ public class BokeccHelper {
 			paramMap.put("endtime", endTime);
 		}
 
-		return API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
+		LiveHistoryResponse response = null;
+		try {
+			String url = API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
+			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+					LiveHistoryResponse.class);
+		} catch (Exception lvlre) {
+			lvlre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法:获取回放列表的信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_17">查询回放列表</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_17">查询回放列表</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -193,7 +257,7 @@ public class BokeccHelper {
 	 * @param liveid
 	 *            直播id,若为空,则查询该直播下的回放信息
 	 */
-	public String getLiveRecordList(String roomId, Integer pageNum, Integer pageIndex,
+	public LiveVideoListResponse getLiveRecordList(String roomId, int pageNum, int pageIndex,
 			String endTime, String liveId) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -213,28 +277,56 @@ public class BokeccHelper {
 		if (StringUtils.isNotBlank(liveId)) {
 			paramMap.put("liveid", liveId);
 		}
-		return API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
+
+		LiveVideoListResponse response = null;
+		try {
+			String url = API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
+			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+					LiveVideoListResponse.class);
+			if (response.ifSuccess()) {
+				return response;
+			} else {
+				throw new RuntimeException("异常堆栈信息轨迹：" + response.getReason());
+			}
+		} catch (Exception lvlre) {
+			lvlre.printStackTrace();
+		}
+
+		return response;
+
 	}
 
 	/**
 	 * @方法:获取单个回放信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_18">查询回放信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_18">查询回放信息</a>
 	 * @创建人:独泪了无痕
 	 * @param recordid
 	 *            回放id
 	 * @return
 	 */
-	public String getLiveRecordInfo(String recordId) {
+	public LiveVideoRecordResponse getLiveRecordInfo(String recordId) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("recordid", recordId);
-		return API_BASE_URL + "v2/record/search?" + createHashedQueryString(paramMap);
+		LiveVideoRecordResponse response = null;
+		try {
+			String result = connHelper.sendGetRequest(
+					API_BASE_URL + "v2/record/search?" + createHashedQueryString(paramMap));
+			response = gsonHelper.fromJson(result, LiveVideoRecordResponse.class);
+			if (response.ifSuccess()) {
+				return response;
+			} else {
+				throw new RuntimeException("异常堆栈信息轨迹：" + response.getReason());
+			}
+		} catch (Exception lvre) {
+			lvre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法:获取用户账号下所有正在进行直播的直播间列表
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_19">
-	 *      获取正在直播的直播间列表</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_19"> 获取正在直播的直播间列表</a>
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
@@ -246,8 +338,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间直播状态
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_20">获取直播间直播状态
-	 *      </a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_20">获取直播间直播状态 </a>
 	 * @创建人:独泪了无痕
 	 * @param roomids
 	 *            直播间id（以英文逗号,区分)，批量查询直播间数量不能超过100个
@@ -263,8 +354,7 @@ public class BokeccHelper {
 	/**
 	 * 
 	 * @方法:获取直播间的连接数统计信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_21">获取直播间连接数
-	 *      </a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_21">获取直播间连接数 </a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -289,20 +379,32 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间各模板信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_22">获取直播间模板信息
-	 *      </a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_22">获取直播间模板信息 </a>
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	public String getLiveRoomViewtemplate() {
+	public LiveViewTemplateResponse getLiveRoomViewtemplate() {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		return API_BASE_URL + "viewtemplate/info?" + createHashedQueryString(paramMap);
+		LiveViewTemplateResponse response = null;
+		try {
+			String result = connHelper.sendGetRequest(
+					API_BASE_URL + "viewtemplate/info?" + createHashedQueryString(paramMap));
+			response = gsonHelper.fromJson(result, LiveViewTemplateResponse.class);
+			if (response.ifSuccess()) {
+				return response;
+			} else {
+				throw new RuntimeException("异常堆栈信息轨迹：" + response.getReason());
+			}
+		} catch (Exception lvre) {
+			lvre.printStackTrace();
+		}
+		return response;
 	}
 
 	/**
 	 * @方法:获取直播间的代码信息，包括观看地址信息、客户端登陆地址、助教端登录地址、推流地址(只有第三方推流用户才可以获得)
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_23">获取直播间代码</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_23">获取直播间代码</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -317,8 +419,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取直播间内用户进出信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_24">
-	 *      获取直播间内用户进出信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_24"> 获取直播间内用户进出信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -339,8 +440,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取观看直播的统计信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_25">获取观看直播的统计信息
-	 *      </a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_25">获取观看直播的统计信息 </a>
 	 * @创建人:独泪了无痕
 	 * @param liveid
 	 *            直播id
@@ -355,8 +455,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取单个直播观看回放的用户登录，退出行为统计
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_26">
-	 *      获取单个直播回放的观看统计信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_26"> 获取单个直播回放的观看统计信息
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param recordId
 	 *            录制id
@@ -366,7 +466,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveReplayUserAction(String recordId, Integer pageIndex, Integer pageNum) {
+	public String getLiveReplayUserAction(String recordId, int pageIndex, int pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -384,8 +484,8 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取观看直播回放的用户登录，退出行为统计
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_27">
-	 *      获取所有直播回放的观看统计信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_27"> 获取所有直播回放的观看统计信息
+	 *      </a>
 	 * @创建人:独泪了无痕
 	 * @param recordId
 	 *            录制id
@@ -395,8 +495,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveReplayList(Date startTime, Date endTime, Integer pageIndex,
-			Integer pageNum) {
+	public String getLiveReplayList(Date startTime, Date endTime, int pageIndex, int pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -415,7 +514,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:分页获取直播的聊天信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_28">获取聊天信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_28">获取聊天信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -446,7 +545,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取抽奖信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_29">获取抽奖信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_29">获取抽奖信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -477,7 +576,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取问答信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_30">获取问答信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_30">获取问答信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -507,7 +606,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取签到信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_31">获取签到信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_31">获取签到信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -525,8 +624,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取签到用户信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_32">获取签到用户信息
-	 *      </a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_32">获取签到用户信息 </a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
@@ -547,7 +645,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取问卷信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_33">获取问卷信息</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_33">获取问卷信息</a>
 	 * @创建人:独泪了无痕
 	 * @param liveid
 	 *            直播id
@@ -562,8 +660,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法:获取用户答卷信息
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_34">获取用户答卷信息
-	 *      </a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_34">获取用户答卷信息 </a>
 	 * @创建人:独泪了无痕
 	 * @param liveid
 	 *            直播id
@@ -595,10 +692,10 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 直播自动登录方式
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_36">观众端自动登陆</a>
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_37">助教端自动登陆</a>
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_38">主持人自动登陆</a>
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_39">讲师端自动登陆</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_36">观众端自动登陆</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_37">助教端自动登陆</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_38">主持人自动登陆</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_39">讲师端自动登陆</a>
 	 * @param visitorType
 	 *            用户类型：1:讲师;2:助教;3:主持人;4:游客(观众或学员);默认是4
 	 * @param roomId
@@ -647,7 +744,7 @@ public class BokeccHelper {
 
 	/**
 	 * @方法描述 : 录播自动登录方式
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_36">观众端自动登陆</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_36">观众端自动登陆</a>
 	 * @param roomId
 	 *            直播间id
 	 * @param recordid
@@ -678,7 +775,7 @@ public class BokeccHelper {
 	/** ----------------------------------------------- [私有方法] */
 	/**
 	 * @方法描述 : HTTP通信加密算法
-	 * @see <a href="http://doc.bokecc.com/live/dev/liveapi/#toc_40">加密算法</a>
+	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_40">加密算法</a>
 	 * @param queryMap
 	 * @param time
 	 *            当前时间的 Unix 时间戳,秒数
@@ -727,12 +824,6 @@ public class BokeccHelper {
 		}
 		return sortedMap;
 	}
-
-	/**
-	 * ----------------------------------------------- [私有方法]
-	 * 
-	 * @throws Exception
-	 */
 
 	public static void main(String[] args) throws Exception {
 		// String platAccount = "3796854BCEEBFF20";
