@@ -3,8 +3,8 @@ package com.cdeledu.util.openplatform.livevideo;
 import java.util.Map;
 
 import com.cdeledu.util.apache.collection.MapUtilHelper;
-import com.cdeledu.util.openplatform.livevideo.entity.TrainingCourseware;
-import com.cdeledu.util.openplatform.livevideo.entity.TrainingRoomRequest;
+import com.cdeledu.util.openplatform.livevideo.entity.gensee.TrainingCourseware;
+import com.cdeledu.util.openplatform.livevideo.entity.gensee.TrainingRoomRequest;
 import com.cdeledu.util.security.Md5Helper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;

@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.livevideo.entity;
+package com.cdeledu.util.openplatform.livevideo.model.gensee;
 
 import java.io.Serializable;
 
