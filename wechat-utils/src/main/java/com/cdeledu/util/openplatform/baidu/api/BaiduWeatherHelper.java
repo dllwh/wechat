@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu;
+package com.cdeledu.util.openplatform.baidu.api;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -12,8 +12,8 @@ import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.appConfig.ConfigUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
-import com.cdeledu.util.openplatform.baidu.model.OneDayWeatherInfo;
-import com.cdeledu.util.openplatform.baidu.model.WeatherInfo;
+import com.cdeledu.util.openplatform.baidu.api.entity.OneDayWeatherInfo;
+import com.cdeledu.util.openplatform.baidu.api.entity.WeatherInfo;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

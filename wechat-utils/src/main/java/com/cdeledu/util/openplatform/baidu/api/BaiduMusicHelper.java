@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu;
+package com.cdeledu.util.openplatform.baidu.api;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,8 +14,8 @@ import org.dom4j.io.SAXReader;
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.network.URLEncodingUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
-import com.cdeledu.util.openplatform.baidu.model.BaiduMusic;
-import com.cdeledu.util.openplatform.baidu.model.MusicUrl;
+import com.cdeledu.util.openplatform.baidu.api.entity.BaiduMusic;
+import com.cdeledu.util.openplatform.baidu.api.entity.MusicUrl;
 
 /**
  * 

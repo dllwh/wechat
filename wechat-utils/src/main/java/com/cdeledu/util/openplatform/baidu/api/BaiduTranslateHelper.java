@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu;
+package com.cdeledu.util.openplatform.baidu.api;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;

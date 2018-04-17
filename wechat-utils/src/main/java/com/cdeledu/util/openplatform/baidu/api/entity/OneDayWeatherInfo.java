@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu.model;
+package com.cdeledu.util.openplatform.baidu.api.entity;
 
 /**
  * @ClassName: OneDayWeatherInfo
