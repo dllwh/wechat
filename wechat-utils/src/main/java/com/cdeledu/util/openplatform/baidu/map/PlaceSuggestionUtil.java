@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.cdeledu.common.network.UrlHelper;
-import com.cdeledu.util.openplatform.baidu.model.PlaceSuggestionAPI;
+import com.cdeledu.util.openplatform.baidu.map.entity.PlaceSuggestionAPI;
 
 /**
  * 

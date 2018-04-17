@@ -15,8 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.cdeledu.common.network.UrlHelper;
-import com.cdeledu.util.openplatform.baidu.model.LatitudeInfo;
-import com.cdeledu.util.openplatform.baidu.model.LocalInfo;
+import com.cdeledu.util.openplatform.baidu.map.entity.LatitudeInfo;
+import com.cdeledu.util.openplatform.baidu.map.entity.LocalInfo;
 
 class GeocodingUtil {
 	private final static String GEOCODER = "http://api.map.baidu.com/geocoder/v2/";

@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
-import com.cdeledu.util.openplatform.baidu.model.PlaceApi;
+import com.cdeledu.util.openplatform.baidu.map.entity.PlaceApi;
 
 /**
  * 
