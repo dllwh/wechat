@@ -24,17 +24,17 @@ import net.sf.json.JSONObject;
  * @date: 2015年7月17日 下午1:38:58
  * @version: V1.0
  * @since: JDK 1.7
- * @see <a href=
- *      "http://developer.baidu.com/map/index.php?title=car/api/weather">天气查询
+ * @see <a href= "developer.baidu.com/map/index.php?title=car/api/weather">天气查询
  *      </a>
  */
-class BaiduWeather {
+public class BaiduWeatherHelper {
 	/*-------------------------- 私有属性 begin -------------------------------*/
 	private final static String WEATHER = "http://api.map.baidu.com/telematics/v3/weather";
 
 	// 编码格式
 	private final static String CHARSER = ConstantHelper.UTF_8.name();
 	private static HttpURLConnHelper conn = null;
+
 	static {
 		conn = HttpURLConnHelper.getInstance(CHARSER);
 	}

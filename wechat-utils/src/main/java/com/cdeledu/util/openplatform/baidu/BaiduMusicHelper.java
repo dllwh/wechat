@@ -21,13 +21,13 @@ import com.cdeledu.util.openplatform.baidu.model.MusicUrl;
  * 
  * @ClassName: BaiduMusicService
  * @Description: 百度音乐搜索API操作类<br>
- *               http://box.zhangmen.baidu.com/x?op=12&count=1&title=歌名$$歌手
+ *               box.zhangmen.baidu.com/x?op=12&count=1&title=歌名$$歌手
  * @author: 独泪了无痕
  * @date: 2015年11月10日 上午8:12:44
- * @version: V1.0
+ * @version: V2.0
  * @since: JDK 1.7
  */
-class BaiduMusicService {
+public class BaiduMusicHelper {
 	/** -------------------------- 属性 begin ------------------------------- */
 	/** 百度音乐搜索地址 */
 	public final static String MUSIC_URL = "http://box.zhangmen.baidu.com/x?op=12&count=1&title=%s$$%s";

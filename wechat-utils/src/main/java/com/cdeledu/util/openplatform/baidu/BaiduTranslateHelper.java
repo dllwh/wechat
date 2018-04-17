@@ -27,12 +27,12 @@ import com.cdeledu.util.openplatform.baidu.constants.ResultStatus;
  * @Description: 百度翻译(调用百度翻译 API)
  * @author: 独泪了无痕
  * @date: 2015年7月17日 下午1:38:06
- * @version: V1.0
+ * @version: V2.0
  * @since: JDK 1.7
- * @see <a href="http://api.fanyi.baidu.com/api/trans/product/apidoc">API接入文档
+ * @see <a href="api.fanyi.baidu.com/api/trans/product/apidoc">API接入文档
  *      </a>
  */
-class BaiduTranslate {
+public class BaiduTranslateHelper {
 	/** -------------------------- 私有属性 begin ------------------------------- */
 	// 翻译API HTTP地址
 	private final static String BAIDU_TRANS_URL = "http://api.fanyi.baidu.com/api/trans/vip/translate";
