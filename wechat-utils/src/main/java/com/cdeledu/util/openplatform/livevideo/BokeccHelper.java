@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
-import com.cdeledu.util.apache.lang.DateUtilHelper;
 import com.cdeledu.util.application.QvoConditionUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.cdeledu.util.openplatform.livevideo.entity.bokecc.LiveRoomEntity;
@@ -191,6 +190,7 @@ public class BokeccHelper {
 		LiveRoomListResponse response = null;
 		try {
 			String url = API_BASE_URL + "room/search?" + createHashedQueryString(paramMap);
+			System.out.println(url);
 			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
 					LiveRoomListResponse.class);
 		} catch (Exception lvlre) {
@@ -204,15 +204,17 @@ public class BokeccHelper {
 	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_16">获取直播列表</a>
 	 * @param roomId
 	 *            直播间id
+	 * @param startTime
+	 *            查询起始时间,如果填写该参数则endTime参数必填
+	 * @param endTime
+	 *            查询截止时间,如果填写该参数则startTime必填；
 	 * @param pageNum
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
-	 * @param endTime
-	 *            查询截止时间,精确到分钟，例："2015-01-02 12:30"
 	 */
-	public LiveHistoryResponse getLiveRoomHistory(String roomId, int pageNum, int pageIndex,
-			String endTime) {
+	public LiveHistoryResponse getLiveRoomHistory(String roomId, String startTime, String endTime,
+			int pageNum, int pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -225,7 +227,8 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		if (StringUtils.isNotBlank(endTime)) {
+		if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+			paramMap.put("startTime", startTime);
 			paramMap.put("endtime", endTime);
 		}
 
@@ -246,19 +249,19 @@ public class BokeccHelper {
 	 * @创建人:独泪了无痕
 	 * @param roomid
 	 *            直播间id
+	 * @param startTime
+	 *            查询起始时间,如果填写该参数则endTime参数必填
+	 * @param endTime
+	 *            查询截止时间,如果填写该参数则startTime必填；
+	 * @param liveid
+	 *            直播id,若为空,则查询该直播下的回放信息
 	 * @param pageNum
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
-	 * @param starttime
-	 *            查询起始时间,精确到分钟，例："2015-01-01 12:30"
-	 * @param endtime
-	 *            查询截止时间, 精确到分钟，例："2015-01-02 12:30"
-	 * @param liveid
-	 *            直播id,若为空,则查询该直播下的回放信息
 	 */
-	public LiveVideoListResponse getLiveRecordList(String roomId, int pageNum, int pageIndex,
-			String endTime, String liveId) {
+	public LiveVideoListResponse getLiveRecordList(String roomId, String startTime, String endTime,
+			String liveId, int pageNum, int pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -271,7 +274,9 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		if (StringUtils.isNotBlank(endTime)) {
+
+		if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
+			paramMap.put("startTime", startTime);
 			paramMap.put("endtime", endTime);
 		}
 		if (StringUtils.isNotBlank(liveId)) {
@@ -281,6 +286,7 @@ public class BokeccHelper {
 		LiveVideoListResponse response = null;
 		try {
 			String url = API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
+			System.out.println(url);
 			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
 					LiveVideoListResponse.class);
 			if (response.ifSuccess()) {
@@ -368,12 +374,8 @@ public class BokeccHelper {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
-		if (StringUtils.isNotBlank(startTime)) {
-			paramMap.put("starttime", startTime);
-		}
-		if (StringUtils.isNotBlank(endTime)) {
-			paramMap.put("endtime", endTime);
-		}
+		paramMap.put("starttime", startTime);
+		paramMap.put("endtime", endTime);
 		return API_BASE_URL + "statis/connections?" + createHashedQueryString(paramMap);
 	}
 
@@ -424,9 +426,9 @@ public class BokeccHelper {
 	 * @param roomid
 	 *            直播间id
 	 * @param starttime
-	 *            查询起始时间,精确到分钟，例："2015-01-01 12:30"
+	 *            查询起始时间
 	 * @param endtime
-	 *            查询截止时间, 精确到分钟，例："2015-01-02 12:30"
+	 *            查询截止时间
 	 * @return
 	 */
 	public String getLiveRoomUseraction(String roomId, String startTime, String endTime) {
@@ -505,8 +507,8 @@ public class BokeccHelper {
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		paramMap.put("starttime", DateUtilHelper.formatDate(startTime, "yyyy-MM-dd HH:mm"));
-		paramMap.put("endtime", DateUtilHelper.formatDate(startTime, "yyyy-MM-dd HH:mm"));
+		paramMap.put("starttime", startTime);
+		paramMap.put("endtime", startTime);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
 		return API_BASE_URL + "v2/statis/replay?" + createHashedQueryString(paramMap);
