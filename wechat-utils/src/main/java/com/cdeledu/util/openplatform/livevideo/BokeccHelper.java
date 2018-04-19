@@ -1,7 +1,6 @@
 package com.cdeledu.util.openplatform.livevideo;
 
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -497,7 +496,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveReplayList(Date startTime, Date endTime, int pageIndex, int pageNum) {
+	public String getLiveReplayList(String startTime, String endTime, int pageIndex, int pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
