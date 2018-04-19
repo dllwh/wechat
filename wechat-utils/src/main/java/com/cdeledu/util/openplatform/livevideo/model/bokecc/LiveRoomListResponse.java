@@ -1,5 +1,7 @@
 package com.cdeledu.util.openplatform.livevideo.model.bokecc;
 
+import java.util.List;
+
 import com.cdeledu.util.openplatform.livevideo.entity.bokecc.LiveRoomEntity;
 import com.cdeledu.util.openplatform.livevideo.model.BoKeCCApiResult;
 
@@ -21,7 +23,7 @@ public class LiveRoomListResponse extends BoKeCCApiResult {
 	/** 直播间总数 */
 	private Integer count;
 	/** 直播间列表信息 */
-	private LiveRoomEntity rooms;
+	private List<LiveRoomEntity> rooms;
 
 	public Integer getPageIndex() {
 		return pageIndex;
@@ -39,11 +41,11 @@ public class LiveRoomListResponse extends BoKeCCApiResult {
 		this.count = count;
 	}
 
-	public LiveRoomEntity getRooms() {
+	public List<LiveRoomEntity> getRooms() {
 		return rooms;
 	}
 
-	public void setRooms(LiveRoomEntity rooms) {
+	public void setRooms(List<LiveRoomEntity> rooms) {
 		this.rooms = rooms;
 	}
 

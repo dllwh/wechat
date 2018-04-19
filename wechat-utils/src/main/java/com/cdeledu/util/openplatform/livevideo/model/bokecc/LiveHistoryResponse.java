@@ -1,5 +1,7 @@
 package com.cdeledu.util.openplatform.livevideo.model.bokecc;
 
+import java.util.List;
+
 import com.cdeledu.util.openplatform.livevideo.entity.bokecc.LiveHistory;
 import com.cdeledu.util.openplatform.livevideo.model.BoKeCCApiResult;
 
@@ -10,7 +12,7 @@ public class LiveHistoryResponse extends BoKeCCApiResult {
 	/** 直播间总数 */
 	private Integer count;
 	/** 直播间列表信息 */
-	private LiveHistory lives;
+	private List<LiveHistory> lives;
 
 	public Integer getPageIndex() {
 		return pageIndex;
@@ -28,11 +30,11 @@ public class LiveHistoryResponse extends BoKeCCApiResult {
 		this.count = count;
 	}
 
-	public LiveHistory getLives() {
+	public List<LiveHistory> getLives() {
 		return lives;
 	}
 
-	public void setLives(LiveHistory lives) {
+	public void setLives(List<LiveHistory> lives) {
 		this.lives = lives;
 	}
 
