@@ -213,7 +213,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 */
 	public LiveHistoryResponse getLiveRoomHistory(String roomId, String startTime, String endTime,
-			int pageNum, int pageIndex) {
+			Integer pageNum, Integer pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -260,7 +260,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 */
 	public LiveVideoListResponse getLiveRecordList(String roomId, String startTime, String endTime,
-			String liveId, int pageNum, int pageIndex) {
+			String liveId, Integer pageNum, Integer pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -285,7 +285,6 @@ public class BokeccHelper {
 		LiveVideoListResponse response = null;
 		try {
 			String url = API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
-			System.out.println(url);
 			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
 					LiveVideoListResponse.class);
 			if (response.ifSuccess()) {
@@ -467,7 +466,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveReplayUserAction(String recordId, int pageIndex, int pageNum) {
+	public String getLiveReplayUserAction(String recordId, Integer pageIndex, Integer pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -496,7 +495,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveReplayList(String startTime, String endTime, int pageIndex, int pageNum) {
+	public String getLiveReplayList(String startTime, String endTime, Integer pageIndex, Integer pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -507,7 +506,7 @@ public class BokeccHelper {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("starttime", startTime);
-		paramMap.put("endtime", startTime);
+		paramMap.put("endtime", endTime);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
 		return API_BASE_URL + "v2/statis/replay?" + createHashedQueryString(paramMap);
@@ -527,7 +526,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomChatmsg(String roomId, String liveid, int pageNum, int pageIndex) {
+	public String getLiveRoomChatmsg(String roomId, String liveid, Integer pageNum, Integer pageIndex) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -558,7 +557,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomLotterys(String roomId, String liveid, int pageNum, int pageIndex) {
+	public String getLiveRoomLotterys(String roomId, String liveid, Integer pageNum, Integer pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -589,7 +588,7 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomQas(String roomId, String liveid, int pageNum, int pageIndex) {
+	public String getLiveRoomQas(String roomId, String liveid, Integer pageNum, Integer pageIndex) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -674,7 +673,7 @@ public class BokeccHelper {
 	 * @return
 	 */
 	public String getLiveRoomQuestionnairesViewers(String liveid, String questionnaireid,
-			int pageIndex, int pageNum) {
+			Integer pageIndex, Integer pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
