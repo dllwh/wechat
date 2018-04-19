@@ -23,6 +23,8 @@ public class BoKeCCApiResult implements Serializable {
 	private String result;
 	/** 错误原因 */
 	private String reason;
+	/** 请求地址 */
+	private String url;
 
 	public boolean ifSuccess() {
 		if (StringUtils.isNotBlank(result) && "ok".equalsIgnoreCase(result)) {
@@ -48,9 +50,16 @@ public class BoKeCCApiResult implements Serializable {
 		this.reason = reason;
 	}
 
-	@Override
-	public String toString() {
-		return "BoKeCCApiResult [result=" + result + ", reason=" + reason + "]";
+	public String getUrl() {
+		return url;
 	}
 
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	@Override
+	public String toString() {
+		return "BoKeCCApiResult [result=" + result + ", reason=" + reason + ", url=" + url + "]";
+	}
 }

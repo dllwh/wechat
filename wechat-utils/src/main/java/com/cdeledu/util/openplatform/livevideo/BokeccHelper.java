@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
@@ -16,6 +17,7 @@ import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.cdeledu.util.openplatform.livevideo.entity.bokecc.LiveRoomEntity;
 import com.cdeledu.util.openplatform.livevideo.model.BoKeCCApiResult;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveHistoryResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomCodeResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomListResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoListResponse;
@@ -24,6 +26,7 @@ import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveViewTemplateResp
 import com.cdeledu.util.security.Md5Helper;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * 
@@ -41,6 +44,7 @@ import com.google.gson.Gson;
  */
 public class BokeccHelper {
 	/** ----------------------------------------------------- Fields start */
+	public static boolean isDebug = Logger.getLogger(BokeccHelper.class).isDebugEnabled();
 	/** 基本地址 */
 	private final static String API_BASE_URL = "http://api.csslcloud.net/api/";
 	/** 观看基本地址 */
@@ -85,18 +89,19 @@ public class BokeccHelper {
 	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_11">创建直播间</a>
 	 * @param bokeccLiveEntity
 	 * @return
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public LiveRoomResponse createLiveRoom(LiveRoomEntity liveEntity) {
+	public LiveRoomResponse createLiveRoom(LiveRoomEntity liveEntity)
+			throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(liveEntity);
 		paramMap.put("userid", platAccount);
 
-		LiveRoomResponse response = null;
-		try {
-			String url = API_BASE_URL + "room/create?" + createHashedQueryString(paramMap);
-			response = gsonHelper.fromJson(connHelper.sendGetRequest(url), LiveRoomResponse.class);
-		} catch (Exception lvlre) {
-			lvlre.printStackTrace();
-		}
+		String url = API_BASE_URL + "room/create?" + createHashedQueryString(paramMap);
+		LiveRoomResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveRoomResponse.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -106,18 +111,20 @@ public class BokeccHelper {
 	 * @param roomid
 	 * @param bokeccLiveEntity
 	 * @return
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public BoKeCCApiResult updateLiveRoom(LiveRoomEntity liveEntity) {
+	public BoKeCCApiResult updateLiveRoom(LiveRoomEntity liveEntity)
+			throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(liveEntity);
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", liveEntity.getId());
-		BoKeCCApiResult response = null;
-		try {
-			String url = API_BASE_URL + "room/update?" + createHashedQueryString(paramMap);
-			response = gsonHelper.fromJson(connHelper.sendGetRequest(url), BoKeCCApiResult.class);
-		} catch (Exception lvlre) {
-			lvlre.printStackTrace();
-		}
+
+		String url = API_BASE_URL + "room/update?" + createHashedQueryString(paramMap);
+		BoKeCCApiResult response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				BoKeCCApiResult.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -127,18 +134,19 @@ public class BokeccHelper {
 	 * @param roomId
 	 *            直播间id
 	 * @return
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public BoKeCCApiResult closeLiveRoom(String roomId) {
+	public BoKeCCApiResult closeLiveRoom(String roomId) throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("roomid", roomId);
 		paramMap.put("userid", platAccount);
-		BoKeCCApiResult response = null;
-		try {
-			String url = API_BASE_URL + "room/close?" + createHashedQueryString(paramMap);
-			response = gsonHelper.fromJson(connHelper.sendGetRequest(url), BoKeCCApiResult.class);
-		} catch (Exception lvlre) {
-			lvlre.printStackTrace();
-		}
+
+		String url = API_BASE_URL + "room/close?" + createHashedQueryString(paramMap);
+		BoKeCCApiResult response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				BoKeCCApiResult.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -149,28 +157,27 @@ public class BokeccHelper {
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public LiveRoomListResponse getLiveRoomList(Integer pageNum, Integer pageIndex) {
+	public LiveRoomListResponse getLiveRoomList(Integer pageNum, Integer pageIndex)
+			throws JsonSyntaxException, Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
 		if (!QvoConditionUtil.checkInteger(pageIndex)) {
 			pageIndex = 1;
 		}
-
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
 
-		LiveRoomListResponse response = null;
-		try {
-			String url = API_BASE_URL + "room/info?" + createHashedQueryString(paramMap);
-			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
-					LiveRoomListResponse.class);
-		} catch (Exception lvlre) {
-			lvlre.printStackTrace();
-		}
+		String url = API_BASE_URL + "room/info?" + createHashedQueryString(paramMap);
+		LiveRoomListResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveRoomListResponse.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -180,21 +187,20 @@ public class BokeccHelper {
 	 * @创建人:独泪了无痕
 	 * @param roomId
 	 *            直播间id
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public LiveRoomListResponse getLiveRoomInfo(String roomId) {
+	public LiveRoomListResponse getLiveRoomInfo(String roomId)
+			throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
 
-		LiveRoomListResponse response = null;
-		try {
-			String url = API_BASE_URL + "room/search?" + createHashedQueryString(paramMap);
-			System.out.println(url);
-			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
-					LiveRoomListResponse.class);
-		} catch (Exception lvlre) {
-			lvlre.printStackTrace();
-		}
+		String url = API_BASE_URL + "room/search?" + createHashedQueryString(paramMap);
+		LiveRoomListResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveRoomListResponse.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -211,9 +217,11 @@ public class BokeccHelper {
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
 	public LiveHistoryResponse getLiveRoomHistory(String roomId, String startTime, String endTime,
-			Integer pageNum, Integer pageIndex) {
+			Integer pageNum, Integer pageIndex) throws JsonSyntaxException, Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -231,14 +239,11 @@ public class BokeccHelper {
 			paramMap.put("endtime", endTime);
 		}
 
-		LiveHistoryResponse response = null;
-		try {
-			String url = API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
-			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
-					LiveHistoryResponse.class);
-		} catch (Exception lvlre) {
-			lvlre.printStackTrace();
-		}
+		String url = API_BASE_URL + "v2/live/info?" + createHashedQueryString(paramMap);
+		LiveHistoryResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveHistoryResponse.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -258,9 +263,12 @@ public class BokeccHelper {
 	 *            每页显示的个数，系统默认值为50
 	 * @param pageIndex
 	 *            页码，系统默认值为1
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
 	public LiveVideoListResponse getLiveRecordList(String roomId, String startTime, String endTime,
-			String liveId, Integer pageNum, Integer pageIndex) {
+			String liveId, Integer pageNum, Integer pageIndex)
+			throws JsonSyntaxException, Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -273,7 +281,6 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-
 		if (StringUtils.isNotBlank(startTime) && StringUtils.isNotBlank(endTime)) {
 			paramMap.put("startTime", startTime);
 			paramMap.put("endtime", endTime);
@@ -282,19 +289,10 @@ public class BokeccHelper {
 			paramMap.put("liveid", liveId);
 		}
 
-		LiveVideoListResponse response = null;
-		try {
-			String url = API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
-			response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
-					LiveVideoListResponse.class);
-			if (response.ifSuccess()) {
-				return response;
-			} else {
-				throw new RuntimeException("异常堆栈信息轨迹：" + response.getReason());
-			}
-		} catch (Exception lvlre) {
-			lvlre.printStackTrace();
-		}
+		String url = API_BASE_URL + "v2/record/info?" + createHashedQueryString(paramMap);
+		LiveVideoListResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveVideoListResponse.class);
+		response.setUrl(url);
 
 		return response;
 
@@ -307,24 +305,20 @@ public class BokeccHelper {
 	 * @param recordid
 	 *            回放id
 	 * @return
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public LiveVideoRecordResponse getLiveRecordInfo(String recordId) {
+	public LiveVideoRecordResponse getLiveRecordInfo(String recordId)
+			throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("recordid", recordId);
-		LiveVideoRecordResponse response = null;
-		try {
-			String result = connHelper.sendGetRequest(
-					API_BASE_URL + "v2/record/search?" + createHashedQueryString(paramMap));
-			response = gsonHelper.fromJson(result, LiveVideoRecordResponse.class);
-			if (response.ifSuccess()) {
-				return response;
-			} else {
-				throw new RuntimeException("异常堆栈信息轨迹：" + response.getReason());
-			}
-		} catch (Exception lvre) {
-			lvre.printStackTrace();
-		}
+
+		String url = API_BASE_URL + "v2/record/search?" + createHashedQueryString(paramMap);
+		LiveVideoRecordResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveVideoRecordResponse.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -337,6 +331,7 @@ public class BokeccHelper {
 	public String getLiveBroadcastingList() {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
+
 		return API_BASE_URL + "rooms/broadcasting?" + createHashedQueryString(paramMap);
 	}
 
@@ -352,6 +347,7 @@ public class BokeccHelper {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomids", roomids);
+
 		return API_BASE_URL + "rooms/publishing?" + createHashedQueryString(paramMap);
 	}
 
@@ -374,6 +370,7 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("starttime", startTime);
 		paramMap.put("endtime", endTime);
+
 		return API_BASE_URL + "statis/connections?" + createHashedQueryString(paramMap);
 	}
 
@@ -382,23 +379,19 @@ public class BokeccHelper {
 	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_22">获取直播间模板信息 </a>
 	 * @创建人:独泪了无痕
 	 * @return
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public LiveViewTemplateResponse getLiveRoomViewtemplate() {
+	public LiveViewTemplateResponse getLiveRoomViewtemplate()
+			throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
-		LiveViewTemplateResponse response = null;
-		try {
-			String result = connHelper.sendGetRequest(
-					API_BASE_URL + "viewtemplate/info?" + createHashedQueryString(paramMap));
-			response = gsonHelper.fromJson(result, LiveViewTemplateResponse.class);
-			if (response.ifSuccess()) {
-				return response;
-			} else {
-				throw new RuntimeException("异常堆栈信息轨迹：" + response.getReason());
-			}
-		} catch (Exception lvre) {
-			lvre.printStackTrace();
-		}
+
+		String url = API_BASE_URL + "viewtemplate/info?" + createHashedQueryString(paramMap);
+		LiveViewTemplateResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveViewTemplateResponse.class);
+		response.setUrl(url);
+
 		return response;
 	}
 
@@ -409,12 +402,19 @@ public class BokeccHelper {
 	 * @param roomid
 	 *            直播间id
 	 * @return
+	 * @throws Exception
 	 */
-	public String getLiveRoomCode(String roomId) {
+	public LiveRoomCodeResponse getLiveRoomCode(String roomId) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
-		return API_BASE_URL + "room/code?" + createHashedQueryString(paramMap);
+
+		String url = API_BASE_URL + "room/code?" + createHashedQueryString(paramMap);
+		LiveRoomCodeResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveRoomCodeResponse.class);
+		response.setUrl(url);
+
+		return response;
 	}
 
 	/**
@@ -435,6 +435,7 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("starttime", startTime);
 		paramMap.put("endtime", endTime);
+
 		return API_BASE_URL + "statis/useraction?" + createHashedQueryString(paramMap);
 	}
 
@@ -450,6 +451,7 @@ public class BokeccHelper {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("liveid", liveid);
+
 		return API_BASE_URL + "statis/userview?" + createHashedQueryString(paramMap);
 	}
 
@@ -479,6 +481,7 @@ public class BokeccHelper {
 		paramMap.put("recordid", recordId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
+
 		return API_BASE_URL + "v2/statis/replay/useraction?" + createHashedQueryString(paramMap);
 	}
 
@@ -495,7 +498,8 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveReplayList(String startTime, String endTime, Integer pageIndex, Integer pageNum) {
+	public String getLiveReplayList(String startTime, String endTime, Integer pageIndex,
+			Integer pageNum) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -509,6 +513,7 @@ public class BokeccHelper {
 		paramMap.put("endtime", endTime);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
+
 		return API_BASE_URL + "v2/statis/replay?" + createHashedQueryString(paramMap);
 	}
 
@@ -526,7 +531,8 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomChatmsg(String roomId, String liveid, Integer pageNum, Integer pageIndex) {
+	public String getLiveRoomChatmsg(String roomId, String liveid, Integer pageNum,
+			Integer pageIndex) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -540,6 +546,7 @@ public class BokeccHelper {
 		paramMap.put("liveid", liveid);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
+
 		return API_BASE_URL + "live/chatmsg?" + createHashedQueryString(paramMap);
 	}
 
@@ -557,7 +564,8 @@ public class BokeccHelper {
 	 *            页码，系统默认值为1
 	 * @return
 	 */
-	public String getLiveRoomLotterys(String roomId, String liveid, Integer pageNum, Integer pageIndex) {
+	public String getLiveRoomLotterys(String roomId, String liveid, Integer pageNum,
+			Integer pageIndex) {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -571,6 +579,7 @@ public class BokeccHelper {
 		paramMap.put("liveid", liveid);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
+
 		return API_BASE_URL + "live/lotterys?" + createHashedQueryString(paramMap);
 	}
 
@@ -601,6 +610,7 @@ public class BokeccHelper {
 		paramMap.put("liveid", liveid);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
+
 		return API_BASE_URL + "live/qas?" + createHashedQueryString(paramMap);
 	}
 
@@ -619,6 +629,7 @@ public class BokeccHelper {
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomid);
 		paramMap.put("liveid", liveid);
+
 		return API_BASE_URL + "live/rollcall?" + createHashedQueryString(paramMap);
 	}
 
@@ -640,6 +651,7 @@ public class BokeccHelper {
 		paramMap.put("roomid", roomId);
 		paramMap.put("liveid", liveId);
 		paramMap.put("rollcallid", rollcallId);
+
 		return API_BASE_URL + "live/rollcall/viewers?" + createHashedQueryString(paramMap);
 	}
 
@@ -687,6 +699,7 @@ public class BokeccHelper {
 		paramMap.put("questionnaireid", questionnaireid);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
+
 		return API_BASE_URL + "live/questionnaire/viewers" + createHashedQueryString(paramMap);
 	}
 
@@ -759,7 +772,6 @@ public class BokeccHelper {
 	 */
 	public String getRecordAutoLogin(String roomId, String recordTd, String viewerName,
 			String viewerToken, String viewerCustomua) {
-		String result = "";
 		if (StringUtils.isBlank(viewerToken)) {
 			viewerToken = "";
 		}
@@ -767,9 +779,8 @@ public class BokeccHelper {
 		if (StringUtils.isBlank(viewerCustomua)) {
 			viewerCustomua = "";
 		}
-		result = String.format(recordAutoLogin, recordTd, roomId, platAccount, viewerName,
+		return String.format(recordAutoLogin, recordTd, roomId, platAccount, viewerName,
 				viewerToken, viewerCustomua);
-		return result;
 	}
 
 	/** ----------------------------------------------- [私有方法] */
@@ -786,7 +797,7 @@ public class BokeccHelper {
 	private String createHashedQueryString(Map<String, Object> paramMap) {
 		Map<String, Object> map = new TreeMap<String, Object>(paramMap);
 		Map<String, Object> queryMap = createQueryString(map);
-		String result = "", hash = "", qs = "";
+		String hash = "", qs = "";
 		qs = Joiner.on("&").withKeyValueSeparator("=").join(queryMap);
 		if (StringUtils.isBlank(qs)) {
 			return "";
@@ -796,9 +807,8 @@ public class BokeccHelper {
 
 		hash = Md5Helper.md5(String.format("%s&time=%d&salt=%s", qs, time, appKey), 32)
 				.toUpperCase();
-		result = String.format("%s&time=%d&hash=%s", qs, time, hash);
 
-		return result;
+		return String.format("%s&time=%d&hash=%s", qs, time, hash);
 	}
 
 	/**
@@ -820,7 +830,6 @@ public class BokeccHelper {
 			} catch (Exception e) {
 				sortedMap.put(tmpEntry.getKey(), keyOfValue);
 			}
-
 		}
 		return sortedMap;
 	}
