@@ -19,7 +19,7 @@ import com.google.gson.Gson;
  * @since: JDK 1.7
  * @see <a href="lbsyun.baidu.com/index.php?title=webapi/ip-api"></a>
  */
-public final class BaiduMapIPHelper {
+final class BaiduMapIPHelper {
 	private static HttpURLConnHelper connHelper = null;
 	private static Gson gsonHelper = null;
 
