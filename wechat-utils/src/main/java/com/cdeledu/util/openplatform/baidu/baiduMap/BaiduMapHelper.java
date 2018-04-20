@@ -1,5 +1,7 @@
 package com.cdeledu.util.openplatform.baidu.baiduMap;
 
+import com.cdeledu.util.openplatform.baidu.baiduMap.model.IpResponse;
+
 /**
  * @类描述: 百度地图工具类(调用百度地图接口)
  * @创建者: 独泪了无痕
@@ -18,4 +20,15 @@ public class BaiduMapHelper {
 		this.ak = ak;
 	}
 
+	/**
+	 * @方法:利用IP获取大致位置
+	 * @创建人:独泪了无痕
+	 * @param ip
+	 *            IP地址
+	 * @return
+	 * @throws Exception
+	 */
+	public IpResponse getlocationByIP(String ip) throws Exception {
+		return BaiduMapIPHelper.getlocationByIP(ak, ip);
+	}
 }
