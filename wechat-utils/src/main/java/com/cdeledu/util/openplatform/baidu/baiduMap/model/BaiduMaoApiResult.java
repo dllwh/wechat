@@ -19,6 +19,8 @@ public class BaiduMaoApiResult implements Serializable {
 	private Integer status;
 	/** 错误原因 */
 	private String message;
+	/** 请求地址 */
+	private String resquestUrl;
 
 	public boolean ifSuccess() {
 		if (null != status && 0 == status) {
@@ -44,8 +46,17 @@ public class BaiduMaoApiResult implements Serializable {
 		this.message = message;
 	}
 
+	public String getResquestUrl() {
+		return resquestUrl;
+	}
+
+	public void setResquestUrl(String resquestUrl) {
+		this.resquestUrl = resquestUrl;
+	}
+
 	@Override
 	public String toString() {
-		return "BaiduMaoApiResult [status=" + status + ", message=" + message + "]";
+		return "BaiduMaoApiResult [status=" + status + ", message=" + message + ", resquestUrl="
+				+ resquestUrl + "]";
 	}
 }

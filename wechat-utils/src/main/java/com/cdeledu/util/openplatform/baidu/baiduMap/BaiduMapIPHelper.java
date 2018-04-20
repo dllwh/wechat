@@ -44,6 +44,8 @@ final class BaiduMapIPHelper {
 			ip = "";
 		}
 		String url = "http://api.map.baidu.com/location/ip?ip=" + ip + "&ak=" + ak;
-		return gsonHelper.fromJson(connHelper.sendGetRequest(url), IpResponse.class);
+		IpResponse result = gsonHelper.fromJson(connHelper.sendGetRequest(url), IpResponse.class);
+		result.setResquestUrl(url);
+		return result;
 	}
 }
