@@ -1,4 +1,4 @@
-package com.cdeledu.util.openplatform.baidu.speech;
+package com.cdeledu.util.openplatform.baidu.baiduAI.speech;
 
 /**
  * 
