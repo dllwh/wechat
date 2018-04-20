@@ -43,7 +43,7 @@ final class BaiduMapIPHelper {
 		if (StringUtils.isBlank(ip)) {
 			ip = "";
 		}
-		String url = "http://api.map.baidu.com/location/ip?ip=" + ip + "&ak=" + ak;
+		String url = "http://api.map.baidu.com/location/ip?ip=" + ip + "&ak=" + ak+"&coor=bd09ll";
 		IpResponse result = gsonHelper.fromJson(connHelper.sendGetRequest(url), IpResponse.class);
 		result.setResquestUrl(url);
 		return result;
