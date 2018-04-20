@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
@@ -19,7 +18,9 @@ import com.cdeledu.util.openplatform.livevideo.model.BoKeCCApiResult;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveHistoryResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomCodeResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomListResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomPublishResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveUserActionResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoListResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoRecordResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveViewTemplateResponse;
@@ -38,13 +39,12 @@ import com.google.gson.JsonSyntaxException;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年3月19日 下午7:15:27
- * @版本: V1.0
+ * @版本: V1.2.1
  * @since: JDK 1.7
  * @see <a href="www.bokecc.com/">CC视频</a>
  */
 public class BokeccHelper {
 	/** ----------------------------------------------------- Fields start */
-	public static boolean isDebug = Logger.getLogger(BokeccHelper.class).isDebugEnabled();
 	/** 基本地址 */
 	private final static String API_BASE_URL = "http://api.csslcloud.net/api/";
 	/** 观看基本地址 */
@@ -268,7 +268,7 @@ public class BokeccHelper {
 	 */
 	public LiveVideoListResponse getLiveRecordList(String roomId, String startTime, String endTime,
 			String liveId, Integer pageNum, Integer pageIndex)
-			throws JsonSyntaxException, Exception {
+					throws JsonSyntaxException, Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -343,12 +343,18 @@ public class BokeccHelper {
 	 *            直播间id（以英文逗号,区分)，批量查询直播间数量不能超过100个
 	 * @return
 	 */
-	public String getLiveRoomPublish(String roomids) {
+	public LiveRoomPublishResponse getLiveRoomPublish(String roomids)
+			throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomids", roomids);
 
-		return API_BASE_URL + "rooms/publishing?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "rooms/publishing?" + createHashedQueryString(paramMap);
+		LiveRoomPublishResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveRoomPublishResponse.class);
+		response.setUrl(url);
+
+		return response;
 	}
 
 	/**
@@ -428,15 +434,21 @@ public class BokeccHelper {
 	 * @param endtime
 	 *            查询截止时间
 	 * @return
+	 * @throws Exception
+	 * @throws JsonSyntaxException
 	 */
-	public String getLiveRoomUseraction(String roomId, String startTime, String endTime) {
+	public LiveUserActionResponse getLiveRoomUseraction(String roomId, String startTime,
+			String endTime) throws JsonSyntaxException, Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
 		paramMap.put("starttime", startTime);
 		paramMap.put("endtime", endTime);
-
-		return API_BASE_URL + "statis/useraction?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "statis/useraction?" + createHashedQueryString(paramMap);
+		LiveUserActionResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveUserActionResponse.class);
+		response.setUrl(url);
+		return response;
 	}
 
 	/**
