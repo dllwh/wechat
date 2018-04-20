@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 public class BaiduMaoApiResult implements Serializable {
 	private static final long serialVersionUID = 1L;
-	/** 结果状态返回码 */
+	/** 结果状态返回码， 成功返回0 */
 	private Integer status;
 	/** 错误原因 */
 	private String message;
