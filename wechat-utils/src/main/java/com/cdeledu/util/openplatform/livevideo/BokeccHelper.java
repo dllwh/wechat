@@ -51,7 +51,7 @@ public class BokeccHelper {
 	private final static String VIEW_BASE_URL = "https://view.csslcloud.net/api/view/";
 	/** 观众端直播自动登陆 */
 	private String visitorAutoLogin = VIEW_BASE_URL
-			+ "index?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s&viewercustomua=%s";
+			+ "index?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
 	/** 助教(管理员)直播自动登陆 */
 	private String assistantAutoLogin = VIEW_BASE_URL
 			+ "assistant/login?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
@@ -63,7 +63,7 @@ public class BokeccHelper {
 			+ "manage?roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
 	/** 观众端回放自动登陆 */
 	private String recordAutoLogin = VIEW_BASE_URL
-			+ "callback/login?recordid=%s&roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s&viewercustomua=%s";
+			+ "callback/login?recordid=%s&roomid=%s&userid=%s&autoLogin=true&viewername=%s&viewertoken=%s";
 
 	/** ----------------------------------------------------- Fields end */
 	/** 直播平台帐号对应的 API Key 值 */
@@ -736,7 +736,7 @@ public class BokeccHelper {
 	 * @return 如果roomId 或者 userId 为空，返回结果 空
 	 */
 	public String getLiveAutoLogin(int visitorType, String roomId, String viewerName,
-			String viewerToken, String viewerCustomua) {
+			String viewerToken) {
 		if (StringUtils.isBlank(roomId)) {
 			return "";
 		}
@@ -744,10 +744,6 @@ public class BokeccHelper {
 
 		if (StringUtils.isBlank(viewerToken)) {
 			viewerToken = "";
-		}
-
-		if (StringUtils.isBlank(viewerCustomua)) {
-			viewerCustomua = "";
 		}
 
 		if (visitorType == 1) {// 讲师端自动登陆
@@ -758,11 +754,9 @@ public class BokeccHelper {
 		} else if (visitorType == 3) { // 主持人自动登陆
 			result = String.format(manageAutoLogin, roomId, platAccount, viewerName, viewerToken);
 		} else if (visitorType == 4) { // 观众端自动登陆
-			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken,
-					viewerCustomua);
+			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken);
 		} else {
-			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken,
-					viewerCustomua);
+			result = String.format(visitorAutoLogin, roomId, platAccount, viewerName, viewerToken);
 		}
 		return result;
 	}
