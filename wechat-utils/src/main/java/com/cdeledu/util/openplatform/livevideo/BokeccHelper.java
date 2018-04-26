@@ -15,6 +15,7 @@ import com.cdeledu.util.application.QvoConditionUtil;
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 import com.cdeledu.util.openplatform.livevideo.entity.bokecc.LiveRoomEntity;
 import com.cdeledu.util.openplatform.livevideo.model.BoKeCCApiResult;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveChatMsgResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveHistoryResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomCodeResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomListResponse;
@@ -25,6 +26,7 @@ import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveUserViewResponse
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoListResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoRecordResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveViewTemplateResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.QuestionResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.ReplayUserActionsResponse;
 import com.cdeledu.util.security.Md5Helper;
 import com.google.common.base.Joiner;
@@ -509,9 +511,10 @@ public class BokeccHelper {
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 * @return
+	 * @throws Exception
 	 */
 	public String getLiveReplayList(String startTime, String endTime, Integer pageIndex,
-			Integer pageNum) {
+			Integer pageNum) throws Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -526,7 +529,11 @@ public class BokeccHelper {
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
 
-		return API_BASE_URL + "v2/statis/replay?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "v2/statis/replay?" + createHashedQueryString(paramMap);
+		ReplayUserActionsResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				ReplayUserActionsResponse.class);
+		response.setUrl(url);
+		return null;
 	}
 
 	/**
@@ -542,9 +549,10 @@ public class BokeccHelper {
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 * @return
+	 * @throws Exception
 	 */
-	public String getLiveRoomChatmsg(String roomId, String liveid, Integer pageNum,
-			Integer pageIndex) {
+	public LiveChatMsgResponse getLiveRoomChatmsg(String roomId, String liveid, Integer pageNum,
+			Integer pageIndex) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -558,8 +566,11 @@ public class BokeccHelper {
 		paramMap.put("liveid", liveid);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-
-		return API_BASE_URL + "live/chatmsg?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "live/chatmsg?" + createHashedQueryString(paramMap);
+		LiveChatMsgResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveChatMsgResponse.class);
+		response.setUrl(url);
+		return response;
 	}
 
 	/**
@@ -608,8 +619,10 @@ public class BokeccHelper {
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 * @return
+	 * @throws Exception
 	 */
-	public String getLiveRoomQas(String roomId, String liveid, Integer pageNum, Integer pageIndex) {
+	public String getLiveRoomQas(String roomId, String liveid, Integer pageNum, Integer pageIndex)
+			throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
@@ -623,7 +636,12 @@ public class BokeccHelper {
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
 
-		return API_BASE_URL + "live/qas?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "live/qas?" + createHashedQueryString(paramMap);
+		QuestionResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				QuestionResponse.class);
+		response.setUrl(url);
+		System.out.println(response);
+		return null;
 	}
 
 	/**
