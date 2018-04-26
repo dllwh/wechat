@@ -28,12 +28,12 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
  * @创建时间: 2017年3月5日 上午9:57:05
  * @版本: V1.0
  * @since: JDK 1.7
- * @see <a href="">TODO(连接内容简介)</a>
  */
 public class ChineseHelper {
 	/** ----------------------------------------------------- Fields start */
 	/** 创建汉语拼音处理类 */
 	private static final HanyuPinyinOutputFormat DEFAULTFORMAT = new HanyuPinyinOutputFormat();
+
 	static {
 		// 输出设置，大小写，音标方式
 		DEFAULTFORMAT.setCaseType(HanyuPinyinCaseType.LOWERCASE);
@@ -52,7 +52,7 @@ public class ChineseHelper {
 		// 去除重复拼音后的拼音列表
 		List<Map<String, Integer>> resultMapList = new ArrayList<Map<String, Integer>>();
 		// 用于处理每个字的多音字，去掉重复
-		Map<String, Integer> onlyOne = null;
+		Map<String, Integer> onlyOne;
 		String[] firsts = chineseStr.split("--");
 		// 读出每个汉字的拼音
 		for (String str : firsts) {
@@ -122,7 +122,7 @@ public class ChineseHelper {
 		if (str == null) {
 			return null;
 		}
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		char[] arr = str.toCharArray();
 		for (int i = 0; i < arr.length; i++) {
 			char ch = arr[i];
@@ -138,7 +138,7 @@ public class ChineseHelper {
 
 	/**
 	 * @方法描述:
-	 *        <ul>
+	 * 		<ul>
 	 *        <li>汉字转换位汉语全拼</li>
 	 *        <li>英文字符不变,特殊字符丢失,支持多音字</li>
 	 *        </ul>
@@ -157,12 +157,12 @@ public class ChineseHelper {
 	public static List<String> converterToSpell(String chinese, boolean isUpperCase)
 			throws Exception {
 		if (StringUtils.isBlank(chinese)) {
-			return null;
+			return Lists.newArrayList();
 		}
 
-		StringBuffer pinyinName = new StringBuffer();
+		StringBuilder pinyinName = new StringBuilder();
 		char[] nameChar = chinese.toCharArray();
-		String[] resultArr = null;
+		String[] resultArr;
 		for (int i = 0; i < nameChar.length; i++) {
 			if (nameChar[i] > 128) { // 非ASCII码
 				// 取得当前汉字的所有全拼

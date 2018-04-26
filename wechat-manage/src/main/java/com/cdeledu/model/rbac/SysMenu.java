@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.cdeledu.common.base.DataEntity;
+import com.google.common.collect.Lists;
 
 /**
  * @类描述: 菜单表实体类
@@ -112,7 +113,7 @@ public class SysMenu extends DataEntity {
 	 */
 	public List<SysMenu> findChildNodes(List<SysMenu> nodeList, Integer parentId) {
 		if (nodeList == null && parentId == null) {
-			return null;
+			return Lists.newArrayList();
 		}
 		for (Iterator<SysMenu> iterator = nodeList.iterator(); iterator.hasNext();) {
 			SysMenu node = iterator.next();

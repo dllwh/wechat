@@ -61,7 +61,7 @@ public class IconController  extends BaseController{
 			filePathMap.put("fontAwesome", baseUrl.getResource("bootstrapIconInfo/font-awesome.css").getPath());
 			filePathMap.put("simpleLine", baseUrl.getResource("bootstrapIconInfo/simple-line-icons.css").getPath());
 			List<Map<String, String>> resultList=BootstrapHelper.getBootstrapIconInfo(filePathMap);
-			SysIcon sysIcon = null;
+			SysIcon sysIcon;
 			for (Map<String, String> map : resultList) {
 				try {
 					sysIcon = new SysIcon();

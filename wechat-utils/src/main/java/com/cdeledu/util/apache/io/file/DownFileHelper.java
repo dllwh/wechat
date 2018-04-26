@@ -7,11 +7,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * 
@@ -31,27 +32,21 @@ class DownFileHelper {
 	 * @return：boolean 返回类型
 	 */
 	private static boolean isLinux() {
-		String osType = System.getProperties().getProperty("os.name")
-				.toLowerCase();
-		if (osType.startsWith("windows")) {
-			return false;
-		} else {
-			return true;
-		}
+		String osType = System.getProperties().getProperty("os.name");
+		return osType.toLowerCase().startsWith("windows");
 	}
 
 	/**
 	 * 
-	 * @Title：downloadLocal
-	 * @Description： 下载本地文件
+	 * @Title：downloadLocal @Description： 下载本地文件
 	 * @param request
 	 * @param response
 	 * @param fileUrl
 	 *            是指欲下载的文件的路径。
 	 * @return：void 返回类型
 	 */
-	public void downloadLocal(HttpServletRequest request,
-			HttpServletResponse response, String filePath) {
+	public void downloadLocal(HttpServletRequest request, HttpServletResponse response,
+			String filePath) {
 		InputStream is = null;
 		String basePath = "";// 文件保存目录相对路径(默认是windows之下的upload)
 		String fileUrl = "";// 文件的存放路径
@@ -78,34 +73,28 @@ class DownFileHelper {
 
 		try {
 			fileName = URLEncoder.encode(fileName, "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
+			/**
+			 * 3.设置输出的格式
+			 */
+			// 1.清空response
+			response.reset();
+			// 2.设置response的Header
+			// 使用setHeader()方法弹出"是否要保存"的对话框,打引号的部分都是固定的值,不要改变
+			String disposition = "attachment; filename=\"" + fileName + "\"";
+			response.setHeader("Content-Disposition", disposition);
+			if ("Post".equalsIgnoreCase(request.getMethod())) {
+				response.setHeader("content_Length", Long.toString(file.length()));
+			}
 
-		/**
-		 * 3.设置输出的格式
-		 */
-		// 1.清空response
-		response.reset();
-		// 2.设置response的Header
-		// 使用setHeader()方法弹出"是否要保存"的对话框,打引号的部分都是固定的值,不要改变
-		String disposition = "attachment; filename=\"" + fileName + "\"";
-		response.setHeader("Content-Disposition", disposition);
-		if ("Post".equalsIgnoreCase(request.getMethod())) {
-			response.setHeader("content_Length", String.valueOf(file.length()));
-		}
+			/**
+			 * 4.循环取出流中的数据.设置缓冲区为1024个字节，即1KB
+			 */
+			byte[] b = new byte[1024];
 
-		/**
-		 * 4.循环取出流中的数据.设置缓冲区为1024个字节，即1KB
-		 */
-		byte[] b = new byte[1024];
-
-		try {
 			if (isLinux()) {
 				basePath = "";// 文件保存目录相对路径(linux之下的某个文件件的名称)
 			}
-			String fileTitle = filePath.substring(filePath.indexOf("\\") + 1);
-			fileUrl = basePath + "/" + fileTitle;
+			fileUrl = basePath + "/" + filePath.substring(filePath.indexOf("\\") + 1);
 			/**
 			 * 5.读到流中
 			 */
@@ -121,11 +110,7 @@ class DownFileHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				is.close();
-			} catch (Exception e2) {
-				// 用户在下载窗口点击取消，跳到此处
-			}
+			IOUtils.closeQuietly(is);
 		}
 	}
 
@@ -138,8 +123,7 @@ class DownFileHelper {
 	 * @return
 	 * @return：HttpServletResponse 返回类型
 	 */
-	public static HttpServletResponse download(String path,
-			HttpServletResponse response) {
+	public static HttpServletResponse download(String path, HttpServletResponse response) {
 		try {
 			File file = new File(path);
 			// 取得文件名。
@@ -149,17 +133,15 @@ class DownFileHelper {
 			// 以流的形式下载文件。
 			InputStream fis = new BufferedInputStream(new FileInputStream(path));
 			byte[] buffer = new byte[fis.available()];
-			// byte[] buffer = new byte[1024];
 			fis.read(buffer);
 			fis.close();
 			// 清空response
 			response.reset();
 			// 设置response的Header
-			response.addHeader("Content-Disposition", "attachment;filename="
-					+ new String(filename.getBytes()));
+			response.addHeader("Content-Disposition",
+					"attachment;filename=" + new String(filename.getBytes()));
 			response.addHeader("Content-Length", "" + file.length());
-			OutputStream toClient = new BufferedOutputStream(
-					response.getOutputStream());
+			OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
 			response.setContentType("application/octet-stream");
 			toClient.write(buffer);
 			toClient.flush();

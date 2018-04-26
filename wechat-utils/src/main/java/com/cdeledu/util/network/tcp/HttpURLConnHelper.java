@@ -33,7 +33,6 @@ import org.apache.http.HttpHeaders;
 import com.cdeledu.common.browser.UserAgentType;
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.exception.ExceptionHelper;
-import com.cdeledu.common.exception.RuntimeExceptionHelper;
 import com.cdeledu.common.httpEntity.BasicAuthenticator;
 import com.cdeledu.common.httpEntity.HttpMethod;
 import com.cdeledu.common.network.MyX509TrustManager;
@@ -60,9 +59,8 @@ public class HttpURLConnHelper {
 	private static final String BOUNDARY = "---------7d4a6d158c9";
 	private static final String POST_HTTP = HttpMethod.POST.getValue();
 	private static final String GET_HTTP = HttpMethod.GET.getValue();
-	private static URLConnection urlConn = null;
 	/** 请求编码，默认使用utf-8 */
-	private static String URLCHARSET = ConstantHelper.UTF_8.name();
+	private String URLCHARSET;
 	private static HttpURLConnHelper instance;
 
 	/** 转码 */
@@ -84,11 +82,8 @@ public class HttpURLConnHelper {
 	 */
 	private HttpURLConnection initConn(String url, String ReqMethod, boolean isUseProxy)
 			throws Exception {
-
-		if (StringUtils.isBlank(url)) {
-			throw new RuntimeExceptionHelper("请求的URL不能为空");
-		}
 		HttpURLConnection httpConn = null;
+		URLConnection urlConn = null;
 		// 打开HttpURLConnection
 		URL realUrl = new URL(url);
 		if (isUseProxy) {
@@ -182,11 +177,6 @@ public class HttpURLConnHelper {
 		BufferedReader reader = null;
 		HttpURLConnection httpConn = null;
 
-		if (StringUtils.isEmpty(url)) {
-			ExceptionHelper.getExceptionHint("HttpURLConnHelper", "sendPostRequest",
-					"targetUrl不能为空!");
-		}
-
 		httpConn = initConn(url, POST_HTTP, isproxy);
 
 		// 建立实际的连接
@@ -210,7 +200,7 @@ public class HttpURLConnHelper {
 			reader = new BufferedReader(
 					new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
 			String line;
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 
 			while ((line = reader.readLine()) != null) {
 				String str = CharsetHelper.UnicodeToString(line);
@@ -234,11 +224,8 @@ public class HttpURLConnHelper {
 	/*--------------------------公有方法 start-------------------------------*/
 
 	public static HttpURLConnHelper getInstance() {
-		init(URLCHARSET);
+		init(ConstantHelper.UTF_8.name());
 		return instance;
-	}
-
-	HttpURLConnHelper() {
 	}
 
 	public static HttpURLConnHelper getInstance(String urlCharset) {
@@ -251,7 +238,7 @@ public class HttpURLConnHelper {
 			instance = new HttpURLConnHelper();
 		}
 		if (StringUtils.isBlank(urlCharset)) {
-			urlCharset = URLCHARSET;
+			urlCharset = ConstantHelper.UTF_8.name();
 		}
 		// 设置默认的url编码
 		instance.setUrlCharset(urlCharset);
@@ -285,11 +272,6 @@ public class HttpURLConnHelper {
 		BufferedReader reader = null;
 		HttpURLConnection httpConn = null;
 
-		if (StringUtils.isEmpty(url)) {
-			ExceptionHelper.getExceptionHint("HttpURLConnHelper", "sendGetRequest",
-					"targetUrl不能为空!");
-		}
-
 		try {
 
 			httpConn = initConn(url, HttpMethod.GET.getValue(), false);
@@ -307,7 +289,7 @@ public class HttpURLConnHelper {
 			reader = new BufferedReader(
 					new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
 			String line;
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 
 			while ((line = reader.readLine()) != null) {
 				String str = CharsetHelper.UnicodeToString(line);
@@ -441,9 +423,11 @@ public class HttpURLConnHelper {
 			br = new BufferedReader(new InputStreamReader(httpConn.getInputStream(), URLCHARSET));
 
 		} catch (FileNotFoundException fe) {
-			InputStream err = ((HttpURLConnection) httpConn).getErrorStream();
-			if (err == null) {
-				br = new BufferedReader(new InputStreamReader(err));
+			if (httpConn != null) {
+				InputStream err = ((HttpURLConnection) httpConn).getErrorStream();
+				if (err == null) {
+					br = new BufferedReader(new InputStreamReader(err));
+				}
 			}
 		} catch (IOException ie) {
 			ie.printStackTrace();
@@ -457,16 +441,17 @@ public class HttpURLConnHelper {
 		 */
 		StringBuffer response = new StringBuffer();
 		String line;
-		try {
-			while ((line = br.readLine()) != null) {
-				response.append(line + "\n");
+		if (br != null) {
+			try {
+				while ((line = br.readLine()) != null) {
+					response.append(line + "\n");
+				}
+			} catch (IOException ioe) {
+				ioe.getStackTrace();
+			} finally {
+				IOUtils.closeQuietly(br);
+				IOUtils.close(httpConn);
 			}
-			br.close();
-		} catch (IOException ioe) {
-			ioe.getStackTrace();
-		} finally {
-			IOUtils.closeQuietly(br);
-			IOUtils.close(httpConn);
 		}
 		return response.toString();
 	}
@@ -481,8 +466,6 @@ public class HttpURLConnHelper {
 	 */
 	public boolean isConnect(String url) {
 		int count = 0;
-		HttpURLConnection httpConn = null;
-
 		if (StringUtils.isEmpty(url)) {
 			return false;
 		}
@@ -490,11 +473,10 @@ public class HttpURLConnHelper {
 		while (count < 5) {
 			try {
 				URL realUrl = new URL(url);
-				httpConn = (HttpURLConnection) realUrl.openConnection();
+				HttpURLConnection httpConn = (HttpURLConnection) realUrl.openConnection();
 				if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					return true;
 				}
-				break;
 			} catch (Exception e) {
 				count++;
 				continue;
@@ -547,10 +529,8 @@ public class HttpURLConnHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (null != httpConn) {
-				httpConn.disconnect();
-			}
 			IOUtils.closeQuietly(br);
+			IOUtils.close(httpConn);
 		}
 		return null;
 	}
@@ -606,16 +586,8 @@ public class HttpURLConnHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (con != null) {
-				con.disconnect();
-			}
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			IOUtils.closeQuietly(reader);
+			IOUtils.close(con);
 		}
 		return result;
 	}

@@ -17,10 +17,10 @@ import com.cdeledu.util.network.tcp.HttpURLConnHelper;
 public class CtripHelperUtil {
 	/** ----------------------------------------------------- Fields start */
 	// 编码格式
-	private final static String CHARSER = ConstantHelper.UTF_8.name();
 	private static HttpURLConnHelper conn = null;
+
 	static {
-		conn = HttpURLConnHelper.getInstance(CHARSER);
+		conn = HttpURLConnHelper.getInstance(ConstantHelper.UTF_8.name());
 	}
 
 	/** ----------------------------------------------------- Fields end */
@@ -39,7 +39,7 @@ public class CtripHelperUtil {
 		/**
 		 * 2.利用正则表达式从网页源码中抽取"历史上的今天"信心数据<br/>
 		 */
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		// 日期标签:用以确定区分今天还是昨天
 		String dateTag = DateUtilHelper.getMonthDay(0);
 		String regex = "(.*)(<div class=\"listren\">)(.*?)(</div>)(.*)";

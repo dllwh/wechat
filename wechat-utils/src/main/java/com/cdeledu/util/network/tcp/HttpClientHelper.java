@@ -54,11 +54,11 @@ import com.cdeledu.common.mapper.ClassUtilHelper;
 @SuppressWarnings("deprecation")
 public class HttpClientHelper {
 	/*-------------------------- 私有属性 begin -------------------------------*/
-	public static HttpClientContext context = new HttpClientContext();
+	private static HttpClientContext context = new HttpClientContext();
 	private HttpClient httpClient = HttpClients.createDefault();;
 	private static HttpClientHelper instance;
 	/** 请求编码，默认使用utf-8 */
-	private static String URLCHARSET = ConstantHelper.UTF_8.name();
+	private String URLCHARSET;
 	private String result = null;
 	private HttpEntity entity = null;
 	private HttpResponse response = null;
@@ -67,15 +67,12 @@ public class HttpClientHelper {
 	/*-------------------------- 私有属性 end   -------------------------------*/
 	/*-------------------------- 私有方法 begin -------------------------------*/
 
-	HttpClientHelper() {
-	}
-
 	private void setUrlCharset(String urlCharset) {
 		URLCHARSET = urlCharset;
 	}
 
 	public static HttpClientHelper getInstance() {
-		init(URLCHARSET);
+		init(ConstantHelper.UTF_8.name());
 		return instance;
 	}
 
@@ -94,7 +91,7 @@ public class HttpClientHelper {
 			instance = new HttpClientHelper();
 		}
 		if (StringUtils.isBlank(urlCharset)) {
-			urlCharset = URLCHARSET;
+			urlCharset = ConstantHelper.UTF_8.name();
 		}
 		// 设置默认的url编码
 		instance.setUrlCharset(urlCharset);
@@ -212,7 +209,6 @@ public class HttpClientHelper {
 			try {
 				result = getHttpResponseContent(response);
 			} catch (Exception ioe) {
-				ioe.printStackTrace();
 				httpPost.abort();
 				throw new RuntimeException("HttpClient,error status code :" + statusCode);
 			}

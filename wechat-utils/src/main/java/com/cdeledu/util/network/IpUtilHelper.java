@@ -40,15 +40,11 @@ public class IpUtilHelper {
 	/** 新浪Ip查询接口 */
 	private final static String SINA_URL = "http://int.dpool.sina.com.cn/iplookup/iplookup.php";
 	/** 淘宝Ip查询接口 */
-	private final static String TAO_BAO_URL = "http://ip.taobao.com/service/getIpInfo.php?ip=%S";
+	private static String TAO_BAO_URL = "http://ip.taobao.com/service/getIpInfo.php?ip=%s";
 	/** API调试工具--接口地址 */
-	private final static String IP_LOOKUP = "http://apis.baidu.com/apistore/iplookupservice/iplookup?";
-	private final static String IP_LOOKUP_SERVICE = IP_LOOKUP + "ip=%s";
+	private static String IP_LOOKUP_SERVICE = "http://apis.baidu.com/apistore/iplookupservice/iplookup?ip=%s";
 	private static Map<String, String> headerMap = new HashMap<String, String>();
-	private static String proxyIp = "";
-	private static String proxyPort = "";
-	private static String userName = "";
-	private static String password = "";
+
 	static {
 		headerMap.put("apikey", ConfigUtil.getApiStoreAkValue());
 	}
@@ -65,15 +61,12 @@ public class IpUtilHelper {
 	public static String getClientIP(HttpServletRequest request) {
 		String ip = null;
 		/**
-		 * Cdn-Src-Ip : 网宿cdn的真实ip
-		 * HTTP_CLIENT_IP : 蓝讯cdn的真实ip
-		 * X-Forwarded-For : 获取代理ip
-		 * Proxy-Client-IP : 获取代理ip
-		 * WL-Proxy-Client-IP : 获取代理ip 
+		 * Cdn-Src-Ip : 网宿cdn的真实ip HTTP_CLIENT_IP : 蓝讯cdn的真实ip X-Forwarded-For :
+		 * 获取代理ip Proxy-Client-IP : 获取代理ip WL-Proxy-Client-IP : 获取代理ip
 		 */
 		if (null != request) {
-			String proxs[] = { "Cdn-Src-Ip","X-Forwarded-For", "Proxy-Client-IP", "WL-Proxy-Client-IP",
-					"HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "x-real-ip" };
+			String proxs[] = { "Cdn-Src-Ip", "X-Forwarded-For", "Proxy-Client-IP",
+					"WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "x-real-ip" };
 			for (String prox : proxs) {
 				ip = request.getHeader(prox);
 				if (StringUtils.isBlank(ip) || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
@@ -116,7 +109,7 @@ public class IpUtilHelper {
 
 		Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();
 
-		InetAddress ip = null;
+		InetAddress ip;
 		boolean finded = false;// 是否找到外网IP
 
 		while (netInterfaces.hasMoreElements() && !finded) {
@@ -148,7 +141,7 @@ public class IpUtilHelper {
 	 * @Title：getIpInfoBySinaUrl
 	 * @Description：新浪接口(IP值为空时获取本地) @param ip
 	 * @return
-	 *         <ul>
+	 * 		<ul>
 	 *         <li>ret : 有且仅当tet的值是1才有效</li>
 	 *         <li>country: 国家</li>
 	 *         <li>province: 省份</li>
@@ -179,7 +172,7 @@ public class IpUtilHelper {
 	 * @Description：淘宝ip查询接口
 	 * @param ip
 	 * @return
-	 *         <ul>
+	 * 		<ul>
 	 *         <li>code : 0：成功，1：失败</li>
 	 *         <li>country: 国家</li>
 	 *         <li>area: 区域</li>
@@ -210,14 +203,13 @@ public class IpUtilHelper {
 		String result = conn.sendGetRequest(url, headerMap);
 		// 转化为JSON类
 		JSONObject json = JSONObject.fromObject(result);
-		JSONObject _array = null;
 
 		// 得到错误码并判断
 		if (json.getInt("errNum") == 0) {
 			// 根据需要取得数据
-			_array = json.getJSONObject("retData");
+			return json.getJSONObject("retData");
 		}
-		return _array;
+		return null;
 	}
 
 	/**
@@ -282,11 +274,15 @@ public class IpUtilHelper {
 	 */
 	public static Map<String, Object> getProxyIp() {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
+		String proxyIp = "";
+		String proxyPort = "";
+		String userName = "";
+		String password = "";
 		try {
 			List<String> ipList = Lists.newArrayList();
 			BufferedReader proxyIpReader = new BufferedReader(new InputStreamReader(
 					IpUtilHelper.class.getResourceAsStream("/ip/proxyip.txt")));
-			String ip = "";
+			String ip;
 			while ((ip = proxyIpReader.readLine()) != null) {
 				ipList.add(ip);
 			}
@@ -324,8 +320,8 @@ public class IpUtilHelper {
 	public static void setProxyIp() {
 		Map<String, Object> ipMap = getProxyIp();
 
-		proxyIp = String.valueOf(ipMap.get("proxyIp"));
-		proxyPort = String.valueOf(ipMap.get("proxyPort"));
+		String proxyIp = String.valueOf(ipMap.get("proxyIp"));
+		String proxyPort = String.valueOf(ipMap.get("proxyPort"));
 
 		System.setProperty("http.maxRedirects", "50");
 		SystemHelper.setHttpProxy(proxyIp, proxyPort);

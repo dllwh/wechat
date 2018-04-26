@@ -323,7 +323,7 @@ public class DataTableHelper {
 	 */
 	public List<Map<String, Object>> getTablesList(Connection conn) throws SQLException {
 		List<Map<String, Object>> tableList = Lists.newArrayList();
-		Map<String, Object> resultMap = null;
+		Map<String, Object> resultMap;
 		DatabaseMetaData metadata = conn.getMetaData();
 		String[] types = { "TABLE" };
 		/**
@@ -445,8 +445,8 @@ public class DataTableHelper {
 			resultMap.setCurrency(rsmd.isCurrency(i)); // 列在数据库中是否为货币型
 			resultMap.setNullable(rsmd.isNullable(i) == 0 ? true : false); // 列是否为空
 			resultMap.setReadOnly(rsmd.isReadOnly(i)); // 列是否为只读
-			// resultMap.put("remark", );
-			// resultMap.put("defaultValue", );
+			// resultMap.put("remark", "");
+			// resultMap.put("defaultValue", "");
 
 			resList.add(resultMap);
 		}
