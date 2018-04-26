@@ -21,6 +21,7 @@ import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomListResponse
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomPublishResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveRoomResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveUserActionResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveUserViewResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoListResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoRecordResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveViewTemplateResponse;
@@ -91,10 +92,8 @@ public class BokeccHelper {
 	 * @param bokeccLiveEntity
 	 * @return
 	 * @throws Exception
-	 * @throws JsonSyntaxException
 	 */
-	public LiveRoomResponse createLiveRoom(LiveRoomEntity liveEntity)
-			throws JsonSyntaxException, Exception {
+	public LiveRoomResponse createLiveRoom(LiveRoomEntity liveEntity) throws Exception {
 		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(liveEntity);
 		paramMap.put("userid", platAccount);
 
@@ -113,10 +112,8 @@ public class BokeccHelper {
 	 * @param bokeccLiveEntity
 	 * @return
 	 * @throws Exception
-	 * @throws JsonSyntaxException
 	 */
-	public BoKeCCApiResult updateLiveRoom(LiveRoomEntity liveEntity)
-			throws JsonSyntaxException, Exception {
+	public BoKeCCApiResult updateLiveRoom(LiveRoomEntity liveEntity) throws Exception {
 		Map<String, Object> paramMap = MapUtilHelper.beanToMapByLowerCase(liveEntity);
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", liveEntity.getId());
@@ -138,7 +135,7 @@ public class BokeccHelper {
 	 * @throws Exception
 	 * @throws JsonSyntaxException
 	 */
-	public BoKeCCApiResult closeLiveRoom(String roomId) throws JsonSyntaxException, Exception {
+	public BoKeCCApiResult closeLiveRoom(String roomId) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("roomid", roomId);
 		paramMap.put("userid", platAccount);
@@ -159,10 +156,9 @@ public class BokeccHelper {
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 * @throws Exception
-	 * @throws JsonSyntaxException
 	 */
 	public LiveRoomListResponse getLiveRoomList(Integer pageNum, Integer pageIndex)
-			throws JsonSyntaxException, Exception {
+			throws Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -189,10 +185,8 @@ public class BokeccHelper {
 	 * @param roomId
 	 *            直播间id
 	 * @throws Exception
-	 * @throws JsonSyntaxException
 	 */
-	public LiveRoomListResponse getLiveRoomInfo(String roomId)
-			throws JsonSyntaxException, Exception {
+	public LiveRoomListResponse getLiveRoomInfo(String roomId) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
@@ -222,7 +216,7 @@ public class BokeccHelper {
 	 * @throws JsonSyntaxException
 	 */
 	public LiveHistoryResponse getLiveRoomHistory(String roomId, String startTime, String endTime,
-			Integer pageNum, Integer pageIndex) throws JsonSyntaxException, Exception {
+			Integer pageNum, Integer pageIndex) throws Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -268,8 +262,7 @@ public class BokeccHelper {
 	 * @throws JsonSyntaxException
 	 */
 	public LiveVideoListResponse getLiveRecordList(String roomId, String startTime, String endTime,
-			String liveId, Integer pageNum, Integer pageIndex)
-					throws JsonSyntaxException, Exception {
+			String liveId, Integer pageNum, Integer pageIndex) throws Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -307,10 +300,8 @@ public class BokeccHelper {
 	 *            回放id
 	 * @return
 	 * @throws Exception
-	 * @throws JsonSyntaxException
 	 */
-	public LiveVideoRecordResponse getLiveRecordInfo(String recordId)
-			throws JsonSyntaxException, Exception {
+	public LiveVideoRecordResponse getLiveRecordInfo(String recordId) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("recordid", recordId);
@@ -344,8 +335,7 @@ public class BokeccHelper {
 	 *            直播间id（以英文逗号,区分)，批量查询直播间数量不能超过100个
 	 * @return
 	 */
-	public LiveRoomPublishResponse getLiveRoomPublish(String roomids)
-			throws JsonSyntaxException, Exception {
+	public LiveRoomPublishResponse getLiveRoomPublish(String roomids) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomids", roomids);
@@ -389,8 +379,7 @@ public class BokeccHelper {
 	 * @throws Exception
 	 * @throws JsonSyntaxException
 	 */
-	public LiveViewTemplateResponse getLiveRoomViewtemplate()
-			throws JsonSyntaxException, Exception {
+	public LiveViewTemplateResponse getLiveRoomViewtemplate() throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 
@@ -425,7 +414,7 @@ public class BokeccHelper {
 	}
 
 	/**
-	 * @方法:获取直播间内用户进出信息
+	 * @方法:获取直播间内用户进出信息,起始与终止时间不能超过七天
 	 * @see <a href="doc.bokecc.com/live/dev/liveapi/#toc_24"> 获取直播间内用户进出信息</a>
 	 * @创建人:独泪了无痕
 	 * @param roomid
@@ -439,7 +428,7 @@ public class BokeccHelper {
 	 * @throws JsonSyntaxException
 	 */
 	public LiveUserActionResponse getLiveRoomUseraction(String roomId, String startTime,
-			String endTime) throws JsonSyntaxException, Exception {
+			String endTime) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("roomid", roomId);
@@ -460,12 +449,15 @@ public class BokeccHelper {
 	 *            直播id
 	 * @return
 	 */
-	public String getLiveRoomUserView(String liveid) {
+	public LiveUserViewResponse getLiveRoomUserView(String liveid) throws Exception {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userid", platAccount);
 		paramMap.put("liveid", liveid);
-
-		return API_BASE_URL + "statis/userview?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "statis/userview?" + createHashedQueryString(paramMap);
+		LiveUserViewResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				LiveUserViewResponse.class);
+		response.setUrl(url);
+		return response;
 	}
 
 	/**
@@ -480,10 +472,10 @@ public class BokeccHelper {
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 * @return
-	 * @throws Exception 
-	 * @throws JsonSyntaxException 
+	 * @throws Exception
 	 */
-	public ReplayUserActionsResponse getLiveReplayUserAction(String recordId, Integer pageIndex, Integer pageNum) throws JsonSyntaxException, Exception {
+	public ReplayUserActionsResponse getLiveReplayUserAction(String recordId, Integer pageIndex,
+			Integer pageNum) throws Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -496,11 +488,12 @@ public class BokeccHelper {
 		paramMap.put("recordid", recordId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-		String url = API_BASE_URL + "v2/statis/replay/useraction?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "v2/statis/replay/useraction?"
+				+ createHashedQueryString(paramMap);
 		ReplayUserActionsResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
 				ReplayUserActionsResponse.class);
 		response.setUrl(url);
-		
+
 		return response;
 	}
 
