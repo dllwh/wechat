@@ -24,6 +24,7 @@ import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveUserActionRespon
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoListResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveVideoRecordResponse;
 import com.cdeledu.util.openplatform.livevideo.model.bokecc.LiveViewTemplateResponse;
+import com.cdeledu.util.openplatform.livevideo.model.bokecc.ReplayUserActionsResponse;
 import com.cdeledu.util.security.Md5Helper;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
@@ -479,8 +480,10 @@ public class BokeccHelper {
 	 * @param pageIndex
 	 *            页码，系统默认值为1
 	 * @return
+	 * @throws Exception 
+	 * @throws JsonSyntaxException 
 	 */
-	public String getLiveReplayUserAction(String recordId, Integer pageIndex, Integer pageNum) {
+	public ReplayUserActionsResponse getLiveReplayUserAction(String recordId, Integer pageIndex, Integer pageNum) throws JsonSyntaxException, Exception {
 		if (!QvoConditionUtil.checkInteger(pageNum)) {
 			pageNum = 50;
 		}
@@ -493,8 +496,12 @@ public class BokeccHelper {
 		paramMap.put("recordid", recordId);
 		paramMap.put("pagenum", pageNum);
 		paramMap.put("pageindex", pageIndex);
-
-		return API_BASE_URL + "v2/statis/replay/useraction?" + createHashedQueryString(paramMap);
+		String url = API_BASE_URL + "v2/statis/replay/useraction?" + createHashedQueryString(paramMap);
+		ReplayUserActionsResponse response = gsonHelper.fromJson(connHelper.sendGetRequest(url),
+				ReplayUserActionsResponse.class);
+		response.setUrl(url);
+		
+		return response;
 	}
 
 	/**
