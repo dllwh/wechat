@@ -60,7 +60,7 @@ public class UrlHelper implements Serializable {
 			try {
 				return URLEncoder.encode(str, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				throw new RuntimeException("UnsupportedEncodingException occurred. ", e);
+				e.printStackTrace();
 			}
 		}
 		return str;
@@ -88,9 +88,9 @@ public class UrlHelper implements Serializable {
 	public static String appendParaToUrl(String url, String paraUrl) {
 		if (StringUtils.isNotEmpty(url) && StringUtils.isNotEmpty(paraUrl)) {
 			if (!url.contains(QUESTION_MARK))
-				url += QUESTION_MARK + paraUrl;
+				return url + QUESTION_MARK + paraUrl;
 			else
-				url += paraUrl;
+				return url + paraUrl;
 		}
 		return url;
 	}
@@ -142,9 +142,10 @@ public class UrlHelper implements Serializable {
 	 */
 	public static String formatParameters(Map<String, Object> paramsMap) {
 		if (MapUtils.isEmpty(paramsMap)) {
-			return null;
+			return "";
 		}
-		Object key, val = null;
+		Object key = null;
+		Object val = null;
 
 		StringBuilder paras = new StringBuilder();
 		for (Entry<String, Object> entry : paramsMap.entrySet()) {
@@ -200,54 +201,47 @@ public class UrlHelper implements Serializable {
 	 * @return
 	 */
 	public static String getFileEncoding(URL url) {
-		HttpURLConnection uc = null;
+		HttpURLConnection con = null;
 		String regex = "charset=[\"']?([\\w-]+?)([^\\w-]|$)";
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		try {
-			uc = (HttpURLConnection) url.openConnection();
-			uc.setRequestProperty("User-Agent",
-					"Mozilla/4.0 (compatible; MSIE 5.0; Windows XP; DigExt)");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// Content-Type: text/html;charset=UTF-8
-		String tmp = uc.getContentType();
-		uc.disconnect();
-		if (tmp != null) {
-			Matcher matcher = pattern.matcher(tmp);
-			if (matcher.find())
-				return matcher.group(1);
-		}
-
-		HttpURLConnection con = null;
-		try {
-
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestProperty("User-Agent",
 					"Mozilla/4.0 (compatible; MSIE 5.0; Windows XP; DigExt)");
 			con.setConnectTimeout(152000);
 			con.setReadTimeout(288000);
 			con.connect();
-			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String line = br.readLine();
-			while (line != null && (line.indexOf("charset=") == -1))
-				line = br.readLine();
-			if (line != null) {
-				line = line.trim();
-				if (line.indexOf("<script") == -1) {
 
-					Matcher matcher = pattern.matcher(line);
+			// Content-Type: text/html;charset=UTF-8
+			if (con != null) {
+				String tmp = con.getContentType();
+				if (tmp != null) {
+					Matcher matcher = pattern.matcher(tmp);
 					if (matcher.find())
 						return matcher.group(1);
 				}
+
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				String line = br.readLine();
+				while (line != null && (line.indexOf("charset=") == -1))
+					line = br.readLine();
+				if (line != null) {
+					line = line.trim();
+					if (line.indexOf("<script") == -1) {
+
+						Matcher matcher = pattern.matcher(line);
+						if (matcher.find())
+							return matcher.group(1);
+					}
+				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
 		} finally {
 			if (con != null)
 				con.disconnect();
 		}
-		return null;
+		return "";
 	}
 
 	/**
@@ -283,7 +277,7 @@ public class UrlHelper implements Serializable {
 
 		return paramMap;
 	}
-	
+
 	public static Map<String, String[]> parseParams(HttpServletRequest request) {
 		Map<String, String[]> resultMap = new HashMap<String, String[]>();
 		Enumeration<?> params = request.getParameterNames();
@@ -315,7 +309,7 @@ public class UrlHelper implements Serializable {
 				}
 			}
 		}
-		
+
 		if (logger.isDebugEnabled()) {
 
 			if (emptyParamSb.length() > 0) {

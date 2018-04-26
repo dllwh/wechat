@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSON;
+import com.cdeledu.util.apache.collection.CollectionHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 import com.cdeledu.util.apache.lang.DateUtilHelper;
 import com.cdeledu.util.database.redis.config.RedisConfig;
@@ -19,6 +20,7 @@ import com.cdeledu.util.database.redis.entity.ClientInfo;
 import com.cdeledu.util.database.redis.entity.OperateLog;
 import com.cdeledu.util.database.redis.entity.RedisInfoDetail;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
@@ -42,23 +44,6 @@ public class RedisClient {
 	private static ReentrantLock lockJedis = new ReentrantLock();
 	private static JedisSentinelPool jedisPool = null;
 	private static RedisClient redisClient;
-	// private static Jedis jedis = null;
-
-	/**
-	 * redis过期时间,以秒为单位
-	 */
-	public final static int EXRP_HOUR = 60 * 60; // 一小时
-	public final static int EXRP_DAY = 60 * 60 * 24; // 一天
-	public final static int EXRP_MONTH = 60 * 60 * 24 * 30; // 一个月
-
-	/**
-	 * 成功,"OK"
-	 */
-	private final static String SUCCESS_OK = "ok";
-	/**
-	 * 成功,1L
-	 */
-	private static final Long SUCCESS_STATUS_LONG = 1L;
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -156,7 +141,7 @@ public class RedisClient {
 			jedis = acquireConnection();
 			String result = jedis.set(key, value);
 			// 如果在键中设置了值，返回简单字符串回复：OK。如果值没有设置则返回 Null
-			if (SUCCESS_OK.equalsIgnoreCase(result)) {
+			if ("ok".equalsIgnoreCase(result)) {
 				return true;
 			} else {
 				return false;
@@ -183,7 +168,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.setnx(key, value);
-			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
+			if (1 == statusCode) {
 				return true;
 			}
 		} finally {
@@ -213,7 +198,7 @@ public class RedisClient {
 			// 如果在键中设置了值，返回简单字符串回复：OK。如果值没有设置则返回 Null
 			String result = jedis.setex(key, time, value);
 			// 如果在键中设置了值，返回简单字符串回复：OK。如果值没有设置则返回 Null
-			if (SUCCESS_OK.equalsIgnoreCase(result)) {
+			if ("ok".equalsIgnoreCase(result)) {
 				return true;
 			} else {
 				return false;
@@ -275,7 +260,7 @@ public class RedisClient {
 	 */
 	public List<String> mget(String... keys) throws Exception {
 		if (isEmpty(keys)) {
-			return null;
+			return Lists.newArrayList();
 		}
 		Jedis jedis = null;
 		try {
@@ -398,7 +383,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.expire(key, seconds);
-			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
+			if (1 == statusCode) {
 				return true;
 			}
 		} finally {
@@ -517,7 +502,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.persist(key);
-			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
+			if (1 == statusCode) {
 				return true;
 			}
 		} finally {
@@ -542,7 +527,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.rename(oldkey, newKey);
-			if (SUCCESS_OK.equalsIgnoreCase(statusCode)) {
+			if ("ok".equalsIgnoreCase(statusCode)) {
 				return true;
 			}
 		} finally {
@@ -586,7 +571,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.renamenx(oldkey, newKey);
-			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
+			if (1 == statusCode) {
 				return true;
 			}
 		} finally {
@@ -661,7 +646,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			Long statusCode = jedis.hsetnx(key, field, value);
-			if (SUCCESS_STATUS_LONG.equals(statusCode)) {
+			if (1 == statusCode) {
 				return true;
 			}
 		} finally {
@@ -685,7 +670,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.hmset(key, hash);
-			if (SUCCESS_OK.equalsIgnoreCase(statusCode)) {
+			if ("ok".equalsIgnoreCase(statusCode)) {
 				return true;
 			} else {
 				return false;
@@ -724,7 +709,7 @@ public class RedisClient {
 	 */
 	public Map<String, String> hgetAll(String key) throws Exception {
 		if (isEmpty(key)) {
-			return null;
+			return Maps.newHashMap();
 		}
 		Jedis jedis = null;
 		try {
@@ -742,7 +727,7 @@ public class RedisClient {
 	 */
 	public List<String> hmget(String key, String... fields) throws Exception {
 		if (isEmpty(key) || isEmpty(fields)) {
-			return null;
+			return Lists.newArrayList();
 		}
 		Jedis jedis = null;
 		try {
@@ -834,7 +819,7 @@ public class RedisClient {
 	 */
 	public List<String> hvals(String key) throws Exception {
 		if (isEmpty(key)) {
-			return null;
+			return Lists.newArrayList();
 		}
 		Jedis jedis = null;
 		try {
@@ -993,7 +978,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.lset(key, index, value);
-			if (SUCCESS_OK.equalsIgnoreCase(statusCode)) {
+			if ("ok".equalsIgnoreCase(statusCode)) {
 				return true;
 			} else {
 				return false;
@@ -1015,7 +1000,7 @@ public class RedisClient {
 	 */
 	public List<String> lrange(String key, long start, long end) throws Exception {
 		if (isEmpty(key)) {
-			return null;
+			return Lists.newArrayList();
 		}
 		Jedis jedis = null;
 		try {
@@ -1045,7 +1030,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			String statusCode = jedis.ltrim(key, start, end);
-			if (SUCCESS_OK.equalsIgnoreCase(statusCode)) {
+			if ("ok".equalsIgnoreCase(statusCode)) {
 				return true;
 			} else {
 				return false;
@@ -1780,7 +1765,8 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			List<Slowlog> logList = jedis.slowlogGet(entries);
-			if (logList != null && logList.size() > 0) {
+			
+			if (CollectionHelper.isNotEmpty(logList)) {
 				opList = Lists.newLinkedList();
 				String args = "";
 				for (Slowlog sl : logList) {
@@ -1884,7 +1870,7 @@ public class RedisClient {
 		List<RedisInfoDetail> redisList = Lists.newArrayList();
 
 		String[] strs = getRedisInfo().split("\n");
-		RedisInfoDetail rif = null;
+		RedisInfoDetail rif;
 
 		if (strs != null && strs.length > 0) {
 			for (int i = 0; i < strs.length; i++) {
