@@ -76,11 +76,7 @@ public class ImageUtilHelper {
 		}
 		try {
 			BufferedImage bi = ImageIO.read(file);
-			if (bi == null) {
-				return false;
-			} else {
-				return true;
-			}
+			return bi == null;
 		} catch (Exception e) {
 			return false;
 		}
@@ -99,9 +95,8 @@ public class ImageUtilHelper {
 	 * @return
 	 */
 	public static ImageModel getImageByImageReader(String path) {
-		ImageModel model = null;
+		ImageModel model = new ImageModel();
 		BufferedImage sourceImg = null;
-		model = new ImageModel();
 		URL url = null;
 		File picture = new File(path);
 		if (path.startsWith("http")) {
@@ -109,17 +104,17 @@ public class ImageUtilHelper {
 				url = new URL(path);
 				URLConnection uc = url.openConnection();
 				sourceImg = ImageIO.read(uc.getInputStream());
+				String file = url.getFile();
+				model.setName(file.replace("/", ""));
+				if (file.lastIndexOf(".") >= 0) {
+					sourceImg.getType();
+					model.setExt(file.substring(file.lastIndexOf(".") + 1));
+				}
+				model.setWidth(sourceImg.getWidth());
+				model.setHeight(sourceImg.getHeight());
 			} catch (IOException ioExp) {
 				logger.error("ImageUtils.getImageByImageReader", ioExp);
 			}
-			String file = url.getFile();
-			model.setName(file.replace("/", ""));
-			if (file.lastIndexOf(".") >= 0) {
-				sourceImg.getType();
-				model.setExt(file.substring(file.lastIndexOf(".") + 1));
-			}
-			model.setWidth(sourceImg.getWidth());
-			model.setHeight(sourceImg.getHeight());
 		} else {
 			try {
 				sourceImg = ImageIO.read(new FileInputStream(picture));
