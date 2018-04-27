@@ -1,13 +1,12 @@
 package com.cdeledu.common.network;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +14,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.cdeledu.common.constant.ConstantHelper;
 
 /**
  * @Description: URL 操作工具类
@@ -31,9 +24,7 @@ import com.cdeledu.common.constant.ConstantHelper;
  * @version: V2.0
  * @history:
  */
-public class UrlHelper implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private static Logger logger = LoggerFactory.getLogger(UrlHelper.class);
+public final class UrlHelper {
 	/** -------------------------- 私有属性 begin ------------------------------- */
 	/** 请求网址与请求参数之间的分隔符 **/
 	public static final String QUESTION_MARK = "?";
@@ -145,7 +136,6 @@ public class UrlHelper implements Serializable {
 			return "";
 		}
 		Object key = null;
-		Object val = null;
 
 		StringBuilder paras = new StringBuilder();
 		for (Entry<String, Object> entry : paramsMap.entrySet()) {
@@ -154,13 +144,8 @@ public class UrlHelper implements Serializable {
 			if (key == null) {
 				continue;
 			}
-			val = entry.getValue();
-			if ((val == null) || val.toString().length() == 0) {
-				continue;
-			}
-
-			paras.append(
-					String.format("%s=%s", utf8Encode(key.toString()), utf8Encode(val.toString())));
+			paras.append(String.format("%s=%s", utf8Encode(key.toString()),
+					utf8Encode(entry.getValue().toString())));
 			paras.append(AND_SIGN);
 		}
 		// 删除最后一个'&'
@@ -200,47 +185,35 @@ public class UrlHelper implements Serializable {
 	 * @param url
 	 * @return
 	 */
-	public static String getFileEncoding(URL url) {
-		HttpURLConnection con = null;
+	public static String getFileEncoding(URL url) throws IOException {
 		String regex = "charset=[\"']?([\\w-]+?)([^\\w-]|$)";
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-		try {
-			con = (HttpURLConnection) url.openConnection();
-			con.setRequestProperty("User-Agent",
-					"Mozilla/4.0 (compatible; MSIE 5.0; Windows XP; DigExt)");
-			con.setConnectTimeout(152000);
-			con.setReadTimeout(288000);
-			con.connect();
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestProperty("User-Agent",
+				"Mozilla/4.0 (compatible; MSIE 5.0; Windows XP; DigExt)");
+		con.setConnectTimeout(152000);
+		con.setReadTimeout(288000);
+		con.connect();
 
-			// Content-Type: text/html;charset=UTF-8
-			if (con != null) {
-				String tmp = con.getContentType();
-				if (tmp != null) {
-					Matcher matcher = pattern.matcher(tmp);
+		String tmp = con.getContentType();
+		if (tmp != null) {
+			Matcher matcher = pattern.matcher(tmp);
+			if (matcher.find()) {
+				return matcher.group(1);
+			}
+		} else {
+			// 获取网页输入流
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String line = br.readLine().trim();
+			while (line != null && (line.indexOf("charset=") == -1)) {
+				if (line.indexOf("<script") == -1) {
+					Matcher matcher = pattern.matcher(line);
 					if (matcher.find())
 						return matcher.group(1);
 				}
-
-				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String line = br.readLine();
-				while (line != null && (line.indexOf("charset=") == -1))
-					line = br.readLine();
-				if (line != null) {
-					line = line.trim();
-					if (line.indexOf("<script") == -1) {
-
-						Matcher matcher = pattern.matcher(line);
-						if (matcher.find())
-							return matcher.group(1);
-					}
-				}
 			}
-		} catch (Exception e) {
-
-		} finally {
-			if (con != null)
-				con.disconnect();
 		}
+
 		return "";
 	}
 
@@ -252,7 +225,7 @@ public class UrlHelper implements Serializable {
 	 * @param url
 	 * @return
 	 */
-	public static Map<String, String> parseParameters(String url) {
+	public static Map<String, Object> parseParameters(String url) {
 
 		if (StringUtils.isBlank(url)) {
 			return null;
@@ -261,7 +234,7 @@ public class UrlHelper implements Serializable {
 		if (questionMarkIndex == -1 || questionMarkIndex == url.length() - 1) {
 			return null;
 		}
-		Map<String, String> paramMap = new HashMap<String, String>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		String queryStr = url.substring(questionMarkIndex + 1);
 		String[] paramArray = queryStr.split(String.valueOf(AND_SIGN));
 
@@ -270,63 +243,11 @@ public class UrlHelper implements Serializable {
 			if (equalsSignIndex == -1) {
 				continue;
 			}
-			String paramName = paramArray[i].substring(0, equalsSignIndex);
-			String paramValue = paramArray[i].substring(equalsSignIndex + 1);
-			paramMap.put(paramName, paramValue);
+			paramMap.put(paramArray[i].substring(0, equalsSignIndex),
+					paramArray[i].substring(equalsSignIndex + 1));
 		}
 
 		return paramMap;
-	}
-
-	public static Map<String, String[]> parseParams(HttpServletRequest request) {
-		Map<String, String[]> resultMap = new HashMap<String, String[]>();
-		Enumeration<?> params = request.getParameterNames();
-
-		StringBuffer paramSb = null;
-		StringBuffer emptyParamSb = null;
-
-		if (logger.isDebugEnabled()) {
-			paramSb = new StringBuffer();
-			emptyParamSb = new StringBuffer();
-			paramSb.append("<<请求参数[request params]>>");
-			paramSb.append(ConstantHelper.NEW_LINE);
-		}
-		while (params.hasMoreElements()) {
-			// 得到参数名
-			String name = params.nextElement().toString();
-			String[] value = request.getParameterValues(name);
-			resultMap.put(name, value);
-			if (logger.isDebugEnabled()) {
-
-				String values = URLParameter.join(ConstantHelper.COMMA, value);
-
-				if (StringUtils.isEmpty(values)) {
-					emptyParamSb.append(name + "=" + values);
-					emptyParamSb.append(ConstantHelper.NEW_LINE);
-				} else {
-					paramSb.append(name + "=" + values);
-					paramSb.append(ConstantHelper.NEW_LINE);
-				}
-			}
-		}
-
-		if (logger.isDebugEnabled()) {
-
-			if (emptyParamSb.length() > 0) {
-				paramSb.append("--------------------------------------------");
-				paramSb.append(ConstantHelper.NEW_LINE);
-				paramSb.append(emptyParamSb);
-			}
-
-			if (paramSb.length() > 0) {
-				paramSb.delete(paramSb.length() - ConstantHelper.NEW_LINE.length(),
-						paramSb.length());
-			}
-
-			logger.debug(paramSb.toString());
-		}
-
-		return resultMap;
 	}
 	/** -------------------------- 公有方法 end ------------------------------- */
 }
