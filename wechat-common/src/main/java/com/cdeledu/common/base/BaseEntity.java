@@ -94,4 +94,11 @@ public abstract class BaseEntity extends PageEntity {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+	@Override
+	public String toString() {
+		return super.toString()+ "\r\n BaseEntity [id=" + id + ", ifVisible=" + ifVisible + ", ifEnabled=" + ifEnabled
+				+ ", allowEdit=" + allowEdit + ", allowDelete=" + allowDelete + ", sequence="
+				+ sequence + ", remark=" + remark + "]";
+	}
 }

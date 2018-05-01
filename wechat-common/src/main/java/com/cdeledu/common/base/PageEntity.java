@@ -138,4 +138,10 @@ public class PageEntity implements Serializable {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "PageEntity [page=" + page + ", pageNumber=" + pageNumber + ", rows=" + rows
+				+ ", pageSize=" + pageSize + ", startRow=" + startRow + ", sort=" + sort
+				+ ", sortName=" + sortName + ", order=" + order + ", sortOrder=" + sortOrder + "]";
+	}
 }

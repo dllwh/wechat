@@ -61,6 +61,4 @@ public abstract class DataEntity extends BaseEntity {
 		return super.toString()+ "\n DataEntity [creator=" + creator + ", createTime=" + createTime + ", modifier="
 				+ modifier + ", updateTime=" + updateTime + "]";
 	}
-	
-	
 }
