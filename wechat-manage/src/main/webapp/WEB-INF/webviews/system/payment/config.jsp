@@ -8,65 +8,8 @@
 <%@ include file="/WEB-INF/webviews/common/context/ace.jsp"%>
 <%@ include file="/WEB-INF/webviews/common/context/assets.jsp"%>
 <link rel="stylesheet" href="${_currConText }/plug-in/font/css/font-awesome.min.css" />
+<link rel="stylesheet" href="${_currConText }/static/css/payment.css"/>  
 <title>支付配置</title>
-<style type="text/css">
-/**********支付配置***********/
-.Configure_style .manner .title_name {
-	height: 40px;
-	padding: 0px 20px;
-	line-height: 40px;
-	font-size: 16px;
-	color: #ffffff;
-	background-color: #438eb9
-}
-
-.Configure_style .table th {
-	border-bottom: 0px;
-}
-
-.Configure_style .table th, .Configure_style .table.table-bordered tbody tr td
-	{
-	font-family: "Microsoft YaHei"
-}
-
-.Configure_style .Other_style .title_name {
-	height: 40px;
-	border: 1px solid #dddddd;
-	line-height: 40px;
-	font-size: 16px;
-	padding: 0px 20px;
-	background: #2a8bcc !important;
-	background-image: -webkit-gradient(linear, left 0, left 100%, from(#ffffff),
-		to(#ededed)) !important;
-	background-image: -webkit-linear-gradient(top, #ffffff, 0%, #ededed, 100%)
-		!important;
-	background-image: -moz-linear-gradient(top, #ffffff 0, #ededed 100%)
-		!important;
-	background-image: linear-gradient(to bottom, #ffffff 0, #ededed 100%)
-		!important;
-	background-repeat: repeat-x !important;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
-		endColorstr='#ededed', GradientType=0) !important;
-}
-
-.Configure_style .Other_style .deploy .name {
-	height: 30px;
-	line-height: 30px;
-	border-bottom: 1px solid #dddddd;
-	background: #2a8bcc !important;
-	background-image: -webkit-gradient(linear, left 0, left 100%, from(#ffffff),
-		to(#ededed)) !important;
-	background-image: -webkit-linear-gradient(top, #ffffff, 0%, #ededed, 100%)
-		!important;
-	background-image: -moz-linear-gradient(top, #ffffff 0, #ededed 100%)
-		!important;
-	background-image: linear-gradient(to bottom, #ffffff 0, #ededed 100%)
-		!important;
-	background-repeat: repeat-x !important;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
-		endColorstr='#ededed', GradientType=0) !important;
-}
-</style>
 </head>
 <body>
 	<div class="margin clearfix">
