@@ -363,7 +363,7 @@ body
 .brand_detailed .Info_style{ padding:20px 0px;   margin-right:160px; position:relative; left:0px; top:0px;}
 .brand_detailed .Info_style li{ width:250px; float:left; height:40px; line-height:40px;}
 .brand_detailed .Info_style .b_Introduce{ width:100%; height:auto; position:relative}
-.brand_detailed .Info_style .b_Introduce .name{ line-height:24px; margin-left:80px; position:relative; top:-30px;}
+.brand_detailed .Info_style .b_Introduce .name{ line-height:24px; margin-left:80px; position:relative;}
 .brand_detailed .Info_style li .label_name{ float:left; width:80px; line-height:40px; text-align:right}
 .brand_detailed .Info_style li .name{ float:left; line-height:40px; margin-left:5px;}
 .brand_detailed .brand_logo{ 

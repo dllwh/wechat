@@ -39,4 +39,23 @@ public class PaymentConfigController extends BaseController {
 		}
 		return mv;
 	}
+	
+	/**
+	 * @方法:支付详细信息
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@RequestMapping(value="details")
+	public ModelAndView details(Integer ownerId){
+		ModelAndView mv = this.getModelAndView();
+		try {
+			mv.addObject("paymentConfig", paymentService.getPaymentConfigInfo(ownerId));
+			mv.addObject("paymentBank", paymentService.getPaymentConfigBank(ownerId));
+			mv.addObject("notExistPayBank", paymentService.getNotExistPaymentBank(ownerId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mv.setViewName("system/payment/details");
+		return mv;
+	}
 }

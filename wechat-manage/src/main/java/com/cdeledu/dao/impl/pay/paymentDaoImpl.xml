@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdeledu.dao.impl.pay.paymentDaoImpl">
+	<!-- 获取支付配置列表 -->
 	<select id="getPaymentConfigList" resultType="com.cdeledu.model.pay.PaymentConfig">
 		SELECT * FROM sys_payment_config
+	</select>
+	
+	<!-- 获取支付配置列表 -->
+	<select id="getPaymentConfigInfo" resultType="com.cdeledu.model.pay.PaymentConfig">
+		SELECT 
+			spc.*,sd.itemName 
+		FROM sys_payment_config spc 
+		INNER JOIN sys_dict sd ON sd.itemCode = spc.currency AND ifEnabled = 1
+		where
+			spc.id = #{_parameter}
+	</select>
+	
+	<!-- 获取支付配置的银行 -->
+	<select id="getPaymentConfigBank" resultType="com.cdeledu.model.pay.PayBank">
+		SELECT spb.* FROM sys_payment_bank spb 
+		INNER JOIN sys_payment_config_bank spcb ON spcb.bank = spb.id AND spb.ifEnabled = 1
+		WHERE 
+			spcb.config = #{_parameter}
+	</select>
+	
+	<!-- 获取没在支付配置的银行 -->
+	<select id="getNotExistPaymentBank" resultType="com.cdeledu.model.pay.PayBank">
+		SELECT * FROM sys_payment_bank 
+		WHERE 
+			id NOT in (SELECT bank FROM sys_payment_config_bank WHERE config =  #{_parameter})
 	</select>
 </mapper>
