@@ -25,7 +25,7 @@ import com.cdeledu.service.sys.SysMenuService;
  * @since: JDK 1.7
  */
 @Controller
-@RequestMapping("/menuOperate")
+@RequestMapping("/sysMenuOperate")
 public class MenuOperateController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
@@ -143,8 +143,10 @@ public class MenuOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "updateMenu", params = "editDisable")
 	@SystemLog(desc = "禁止编辑菜单", opType = SysOpType.UPDATE, tableName = "sys_menu")
-	public AjaxJson editDisable(SysMenu sysMenu) {
+	public AjaxJson editDisable(SysMenu sysMenu) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
+		sysMenu.setAllowEdit(0);
+		sysMenuService.update(sysMenu);
 		ajaxJson.setMsg(MessageConstant.SUCCESS_ENABLE_FALSE);
 		return ajaxJson;
 	}
@@ -152,8 +154,10 @@ public class MenuOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "updateMenu", params = "delDisable")
 	@SystemLog(desc = "禁止删除菜单", opType = SysOpType.UPDATE, tableName = "sys_menu")
-	public AjaxJson delDisable(SysMenu sysMenu) {
+	public AjaxJson delDisable(SysMenu sysMenu) throws Exception {
 		AjaxJson ajaxJson = new AjaxJson();
+		sysMenu.setAllowDelete(0);
+		sysMenuService.update(sysMenu);
 		ajaxJson.setMsg(MessageConstant.SUCCESS_ENABLE_FALSE);
 		return ajaxJson;
 	}
