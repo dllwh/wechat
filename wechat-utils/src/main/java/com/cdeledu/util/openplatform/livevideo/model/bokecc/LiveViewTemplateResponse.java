@@ -111,7 +111,6 @@ public class LiveViewTemplateResponse extends BoKeCCApiResult {
 
 	@Override
 	public String toString() {
-		return super.toString();
+		return super.toString() + "\r\n  LiveViewTemplateResponse [templates=" + templates + "]";
 	}
-
 }
