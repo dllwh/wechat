@@ -223,7 +223,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			result = jedis.getSet(key, value);
-			result = isEmpty(result) && !"nil".equalsIgnoreCase(result) ? result : "";
+			result = isEmpty(result) ? "" : result;
 		} finally {
 			returnConnection(jedis);
 		}
@@ -245,11 +245,10 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			value = jedis.get(key);
-			value = isEmpty(value) && !"nil".equalsIgnoreCase(value) ? value : "";
+			return isEmpty(value) ? "" : value;
 		} finally {
 			returnConnection(jedis);
 		}
-		return value;
 	}
 
 	/**
@@ -695,11 +694,10 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			result = jedis.hget(key, field);
-			result = isEmpty(result) && !"nil".equalsIgnoreCase(result) ? result : "";
+			return isEmpty(result) ? "" : result;
 		} finally {
 			returnConnection(jedis);
 		}
-		return result;
 	}
 
 	/**
@@ -1057,11 +1055,10 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			result = jedis.lindex(key, index);
-			result = isEmpty(result) && !"nil".equalsIgnoreCase(result) ? result : "";
+			return isEmpty(result) ? "" : result;
 		} finally {
 			returnConnection(jedis);
 		}
-		return result;
 	}
 
 	/**
@@ -1078,11 +1075,10 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			result = jedis.lpop(key);
-			result = isEmpty(result) && !"nil".equalsIgnoreCase(result) ? result : "";
+			return isEmpty(result) ? "" : result;
 		} finally {
 			returnConnection(jedis);
 		}
-		return result;
 	}
 
 	/**
@@ -1099,11 +1095,10 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			result = jedis.rpop(key);
-			result = isEmpty(result) && !"nil".equalsIgnoreCase(result) ? result : "";
+			return isEmpty(result) ? "" : result;
 		} finally {
 			returnConnection(jedis);
 		}
-		return result;
 	}
 
 	/**
@@ -1221,11 +1216,10 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			result = jedis.srandmember(key);
-			result = isEmpty(result) && !"nil".equalsIgnoreCase(result) ? result : "";
+			return isEmpty(result) ? "" : result;
 		} finally {
 			returnConnection(jedis);
 		}
-		return result;
 	}
 
 	/**
@@ -1368,11 +1362,10 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			result = jedis.spop(key);
-			result = isEmpty(result) && !"nil".equalsIgnoreCase(result) ? result : "";
+			return isEmpty(result) ? "" : result;
 		} finally {
 			returnConnection(jedis);
 		}
-		return result;
 	}
 
 	/**
@@ -1765,7 +1758,7 @@ public class RedisClient {
 		try {
 			jedis = acquireConnection();
 			List<Slowlog> logList = jedis.slowlogGet(entries);
-			
+
 			if (CollectionHelper.isNotEmpty(logList)) {
 				opList = Lists.newLinkedList();
 				String args = "";
