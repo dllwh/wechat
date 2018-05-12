@@ -33,14 +33,15 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 	private static RedisClusterFactory redisClusterFactory;
 	private Set<HostAndPort> clusterNodes;
 	private JedisCluster jedisClusterClient;
-	private List<String> hostAndPortList;
 	/** 建立连接池配置参数 */
-	private JedisPoolConfig poolConfig = null;
+	private JedisPoolConfig poolConfig;
+	private RedisConfigFactory factory;
 
 	/** ----------------------------------------------------- Fields end */
-	private RedisClusterFactory() {
-		poolConfig = RedisConfigFactory.genJedisConfig();
-		clusterNodes = RedisConfigFactory.genClusterNode(hostAndPortList);
+	private RedisClusterFactory(List<String> hostAndPortList) {
+		factory = new RedisConfigFactory(hostAndPortList);
+		poolConfig = factory.genJedisConfig();
+		clusterNodes = factory.genClusterNode();
 	}
 
 	/**
@@ -49,7 +50,7 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 	 */
 	public static RedisClusterFactory getInstance(List<String> hostAndPortList) {
 		if (redisClusterFactory == null) {
-			redisClusterFactory = new RedisClusterFactory();
+			redisClusterFactory = new RedisClusterFactory(hostAndPortList);
 		}
 		return redisClusterFactory;
 	}
