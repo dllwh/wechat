@@ -17,11 +17,6 @@ import java.util.Set;
  * @since: JDK 1.7
  */
 interface RedisBasicCommand<T> {
-	/** 从连接池中获取连接 */
-	T getRedisClient();
-
-	/** 把连接返回给连接池,释放资源 */
-	void closeRedisClient();
 
 	/************************************************************************/
 	/******************* Redis 键(key) **************************************/

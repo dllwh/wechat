@@ -47,7 +47,7 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 	 * @方法描述 : 静态工厂方法
 	 * @return
 	 */
-	public static synchronized RedisClusterFactory getInstance(List<String> hostAndPortList) {
+	public static RedisClusterFactory getInstance(List<String> hostAndPortList) {
 		if (redisClusterFactory == null) {
 			redisClusterFactory = new RedisClusterFactory();
 		}
@@ -59,7 +59,7 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 	 * @return
 	 */
 
-	public JedisCluster getRedisClient() {
+	private JedisCluster getRedisClient() {
 		if (jedisClusterClient == null) {
 			synchronized (JedisCluster.class) {
 				jedisClusterClient = new JedisCluster(clusterNodes, poolConfig);
@@ -69,7 +69,7 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 	}
 
 	@SuppressWarnings("deprecation")
-	public void closeRedisClient() {
+	private void closeRedisClient() {
 		if (jedisClusterClient != null) {
 			try {
 				jedisClusterClient.quit();
@@ -83,15 +83,15 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 	public Set<String> getAllKeys() {
 		Set<String> keys = new TreeSet<>();
 		Map<String, JedisPool> clusterNodes = getRedisClient().getClusterNodes();
-		for (String k : clusterNodes.keySet()) {
-			JedisPool jp = clusterNodes.get(k);
-			Jedis connection = jp.getResource();
-			try {
+		try {
+			for (String k : clusterNodes.keySet()) {
+				JedisPool jp = clusterNodes.get(k);
+				Jedis connection = jp.getResource();
 				keys.addAll(connection.keys("*"));
-			} catch (Exception e) {
-			} finally {
-				connection.close();// 用完一定要close这个链接！！！
 			}
+		} catch (Exception e) {
+		} finally {
+			closeRedisClient();// 用完一定要close这个链接！！！
 		}
 		return keys;
 	}
@@ -99,15 +99,15 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 	public Set<String> getkeys(String pattern) {
 		Set<String> keys = new TreeSet<>();
 		Map<String, JedisPool> clusterNodes = getRedisClient().getClusterNodes();
-		for (String k : clusterNodes.keySet()) {
-			JedisPool jp = clusterNodes.get(k);
-			Jedis connection = jp.getResource();
-			try {
+		try {
+			for (String k : clusterNodes.keySet()) {
+				JedisPool jp = clusterNodes.get(k);
+				Jedis connection = jp.getResource();
 				keys.addAll(connection.keys(pattern));
-			} catch (Exception e) {
-			} finally {
-				connection.close();// 用完一定要close这个链接！！！
 			}
+		} catch (Exception e) {
+		} finally {
+			closeRedisClient();// 用完一定要close这个链接！！！
 		}
 		return keys;
 	}
@@ -438,5 +438,17 @@ public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster
 
 	public Set<String> zrevrangeByScore(String key, double max, double min, int offset, int count) {
 		return null;
+	}
+
+	public static void main(String[] args) {
+		/** 示例 */
+		// List<String> hostAndPortList = Lists.newArrayList();
+		// hostAndPortList.add("192.168.192.105:27001");
+		// hostAndPortList.add("192.168.192.105:27002");
+		// hostAndPortList.add("192.168.192.106:27001");
+		// hostAndPortList.add("192.168.192.106:27002");
+		// hostAndPortList.add("192.168.192.107:27001");
+		// hostAndPortList.add("192.168.192.108:27002");
+		// RedisClusterFactory.getInstance(hostAndPortList);
 	}
 }
