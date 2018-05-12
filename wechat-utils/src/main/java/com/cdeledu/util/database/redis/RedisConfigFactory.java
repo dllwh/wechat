@@ -67,7 +67,7 @@ public final class RedisConfigFactory {
 		poolConfig.setMaxWaitMillis(10000);
 		// 每次释放连接的最大数目
 		poolConfig.setNumTestsPerEvictionRun(100);
-		// 释放连接的扫描间隔（毫秒）
+		// 释放连接的扫描间隔（毫秒）,如果为负数,则不运行逐出线程, 默认-1 
 		poolConfig.setTimeBetweenEvictionRunsMillis(3000);
 		// 连接最小空闲时间
 		poolConfig.setMinEvictableIdleTimeMillis(1800000);
@@ -81,6 +81,12 @@ public final class RedisConfigFactory {
 		poolConfig.setTestWhileIdle(true);
 		// 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true
 		poolConfig.setBlockWhenExhausted(false);
+		// 是否启用pool的jmx管理功能, 默认true
+		poolConfig.setJmxEnabled(true);
+		// 是否启用后进先出, 默认true 
+		poolConfig.setLifo(true);
+		// 每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3
+		poolConfig.setNumTestsPerEvictionRun(3);
 	}
 
 	/**
