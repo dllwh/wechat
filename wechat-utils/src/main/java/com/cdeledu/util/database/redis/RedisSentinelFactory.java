@@ -33,14 +33,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	private Jedis jedis;
 
 	/** ----------------------------------------------------- Fields end */
-	private RedisSentinelFactory(String auth, String address, String masterName, int timeout,
+	private RedisSentinelFactory(String auth, List<String> address, String masterName, int timeout,
 			int database) {
 		jedisPool = new RedisConfigFactory(auth, address, masterName, timeout, database)
 				.redisPoolFactory();
 	}
 
-	public static RedisSentinelFactory getInstance(String auth, String address, String masterName,
-			int timeout, int database) {
+	public static RedisSentinelFactory getInstance(String auth, List<String> address,
+			String masterName, int timeout, int database) {
 		if (redisSentinelFactory == null) {
 			synchronized (RedisSentinelFactory.class) {
 				if (redisSentinelFactory == null) {
@@ -52,7 +52,7 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 		return redisSentinelFactory;
 	}
 
-	public Jedis getRedisClient() {
+	private Jedis getRedisClient() {
 		// 断言 ，当前锁是否已经锁住，如果锁住了，就啥也不干，没锁的话就执行下面步骤
 		assert !lockJedis.isHeldByCurrentThread();
 		lockJedis.lock();
@@ -66,12 +66,20 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 		return jedis;
 	}
 
-	public void closeRedisClient() {
+	private void closeRedisClient() {
 		if (jedis != null) {
 			// jedis.resetState();
 			jedis.quit();
 			jedis.close();
 		}
+	}
+
+	public static void main(String[] args) {
+		// List<String> address = Lists.newArrayList();
+		// address.add("192.168.192.105:27004");
+		// address.add("192.168.192.106:27004");
+		// address.add("192.168.192.107:27004");
+		// RedisSentinelFactory.getInstance("", address, "mymaster", 10000, 0);
 	}
 
 	/**

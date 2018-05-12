@@ -37,7 +37,8 @@ public final class RedisConfigFactory {
 	private static JedisSentinelPool jedisPool = null;
 	/** 建立连接池配置参数 */
 	private static JedisPoolConfig poolConfig = null;
-	private String auth, address, masterName;
+	private String auth, masterName;
+	private List<String> addressList;
 	private int timeout, database = 0;
 
 	/** ----------------------------------------------------- Fields end */
@@ -46,10 +47,10 @@ public final class RedisConfigFactory {
 		this.hostAndPortList = hostAndPortList;
 	}
 
-	public RedisConfigFactory(String auth, String address, String masterName, int timeout,
+	public RedisConfigFactory(String auth, List<String> addressList, String masterName, int timeout,
 			int database) {
 		this.auth = auth;
-		this.address = address;
+		this.addressList = addressList;
 		this.masterName = masterName;
 		this.timeout = timeout;
 		this.database = database;
@@ -67,7 +68,7 @@ public final class RedisConfigFactory {
 		poolConfig.setMaxWaitMillis(10000);
 		// 每次释放连接的最大数目
 		poolConfig.setNumTestsPerEvictionRun(100);
-		// 释放连接的扫描间隔（毫秒）,如果为负数,则不运行逐出线程, 默认-1 
+		// 释放连接的扫描间隔（毫秒）,如果为负数,则不运行逐出线程, 默认-1
 		poolConfig.setTimeBetweenEvictionRunsMillis(3000);
 		// 连接最小空闲时间
 		poolConfig.setMinEvictableIdleTimeMillis(1800000);
@@ -83,7 +84,7 @@ public final class RedisConfigFactory {
 		poolConfig.setBlockWhenExhausted(false);
 		// 是否启用pool的jmx管理功能, 默认true
 		poolConfig.setJmxEnabled(true);
-		// 是否启用后进先出, 默认true 
+		// 是否启用后进先出, 默认true
 		poolConfig.setLifo(true);
 		// 每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3
 		poolConfig.setNumTestsPerEvictionRun(3);
@@ -97,11 +98,8 @@ public final class RedisConfigFactory {
 		try {
 			if (jedisPool == null) {
 				Set<String> sentinels = new HashSet<String>();
-				String[] addressArray = address.split(",");
-				if (addressArray != null && addressArray.length > 0) {
-					for (int i = 0; i < addressArray.length; i++) {
-						sentinels.add(addressArray[i]);
-					}
+				for (String address : addressList) {
+					sentinels.add(address);
 				}
 				if (StringUtils.isNoneBlank(auth)) {
 					jedisPool = new JedisSentinelPool(masterName, sentinels, poolConfig, timeout,
