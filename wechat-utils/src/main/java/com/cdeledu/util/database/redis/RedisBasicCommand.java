@@ -16,10 +16,17 @@ import java.util.Set;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-interface RedisBasicCommand {
+interface RedisBasicCommand<T> {
+	/** 从连接池中获取连接 */
+	T getRedisClient();
+
+	/** 把连接返回给连接池,释放资源 */
+	void closeRedisClient();
+
 	/************************************************************************/
 	/******************* Redis 键(key) **************************************/
 	/************************************************************************/
+
 	/** 遍历所有的key */
 	Set<String> getAllKeys();
 
