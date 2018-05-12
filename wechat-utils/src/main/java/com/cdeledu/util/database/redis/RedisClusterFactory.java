@@ -28,7 +28,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public final class RedisClusterFactory implements RedisBasicCommand<JedisCluster> {
+public final class RedisClusterFactory implements RedisBasicCommand {
 	/** ----------------------------------------------------- Fields start */
 	private static RedisClusterFactory redisClusterFactory;
 	private Set<HostAndPort> clusterNodes;
