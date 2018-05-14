@@ -54,6 +54,7 @@ public final class RedisConfigFactory {
 		this.masterName = masterName;
 		this.timeout = timeout;
 		this.database = database;
+		genJedisConfig();
 	}
 
 	private void initConfig() {
