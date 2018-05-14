@@ -29,19 +29,19 @@ interface RedisBasicCommand {
 	Set<String> getkeys(String pattern);
 
 	/** 检查给定 key 是否存在 */
-	Boolean exists(String key);
+	boolean exists(String key);
 
 	/** 移除给定 key 的过期时间，使得 key 永不过期 */
-	Long persist(String key);
+	boolean persist(String key);
 
 	/** 返回 key 所储存的值的类型。 */
 	String type(String key);
 
 	/** 设置 key 的过期时间，以秒计。key 过期后将不再可用 */
-	Long expire(String key, int seconds);
+	boolean expire(String key, int seconds);
 
 	/** 用于设置 key 的过期时间，以毫秒计。key 过期后将不再可用 */
-	Long pexpire(String key, long milliseconds);
+	boolean pexpireat(String key, long milliseconds);
 
 	/** 以秒为单位返回 key 的剩余过期时间 */
 	Long ttl(String key);
@@ -50,29 +50,29 @@ interface RedisBasicCommand {
 	Long pttl(final String key);
 
 	/** 修改 key 的名称 */
-	String rename(String oldkey, String newkey);
+	boolean rename(String oldkey, String newkey);
 
 	/** 在新的 key 不存在时修改 key 的名称 */
-	Long renamenx(String oldkey, String newkey);
+	boolean renamenx(String oldkey, String newkey);
 
 	/** 删除已存在的键。不存在的 key 会被忽略 */
-	Long del(String... key);
+	boolean del(String... key);
 
 	/************************************************************************/
 	/******************* Redis 字符串(String) ********************************/
 	/************************************************************************/
 
 	/** 设置给定 key 的值。如果 key 已经存储其他值， SET 就覆写旧值，且无视类型 */
-	String set(String key, String value);
+	boolean set(String key, String value);
 
 	/** 在指定的 key 不存在时，为 key 设置指定的值 */
-	Long setnx(String key, String value);
+	boolean setnx(String key, String value);
 
 	/** 指定的 key 设置值及其过期时间。如果 key 已经存在， SETEX 命令将会替换旧的值 */
-	String setex(String key, int seconds, String value);
+	boolean setex(String key, int seconds, String value);
 
 	/** 以毫秒为单位设置 key 的生存时间 */
-	String psetex(final String key, final long milliseconds, final String value);
+	boolean psetex(final String key, final long milliseconds, final String value);
 
 	/** 获取指定 key 的值。如果 key 不存在，返回 nil 。如果key 储存的值不是字符串类型，返回一个错误 */
 	String get(String key);
@@ -127,7 +127,7 @@ interface RedisBasicCommand {
 	String hget(String key, String field);
 
 	/** 同时将多个 field-value (字段-值)对设置到哈希表中 */
-	String hmset(String key, Map<String, String> hash);
+	boolean hmset(String key, Map<String, String> hash);
 
 	/** 返回哈希表中，一个或多个给定字段的值 */
 	List<String> hmget(String key, String... fields);
@@ -136,10 +136,10 @@ interface RedisBasicCommand {
 	Map<String, String> hgetAll(String key);
 
 	/** 查看哈希表的指定字段是否存在 */
-	Boolean hexists(String key, String field);
+	boolean hexists(String key, String field);
 
 	/** 哈希表中的字段赋值 */
-	Long hset(String key, String field, String value);
+	boolean hset(String key, String field, String value);
 
 	/************************************************************************/
 	/******************* Redis 列表(List) ************************************/
@@ -173,10 +173,10 @@ interface RedisBasicCommand {
 	Long lrem(String key, long count, String value);
 
 	/** 对一个列表进行修剪(trim) */
-	String ltrim(String key, long start, long end);
+	boolean ltrim(String key, long start, long end);
 
 	/** 通过索引来设置元素的值 */
-	String lset(String key, long index, String value);
+	boolean lset(String key, long index, String value);
 
 	/** 移除并返回列表的最后一个元素 */
 	String rpop(String key);
@@ -198,7 +198,7 @@ interface RedisBasicCommand {
 	Set<String> sdiff(String... keys);
 
 	/** 判断成员元素是否是集合的成员 */
-	Boolean sismember(String key, String member);
+	boolean sismember(String key, String member);
 
 	/** 返回集合中的所有的成员。 不存在的集合 key 被视为空集合。 */
 	Set<String> smembers(String key);
@@ -217,7 +217,7 @@ interface RedisBasicCommand {
 	List<String> srandmember(String key, int count);
 
 	/** 用于移除集合中的一个或多个成员元素，不存在的成员元素会被忽略 */
-	Long srem(String key, String... member);
+	boolean srem(String key, String... member);
 
 	/** 返回集合中元素的数量 */
 	Long scard(String key);

@@ -113,24 +113,24 @@ public final class RedisClusterFactory implements RedisBasicCommand {
 		return keys;
 	}
 
-	public Boolean exists(String key) {
-		return null;
+	public boolean exists(String key) {
+		return false;
 	}
 
-	public Long persist(String key) {
-		return null;
+	public boolean persist(String key) {
+		return false;
 	}
 
 	public String type(String key) {
 		return null;
 	}
 
-	public Long expire(String key, int seconds) {
-		return null;
+	public boolean expire(String key, int seconds) {
+		return false;
 	}
 
-	public Long pexpire(String key, long milliseconds) {
-		return null;
+	public boolean pexpireat(String key, long milliseconds) {
+		return false;
 	}
 
 	public Long ttl(String key) {
@@ -141,32 +141,32 @@ public final class RedisClusterFactory implements RedisBasicCommand {
 		return null;
 	}
 
-	public String rename(String oldkey, String newkey) {
-		return null;
+	public boolean rename(String oldkey, String newkey) {
+		return false;
 	}
 
-	public Long renamenx(String oldkey, String newkey) {
-		return null;
+	public boolean renamenx(String oldkey, String newkey) {
+		return false;
 	}
 
-	public Long del(String... key) {
-		return null;
+	public boolean del(String... key) {
+		return false;
 	}
 
-	public String set(String key, String value) {
-		return null;
+	public boolean set(String key, String value) {
+		return false;
 	}
 
-	public Long setnx(String key, String value) {
-		return null;
+	public boolean setnx(String key, String value) {
+		return false;
 	}
 
-	public String setex(String key, int seconds, String value) {
-		return null;
+	public boolean setex(String key, int seconds, String value) {
+		return false;
 	}
 
-	public String psetex(String key, long milliseconds, String value) {
-		return null;
+	public boolean psetex(String key, long milliseconds, String value) {
+		return false;
 	}
 
 	public String get(String key) {
@@ -233,8 +233,8 @@ public final class RedisClusterFactory implements RedisBasicCommand {
 		return null;
 	}
 
-	public String hmset(String key, Map<String, String> hash) {
-		return null;
+	public boolean hmset(String key, Map<String, String> hash) {
+		return false;
 	}
 
 	public List<String> hmget(String key, String... fields) {
@@ -245,12 +245,12 @@ public final class RedisClusterFactory implements RedisBasicCommand {
 		return null;
 	}
 
-	public Boolean hexists(String key, String field) {
-		return null;
+	public boolean hexists(String key, String field) {
+		return false;
 	}
 
-	public Long hset(String key, String field, String value) {
-		return null;
+	public boolean hset(String key, String field, String value) {
+		return false;
 	}
 
 	public List<String> blpop(int timeout, String key) {
@@ -289,12 +289,12 @@ public final class RedisClusterFactory implements RedisBasicCommand {
 		return null;
 	}
 
-	public String ltrim(String key, long start, long end) {
-		return null;
+	public boolean ltrim(String key, long start, long end) {
+		return false;
 	}
 
-	public String lset(String key, long index, String value) {
-		return null;
+	public boolean lset(String key, long index, String value) {
+		return false;
 	}
 
 	public String rpop(String key) {
@@ -317,8 +317,8 @@ public final class RedisClusterFactory implements RedisBasicCommand {
 		return null;
 	}
 
-	public Boolean sismember(String key, String member) {
-		return null;
+	public boolean sismember(String key, String member) {
+		return false;
 	}
 
 	public Set<String> smembers(String key) {
@@ -345,8 +345,8 @@ public final class RedisClusterFactory implements RedisBasicCommand {
 		return null;
 	}
 
-	public Long srem(String key, String... member) {
-		return null;
+	public boolean srem(String key, String... member) {
+		return false;
 	}
 
 	public Long scard(String key) {

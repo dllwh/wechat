@@ -5,6 +5,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisSentinelPool;
 
@@ -74,6 +79,20 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 		}
 	}
 
+	/**
+	 * @方法:是否为空
+	 * @创建人:独泪了无痕
+	 * @param key
+	 * @return
+	 */
+	private static boolean isEmpty(final CharSequence... key) {
+		if (StringUtils.isNoneBlank(key)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	public static void main(String[] args) {
 		// List<String> address = Lists.newArrayList();
 		// address.add("192.168.192.105:27004");
@@ -111,10 +130,12 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return
 	 */
 	public Set<String> getkeys(String pattern) {
+		if (isEmpty(pattern)) {
+			pattern = "*";
+		}
 		try {
-			jedis = getRedisClient();
 			// 获取数据并输出
-			return jedis.keys(pattern);
+			return getRedisClient().keys(pattern);
 		} finally {
 			closeRedisClient();
 		}
@@ -125,8 +146,16 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param key
 	 * @return 存在返回true，否则返回false
 	 */
-	public Boolean exists(String key) {
-		return null;
+	public boolean exists(String key) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			// 获取数据并输出
+			return getRedisClient().exists(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -134,8 +163,16 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param key
 	 * @return 当生存时间移除成功时，返回 true. 如果 key 不存在或 key 没有设置生存时间，返回 false
 	 */
-	public Long persist(String key) {
-		return null;
+	public boolean persist(String key) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			// 获取数据并输出
+			return 1 == getRedisClient().persist(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -145,7 +182,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @throws Exception
 	 */
 	public String type(String key) {
-		return null;
+		if (isEmpty(key) || !exists(key)) {
+			return "";
+		}
+		try {
+			return getRedisClient().type(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -155,12 +199,34 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 *            为Null时，将会马上过期。可以设置-1，0，表示马上过期
 	 * @return
 	 */
-	public Long expire(String key, int seconds) {
-		return null;
+	public boolean expire(String key, int seconds) {
+		if (isEmpty(key)) {
+			return false;
+		}
+
+		if (seconds < -1) {
+			seconds = -1;
+		}
+		try {
+			return 1 == getRedisClient().expire(key, seconds);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
-	public Long pexpire(String key, long milliseconds) {
-		return null;
+	public boolean pexpireat(String key, long milliseconds) {
+		if (isEmpty(key)) {
+			return false;
+		}
+
+		if (milliseconds < -1) {
+			milliseconds = -1;
+		}
+		try {
+			return 1 == getRedisClient().expireAt(key, milliseconds);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -170,11 +236,25 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 *         的剩余生存时间。
 	 */
 	public Long ttl(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().ttl(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Long pttl(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().pttl(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -185,8 +265,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return
 	 * @throws Exception
 	 */
-	public String rename(String oldkey, String newkey) {
-		return null;
+	public boolean rename(String oldkey, String newkey) {
+		if (isEmpty(oldkey) || isEmpty(newkey) || oldkey.equalsIgnoreCase(newkey)) {
+			return false;
+		}
+		try {
+			return "ok".equalsIgnoreCase(getRedisClient().rename(oldkey, newkey));
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -196,8 +283,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return
 	 * @throws Exception
 	 */
-	public Long renamenx(String oldkey, String newkey) {
-		return null;
+	public boolean renamenx(String oldkey, String newkey) {
+		if (isEmpty(oldkey) || exists(newkey)) {
+			return false;
+		}
+		try {
+			return 1 == getRedisClient().renamenx(oldkey, newkey);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -205,8 +299,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param key
 	 * @return 返回删除个数
 	 */
-	public Long del(String... key) {
-		return null;
+	public boolean del(String... key) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return getRedisClient().del(key) >= 0;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -215,8 +316,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param value
 	 * @return
 	 */
-	public String set(String key, String value) {
-		return null;
+	public boolean set(String key, String value) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return "ok".equalsIgnoreCase(getRedisClient().set(key, value));
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -228,8 +336,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param value
 	 * @return 1表示设置成功，否则0
 	 */
-	public Long setnx(String key, String value) {
-		return null;
+	public boolean setnx(String key, String value) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return 1 == getRedisClient().setnx(key, value);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -243,12 +358,26 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param value
 	 * @return
 	 */
-	public String setex(String key, int seconds, String value) {
-		return null;
+	public boolean setex(String key, int seconds, String value) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return "ok".equalsIgnoreCase(getRedisClient().setex(key, seconds, value));
+		} finally {
+			closeRedisClient();
+		}
 	}
 
-	public String psetex(String key, long milliseconds, String value) {
-		return null;
+	public boolean psetex(String key, long milliseconds, String value) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return "ok".equalsIgnoreCase(getRedisClient().psetex(key, milliseconds, value));
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -258,7 +387,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 成功返回value，失败返回""
 	 */
 	public String get(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			String result = getRedisClient().get(key);
+			return isEmpty(result) || "nil".equalsIgnoreCase(result) ? "" : result;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -268,7 +405,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 返回给定 key 的旧值。 当 key 没有旧值时，也即是， key 不存在时，返回 null
 	 */
 	public String getSex(String key, String value) {
-		return null;
+		if (isEmpty(key) || isEmpty(value)) {
+			return "";
+		}
+		try {
+			String result = getRedisClient().getSet(key, value);
+			return isEmpty(result) || "nil".equalsIgnoreCase(result) ? "" : result;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -277,7 +422,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return
 	 */
 	public Long strLength(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().strlen(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -287,7 +439,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 成功返回value，失败返回""
 	 */
 	public List<String> mget(String... keys) {
-		return null;
+		if (isEmpty(keys)) {
+			return Lists.newArrayList();
+		}
+		try {
+			return getRedisClient().mget(keys);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -299,7 +458,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @throws Exception
 	 */
 	public String getrange(String key, long startOffset, long endOffset) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			String result = getRedisClient().getrange(key, startOffset, endOffset);
+			return isEmpty(result) ? "" : result;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -308,7 +475,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 执行 INCR 命令之后 key 的值
 	 */
 	public Long incr(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().incr(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -320,11 +494,25 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 加上 integer 之后key 的值
 	 */
 	public Long incrBy(String key, long integer) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().incrBy(key, integer);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Double incrByFloat(String key, double value) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().incrByFloat(key, value);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -334,7 +522,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 执行 DECR 命令之后 key 的值
 	 */
 	public Long decr(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().decr(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -345,7 +540,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 加上 integer 之后 key 的值
 	 */
 	public Long decrBy(String key, long integer) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().decrBy(key, integer);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -356,7 +558,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 追加 value 之后 key 中字符串的长
 	 */
 	public Long append(String key, String value) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().append(key, value);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -365,7 +574,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 被成功删除的数量.当 key 不存在时，返回 0
 	 */
 	public Long hdel(String key, String... field) {
-		return null;
+		if (isEmpty(key) || !exists(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().hdel(key, field);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -373,7 +589,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param key
 	 */
 	public Long hlen(String key) {
-		return null;
+		if (isEmpty(key) || !exists(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().hlen(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -382,7 +605,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 一个包含哈希表中所有域的表。 当 key 不存在时，返回一个空表
 	 */
 	public Set<String> hkeys(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().hkeys(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -391,7 +621,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 一个包含哈希表中所有值的表。 当 key 不存在时，返回一个空表。
 	 */
 	public List<String> hvals(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return Lists.newArrayList();
+		}
+		try {
+			return getRedisClient().hvals(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -401,7 +638,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 给定域的值。 当给定域不存在或是给定 key 不存在时，返回 null
 	 */
 	public String hget(String key, String field) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			return getRedisClient().hget(key, field);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -411,8 +655,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param hash
 	 * @return 如果命令执行成功，返回 true。 当 key 不是哈希表(hash)类型时，返回false
 	 */
-	public String hmset(String key, Map<String, String> hash) {
-		return null;
+	public boolean hmset(String key, Map<String, String> hash) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return "ok".equalsIgnoreCase(getRedisClient().hmset(key, hash));
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -421,7 +672,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param fields
 	 */
 	public List<String> hmget(String key, String... fields) {
-		return null;
+		if (isEmpty(key)) {
+			return Lists.newArrayList();
+		}
+		try {
+			return getRedisClient().hmget(key, fields);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -430,7 +688,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 以列表形式返回哈希表的域和域的值。 若 key 不存在，返回空列表。
 	 */
 	public Map<String, String> hgetAll(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return Maps.newHashMap();
+		}
+		try {
+			return getRedisClient().hgetAll(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -441,8 +706,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 *            不能为空
 	 * @return 返回hash里面field是否存在
 	 */
-	public Boolean hexists(String key, String field) {
-		return null;
+	public boolean hexists(String key, String field) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return getRedisClient().hexists(key, field);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -453,16 +725,37 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param field
 	 * @param value
 	 */
-	public Long hset(String key, String field, String value) {
-		return null;
+	public boolean hset(String key, String field, String value) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return 1 == getRedisClient().hset(key, field, value);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public List<String> blpop(int timeout, String key) {
-		return null;
+		if (isEmpty(key)) {
+			return Lists.newArrayList();
+		}
+		try {
+			return getRedisClient().blpop(timeout, key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public List<String> brpop(int timeout, String key) {
-		return null;
+		if (isEmpty(key)) {
+			return Lists.newArrayList();
+		}
+		try {
+			return getRedisClient().blpop(timeout, key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -474,7 +767,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 列表中下标为指定索引值的元素。
 	 */
 	public String lindex(String key, long index) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			String result = getRedisClient().lindex(key, index);
+			return "nil".equalsIgnoreCase(result) ? "" : result;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -483,7 +784,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 列表的第一个元素。
 	 */
 	public String lpop(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			String result = getRedisClient().lpop(key);
+			return "nil".equalsIgnoreCase(result) ? "" : result;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -497,7 +806,16 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 返回List的长度
 	 */
 	public Long lpush(String key, String... string) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().lpush(key);
+		} catch (Exception lpushExp) {
+			return null;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -508,7 +826,16 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 返回List的长度
 	 */
 	public Long lpushx(String key, String... value) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().lpushx(key, value);
+		} catch (Exception lpushxExp) {
+			return null;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -519,7 +846,16 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return
 	 */
 	public Long llen(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().llen(key);
+		} catch (Exception llenExp) {
+			return null;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -533,7 +869,16 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 一个列表，包含指定区间内的元素。
 	 */
 	public List<String> lrange(String key, long start, long end) {
-		return null;
+		if (isEmpty(key)) {
+			return Lists.newArrayList();
+		}
+		try {
+			return getRedisClient().lrange(key, start, end);
+		} catch (Exception lrangeExp) {
+			return Lists.newArrayList();
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -548,7 +893,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 被移除元素的数量。 列表不存在时返回 0 。
 	 */
 	public Long lrem(String key, long count, String value) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().lrem(key, count, value);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -562,8 +914,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 *            <li>可以超出索引，不影响结果</li>
 	 * @return 命令执行成功时，返回 true。
 	 */
-	public String ltrim(String key, long start, long end) {
-		return null;
+	public boolean ltrim(String key, long start, long end) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return "ok".equalsIgnoreCase(getRedisClient().ltrim(key, start, end));
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -574,8 +933,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param value
 	 * @return
 	 */
-	public String lset(String key, long index, String value) {
-		return null;
+	public boolean lset(String key, long index, String value) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return "ok".equalsIgnoreCase(getRedisClient().lset(key, index, value));
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -584,7 +950,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 列表的最后一个元素。
 	 */
 	public String rpop(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			return getRedisClient().rpop(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -597,7 +970,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 执行 RPUSH 操作后，列表的长度。
 	 */
 	public Long rpush(String key, String... string) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().rpush(key, string);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -608,7 +988,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 执行 Rpushx 操作后，列表的长度
 	 */
 	public Long rpushx(String key, String... string) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().rpushx(key, string);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -619,7 +1006,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 被添加到集合中的新元素的数量
 	 */
 	public Long sadd(String key, String... member) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().sadd(key, member);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -628,7 +1022,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 包含差集成员的列表。
 	 */
 	public Set<String> sdiff(String... keys) {
-		return null;
+		if (isEmpty(keys)) {
+			return null;
+		}
+		try {
+			return getRedisClient().sdiff(keys);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -638,8 +1039,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param member
 	 * @return 如果成员元素是集合的成员，返回 true。 如果成员元素不是集合的成员，或 key 不存在，返回 false
 	 */
-	public Boolean sismember(String key, String member) {
-		return null;
+	public boolean sismember(String key, String member) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return getRedisClient().sismember(key, member);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -649,7 +1057,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 集合中的所有成员。
 	 */
 	public Set<String> smembers(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().smembers(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -659,7 +1074,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 交集成员的列表。
 	 */
 	public Set<String> sinter(String... keys) {
-		return null;
+		if (isEmpty(keys)) {
+			return null;
+		}
+		try {
+			return getRedisClient().sinter(keys);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -669,11 +1091,26 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 被移除的随机元素。 当集合不存在或是空集时，返回 null
 	 */
 	public String spop(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			String result = getRedisClient().spop(key);
+			return "nil".equalsIgnoreCase(result) ? "" : result;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Set<String> spop(String key, long count) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().spop(key, count);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -682,7 +1119,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 只提供集合 key 参数时，返回一个元素；如果集合为空，返回 null
 	 */
 	public String srandmember(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return "";
+		}
+		try {
+			String result = getRedisClient().srandmember(key);
+			return "nil".equalsIgnoreCase(result) ? "" : result;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -696,7 +1141,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 *         参数，那么返回一个数组；如果集合为空，返回空数组
 	 */
 	public List<String> srandmember(String key, int count) {
-		return null;
+		if (isEmpty(key)) {
+			return Lists.newArrayList();
+		}
+		try {
+			return getRedisClient().srandmember(key, count);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -705,8 +1157,15 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @param key
 	 * @return 被成功移除的元素的数量，不包括被忽略的元素。
 	 */
-	public Long srem(String key, String... member) {
-		return null;
+	public boolean srem(String key, String... member) {
+		if (isEmpty(key)) {
+			return false;
+		}
+		try {
+			return getRedisClient().srem(key, member) >= 0;
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -715,7 +1174,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 集合的数量。 当集合 key 不存在时，返回 0
 	 */
 	public Long scard(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().scard(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -724,7 +1190,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return 并集成员的列表。
 	 */
 	public Set<String> sunion(String... keys) {
-		return null;
+		if (isEmpty(keys)) {
+			return null;
+		}
+		try {
+			return getRedisClient().sunion(keys);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -741,7 +1214,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 被成功添加的新成员的数量，不包括那些被更新的、已经存在的成员。
 	 */
 	public Long zadd(String key, double score, String member) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zadd(key, score, member);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -751,7 +1231,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 当 key 存在且是有序集类型时，返回有序集的基数。 当 key 不存在时，返回 0 。
 	 */
 	public Long zcard(String key) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zcard(key);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -764,7 +1251,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result member 成员的 score 值，以字符串形式表示。
 	 */
 	public Double zscore(String key, String member) {
-		return null;
+		if (isEmpty(key) || !exists(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zscore(key, member);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -778,15 +1272,36 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result score 值在 min 和 max 之间的成员的数量。
 	 */
 	public Long zcount(String key, double min, double max) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zcount(key, min, max);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Long zcount(String key, String min, String max) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zcount(key, min, max);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Long zlexcount(String key, String min, String max) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zlexcount(key, min, max);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -803,15 +1318,36 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
 	public Set<String> zrange(String key, long start, long end) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrange(key, start, end);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Set<String> zrangeByLex(String key, String min, String max) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrangeByLex(key, min, max);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Set<String> zrangeByLex(String key, String min, String max, int offset, int count) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrangeByLex(key, min, max, offset, count);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -826,7 +1362,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
 	public Set<String> zrangeByScore(String key, double min, double max) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrangeByScore(key, min, max);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -847,7 +1390,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
 	public Set<String> zrangeByScore(String key, double min, double max, int offset, int count) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrangeByScore(key, min, max, offset, count);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -861,7 +1411,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 *         的成员，返回 nil 。
 	 */
 	public Long zrank(String key, String member) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrank(key, member);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -875,7 +1432,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 *         的成员，返回 nil 。
 	 */
 	public Long zrevrank(String key, String member) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrevrank(key, member);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -887,7 +1451,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 被成功移除的成员的数量，不包括被忽略的成员。
 	 */
 	public Long zrem(String key, String... member) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrem(key, member);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -904,11 +1475,25 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 被移除成员的数量。
 	 */
 	public Long zremrangeByRank(String key, long start, long end) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zremrangeByRank(key, start, end);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Long zremrangeByLex(String key, String min, String max) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zremrangeByLex(key, min, max);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -922,11 +1507,25 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 被移除成员的数量。
 	 */
 	public Long zremrangeByScore(String key, double start, double end) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zremrangeByScore(key, start, end);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	public Long zremrangeByScore(String key, String start, String end) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zremrangeByScore(key, start, end);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -943,7 +1542,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
 	public Set<String> zrevrange(String key, long start, long end) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrevrange(key, start, end);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -958,7 +1564,14 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
 	public Set<String> zrevrangeByScore(String key, double max, double min) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrevrangeByScore(key, max, min);
+		} finally {
+			closeRedisClient();
+		}
 	}
 
 	/**
@@ -977,6 +1590,13 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
 	public Set<String> zrevrangeByScore(String key, double max, double min, int offset, int count) {
-		return null;
+		if (isEmpty(key)) {
+			return null;
+		}
+		try {
+			return getRedisClient().zrevrangeByScore(key, max, min, offset, count);
+		} finally {
+			closeRedisClient();
+		}
 	}
 }
