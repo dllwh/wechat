@@ -24,5 +24,4 @@
 <script src="${_currConText }/plug-in/assets/js/jquery.dataTables.min.js"></script>
 <script src="${_currConText }/plug-in/assets/js/jquery.dataTables.bootstrap.js"></script>
 
-<script src="${_currConText }/plug-in/assets/layer/layer.js" type="text/javascript" ></script>     
 <script src="${_currConText }/plug-in/assets/dist/echarts.js"></script> 

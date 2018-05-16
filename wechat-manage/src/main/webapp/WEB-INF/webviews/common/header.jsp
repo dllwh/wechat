@@ -23,8 +23,7 @@
 
 <script src="${_currConText }/plug-in/jquery-plugs/jquery.validation/jquery.validate.min.js?v=1.14.0"></script>
 <script src="${_currConText }/plug-in/jquery-plugs/jquery.validation/messages_zh.min.js?v=1.14.0"></script>
-<script src="${_currConText }/plug-in/assets/layer/layer.js?v=2.2"></script>
-<script src="${_currConText }/plug-in/assets/laydate/laydate.js"></script>
+<script src="${_currConText }/plug-in/layui-v2.3.0/layui.all.js" charset="utf-8"></script>
 
 <%-- zTree -- jQuery 树插件 --%>
 <link rel="stylesheet" href="${_currConText }/plug-in/jquery-plugs/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
