@@ -24,8 +24,8 @@ jQuery(function($){
                                 	{image : 'plug-in/login/images/backgrounds/1.jpg'},
                                  	{image : 'plug-in/login/images/backgrounds/2.jpg'},
                                  	{image : 'plug-in/login/images/backgrounds/3.jpg'},
-								 	{image : 'plug-in/login/images/backgrounds/4.jpg'}
-																	
+								 	{image : 'plug-in/login/images/backgrounds/4.jpg'},
+								 	{image : 'plug-in/login/images/backgrounds/5.jpg'}
                        ]
 
     });
