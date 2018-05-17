@@ -34,7 +34,9 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 	/** ----------------------------------------------------- Fields start */
 	private static RedisSentinelFactory redisSentinelFactory;
 	private static ReentrantLock lockJedis = new ReentrantLock();
+	/** 非切片连接池 */
 	private static JedisSentinelPool jedisPool;
+	/** 非切片额客户端连接 */
 	private Jedis jedis;
 
 	/** ----------------------------------------------------- Fields end */

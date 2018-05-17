@@ -57,6 +57,10 @@ public final class RedisConfigFactory {
 		genJedisConfig();
 	}
 
+	/**
+	 * @方法:池基本配置
+	 * @创建人:独泪了无痕
+	 */
 	private void initConfig() {
 		poolConfig = new JedisPoolConfig();
 		// 设置最大连接数，默认值为8.如果赋值为-1，则表示不限制；
