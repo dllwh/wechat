@@ -163,6 +163,11 @@
 			<artifactId>spring-websocket</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>xml-resolver</groupId>
+			<artifactId>xml-resolver</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 	
 	<build>
