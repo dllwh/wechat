@@ -60,9 +60,9 @@ public class LogFactory {
 		sysLog.setParams(params);
 
 		// 操作人的信息
-		int userId = -1;
+		String userId = "-1";
 		if (ShiroHelper.isLogin()) {
-			userId = WebUtilHelper.getCurrentUserId();
+			userId = WebUtilHelper.getCurrentUserName();
 		}
 		sysLog.setUserCode(userId);
 

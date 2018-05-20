@@ -1,5 +1,7 @@
 package com.cdeledu.service.log.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -15,14 +17,29 @@ public class OperateLogServiceImpl extends BaseClass implements OperateLogServic
 	private static final long serialVersionUID = 1L;
 	@Resource
 	private BaseDaoSupport<?> baseDao;
-	private static final String  PREFIX = "com.cdeledu.dao.impl.sysLog.OperateLog.";
+	private static final String PREFIX = "com.cdeledu.dao.impl.sysLog.OperateLog.";
+
 	/** ----------------------------------------------------- Fields end */
-	@Override
 	public void addLog(SysLogEntity syslog) {
 		try {
-			baseDao.insert(PREFIX+"insertSyslog", syslog);
+			baseDao.insert(PREFIX + "insertSyslog", syslog);
 		} catch (Exception e) {
 			error(getClass(), "添加操作日志出现异常", e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<SysLogEntity> getSysLog(SysLogEntity sysLogEntity) throws Exception {
+		return (List<SysLogEntity>) baseDao.findListForJdbcParam(PREFIX + "getSysLog",
+				sysLogEntity);
+	}
+
+	@Override
+	public Integer getSysLogCount(SysLogEntity sysLogEntity) {
+		try {
+			return baseDao.getCountForJdbcParam(PREFIX + "getSysLogCount", sysLogEntity);
+		} catch (Exception e) {
+			return 0;
 		}
 	}
 

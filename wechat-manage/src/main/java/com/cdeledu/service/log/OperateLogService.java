@@ -1,5 +1,7 @@
 package com.cdeledu.service.log;
 
+import java.util.List;
+
 import com.cdeledu.model.system.SysLogEntity;
 
 /**
@@ -15,4 +17,9 @@ public interface OperateLogService {
 	 * @创建人:独泪了无痕
 	 */
 	void addLog(SysLogEntity syslog);
+
+	Integer getSysLogCount(SysLogEntity sysLogEntity);
+
+	/** 获取操作数据 */
+	List<SysLogEntity> getSysLog(SysLogEntity sysLogEntity) throws Exception;
 }

@@ -35,4 +35,13 @@
 			<if test="opResult != null and opResult != '' "> #{opResult},	</if>
 		</trim>
 	</insert>
+
+	<select id="getSysLogCount" parameterType="com.cdeledu.model.system.SysLogEntity"  resultType="int">
+		SELECT count(*) from sys_log
+	</select>
+
+	<select id="getSysLog" parameterType="com.cdeledu.model.system.SysLogEntity" 
+		resultType="com.cdeledu.model.system.SysLogEntity">
+		SELECT * from sys_log LIMIT #{startRow},#{pageSize}
+	</select>
 </mapper>

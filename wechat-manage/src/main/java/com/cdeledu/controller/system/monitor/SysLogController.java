@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.LayuiResponse;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
+import com.cdeledu.model.system.SysLogEntity;
 import com.cdeledu.model.system.SysLoginLog;
 import com.cdeledu.service.log.LoginLogService;
+import com.cdeledu.service.log.OperateLogService;
 import com.cdeledu.util.WebUtilHelper;
 
 /**
@@ -38,6 +41,8 @@ public class SysLogController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private LoginLogService loginLogService;
+	@Autowired
+	private OperateLogService operateLogService;
 
 	/** ----------------------------------------------------- Fields end */
 	/**
@@ -116,9 +121,22 @@ public class SysLogController extends BaseController {
 	 * @方法描述: 操作日志列表
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "opLog", params = "list")
-	public List<SysLoginLog> sysOperateLogList() {
-		return null;
+	public LayuiResponse sysOperateLogList(SysLogEntity sysLogEntity) {
+
+		LayuiResponse resultMap = new LayuiResponse();
+
+		try {
+			resultMap.setCount(operateLogService.getSysLogCount(sysLogEntity));
+			resultMap.setData(operateLogService.getSysLog(sysLogEntity));
+			resultMap.setCode(0);
+		} catch (Exception e) {
+			resultMap.setMsg(e.getMessage());
+			resultMap.setCode(0);
+			resultMap.setCount(0);
+		}
+		return resultMap;
 	}
 
 	/**

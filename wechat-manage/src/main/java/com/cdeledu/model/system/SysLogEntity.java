@@ -1,7 +1,8 @@
 package com.cdeledu.model.system;
 
-import java.io.Serializable;
 import java.util.Date;
+
+import com.cdeledu.common.base.PageEntity;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -14,14 +15,14 @@ import java.util.Date;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class SysLogEntity implements Serializable {
+public class SysLogEntity extends PageEntity {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields end */
 	/** */
 	private int id;
 	/** 操作人的信息 */
-	private int userCode;
+	private String userCode;
 	/** IP地址 */
 	private String ipAddress;
 	/** 日志描述类型(操作代码) */
@@ -56,11 +57,11 @@ public class SysLogEntity implements Serializable {
 		this.id = id;
 	}
 
-	public int getUserCode() {
+	public String getUserCode() {
 		return userCode;
 	}
 
-	public void setUserCode(int userCode) {
+	public void setUserCode(String userCode) {
 		this.userCode = userCode;
 	}
 
