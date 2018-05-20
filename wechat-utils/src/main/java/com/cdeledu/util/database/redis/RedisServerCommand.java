@@ -3,7 +3,8 @@ package com.cdeledu.util.database.redis;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.ss.formula.functions.T;
+import com.cdeledu.util.database.redis.entity.ClientInfo;
+import com.cdeledu.util.database.redis.entity.RedisServerInfo;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -21,10 +22,10 @@ import org.apache.poi.ss.formula.functions.T;
 interface RedisServerCommand {
 
 	/** 返回关于 当前Redis 服务器的各种信息和统计数值 */
-	List<T> getRedisServerInfo();
+	List<RedisServerInfo> getRedisServerInfo();
 
 	/** 用于返回所有连接到服务器的客户端信息和统计数据 */
-	List<T> getClientList();
+	List<ClientInfo> getClientList();
 
 	/** 关闭客户端连接 */
 	boolean kill(String addr);
@@ -33,7 +34,7 @@ interface RedisServerCommand {
 	Long dbSize();
 
 	/** 获取当前redis使用内存大小情况 */
-	Map<T, T> getMemeryInfo();
+	Map<String, Object> getMemeryInfo();
 
 	/** 用于测试与服务器的连接是否仍然生效，或者用于测量延迟值 */
 	boolean isPing();
