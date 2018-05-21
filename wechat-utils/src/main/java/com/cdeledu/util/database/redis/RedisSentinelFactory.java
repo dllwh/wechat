@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.cdeledu.util.database.redis.entity.ClientInfo;
 import com.cdeledu.util.database.redis.entity.RedisServerInfo;
@@ -35,6 +36,7 @@ import redis.clients.jedis.JedisSentinelPool;
  */
 public final class RedisSentinelFactory implements RedisBasicCommand,RedisServerCommand {
 	/** ----------------------------------------------------- Fields start */
+	protected static Logger logger = Logger.getLogger(RedisSentinelFactory.class);
 	private static RedisSentinelFactory redisSentinelFactory;
 	private static ReentrantLock lockJedis = new ReentrantLock();
 	/** 非切片连接池 */
@@ -47,6 +49,7 @@ public final class RedisSentinelFactory implements RedisBasicCommand,RedisServer
 			int database) {
 		jedisPool = new RedisConfigFactory(auth, address, masterName, timeout, database)
 				.redisPoolFactory();
+		setShutdownWork();
 	}
 
 	public static RedisSentinelFactory getInstance(String auth, List<String> address,
@@ -62,6 +65,33 @@ public final class RedisSentinelFactory implements RedisBasicCommand,RedisServer
 		return redisSentinelFactory;
 	}
 
+	/**
+	 * @方法描述: 设置系统停止时需执行的任务
+	 */
+	private static void setShutdownWork() {
+		try {
+			Runtime runtime = Runtime.getRuntime();
+			runtime.addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					try {
+						if (jedisPool != null) {
+							jedisPool.destroy();
+							jedisPool = null;
+							logger.info("关闭Redis Pool成功.");
+						}
+					} catch (Exception ex) {
+						logger.error("关闭Redis Pool失败.", ex);
+					}
+				}
+			});
+			logger.info("设置系统停止时关闭Redis Pool的任务成功.");
+		} catch (Exception e) {
+			logger.error("设置系统停止时关闭Redis Pool的任务失败.");
+		}
+
+	}
+	
 	private Jedis getRedisClient() {
 		// 断言 ，当前锁是否已经锁住，如果锁住了，就啥也不干，没锁的话就执行下面步骤
 		assert !lockJedis.isHeldByCurrentThread();
