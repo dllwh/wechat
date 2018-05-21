@@ -1,5 +1,6 @@
 package com.cdeledu.util.database.redis;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -7,6 +8,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.cdeledu.util.database.redis.entity.ClientInfo;
+import com.cdeledu.util.database.redis.entity.RedisServerInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -30,7 +33,7 @@ import redis.clients.jedis.JedisSentinelPool;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public final class RedisSentinelFactory implements RedisBasicCommand {
+public final class RedisSentinelFactory implements RedisBasicCommand,RedisServerCommand {
 	/** ----------------------------------------------------- Fields start */
 	private static RedisSentinelFactory redisSentinelFactory;
 	private static ReentrantLock lockJedis = new ReentrantLock();
@@ -1600,5 +1603,115 @@ public final class RedisSentinelFactory implements RedisBasicCommand {
 		} finally {
 			closeRedisClient();
 		}
+	}
+
+	/**
+	 * 获取redis 服务器信息
+	 */
+	public List<RedisServerInfo> getRedisServerInfo() {
+		List<RedisServerInfo> redisList = Lists.newArrayList();
+		RedisServerInfo rif;
+		String[] redisServerStrs = getRedisClient().info().split("\n");
+
+		if (redisServerStrs != null && redisServerStrs.length > 0) {
+			for (String redisServer : redisServerStrs) {
+				rif = new RedisServerInfo();
+				String[] str = redisServer.split(":");
+				if (str != null && str.length > 1) {
+					rif.setKey(str[0]);
+					rif.setValue(str[1]);
+					redisList.add(rif);
+				}
+			}
+		}
+		return redisList;
+	}
+
+	/**
+	 * @方法描述: 用于返回所有连接到服务器的客户端信息和统计数据
+	 * @返回参数详情：http://redisdoc.com/server/client_list.html
+	 */
+	public List<ClientInfo> getClientList() {
+		List<ClientInfo> clientList = Lists.newArrayList();
+		try {
+			String[] clientStrs = getRedisClient().clientList().split("\n");
+			if (clientStrs != null && clientStrs.length > 0) {
+				for (String client : clientStrs) {
+					ClientInfo clientInfo;
+					String[] infoArr = client.trim().split(" ");
+					if (infoArr != null && infoArr.length > 0) {
+						for (String info : infoArr) {
+							clientInfo = new ClientInfo();
+							String[] inFoArr2 = info.split("=");
+							if (inFoArr2 != null && inFoArr2.length > 1) {
+								clientInfo.setKey(inFoArr2[0]);
+								clientInfo.setValue(inFoArr2[1]);
+								clientList.add(clientInfo);
+							}
+						}
+					}
+				}
+			}
+		} finally {
+			closeRedisClient();
+		}
+		return clientList;
+	}
+
+	@Override
+	public boolean kill(String addr) {
+		if (isEmpty(addr)) {
+			return false;
+		}
+
+		try {
+			getRedisClient().clientKill(addr);
+			return true;
+		} catch (Exception e) {
+			return false;
+		} finally {
+			closeRedisClient();
+		}
+
+	}
+
+	public Long dbSize() {
+		try {
+			return getRedisClient().dbSize();
+		} finally {
+			closeRedisClient();
+		}
+	}
+
+	public Map<String, Object> getMemeryInfo() {
+		String[] strs = getRedisClient().info().split("\n");
+		Map<String, Object> map = null;
+		for (int i = 0; i < strs.length; i++) {
+			String s = strs[i];
+			String[] detail = s.split(":");
+			if (detail[0].equals("used_memory")) {
+				map = new HashMap<String, Object>();
+				map.put("used_memory", detail[1].substring(0, detail[1].length() - 1));
+				map.put("create_time", System.currentTimeMillis());
+				break;
+			}
+		}
+		return map;
+	}
+
+	/**
+	 * @方法描述: 用于测试与服务器的连接是否仍然生效，或者用于测量延迟值
+	 * @说明 Redis Ping 命令使用客户端向 Redis 服务器发送一个 PING ，如果服务器运作正常的话，会返回一个 PONG
+	 * @return true:客户端和服务器连接正常 false: 客户端和服务器连接不正常(网络不正常或服务器未能正常运行)
+	 */
+	public boolean isPing() {
+		try {
+			if ("pong".equalsIgnoreCase(getRedisClient().ping())) {
+				return true;
+			}
+		} finally {
+			closeRedisClient();
+		}
+		return false;
 	}
 }
