@@ -120,7 +120,7 @@ public class WebUtilHelper {
 	 * @return
 	 */
 	public static String getCurrentUserName() {
-		return ShiroHelper.getCurrentNickName();
+		return ShiroHelper.getCurrentUserName();
 	}
 
 	/**
