@@ -49,4 +49,10 @@ public class SysRole extends DataEntity {
 	public void setCategoryCode(Integer categoryCode) {
 		this.categoryCode = categoryCode;
 	}
+
+	@Override
+	public String toString() {
+		return super.toString()+ "\r\n SysRole [roleName=" + roleName + ", roleCode=" + roleCode + ", categoryCode="
+				+ categoryCode + "]";
+	}
 }
