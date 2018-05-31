@@ -30,20 +30,36 @@
 						<div class="row">
 							<div class="col-sm-12 search_style">
 								<div class="title_names">搜索查询</div>
-								<div class="form-group">
-									<div class="input-group">
-										<div class="input-group col-sm-6" style="float:left;">
+								<div class="form-group center">
+									<div class="row">
+										<div class="col-xs-4">
 											<label class="form-label">角色名称</label>
 											<input id="searchRoleName" onkeyup="value=value.replace(/[\d]/g,'') " 
 												type="text" class="input form-control" placeholder="输入角色名称">
 										</div>
-										<div class="input-group col-sm-6" style="padding-left: 20px;">
+										<div class="col-xs-4">
 											<label class="form-label">角色编码</label>
 											<input id="searchRoleCode" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
 												type="text" class="input form-control" placeholder="输入角色名称">
 										</div>
+										<div class="col-xs-2">
+											<label class="form-label">角色类型</label>
+											<select class="form-control" id="searchCategoryCode">
+												<option value="">请选择</option>
+												<option value="0">业务角色</option>
+												<option value="1">系统角色</option>
+											</select>
+										</div>
+										<div class="col-xs-2">
+											<label class="form-label">使用状态</label>
+											<select class="form-control" id="searchVisible">
+												<option value="">请选择</option>
+												<option value="0">启用</option>
+												<option value="1">禁用</option>
+											</select>
+										</div>
 									</div>
-									<div class="input-group" style="text-align: center;">										
+									<div class="input-group" style="text-align: center;margin-top: 15px;">										
 										<span class="input-group-btn">
 											<button id="btnSearch" class="btn btn-primary"
 												type="button">
@@ -519,7 +535,9 @@
 			sortName: params.sortName,
 			sortOrder: params.sortOrder,
 			roleName : $("#searchRoleName").val().trim(),
-			roleCode : $("#searchRoleCode").val().trim()
+			roleCode : $("#searchRoleCode").val().trim(),
+			categoryCode : $("#searchCategoryCode").val().trim(),
+			ifVisible : $("#searchVisible").val().trim()
 		};
 		return temp;
 	}
