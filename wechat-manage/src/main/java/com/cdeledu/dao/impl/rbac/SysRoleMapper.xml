@@ -26,6 +26,12 @@
 			<if test="roleCode != null and roleCode != '' ">  
 				and roleCode  LIKE CONCAT(CONCAT('%', #{roleCode}),'%') 
 			</if>
+			<if test="ifVisible != null and ifVisible != '' ">  
+				and ifVisible = #{ifVisible}
+			</if>
+			<if test="categoryCode != null and categoryCode != '' ">  
+				and categoryCode = #{categoryCode}
+			</if>
 		</where>
 		ORDER BY
 		<choose>
