@@ -26,14 +26,24 @@
 							</a>
 						</div>
 					</div>
-					<div class="ibox-content">
+					<div class="ibox-content form-horizontal">
 						<div class="row">
 							<div class="col-sm-12 search_style">
 								<div class="title_names">搜索查询</div>
 								<div class="form-group">
 									<div class="input-group">
-										<input id="txtSearchKey" type="text" 
-											class="input form-control" placeholder="输入角色名称">
+										<div class="input-group col-sm-6" style="float:left;">
+											<label class="form-label">角色名称</label>
+											<input id="searchRoleName" onkeyup="value=value.replace(/[\d]/g,'') " 
+												type="text" class="input form-control" placeholder="输入角色名称">
+										</div>
+										<div class="input-group col-sm-6" style="padding-left: 20px;">
+											<label class="form-label">角色编码</label>
+											<input id="searchRoleCode" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" 
+												type="text" class="input form-control" placeholder="输入角色名称">
+										</div>
+									</div>
+									<div class="input-group" style="text-align: center;">										
 										<span class="input-group-btn">
 											<button id="btnSearch" class="btn btn-primary"
 												type="button">
@@ -508,7 +518,8 @@
 			page : params.pageNumber,
 			sortName: params.sortName,
 			sortOrder: params.sortOrder,
-			roleName : $("#txtSearchKey").val().trim()
+			roleName : $("#searchRoleName").val().trim(),
+			roleCode : $("#searchRoleCode").val().trim()
 		};
 		return temp;
 	}
