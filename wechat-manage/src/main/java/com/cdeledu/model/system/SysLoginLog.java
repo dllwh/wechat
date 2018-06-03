@@ -16,7 +16,7 @@ public class SysLoginLog extends BaseEntity {
 	// 登录人
 	private String userCode;
 	// 登录时间
-	private Date loginTime;
+	private Date createTime;
 	// 登录的IP地址
 	private String ipAddress;
 	// 登录是否成功的标识位
@@ -38,12 +38,12 @@ public class SysLoginLog extends BaseEntity {
 		this.userCode = userCode;
 	}
 
-	public Date getLoginTime() {
-		return loginTime;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setLoginTime(Date loginTime) {
-		this.loginTime = loginTime;
+	public void setLoginTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public String getIpAddress() {

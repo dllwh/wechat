@@ -55,9 +55,11 @@ public class LogFactory {
 		sysLog.setMethod(targetName + "." + signature.getName() + "()");
 		// 访问目标方法的参数：
 		Object[] args = joinPoint.getArgs();
-		String params = JSON.toJSONString(args[0]);
-		// sysLog.setParams(JsonMapper.toJsonString(joinPoint.getArgs()));
-		sysLog.setParams(params);
+		if(args != null && args.length < 0 ){
+			String params = JSON.toJSONString(args[0]);
+			// sysLog.setParams(JsonMapper.toJsonString(joinPoint.getArgs()));
+			sysLog.setParams(params);
+		}
 
 		// 操作人的信息
 		String userId = "-1";
