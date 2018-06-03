@@ -26,7 +26,7 @@
 			<if test="time != null"> #{time},</if>
 			<if test="method != null and method != '' "> #{method},</if>
 			<if test="browser != null and browser != '' "> #{browser},</if>
-			<if test="params != null and browser != '' "> #{params},</if>
+			<if test="params != null and params != '' "> #{params},</if>
 			<if test="tableName != null and tableName !='' "> #{tableName},</if>
 			<if test="logType != null"> #{logType},</if>
 			<if test="exceptionCode != null and exceptionCode != '' "> #{exceptionCode},</if>
@@ -37,11 +37,42 @@
 	</insert>
 
 	<select id="getSysLogCount" parameterType="com.cdeledu.model.system.SysLogEntity"  resultType="int">
-		SELECT count(*) from sys_log
+		SELECT 
+			count(*)
+		from 
+			sys_log sl 
+		LEFT JOIN sys_user su on su.userName = sl.userCode 
+		<where>
+			<if test="userCode != null and userCode != '' ">
+				and userCode LIKE CONCAT(CONCAT('%', #{userCode}),'%') 
+			</if>
+			<if test="opType != null and opType != '' "> and opType=#{opType} </if>
+			<if test="browser != null and browser != '' ">and browser=#{browser} </if>
+			<if test="tableName != null and tableName !='' ">and tableName = #{tableName} </if>
+			<if test="params != null and params != '' "> 
+				and params LIKE CONCAT(CONCAT('%', #{params}),'%')
+			</if>
+		</where>
 	</select>
 
 	<select id="getSysLog" parameterType="com.cdeledu.model.system.SysLogEntity" 
 		resultType="com.cdeledu.model.system.SysLogEntity">
-		SELECT * from sys_log LIMIT #{startRow},#{pageSize}
+		SELECT 
+			sl.*,su.id as userId 
+		from 
+			sys_log sl 
+		LEFT JOIN sys_user su on su.userName = sl.userCode
+		<where>
+			<if test="userCode != null and userCode != '' ">
+				and userCode LIKE CONCAT(CONCAT('%', #{userCode}),'%') 
+			</if>
+			<if test="opType != null and opType != '' "> and opType=#{opType} </if>
+			<if test="browser != null and browser != '' ">and browser=#{browser} </if>
+			<if test="tableName != null and tableName !='' ">and tableName = #{tableName} </if>
+			<if test="params != null and params != '' "> 
+				and params LIKE CONCAT(CONCAT('%', #{params}),'%')
+			</if>
+		</where>
+		LIMIT #{startRow},#{pageSize}
 	</select>
 </mapper>
