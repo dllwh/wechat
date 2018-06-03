@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class LayuiResponse {
 	/** 状态，表示请求成功 */
-	private Integer code;
+	private Integer code = 0;
 	/** 返回的信息 */
 	private String msg;
 	/** 表示数据库中总共多少条数据 */
