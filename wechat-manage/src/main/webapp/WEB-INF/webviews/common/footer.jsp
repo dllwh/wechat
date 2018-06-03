@@ -1,3 +1,4 @@
+<script src="${_currConText }/plug-in/layui-v2.3.0/layui.all.js" charset="utf-8"></script>
 <%-- 自定义js --%>
 <script src="${_currConText }/plug-in/tools/extJavascript.js?v=1.1.1"></script>
 <script src="${_currConText }/plug-in/tools/layerExt.js?v=1.0"></script>
