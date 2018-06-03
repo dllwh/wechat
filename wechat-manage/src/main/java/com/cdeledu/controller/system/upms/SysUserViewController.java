@@ -2,17 +2,22 @@ package com.cdeledu.controller.system.upms;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.rbac.SysUser;
+import com.cdeledu.model.system.SysLoginLog;
+import com.cdeledu.service.log.LoginLogService;
+import com.cdeledu.util.WebUtilHelper;
 import com.google.common.collect.Maps;
 
 /**
@@ -31,7 +36,8 @@ import com.google.common.collect.Maps;
 public class SysUserViewController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
-
+	@Autowired
+	private LoginLogService loginLogService;
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法描述: 管理员列表
@@ -57,6 +63,38 @@ public class SysUserViewController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/sysUser/adminInfo");
 		return mv;
+	}
+	
+	/**
+	 * @方法:获取当前登录用户的登录记录
+	 * @创建人:独泪了无痕
+	 * @param modelMap
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "adminInfo",params="getUserLoginLog")
+	public Map<String, Object> getUserLoginLog(ModelMap modelMap,
+			@RequestParam(defaultValue="30",required=true) int rows,
+			@RequestParam(defaultValue="1",required=true) int page) {
+		Map<String, Object> resultMap = Maps.newConcurrentMap();
+		try {
+			
+			if(WebUtilHelper.getCurrenLoginUser() != null){
+				SysLoginLog sysLoginLog = new SysLoginLog();
+				sysLoginLog.setRows(rows);
+				sysLoginLog.setPage(page);
+				sysLoginLog.setUserCode(WebUtilHelper.getCurrentUserName());
+				resultMap.put("total", loginLogService.getCountForJdbcParam(sysLoginLog));
+				resultMap.put("rows",loginLogService.findForJdbcParam(sysLoginLog));	
+			} else {
+				resultMap.put("rows", null);
+				resultMap.put("total", 0);
+			}
+		} catch (Exception e) {
+			resultMap.put("rows", null);
+			resultMap.put("total", 0);
+		}
+		return resultMap;
 	}
 
 	/**

@@ -186,8 +186,19 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "updateUser")
 	@SystemLog(desc = "更新当前登录用户用户", opType = SysOpType.UPDATE, tableName = "sys_user")
-	public AjaxJson updateUser() {
+	public AjaxJson updateUser(SysUser user) {
+		
 		AjaxJson result = new AjaxJson();
+		try {
+			if(WebUtilHelper.getCurrenLoginUser() != null){
+				user.setId(WebUtilHelper.getCurrentUserId());
+				userService.update(user);
+			}
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
 		return result;
 	}
 
