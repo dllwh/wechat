@@ -46,8 +46,7 @@ public class MenuOperateController extends BaseController {
 			if (menu.getType() == SysMenuType.BUTTON.getValue()) {
 				SysMenu parentmMenu = new SysMenu();
 				parentmMenu.setId(menu.getParentCode());
-				if (sysMenuService.findOneForJdbc(parentmMenu).getType() == SysMenuType.MENU
-						.getValue()) {
+				if (sysMenuService.findOneForJdbc(parentmMenu).getType() == SysMenuType.MENU.getValue()) {
 					resultCount = sysMenuService.insert(menu);
 				} else {
 					ajaxJson.setSuccess(false);
@@ -76,27 +75,28 @@ public class MenuOperateController extends BaseController {
 	public AjaxJson saveMenu(SysMenu sysMenu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		try {
-			SysMenu menu = sysMenuService.findOneById(sysMenu.getId());
-			if (menu != null && menu.getAllowEdit() == 1) {
-				if (menu.getType() == sysMenu.getType()) {
-					sysMenuService.update(sysMenu);
-					ajaxJson.setMsg(MessageConstant.SUCCESS_UPDATE_MESSAGE);
+			Integer id = sysMenu.getId();
+			SysMenu menu = sysMenuService.findOneById(id);
+			if (menu != null && menu.getAllowDelete() == 1) {
+				// 删除权限菜单时先删除权限菜单与角色之间关联表信息
+				if (sysMenuService.hasRole(id)) {
+					ajaxJson.setSuccess(false);
+					ajaxJson.setMsg(MessageConstant.MSG_HAS_CHILD);
 				} else {
-					if (!sysMenuService.hasChildren(sysMenu.getId())) {
-						sysMenuService.update(sysMenu);
-						ajaxJson.setMsg(MessageConstant.SUCCESS_UPDATE_MESSAGE);
-					} else {
+					if (sysMenuService.hasChildren(id)) { // 子节点
 						ajaxJson.setSuccess(false);
 						ajaxJson.setMsg(MessageConstant.MSG_HAS_CHILD);
+					} else {
+						sysMenuService.delete(id);
+						ajaxJson.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 					}
 				}
 			} else {
 				ajaxJson.setSuccess(false);
-				ajaxJson.setMsg("不支持更新操作");
 			}
 		} catch (Exception e) {
-			ajaxJson.setMsg(MessageConstant.FAILURE_UPDATE_MESSAGE);
 			ajaxJson.setSuccess(false);
+			ajaxJson.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
 		return ajaxJson;
 	}
@@ -168,8 +168,12 @@ public class MenuOperateController extends BaseController {
 	public AjaxJson visibleState(SysMenu sysMenu) {
 		AjaxJson ajaxJson = new AjaxJson();
 		try {
-			ajaxJson.setMsg(MessageConstant.SUCCESS_ENABLE_TRUE);
+			SysMenu menu = sysMenuService.findOneById(sysMenu.getId()); 
+			if (menu != null && menu.getAllowEdit() == 1) {
+				sysMenuService.update(sysMenu);
+			}
 		} catch (Exception e) {
+			ajaxJson.setSuccess(false);
 			ajaxJson.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
 		return ajaxJson;
