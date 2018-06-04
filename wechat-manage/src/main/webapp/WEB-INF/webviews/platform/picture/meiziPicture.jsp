@@ -44,6 +44,15 @@ body {
 			elem : '#test',
 			page : true,
 			url : '${_currConText }/pictureController/meiziPicture.shtml?getGanSharekData',
+			page : {
+				layout : [ 'limit', 'count','prev', 'page', 'next', 'skip','refresh' ],
+				prev:'上一页',
+				next:'下一页',
+				first:'首页',
+				last:'尾页',
+				groups : 10// 连续出现的页码个数
+			},
+			limit : 30,// 每页显示的条数
 			cols : [ [
 			    {
 					field : 'id',
@@ -53,13 +62,15 @@ body {
 					field : 'url',
 					event : 'preview',
 					style : 'cursor: pointer;',
-					title : '请求方法'
+					title : '地址'
 				}, {
 					field : 'createdAt',
-					width : '10%'
+					width : '10%',
+					title : '上传时间'
 				}, {
 					field : 'publishedAt',
-					width : '10%'
+					width : '10%',
+					title : '发布时间'
 				}, ] ]
 		});
 
@@ -69,7 +80,7 @@ body {
 			if (obj.event === 'preview') {
 				layer.prompt({
 					formType : 2,
-					title : '修改 ID 为 [' + data.id + '] 的用户签名',
+					title : '预览',
 					value : data.sign
 				}, function(value, index) {
 					//这里一般是发送修改的Ajax请求
