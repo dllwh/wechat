@@ -9,6 +9,11 @@
 body {
 	overflow-y: scroll;
 }
+
+.laytable-cell-1-picurl { /*最后的pic为字段的field*/
+	height: 100%;
+	max-width: 100%;
+}
 </style>
 </head>
 <body>
@@ -34,30 +39,62 @@ body {
 	<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 </body>
 
+<script type="text/html" id="imgTpl">
+	<img style="display: inline-block; width: 100%; height: 100%;" src= {{ d.url }}>
+</script>
+<script type="text/html" id="createdTpl">
+	{{#  
+		var fn = function(value){
+   			return dllwh.genStrDateTime(value);
+		}; 
+	}}
+	{{ fn(d.createdAt) }}
+</script>
+<script type="text/html" id="publishedTpl">
+	{{#  
+		var fn = function(value){
+			return dllwh.genStrDateTime(value);
+		}; 
+	}}
+	{{ fn(d.publishedAt) }}
+</script>
+
 <script type="text/javascript">
 	layui.use(['element', 'layer'], function(){
 	
 		var table = layui.table;
-		
 		
 		table.render({
 			elem : '#test',
 			page : true,
 			url : '${_currConText }/pictureController/meiziPicture.shtml?getGanSharekData',
 			page : {
-				layout : [ 'limit', 'count','prev', 'page', 'next', 'skip','refresh' ],
+				layout : [ 'prev', 'next' ],
 				prev:'上一页',
 				next:'下一页',
-				first:'首页',
-				last:'尾页',
-				groups : 10// 连续出现的页码个数
+				limit : 5,// 每页显示的条数
+				limits:[5, 10, 15] // 每页条数的选择项。
 			},
-			limit : 30,// 每页显示的条数
+			request : {
+				pageName: 'page', //页码的参数名称，默认：page
+				limitName: 'rows'// 每页数据量的参数名，默认：limit
+			},
+			done: function(res, curr, count){
+				console.log(res.msg); 
+			},
+			text: {
+			    none: '无法获取更多数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+			},
 			cols : [ [
-			    {
+				{
 					field : 'id',
 					width : '15%',
-					fixed : 'left'
+					title : '图片标识'
+				}, {
+					field : 'picurl',
+					title : '图片预览',
+					width : '15%',
+					templet: '#imgTpl'
 				}, {
 					field : 'url',
 					event : 'preview',
@@ -65,12 +102,14 @@ body {
 					title : '地址'
 				}, {
 					field : 'createdAt',
-					width : '10%',
-					title : '上传时间'
+					width : '15%',
+					title : '上传时间',
+					templet: '#createdTpl'
 				}, {
 					field : 'publishedAt',
-					width : '10%',
-					title : '发布时间'
+					width : '15%',
+					title : '发布时间',
+					templet: '#publishedTpl'
 				}, ] ]
 		});
 

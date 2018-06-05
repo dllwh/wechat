@@ -59,21 +59,25 @@ public class PictureController extends BaseController {
 			@RequestParam(defaultValue = "1", required = true) int page) {
 		LayuiResponse response = new LayuiResponse();
 		String result = "";
+		
 		try {
 			result = httpRequest.sendGetRequest(getGanRequest(rows, page));
 			if (StringUtils.isNotBlank(result)) {
 				GankResponse gank = new Gson().fromJson(result, GankResponse.class);
 				if (gank.ifSuccess()) {
-					response.setData(gank.getResults());
-					// 没有返回总数，默认给个6666
-					response.setCount(6666);
+					if(gank.getResults() != null && gank.getResults().size() > 0){
+						response.setData(gank.getResults());
+						response.setCount((page+1)*rows);
+					} else {
+						response.setCount(page*rows);
+						
+					}
 				} else {
-					response.setCount(0);
+					response.setCount(page*rows);
 				}
 			}
 
 		} catch (Exception e) {
-			response.setCode(500);
 			response.setMsg(e.getMessage());
 			response.setCount(0);
 		}
