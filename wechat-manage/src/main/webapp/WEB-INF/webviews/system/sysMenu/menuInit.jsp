@@ -99,7 +99,7 @@
 													onclick="sysMenuController.deleteClick()">
 													<span class="fa fa-warning"> 禁止删除</span>
 												</button>
-												<button type="button" class="btn btn-warning visibleButton editBut"
+												<button type="button" class="btn btn-warning visibleButton"
 													onclick="sysMenuController.isVisibleClick()">
 												</button>
 											</shiro:hasPermission>
@@ -124,9 +124,9 @@
 	</div>
 	
 	<%-- 添加窗口 --%>
-	<div class="modal fade" id="addMenuMode" tabindex="-1" role="dialog" aria-hidden="true"
+	<div class="modal fade bs-example-modal-lg" id="addMenuMode" tabindex="-1" role="dialog" aria-hidden="true"
 		data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -240,9 +240,9 @@
 	</div>
 	
 	<%-- 编辑窗口 --%>
-	<div class="modal fade" id="editMenuMode" tabindex="-1" role="dialog" aria-hidden="true"
+	<div class="modal fade bs-example-modal-lg" id="editMenuMode" tabindex="-1" role="dialog" aria-hidden="true"
 		data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -623,6 +623,7 @@
 			},{
 				field: 'allowEdit',
 				title: '是否允许编辑',
+				visible:false,
 				formatter : function(value,rowData,rowIndex){
 					if(value == 1){
 						return "<span class='label label-info radius'>允许</span>";
@@ -632,6 +633,7 @@
 				}
 			},{
 				field: 'allowDelete',
+				visible:false,
 				title: '是否允许删除',
 				formatter : function(value,rowData,rowIndex){
 					if(value == 1){
@@ -685,7 +687,6 @@
 				if(row.ifVisible == 1 ){//
 					$(".visibleButton").html('<span class="fa fa-warning">禁用</span>');
 				} else {
-					$(".editBut").attr("disabled", true);
 					$(".visibleButton").html('<span class="fa fa-warning">启用</span>');
 				}
 			},
@@ -893,7 +894,6 @@
 				url:'${_currConText }/sysMenuOperate/createMenu.shtml',
 				beforeSubmit : function(){
 					var isValid = $("#createMenuForm").valid();
-					alert(isValid);
 					if(mType == 0){
 						
 					}

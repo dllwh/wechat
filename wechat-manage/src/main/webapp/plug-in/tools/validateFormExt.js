@@ -37,35 +37,35 @@ $(document).ready(function() {
 			return false;
 		if (!/[0-9]/.test(str))
 			return fasle;
-		return this.optional(element) || /[^A-Za-z0-9]/.test(str);
+		return this.optional(element) && /[^A-Za-z0-9]/.test(str);
 	}, "以字母开头，长度在6-12之间，必须包含数字和特殊字符。");
 
 	// 邮政编码验证
 	jQuery.validator.addMethod("isZipCode", function(value, element) {
 		var tel = /^[0-9]{6}$/;
-		return this.optional(element) || (tel.test(value));
+		return this.optional(element) && (tel.test(value));
 	}, "请正确填写您的邮政编码");
 
 	// 判断字符是否是中文字符
 	jQuery.validator.addMethod("isChina", function(value, element) {
 		var patrn = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi;
-		return this.optional(element) || (patrn.exec(value));
+		return this.optional(element) && (patrn.exec(value));
 	}, "只允许填入中文字符 ");
 
 	// 字符验证
 	jQuery.validator.addMethod("stringCheck", function(value, element) {
-		return this.optional(element) || /^[u0391-uFFE5w]+$/.test(value);
+		return this.optional(element) && /^[u0391-uFFE5w]+$/.test(value);
 	}, "只能包括中文字、英文字母、数字和下划线");
 
 	// 字母数字
 	jQuery.validator.addMethod("isNumber", function(value, element) {
-		return this.optional(element) || /^[a-zA-Z0-9]+$/.test(value);
+		return this.optional(element) && /^[a-zA-Z0-9]+$/.test(value);
 	}, "只能包括英文字母和数字");
 
 	// 只能输入英文
 	jQuery.validator.addMethod("isEnglish", function(value, element) {
 		var chrnum = /^([a-zA-Z]+)$/;
-		return this.optional(element) || (chrnum.test(value));
+		return this.optional(element) && (chrnum.test(value));
 	}, "只能输入字母");
 
 	// 检测手机号是否正确
@@ -73,17 +73,17 @@ $(document).ready(function() {
 		var length = value.length;
 		var regPhone = /^1([3578]\d|4[57])\d{8}$/;
 		return this.optional(element)
-				|| (length == 11 && regPhone.test(value));
+				&& (length == 11 && regPhone.test(value));
 	}, "请正确填写您的手机号码");
 
 	// 身份证号码验证
 	jQuery.validator.addMethod("isIdCardNo", function(value, element) {
-		return this.optional(element) || isIdCardNo(value);
+		return this.optional(element) && isIdCardNo(value);
 	}, "请输入正确的身份证号码。");
 	
 	// 身份证号码验证
 	jQuery.validator.addMethod("actionMethod", function(value, element) {
-		return this.optional(element) ||  /^[a-zA-Z]{1,50}((\.|\/)[a-z][a-zA-Z]{1,50})[.shtml]*$/.test(value);
+		return this.optional(element) &&  /^[a-zA-Z]{1,50}((\.|\/)[a-z][a-zA-Z]{1,50})[.shtml]*$/.test(value);
 	}, "请输入正确的规则URL:只能包含英文、/、.等字符,并且以.shtml结尾");
 });
 
