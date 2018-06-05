@@ -64,6 +64,14 @@
 	</function>
 	
 	<function>
+		<description>获取菜单</description>
+		<name>menuList</name>
+		<function-class>com.cdeledu.util.WebUtilHelper</function-class>
+		<function-signature>java.util.List menuList(java.lang.Integer)</function-signature>
+		<example>${fns:menuList(key)}</example>
+	</function>
+	
+	<function>
 		<description>统计用户</description>
 		<name>countUser</name>
 		<function-class>com.cdeledu.util.WebUtilHelper</function-class>

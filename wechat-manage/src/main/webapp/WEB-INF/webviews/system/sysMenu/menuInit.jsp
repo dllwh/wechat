@@ -29,22 +29,17 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="ibox float-e-margins">
-							<div class="ibox-content">
+							<div class="ibox-content">	
 								<div class="row">
 									<div class="col-sm-12 search_style">
 										<div class="title_names">搜索查询</div>
-										<form role="form" class="form-inline">
-											<div class="form-group col-sm-3">
-												<label for="menuName" class="sr-only">菜单名称</label>
-												<input type="text" placeholder="输入菜单名称" id="sMenuName" 
-													class="form-control">
+										<div class="form-group center">
+											<div class="row">
+												<div class="form-group col-sm-3">
+												<label for="menuName">菜单名称</label>
+												<input type="text" placeholder="输入菜单名称" id="sMenuName" class="form-control">
 											</div>
-											<div class="form-group col-sm-3">
-												<label for="menuUrl" class="sr-only">规则URL</label>
-												<input type="text" placeholder="输入规则URL" id="sMenuUrl" 
-													class="form-control">
-											</div>
-											<div class="form-group col-sm-3">
+											<div class="form-group col-sm-2">
 												<label for="menuType">菜单类型</label>
 												<select class="form-control" id="sMenuType" name="menuType">
 													<option value="">请选择</option>
@@ -53,8 +48,7 @@
 													<option value="2">按钮</option>
 												</select>
 											</div>
-											<div class="form-group col-sm-3" id="paraentMenu">
-											</div>
+											<div class="form-group col-sm-3" id="paraentMenu"></div>
 											<div class="form-group col-sm-3">
 												<label for="isVisible">是否有效</label>
 												<select class="form-control" id="sVisible" name="isVisible">
@@ -63,7 +57,8 @@
 													<option value="1">有效</option>
 												</select>
 											</div>
-										</form>
+											</div>
+										</div>
 									</div>
 								</div>
 								<div class="row">
@@ -96,11 +91,11 @@
 												</button>
 											</shiro:hasPermission>
 											<shiro:hasPermission name="sysMenuOperate/updateMenu.shtml">
-												<button type="button" class="btn btn-warning editBut"
+												<button type="button" class="btn btn-warning editOperate"
 													onclick="sysMenuController.editDisable()">
 													<span class="fa fa-warning"> 禁止编辑</span>
 												</button>
-												<button type="button" class="btn btn-danger delBut"
+												<button type="button" class="btn btn-danger delOperate"
 													onclick="sysMenuController.deleteClick()">
 													<span class="fa fa-warning"> 禁止删除</span>
 												</button>
@@ -128,7 +123,7 @@
 		</div>
 	</div>
 	
-		<%-- 添加窗口 --%>
+	<%-- 添加窗口 --%>
 	<div class="modal fade" id="addMenuMode" tabindex="-1" role="dialog" aria-hidden="true"
 		data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
@@ -257,6 +252,8 @@
 					<h4 class="modal-title">菜单更新</h4>
 				</div>
 				<div class="modal-body">
+					<input id="editParentCode" type="hidden"/>
+					<input id="editMenuType" type="hidden"/>
 					<form method="post" id="editMenuForm" role="form"
 						class="form form-horizontal responsive">
 							<input type="hidden" name="id">
@@ -397,11 +394,41 @@
         });
 		
 		
-		$("input[name=type]").each(function(){
+		$("#addMenuMode input[name=type]").each(function(){
 			$(this).click(function(){
 				var discount = $(this).val();
 				$("#parentCode").combotree("clear");
-				$("#mParentCode").combotree("clear");
+				if(discount == 0){ //目录
+					$(".form-group").show();
+					$("[name='menuUrl']").parent().parent().hide();
+				}
+				
+				if(discount == 1){ // 菜单
+					$(".form-group").show();
+				}
+				
+				if(discount == 2){// 按钮
+					$(".form-group").show();
+					$("[name='sequence']").parent().parent().parent().hide();
+					$("[name='iconClass']").parent().parent().parent().hide();
+				}
+			});
+		});
+		
+		$("#editMenuMode input[name=type]").each(function(){
+			$(this).click(function(){
+				var discount = $(this).val();
+			
+				if($("#editMenuType").val() != discount){
+					$("#mParentCode").combotree("clear");
+				} else {
+					$("#mParentCode").combotree("reload");
+					var obj = $("#editParentCode").val();
+					if(dllwh.isNotNullOrEmpty(obj)){
+						$("#mParentCode").combotree("setValue", obj);	
+					}
+				}
+				
 				if(discount == 0){ //目录
 					$(".form-group").show();
 					$("[name='menuUrl']").parent().parent().hide();
@@ -425,12 +452,26 @@
 				if(discount == 0){ // 目录
 					$("#paraentMenu").html("");	
 				}
-				if(discount == 1){ // 目录 
-	
+				if(discount == 1){ // 目录
+					var a = '<label for="isParentCode">父目录</label>';
+					a +='<select class="form-control" name="parentCode" id="sParentCode">';
+					a +='<option value="">请选择</option>';
+					a +='<c:forEach items="${fns:menuList(0)}" var="menu">';
+					a +='<option value="${menu.id }">${menu.menuName}</option>		';
+					a +='</c:forEach>';
+					a +='</select>';
+					$("#paraentMenu").html(a);	
 				} 
 				
 				if(discount == 2){// 菜单 
-
+					var a = '<label for="isParentCode">父菜单</label>';
+					a +='<select class="form-control" name="parentCode" id="sParentCode">';
+					a +='<option value="">请选择</option>';
+					a +='<c:forEach items="${fns:menuList(1)}" var="menu">';
+					a +='<option value="${menu.id }">${menu.menuName}</option>		';
+					a +='</c:forEach>';
+					a +='</select>';
+					$("#paraentMenu").html(a);
 				}
 				
 			});
@@ -532,6 +573,10 @@
 	
 	function initButton(){
 		$(".addBut").attr("disabled", false);
+		$(".editBut").attr("disabled", false);
+		$(".editOperate").attr("disabled", false);
+		$(".delBut").attr("disabled", false);
+		$(".delOperate").attr("disabled", false);
 		$(".visibleButton").html('<span class="fa fa-warning">审核</span>');
 	}
 	
@@ -624,18 +669,23 @@
 			onCheck: function (row) {
 				if(row.allowEdit == 0 ){// 不允许编辑
 					$(".editBut").attr("disabled", true);
+					$(".editOperate").html('<span class="fa fa-warning">允许编辑</span>');
 				} else {
 					$(".editBut").attr("disabled", false);
+					$(".editOperate").html('<span class="fa fa-warning">禁止编辑</span>');
 				}
 				
 				if(row.allowDelete == 0 ){// 不允许删除
 					$(".delBut").attr("disabled", true);
+					$(".delOperate").html('<span class="fa fa-warning">允许删除</span>');
 				} else {
 					$(".delBut").attr("disabled", false);
+					$(".delOperate").html('<span class="fa fa-warning">禁止删除</span>');
 				}
 				if(row.ifVisible == 1 ){//
 					$(".visibleButton").html('<span class="fa fa-warning">禁用</span>');
 				} else {
+					$(".editBut").attr("disabled", true);
 					$(".visibleButton").html('<span class="fa fa-warning">启用</span>');
 				}
 			},
@@ -644,7 +694,6 @@
 				if (selected.length == 0) {
 					initButton();
 				}
-
 			}
 		});
 	}
@@ -652,7 +701,11 @@
 	function queryParams(params) {
 		var temp = { 
 			rows : params.pageSize, //页面大小
-			page : params.pageNumber
+			page : params.pageNumber,
+			menuName:$("#sMenuName").val().trim(),
+			isVisible:$("#sVisible").val().trim(),
+			parentCode:$("#sParentCode").val(),
+			type:$("#sMenuType").val().trim()
 		};
 		return temp;
 	}
@@ -668,13 +721,14 @@
 			var selected = $('#' + this.id).bootstrapTable('getSelections');
 			if (selected == undefined || selected == "" || selected == 'null' || selected == 'undefined') {
 				// "您没有选中任何数据项！
+				dialogAlert("您没有选中任何数据项！", "warn");
 				return false;
 			}
 			
 			if (selected.length == 0) {
 				return false;
 			} else {
-				sysMenuController.setItem = selected[0];
+				this.setItem = selected[0];
 				return true;
 			}
 		},
@@ -689,6 +743,8 @@
 			if (this.check()) {
 				$("#editMenuForm").form("load", this.setItem);
 				$("#editMenuForm input[name=id]").val(this.setItem.id);
+				$("#editParentCode").val(this.setItem.parentCode);
+				$("#editMenuType").val(this.setItem.type);
 				
 				$(".form-group").show();
 				if(this.setItem.type == 0 ){// 目录
@@ -706,12 +762,14 @@
 		openDeleleDig : function() {// 点击删除按钮
 			if (this.check()) {
 				var id = this.setItem.id;
+				
 				dialogConfirm("您确认要删除该资源吗?", function() {
 					$.ajax({
 						url : "${_currConText }/sysMenuOperate/delMenu.shtml",
 						type : "POST",
 						data : {
-							id : id
+							id : id,
+							random:Math.random()
 						},
 						success : function(result) {
 							if (result.success) {
@@ -732,7 +790,7 @@
 				if(ifVisible == 1){
 					ifVisible = 0;
 				} else {
-					ifVisible = 1
+					ifVisible = 1;
 				}
 				
 				dialogConfirm("您确认要操作此数据吗?", function() {
@@ -741,11 +799,12 @@
 						type : "POST",
 						data : {
 							id : id,
-							ifVisible:ifVisible
+							ifVisible:ifVisible,
+							random:Math.random()
 						},
 						success : function(result) {
 							if (result.success) {
-								dialogMsg("删除成功");
+								dialogMsg("操作成功");
 								initTable();
 							} else {
 								dialogMsg(result.msg, "error");
@@ -758,16 +817,25 @@
 		editDisable : function(){// 编辑状态
 			if(this.check()){
 				var id = this.setItem.id;
+				var allowEdit = this.setItem.allowEdit;
+				if(allowEdit == 1){
+					allowEdit = 0;
+				} else {
+					allowEdit = 1;
+				}
+				
 				dialogConfirm("您确认要操作此数据吗?", function() {
 					$.ajax({
 						url : "${_currConText }/sysMenuOperate/updateMenu.shtml?editDisable",
 						type : "POST",
 						data : {
-							id : id
+							id : id,
+							allowEdit:allowEdit,
+							random:Math.random()
 						},
 						success : function(result) {
 							if (result.success) {
-								dialogMsg("删除成功");
+								dialogMsg("操作成功");
 								initTable();
 							} else {
 								dialogMsg(result.msg, "error");
@@ -780,16 +848,25 @@
 		deleteClick : function(){// 删除状态
 			if(this.check()){
 				var id = this.setItem.id;
+				var allowDelete = this.setItem.allowDelete;
+				if(allowDelete == 1){
+					allowDelete = 0;
+				} else {
+					allowDelete = 1;
+				}
+				
 				dialogConfirm("您确认要操作此数据吗?", function() {
 					$.ajax({
 						url : "${_currConText }/sysMenuOperate/updateMenu.shtml?delDisable",
 						type : "POST",
 						data : {
-							id : id
+							id : id,
+							allowDelete:allowDelete,
+							random:Math.random()
 						},
 						success : function(result) {
 							if (result.success) {
-								dialogMsg("删除成功");
+								dialogMsg("操作成功");
 								initTable();
 							} else {
 								dialogMsg(result.msg, "error");
@@ -803,94 +880,82 @@
 			initTable();
 		},
 		resetSearch : function() { // 重置搜索条件
-			$("#menuName").val("");
-			$("#menuUrl").val("");
+			$("#sMenuName").val("");
+			$("#sVisible").val("");
+			$("#sParentCode").val("");
+			$("#sMenuType").val("");
+			$("#paraentMenu").html("");	
 			initTable();
+		},
+		addSubmitClick : function() { // 新建菜单
+			var mType = $("input[type='radio']:checked").val();
+			$("#createMenuForm").ajaxSubmit({
+				url:'${_currConText }/sysMenuOperate/createMenu.shtml',
+				beforeSubmit : function(){
+					var isValid = $("#createMenuForm").valid();
+					alert(isValid);
+					if(mType == 0){
+						
+					}
+					
+					if(mType == 1){
+						isValid = $("#createMenuForm").validate().element($("[name='menuUrl']"));
+					}
+					
+					if(mType == 2){
+						isValid = $("#createMenuForm").validate().element($("[name='menuUrl']"));
+					} 
+					return isValid;
+				},
+				success : function(result) {
+					if (result.success) {
+						dialogMsg("添加成功");
+						initTable();
+						initButton();
+						$("#addMenuMode").modal('hide');
+					} else {
+						dialogMsg(result.msg, {
+							icon : 2
+						});
+					}
+				}
+			});
+		},
+		editSubmitClick : function() { // 修改菜单
+			var mType = $("input[type='radio']:checked").val();
+			$("#editMenuForm").ajaxSubmit({
+				url:'${_currConText }/sysMenuOperate/saveMenu.shtml',
+				beforeSubmit : function(){
+					var isValid = $("#editMenuForm").valid();
+					if(isValid){
+						if(mType == 0){
+							
+						}
+						
+						if(mType == 1){
+							isValid = $("#editMenuForm").validate().element($("#editMenuForm [name='menuUrl']"));
+						}
+						
+						if(mType == 2){
+							isValid = $("#editMenuForm").validate().element($("[name='menuUrl']"));
+						} 
+					}
+					return isValid;
+				},
+				success : function(result) {
+					if (result.success) {
+						dialogMsg("更新成功");
+						initTable();
+						initButton();
+						$("#editMenuMode").modal('hide');
+					} else {
+						dialogMsg(result.msg, {
+							icon : 2
+						});
+					}
+				}
+			});
 		}
 	};
-	
-	/**
-	 * 菜单详情对话框
-	 */
-	var MenuInfoDlg = {
-		showMenuSelectTree : function() { // 显示父级菜单选择的树
-	
-		}
-	}
-	
-	/**
-	 * 新建菜单
-	 */
-	sysMenuController.addSubmitClick = function() {
-		var mType = $("input[type='radio']:checked").val();
-		$("#createMenuForm").ajaxSubmit({
-			url:'${_currConText }/sysMenuOperate/createMenu.shtml',
-			beforeSubmit : function(){
-				var isValid = $("#createMenuForm").valid();
-				alert(isValid);
-				if(mType == 0){
-					
-				}
-				
-				if(mType == 1){
-					isValid = $("#createMenuForm").validate().element($("[name='menuUrl']"));
-				}
-				
-				if(mType == 2){
-					isValid = $("#createMenuForm").validate().element($("[name='menuUrl']"));
-				} 
-				return isValid;
-			},
-			success : function(result) {
-				if (result.success) {
-					dialogMsg("添加成功");
-					initTable();
-					initButton();
-					$("#addMenuMode").modal('hide');
-				} else {
-					dialogMsg(result.msg, {
-						icon : 2
-					});
-				}
-			}
-		});
-	}
-	
-	/**
-	 * 修改菜单
-	 */
-	sysMenuController.editSubmitClick = function() {
-		var mType = $("input[type='radio']:checked").val();
-		$("#editMenuForm").ajaxSubmit({
-			url:'${_currConText }/sysMenuOperate/saveMenu.shtml',
-			beforeSubmit : function(){
-				var isValid = $("#editMenuForm").valid();
-				if(mType == 0){
-					
-				}
-				
-				if(mType == 1){
-					isValid = $("#editMenuForm").validate().element($("#editMenuForm [name='menuUrl']"));
-				}
-				
-				if(mType == 2){
-					isValid = $("#editMenuForm").validate().element($("[name='menuUrl']"));
-				} 
-				return isValid;
-			},
-			success : function(result) {
-				if (result.success) {
-					dialogMsg("更新成功");
-					initTable();
-					initButton();
-					$("#editMenuMode").modal('hide');
-				} else {
-					dialogMsg(result.msg, {
-						icon : 2
-					});
-				}
-			}
-		});
-	}
 </script>
 </html>

@@ -198,7 +198,28 @@ public class WebUtilHelper {
 		} catch (Exception e) {
 			return null;
 		}
-		
+	}
+	
+	/**
+	 * @方法:按照类型获取菜单
+	 * @创建人:独泪了无痕
+	 * @param key
+	 * @return
+	 */
+	public static List<SysMenu> menuList(Integer key) {
+		try {
+			if (key == null) {
+				key = -1;
+			}
+			SysMenu sysMenu = new SysMenu();
+			sysMenu.setIfVisible(1);
+			sysMenu.setType(key);
+			sysMenu.setPage(-1);
+			return sysMenuService.findForJdbcParam(sysMenu);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**

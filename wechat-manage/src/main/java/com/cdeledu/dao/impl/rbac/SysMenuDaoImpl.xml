@@ -156,7 +156,6 @@
 		WHERE 
 				sm.ifEnabled = 1 
 			AND sm.ifVisible = 1
-			AND sm.perms != ''
 			AND sur.userId = #{id}
 	</select>
 	
