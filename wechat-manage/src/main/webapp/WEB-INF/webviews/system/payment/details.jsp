@@ -105,7 +105,7 @@
 				<c:forEach items="${notExistPayBank }" var="item">
 					<li>
 						<label>
-							<input name="form-field-checkbox" type="checkbox" class="ace">
+							<input name="form-field-checkbox" type="checkbox" class="ace" value="${item.id}">
 							<span class="lbl">
 								<img src="${_currConText }${item.iconPath}" width="160px;" />
 							</span>
@@ -115,6 +115,7 @@
 			</ul>
 		</div>
 	</div>
+	<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 </body>
 
 <script type="text/javascript">
@@ -143,7 +144,7 @@
 	
 	/*确认操作*/
 	function bank_complete(obj, id) {
-		var checkbox=$('input[name="form-field-checkbox"]');
+		var checkbox=$('#Bank_operations input[name="form-field-checkbox"]');
 		if(checkbox.length){
 			for(var i=0; i<checkbox.length; i++){ 
 				if(checkbox[i].checked){
@@ -151,8 +152,7 @@
 						title: '提示框',				
 						icon:0,		
 					})
-					
-					break;					
+				
 				} else {
 					$('.ace').removeClass("add");
 					$('#Bank_operations').find('.Push_button').removeClass("btn_delete");
@@ -179,7 +179,7 @@
 	
 	/**添加银行操作**/
 	function Add_Bank(index) {
-		$('input[name="form-field-checkbox"]').removeAttr('checked');
+		$('#add_bankstyle input[name="form-field-checkbox"]').removeAttr('checked');
 		var index = layer.open({
 			type: 1,
 			title: '添加银行',
@@ -187,26 +187,38 @@
 			shadeClose:false,
 			area : ['830px' , ''],
 			content:$('#add_bankstyle'),
+			cancel : function(){
+				$("#add_bankstyle").hide();
+			},
+			end : function(index){
+				$("#add_bankstyle").hide();
+			},
 			btn:['确定','取消'],
 			yes:function(index, layero){
-				var checkbox=$('input[name="form-field-checkbox"]');
+				var checkbox=$('#add_bankstyle input[name="form-field-checkbox"]');
+				var chk_value =[]; 
+
 				if(checkbox.length){
 					for(var i=0; i<checkbox.length; i++){ 
 						if(checkbox[i].checked){
-							layer.alert('添加成功！',{
-								title: '提示框',				
-								icon:0,		
-							}); 
-							layer.close(index); 
-							break;					
-						} else {
-							layer.alert('请选择银行！',{
-								title: '提示框',				
-								icon:0,		
-							});
-						}
+							chk_value.push(checkbox[i].value);
+						} 
 					}
 				} 
+				
+				var ids = chk_value.join(",");
+				if(ids.length){
+					layer.alert('添加成功！',{
+						title: '提示框',				
+						icon:0,		
+					}); 
+					layer.close(index); 
+				} else {
+					layer.alert('请选择银行！',{
+						title: '提示框',				
+						icon:0,		
+					});
+				}
 			}		  
 		});
 	}
