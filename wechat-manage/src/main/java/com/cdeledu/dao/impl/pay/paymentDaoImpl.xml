@@ -30,4 +30,28 @@
 		WHERE 
 			id NOT in (SELECT bank FROM sys_payment_config_bank WHERE config =  #{_parameter})
 	</select>
+	
+	<select id="getPaymentBank" resultType="com.cdeledu.model.pay.PayBank">
+		SELECT * FROM sys_payment_bank 
+	</select>
+	
+	<update id="updateBank" parameterType="com.cdeledu.model.pay.PayBank">
+		UPDATE sys_payment_bank
+		<set>
+			<if test="name != null and name != '' "> name = #{name},</if>
+			<if test="code != null and code != '' "> code = #{code}, </if>
+			<if test="ifEnabled != null"> ifEnabled = #{ifEnabled}, </if>
+			<if test="iconPath != null and iconPath != '' ">iconPath = #{iconPath},</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<insert id="insertBank" parameterType="com.cdeledu.model.pay.PayBank"
+		useGeneratedKeys="true" keyProperty="id" >
+		insert into sys_payment_bank(name,code,iconPath,
+		<if test="ifEnabled != null"> "ifEnabled != null", </if>
+		)values (#{name},#{code},#{iconPath}
+			<if test="ifEnabled != null"> "ifEnabled != null", </if>
+		)
+	</insert>
 </mapper>

@@ -4,6 +4,8 @@ public class PayBank {
 	private Integer id;
 	/** 银行名称 */
 	private String name;
+	/** 银行代码 */
+	private String code;
 	/** 是否可用 */
 	private Integer ifEnabled;
 	/** 图标地址 */
@@ -23,6 +25,14 @@ public class PayBank {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Integer getIfEnabled() {
@@ -47,7 +57,7 @@ public class PayBank {
 
 	@Override
 	public String toString() {
-		return "PayBank [id=" + id + ", name=" + name + ", ifEnabled=" + ifEnabled + ", iconPath="
-				+ iconPath + "]";
+		return "PayBank [id=" + id + ", name=" + name + ", code=" + code + ", ifEnabled="
+				+ ifEnabled + ", iconPath=" + iconPath + "]";
 	}
 }

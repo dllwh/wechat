@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
  * @since: JDK 1.7
  */
 @Service
+@SuppressWarnings("unchecked")
 public class PaymentServiceImpl implements PaymentService {
 	private final static String PREFIX = "com.cdeledu.dao.impl.pay.paymentDaoImpl.";
 	/** ----------------------------------------------------- Fields start */
@@ -38,7 +39,6 @@ public class PaymentServiceImpl implements PaymentService {
 	 * @创建人:独泪了无痕
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public List<PaymentConfig> getPaymentConfigList() throws Exception {
 		return (List<PaymentConfig>) baseDao.findListForJdbcParam(PREFIX + "getPaymentConfigList");
 	}
@@ -49,7 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
 	 * @throws Exception
 	 */
 	public PaymentConfig getPaymentConfigInfo(Integer id) throws Exception {
-		if(id == null){
+		if (id == null) {
 			return null;
 		}
 		return (PaymentConfig) baseDao.findOneForJdbcParam(PREFIX + "getPaymentConfigInfo", id);
@@ -58,19 +58,31 @@ public class PaymentServiceImpl implements PaymentService {
 	/**
 	 * 获取配置的银行信息
 	 */
-	@SuppressWarnings("unchecked")
 	public List<PayBank> getPaymentConfigBank(Integer id) throws Exception {
-		if(id == null){
+		if (id == null) {
 			return Lists.newArrayList();
 		}
-		return (List<PayBank>) baseDao.findListForJdbcParam(PREFIX + "getPaymentConfigBank",id);
+		return (List<PayBank>) baseDao.findListForJdbcParam(PREFIX + "getPaymentConfigBank", id);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public List<PayBank> getNotExistPaymentBank(Integer id) throws Exception {
-		if(id == null){
+		if (id == null) {
 			return Lists.newArrayList();
 		}
-		return (List<PayBank>) baseDao.findListForJdbcParam(PREFIX + "getNotExistPaymentBank",id);
+		return (List<PayBank>) baseDao.findListForJdbcParam(PREFIX + "getNotExistPaymentBank", id);
+	}
+
+	public List<PayBank> getPaymentBank() throws Exception {
+		return (List<PayBank>) baseDao.findListForJdbcParam(PREFIX + "getPaymentBank");
+	}
+
+	@Override
+	public void updateBank(PayBank payBank) throws Exception {
+		baseDao.update(PREFIX + "updateBank", payBank);
+	}
+
+	@Override
+	public Integer insertBank(PayBank payBank) throws Exception {
+		return baseDao.insert(PREFIX, payBank);
 	}
 }
