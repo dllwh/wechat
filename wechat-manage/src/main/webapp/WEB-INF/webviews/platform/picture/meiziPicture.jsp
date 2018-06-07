@@ -80,10 +80,10 @@ body {
 				limitName: 'rows'// 每页数据量的参数名，默认：limit
 			},
 			done: function(res, curr, count){
-				console.log(res.msg); 
+				 
 			},
 			text: {
-			    none: '无法获取更多数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+				none: '无法获取更多数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
 			},
 			cols : [ [
 				{
