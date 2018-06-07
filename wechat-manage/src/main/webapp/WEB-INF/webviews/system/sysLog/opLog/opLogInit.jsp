@@ -23,7 +23,7 @@
 <script type="text/html" id="operateBar">
 	<a class="layui-btn  layui-btn-warm layui-btn-xs" lay-event="detail">查看</a>
 </script>
- 
+	<%@ include file="/WEB-INF/webviews/common/footer.jsp"%>
 <script>
 	var table = layui.table,
 		form = layui.form;
