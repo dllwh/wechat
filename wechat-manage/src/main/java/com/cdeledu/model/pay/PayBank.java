@@ -4,10 +4,10 @@ public class PayBank {
 	private Integer id;
 	/** 银行名称 */
 	private String name;
-	/** 银行代码 */
-	private String code;
 	/** 是否可用 */
 	private Integer ifEnabled;
+	/** 是否有效 */
+	private Integer ifVisible;
 	/** 图标地址 */
 	private String iconPath;
 
@@ -27,14 +27,6 @@ public class PayBank {
 		this.name = name;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	public Integer getIfEnabled() {
 		return ifEnabled;
 	}
@@ -43,7 +35,20 @@ public class PayBank {
 		if (ifEnabled == 0 || ifEnabled == 1) {
 			this.ifEnabled = ifEnabled;
 		} else {
-			this.ifEnabled = 0;
+			this.ifEnabled = 1;
+		}
+	}
+
+	public Integer getIfVisible() {
+		return ifVisible;
+	}
+
+	public void setIfVisible(Integer ifVisible) {
+
+		if (ifVisible == 0 || ifVisible == 1) {
+			this.ifVisible = ifVisible;
+		} else {
+			this.ifVisible = 1;
 		}
 	}
 
@@ -57,7 +62,7 @@ public class PayBank {
 
 	@Override
 	public String toString() {
-		return "PayBank [id=" + id + ", name=" + name + ", code=" + code + ", ifEnabled="
-				+ ifEnabled + ", iconPath=" + iconPath + "]";
+		return "PayBank [id=" + id + ", name=" + name + ", ifEnabled=" + ifEnabled + ", ifVisible="
+				+ ifVisible + ", iconPath=" + iconPath + "]";
 	}
 }

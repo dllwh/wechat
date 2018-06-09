@@ -83,6 +83,6 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Override
 	public Integer insertBank(PayBank payBank) throws Exception {
-		return baseDao.insert(PREFIX, payBank);
+		return baseDao.insert(PREFIX+"insertBank", payBank);
 	}
 }

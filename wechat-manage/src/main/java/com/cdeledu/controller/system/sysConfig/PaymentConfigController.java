@@ -8,7 +8,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
 import com.cdeledu.common.base.LayuiResponse;
+import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
+import com.cdeledu.core.annotation.SystemLog;
 import com.cdeledu.model.pay.PayBank;
 import com.cdeledu.service.pay.PaymentService;
 
@@ -64,7 +66,7 @@ public class PaymentConfigController extends BaseController {
 	}
 
 	/**
-	 * @方法:银行分类
+	 * @方法:获取银行数据
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
@@ -93,7 +95,7 @@ public class PaymentConfigController extends BaseController {
 	}
 
 	/**
-	 * @方法:银行分类
+	 * @方法:更新银行信息
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
@@ -102,7 +104,60 @@ public class PaymentConfigController extends BaseController {
 	public AjaxJson updateBank(PayBank payBank) {
 		AjaxJson ajaxJson = new AjaxJson();
 		try {
+			paymentService.updateBank(payBank);
+			ajaxJson.setSuccess(true);
+		} catch (Exception e) {
+			ajaxJson.setSuccess(false);
+		}
+		return ajaxJson;
+	}
+
+	/**
+	 * @方法:银行分类
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@RequestMapping(value = "saveBank", params = "createBank")
+	public ModelAndView createBank(Integer ownerId) {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/payment/createBank");
+		return mv;
+	}
+
+	/**
+	 * @方法:新增银行分类
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "saveBank")
+	@SystemLog(tableName = "sys_payment_bank", opType = SysOpType.INSERT, desc = "新增加银行")
+	public AjaxJson saveBank(PayBank payBank) {
+		AjaxJson ajaxJson = new AjaxJson();
+		try {
 			paymentService.insertBank(payBank);
+			ajaxJson.setSuccess(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ajaxJson.setMsg(e.getMessage());
+			ajaxJson.setSuccess(false);
+		}
+		return ajaxJson;
+	}
+
+	/**
+	 * @方法:删除银行，实际是更新
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "delBank")
+	@SystemLog(tableName = "sys_payment_bank,sys_payment_config,sys_payment_config_bank", opType = SysOpType.DEL, desc = "删除银行")
+	public AjaxJson delBank(PayBank payBank) {
+		AjaxJson ajaxJson = new AjaxJson();
+		try {
+			payBank.setIfEnabled(0);
+			paymentService.updateBank(payBank);
 			ajaxJson.setSuccess(true);
 		} catch (Exception e) {
 			ajaxJson.setSuccess(false);

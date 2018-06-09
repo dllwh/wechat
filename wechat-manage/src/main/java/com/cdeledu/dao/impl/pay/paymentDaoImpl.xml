@@ -3,7 +3,7 @@
 <mapper namespace="com.cdeledu.dao.impl.pay.paymentDaoImpl">
 	<!-- 获取支付配置列表 -->
 	<select id="getPaymentConfigList" resultType="com.cdeledu.model.pay.PaymentConfig">
-		SELECT * FROM sys_payment_config
+		SELECT * FROM sys_payment_config where ifEnabled = 1
 	</select>
 	
 	<!-- 获取支付配置列表 -->
@@ -11,7 +11,7 @@
 		SELECT 
 			spc.*,sd.itemName 
 		FROM sys_payment_config spc 
-		INNER JOIN sys_dict sd ON sd.itemCode = spc.currency AND ifEnabled = 1
+		INNER JOIN sys_dict sd ON sd.itemCode = spc.currency AND sd.ifEnabled = 1
 		where
 			spc.id = #{_parameter}
 	</select>
@@ -21,26 +21,29 @@
 		SELECT spb.* FROM sys_payment_bank spb 
 		INNER JOIN sys_payment_config_bank spcb ON spcb.bank = spb.id AND spb.ifEnabled = 1
 		WHERE 
-			spcb.config = #{_parameter}
+			spcb.config = #{_parameter} and spb.ifEnabled = 1
 	</select>
 	
 	<!-- 获取没在支付配置的银行 -->
 	<select id="getNotExistPaymentBank" resultType="com.cdeledu.model.pay.PayBank">
 		SELECT * FROM sys_payment_bank 
 		WHERE 
-			id NOT in (SELECT bank FROM sys_payment_config_bank WHERE config =  #{_parameter})
+			id NOT in (
+				SELECT bank FROM sys_payment_config_bank WHERE config =  #{_parameter}
+			)
+			and ifEnabled = 1
 	</select>
 	
 	<select id="getPaymentBank" resultType="com.cdeledu.model.pay.PayBank">
-		SELECT * FROM sys_payment_bank 
+		SELECT * FROM sys_payment_bank where ifEnabled = 1
 	</select>
 	
 	<update id="updateBank" parameterType="com.cdeledu.model.pay.PayBank">
 		UPDATE sys_payment_bank
 		<set>
 			<if test="name != null and name != '' "> name = #{name},</if>
-			<if test="code != null and code != '' "> code = #{code}, </if>
 			<if test="ifEnabled != null"> ifEnabled = #{ifEnabled}, </if>
+			<if test="ifVisible != null"> ifVisible = #{ifVisible}, </if>
 			<if test="iconPath != null and iconPath != '' ">iconPath = #{iconPath},</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}
@@ -48,10 +51,16 @@
 	
 	<insert id="insertBank" parameterType="com.cdeledu.model.pay.PayBank"
 		useGeneratedKeys="true" keyProperty="id" >
-		insert into sys_payment_bank(name,code,iconPath,
-		<if test="ifEnabled != null"> "ifEnabled != null", </if>
-		)values (#{name},#{code},#{iconPath}
-			<if test="ifEnabled != null"> "ifEnabled != null", </if>
+		insert into sys_payment_bank(name,iconPath
+		<trim prefix="," suffixOverrides=",">		
+			<if test="ifVisible != null"> ifVisible, </if>
+			<if test="ifEnabled != null"> ifEnabled, </if>
+		</trim>
+		)values (#{name},#{iconPath}
+		<trim prefix="," suffixOverrides=",">
+			<if test="ifVisible != null"> #{ifVisible}, </if>
+			<if test="ifEnabled != null"> #{ifEnabled}, </if>
+		</trim>
 		)
 	</insert>
 </mapper>
