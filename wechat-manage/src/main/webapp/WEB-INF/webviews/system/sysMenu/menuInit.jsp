@@ -704,7 +704,7 @@
 			rows : params.pageSize, //页面大小
 			page : params.pageNumber,
 			menuName:$("#sMenuName").val().trim(),
-			isVisible:$("#sVisible").val().trim(),
+			ifVisible:$("#sVisible").val().trim(),
 			parentCode:$("#sParentCode").val(),
 			type:$("#sMenuType").val().trim()
 		};
