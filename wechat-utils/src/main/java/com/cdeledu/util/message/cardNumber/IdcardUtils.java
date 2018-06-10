@@ -161,6 +161,7 @@ public class IdcardUtils {
 					// 获取校验码
 					String val = getCheckCode18(iSum17);
 					if (StringUtilHelper.length(val) > 0) {
+						// 将身份证的第18位与算出来的校码进行匹配，不相等就为假
 						if (val.equalsIgnoreCase(code18)) {
 							return true;
 						}
@@ -187,17 +188,46 @@ public class IdcardUtils {
 			if (cityCodes.get(proCode) == null) {
 				return false;
 			}
+			String provinceid = idCard.substring(0, 2);
 			String birthCode = idCard.substring(6, 12);
+
+			// 判断是否为合法的省份
+
+			boolean flag = false;
+			for (String id : cityCode) {
+				if (id.equals(provinceid)) {
+					flag = true;
+					break;
+				}
+			}
+
+			if (!flag) {
+				return false;
+			}
+
+			// 该身份证生出日期在当前日期之后时为假
 			Date birthDate = null;
+			try {
+				birthDate = new SimpleDateFormat("yyMMdd").parse(birthCode);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			if (birthDate == null || new Date().before(birthDate)) {
+				return false;
+			}
+
 			try {
 				birthDate = new SimpleDateFormat("yy").parse(birthCode.substring(0, 2));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			Calendar cal = Calendar.getInstance();
+
 			if (birthDate != null) {
 				cal.setTime(birthDate);
 			}
+			// 判断是否为合法的年份、月份、日期
 			if (!valiDate(cal.get(Calendar.YEAR), Integer.valueOf(birthCode.substring(2, 4)),
 					Integer.valueOf(birthCode.substring(4, 6)))) {
 				return false;
