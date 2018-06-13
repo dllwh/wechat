@@ -57,13 +57,16 @@ public class SftpHelper {
 	private String sftpHost;
 	/** SFTP 端口 */
 	private int sftpPort;
-	private JSch jsch;
 	/** 密钥文件路径 */
 	private String privateKey;
 	/** 密钥口令 */
 	private String passphrase;
+	/** 创建JSch类 */
+	private JSch jsch;
 	private static ChannelSftp sftpClient;
+	// 创建本次的文件会话对象
 	private Session sshSession;
+	// 在该session会话中开启一个SFTP通道
 	private Channel channel;
 
 	/** ----------------------------------------------------- Fields end */
@@ -132,6 +135,12 @@ public class SftpHelper {
 		return list;
 	}
 
+	/**
+	 * @方法:初始化
+	 * @创建人:独泪了无痕
+	 * @throws SftpException
+	 * @throws JSchException
+	 */
 	private void init() throws SftpException, JSchException {
 		jsch = new JSch();
 
