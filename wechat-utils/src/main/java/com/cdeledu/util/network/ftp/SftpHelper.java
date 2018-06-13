@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.cdeledu.util.network.ftp.monitor.FileProgressMonitor;
 import com.google.common.collect.Lists;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
@@ -33,6 +34,12 @@ import com.jcraft.jsch.SftpException;
  * 
  *       <p>
  *       1.所有的文件路径必须以'/'开头和结尾，否则路径最后一部分会被当做是文件名<br>
+ *       2.JSch支持三种文件传输模式 <br>
+ *       2.1 OVERWRITE 完全覆盖模式，这是JSch的默认文件传输模式，即如果目标文件已经存在，传输的文件将完全覆盖目标文件，产生新的文件
+ *       <br>
+ *       2.2 恢复模式，如果文件已经传输一部分，这时由于网络或其他任何原因导致文件传输中断，如果下一次传输相同的文件，则会从上一次中断的地方续传
+ *       <br>
+ *       2.3 追加模式，如果目标文件已存在，传输的文件将在目标文件后追加
  *       </p>
  * @创建者: 独泪了无痕--duleilewuhen@sina.com
  * @创建时间: 2018年6月10日 下午10:12:29
@@ -278,7 +285,7 @@ public class SftpHelper {
 	 * @throws SftpException
 	 * @throws JSchException
 	 */
-	public boolean upload(final String srcFile, final String directory, final String sftpFileName)
+	public boolean upload(final String srcFile, final String directory)
 			throws SftpException, JSchException {
 
 		boolean result = false;
@@ -286,13 +293,10 @@ public class SftpHelper {
 		File file = new File(srcFile);
 		try {
 			if (file.exists()) {
-				mkdir(directory);
-				getSftpConnect().cd(directory);
-				if (StringUtils.isNotBlank(sftpFileName)) {
-					getSftpConnect().put(srcFile, sftpFileName);
-				} else {
-					getSftpConnect().put(srcFile);
+				if (!isDirExist(directory)) {
+					mkdir(directory);
 				}
+				getSftpConnect().put(srcFile, new FileProgressMonitor(), ChannelSftp.OVERWRITE);
 				result = true;
 			}
 		} finally {
@@ -328,7 +332,7 @@ public class SftpHelper {
 			}
 			List<String> srcList = formatPath(downloadFile);
 			getSftpConnect().cd(srcList.get(0));
-			getSftpConnect().get(srcList.get(1), saveFile);
+			getSftpConnect().get(srcList.get(1), saveFile, new FileProgressMonitor());
 			result = true;
 		} finally {
 			logout();
