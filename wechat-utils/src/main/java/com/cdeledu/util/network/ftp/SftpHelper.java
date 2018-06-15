@@ -162,10 +162,10 @@ public class SftpHelper {
 				}
 				Properties sshConfig = new Properties();
 				sshConfig.put("StrictHostKeyChecking", "no");
-
+				
 				sshSession.setConfig(sshConfig);
 				sshSession.setServerAliveInterval(92000);
-
+				
 				// 登陆SFTP服务器
 				sshSession.connect();
 				if (!sshSession.isConnected()) {
@@ -176,10 +176,9 @@ public class SftpHelper {
 				// 参数sftp指明要打开的连接是sftp连接
 				channel = sshSession.openChannel("sftp");
 				channel.connect();
-
+				
 				sftpClient = (ChannelSftp) channel;
 			}
-
 		}
 	}
 
@@ -237,7 +236,6 @@ public class SftpHelper {
 				channel.connect();
 				sftpClient = (ChannelSftp) channel;
 			}
-
 		}
 		return sftpClient;
 	}
@@ -305,7 +303,7 @@ public class SftpHelper {
 				if (!isDirExist(directory)) {
 					mkdir(directory);
 				}
-				getSftpConnect().put(srcFile, new FileProgressMonitor(), ChannelSftp.OVERWRITE);
+				getSftpConnect().put(srcFile, directory, new FileProgressMonitor());
 				result = true;
 			}
 		} finally {

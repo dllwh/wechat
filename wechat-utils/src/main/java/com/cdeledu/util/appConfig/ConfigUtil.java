@@ -21,8 +21,6 @@ public class ConfigUtil {
 	/** --------------------------私有属性 start------------------------------- */
 	// 项目参数
 	private static final ResourceBundle CONFIG = ResourceBundle.getBundle("properties/config");
-	// 数据库配置参数
-	private static final ResourceBundle database = ResourceBundle.getBundle("datasource/jdbc");
 
 	/** --------------------------私有属性 end------------------------------- */
 
@@ -107,16 +105,6 @@ public class ConfigUtil {
 	 */
 	public static final String getUploadDirectory() {
 		return getConfigByName(CONFIG, "uploadDirectory");
-	}
-
-	/**
-	 * @Title: getJdbcUrl
-	 * @Description: 获取数据库类型
-	 * @author: 独泪了无痕
-	 * @return
-	 */
-	public static final String getJdbcUrl() {
-		return database.getString("database.dbUrl").toLowerCase();
 	}
 
 	/**
