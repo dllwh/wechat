@@ -25,24 +25,24 @@ div#zTreeRightMenuContainer {
 }
 
 div#rMenu ul {
-    margin: 0px;
-    padding: 0px;
+	margin: 0px;
+	padding: 0px;
 }
 
 div#rMenu ul li {
-    font-size: 12px;
-    line-height: 20px;
-    margin: 0px;
-    padding: 0px;
-    cursor: pointer;
-    list-style: none outside none; 
-    background-color: #DFDFDF;
-    border-bottom: 1px solid #fff;
-    padding-left: 3px;
+	font-size: 12px;
+	line-height: 20px;
+	margin: 0px;
+	padding: 0px;
+	cursor: pointer;
+	list-style: none outside none; 
+	background-color: #DFDFDF;
+	border-bottom: 1px solid #fff;
+	padding-left: 3px;
 }
 
 div#rMenu ul li:hover {
-    background: #eee;
+	background: #eee;
 }
 
 div#zTreeRightMenuContainer a {
@@ -53,67 +53,7 @@ div#zTreeRightMenuContainer a {
 </head>
 <body>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-2 no-padding">
-				<div class="panel panel-default">
-					<div class="panel-heading">区域目录</div>
-					<div class="panel-body" id="treePanel" style="overflow: auto;">
-						<ul id="areaTree" class="ztree"></ul>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-10 no-padding">
-				<div class="panel panel-default">
-					<div class="panel-heading">区域信息</div>
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-md-7 form-inline pull-left">
-								<div class="form-group">
-									<input class="form-control" placeholder="请输入区域代码" 
-									id="seacherCode"/>
-									<input class="form-control" placeholder="请输入区域名称" 
-									id="seacherName"/>
-									<input id="parentCode" type="hidden"/>
-								</div>
-								<div class="form-group">
-									<a class="btn btn-primary" onclick="sysAreaController.searchClick()">
-										<i class="fa fa-search"></i>&nbsp;查询
-									</a>
-								</div>
-							</div>
-							<div class="col-md-5">
-								<div class="btn-toolbar pull-right">
-									<div class="btn-group">
-										<shiro:hasPermission name="sysAreaOperate/save.shtml">
-											<a class="btn btn-default" onclick="sysAreaController.addClick()">
-												<i class="fa fa-plus"></i>&nbsp;新增
-											</a>
-										</shiro:hasPermission>
-										<shiro:hasPermission name="sysAreaOperate/update.shtml">
-											<a class="btn btn-default" onclick="sysAreaController.editClick()">
-												<i class="fa fa-pencil-square-o icon-white"></i>&nbsp;编辑
-											</a>
-										</shiro:hasPermission>
-										<shiro:hasPermission name="sysAreaOperate/del.shtml">
-											<a class="btn btn-danger" onclick="sysAreaController.deleteClick()">
-												<i class="fa fa-trash-o"></i>&nbsp;删除
-											</a>
-										</shiro:hasPermission>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12" style="padding-top: 10px">
-								<table id="areaTable"
-									class="table table-striped table-bordered table-hover">
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<%@ include file="/WEB-INF/webviews/system/area/areaList.jsp"%>
 	</div>
 	
 	<%-- 右键菜单--%>
@@ -250,19 +190,19 @@ div#zTreeRightMenuContainer a {
 			onClick : function(e, treeId, treeNode) { //定义节点单击事件回调函数
 				var node = zTree.getSelectedNodes()[0];
 				if (node) {
-					 if(node.isParent){
-						 $("#seacherKey").val("");
-						 $("#parentCode").val(node.id);
-						 sysAreaController.searchClick();
-					 } else {
-						 
-					 }
+					if(node.isParent){
+						$("#seacherKey").val("");
+						$("#parentCode").val(node.id);
+						sysAreaController.searchClick();
+					} else {
+						
+					}
 				} else {
 					dialogAlert("请选择要操作的节点", "warn");
 				}
 			},
 			onRightClick : function(event, treeId, treeNode) {//定义节点右键单击事件回调函数
-				 if (treeNode && !treeNode.noR) { // 判断点击的是tree节点
+				if (treeNode && !treeNode.noR) { // 判断点击的是tree节点
 					var top = $(window).scrollTop();
 					// 选中tree节点
 					zTree.selectNode(treeNode);
@@ -275,10 +215,10 @@ div#zTreeRightMenuContainer a {
 						}
 					} else { 
 						treeController.showRMenu("root", event.clientX, event.clientY+top);//根节点
-			        }
-				 } else { // 判断点击了tree的“空白”部分，即没有点击到tree节点上
-					 zTree.cancelSelectedNode();
-				 }
+					}
+				} else { // 判断点击了tree的“空白”部分，即没有点击到tree节点上
+					zTree.cancelSelectedNode();
+				}
 			},
 			onAsyncSuccess : function(event, treeId, treeNode) {//异步加载成功后执行的方法
 				dialogLoading(false);
@@ -428,13 +368,13 @@ div#zTreeRightMenuContainer a {
 		},
 		showRMenu:function (type, x, y) {//显示右键菜单 
 			$("#zTreeRightMenuContainer ul").show();
-			 if (type == "root") {
-				 
-			  } else if(type == "firstNode"){
-				  
-			  } else if(type == "secondNode"){
-				  
-			  }
+			if (type == "root") {
+				
+			} else if(type == "firstNode"){
+				
+			} else if(type == "secondNode"){
+				
+			}
 			// 设置右键菜单的位置、可见
 			$("#zTreeRightMenuContainer").css({
 				"top" : y + "px",
@@ -505,14 +445,14 @@ div#zTreeRightMenuContainer a {
 			if(this.check()){
 				this.hideRMenu();
 				var selectNodes = zTree.getSelectedNodes(); 
-				 zTree.expandNode(selectNodes[0], true, true, null);  
+				zTree.expandNode(selectNodes[0], true, true, null);  
 			}
 		},
 		collapse : function(){ //右键菜单 折叠子节点  
 			if(this.check()){
 				this.hideRMenu();
 				var selectNodes = zTree.getSelectedNodes();
-				 zTree.expandNode(selectNodes[0], false, null, null);
+				zTree.expandNode(selectNodes[0], false, null, null);
 			}
 		},
 		collapseAll : function(){ //右键菜单 全部折叠
@@ -560,5 +500,4 @@ div#zTreeRightMenuContainer a {
 		}
 	};
 </script>
-
 </html>
