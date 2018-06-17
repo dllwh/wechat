@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.impl.cms.AttachmentDaoImpl">
+
+	<select id="getAttachmentList" parameterType="com.cdeledu.model.cms.resources.Attachment"
+		resultType="com.cdeledu.model.cms.resources.Attachment">
+		SELECT * FROM ecms_attachment;
+	</select>
+
+	<select id="getAttachmentCount" parameterType="com.cdeledu.model.cms.resources.Attachment"
+		resultType="int">
+		SELECT COUNT(*) FROM ecms_attachment;
+	</select>
+</mapper>
