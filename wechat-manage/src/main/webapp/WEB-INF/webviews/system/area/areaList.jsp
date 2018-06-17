@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+<%@ include file="/WEB-INF/webviews/common/taglib.jsp"%>
 <div class="row">
 	<div class="col-sm-2 no-padding">
 		<div class="panel panel-default">
