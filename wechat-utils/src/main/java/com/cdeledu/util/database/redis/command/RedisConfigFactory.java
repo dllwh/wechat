@@ -99,6 +99,9 @@ public final class RedisConfigFactory {
 	 * @方法描述: 初始化Redis连接池
 	 */
 	private synchronized void initialPool() {
+		// 断言 ，当前锁是否已经锁住，如果锁住了，就啥也不干，没锁的话就执行下面步骤
+		assert !lockPool.isHeldByCurrentThread();
+
 		lockPool.lock();
 		try {
 			if (jedisPool == null) {
@@ -125,7 +128,7 @@ public final class RedisConfigFactory {
 	/**
 	 * @方法描述 : 实列化JRedis 线程池相关配置
 	 */
-	public synchronized JedisPoolConfig genJedisConfig() {
+	public JedisPoolConfig genJedisConfig() {
 		if (poolConfig == null) {
 			initClusterConfig();
 		}
@@ -137,8 +140,13 @@ public final class RedisConfigFactory {
 	 * @return
 	 */
 	public synchronized JedisSentinelPool redisPoolFactory() {
+		// 断言 ，当前锁是否已经锁住，如果锁住了，就啥也不干，没锁的话就执行下面步骤
+		assert !lockPool.isHeldByCurrentThread();
+
 		if (jedisPool == null) {
-			initialPool();
+			synchronized (JedisSentinelPool.class) {
+				initialPool();
+			}
 		}
 		return jedisPool;
 	}

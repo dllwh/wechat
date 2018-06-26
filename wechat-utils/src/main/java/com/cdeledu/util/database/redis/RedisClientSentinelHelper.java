@@ -32,7 +32,7 @@ import redis.clients.jedis.JedisSentinelPool;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年5月11日 上午9:33:55
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 public class RedisClientSentinelHelper {
@@ -41,9 +41,7 @@ public class RedisClientSentinelHelper {
 	private static RedisClientSentinelHelper redisSentinelFactory;
 	private static ReentrantLock lockJedis = new ReentrantLock();
 	/** 非切片连接池 */
-	private static JedisSentinelPool jedisPool;
-	/** 非切片额客户端连接 */
-	private Jedis jedis;
+	private static JedisSentinelPool jedisPool = null;
 
 	/** ----------------------------------------------------- Fields end */
 	private RedisClientSentinelHelper(String auth, List<String> address, String masterName,
@@ -102,6 +100,8 @@ public class RedisClientSentinelHelper {
 		// 断言 ，当前锁是否已经锁住，如果锁住了，就啥也不干，没锁的话就执行下面步骤
 		assert !lockJedis.isHeldByCurrentThread();
 		lockJedis.lock();
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
 			jedis = jedisPool.getResource();
 		} catch (Exception getRedisClientExp) {
@@ -116,11 +116,13 @@ public class RedisClientSentinelHelper {
 	 * @方法:断开连接池连接
 	 * @创建人:独泪了无痕
 	 */
-	private void closeRedisClient() {
+	private void closeRedisClient(Jedis jedis) {
 		if (jedis != null) {
-			// jedis.resetState();
+			// 1. 请求服务端关闭连接
 			jedis.quit();
+			// 2. 客户端主动关闭连接
 			jedis.close();
+			jedis.disconnect();
 		}
 	}
 
@@ -150,11 +152,14 @@ public class RedisClientSentinelHelper {
 	 * 遍历所有的key
 	 */
 	public Set<String> getAllKeys() {
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
+			jedis = getRedisClient();
 			// 获取数据并输出
-			return getRedisClient().keys("*");
+			return jedis.keys("*");
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -177,11 +182,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(pattern)) {
 			pattern = "*";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
+			jedis = getRedisClient();
 			// 获取数据并输出
-			return getRedisClient().keys(pattern);
+			return jedis.keys(pattern);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -194,11 +202,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
+			jedis = getRedisClient();
 			// 获取数据并输出
-			return getRedisClient().exists(key);
+			return jedis.exists(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -211,11 +222,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
+			jedis = getRedisClient();
 			// 获取数据并输出
-			return 1 == getRedisClient().persist(key);
+			return 1 == jedis.persist(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -229,10 +243,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().type(key);
+			jedis = getRedisClient();
+			return jedis.type(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -251,10 +268,13 @@ public class RedisClientSentinelHelper {
 		if (seconds < -1) {
 			seconds = -1;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return 1 == getRedisClient().expire(key, seconds);
+			jedis = getRedisClient();
+			return 1 == jedis.expire(key, seconds);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -266,10 +286,13 @@ public class RedisClientSentinelHelper {
 		if (milliseconds < -1) {
 			milliseconds = -1;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return 1 == getRedisClient().expireAt(key, milliseconds);
+			jedis = getRedisClient();
+			return 1 == jedis.expireAt(key, milliseconds);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -283,10 +306,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().ttl(key);
+			jedis = getRedisClient();
+			return jedis.ttl(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -294,10 +320,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().pttl(key);
+			jedis = getRedisClient();
+			return jedis.pttl(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -313,10 +342,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(oldkey) || isEmpty(newkey) || oldkey.equalsIgnoreCase(newkey)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().rename(oldkey, newkey));
+			jedis = getRedisClient();
+			return "ok".equalsIgnoreCase(jedis.rename(oldkey, newkey));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -331,10 +363,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(oldkey) || exists(newkey)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return 1 == getRedisClient().renamenx(oldkey, newkey);
+			jedis = getRedisClient();
+			return 1 == jedis.renamenx(oldkey, newkey);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -347,10 +382,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().del(key) >= 0;
+			jedis = getRedisClient();
+			return jedis.del(key) >= 0;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -364,10 +402,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().set(key, value));
+			jedis = getRedisClient();
+			return "ok".equalsIgnoreCase(jedis.set(key, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -384,10 +425,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return 1 == getRedisClient().setnx(key, value);
+			jedis = getRedisClient();
+			return 1 == jedis.setnx(key, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -406,10 +450,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().setex(key, seconds, value));
+			jedis = getRedisClient();
+			return "ok".equalsIgnoreCase(jedis.setex(key, seconds, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -417,10 +464,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().psetex(key, milliseconds, value));
+			jedis = getRedisClient();
+			return "ok".equalsIgnoreCase(jedis.psetex(key, milliseconds, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -434,11 +484,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String result = getRedisClient().get(key);
+			jedis = getRedisClient();
+			String result = jedis.get(key);
 			return isEmpty(result) || "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -452,11 +505,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key) || isEmpty(value)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String result = getRedisClient().getSet(key, value);
+			jedis = getRedisClient();
+			String result = jedis.getSet(key, value);
 			return isEmpty(result) || "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -469,10 +525,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().strlen(key);
+			jedis = getRedisClient();
+			return jedis.strlen(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -486,10 +545,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(keys)) {
 			return Lists.newArrayList();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().mget(keys);
+			jedis = getRedisClient();
+			return jedis.mget(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -505,11 +567,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String result = getRedisClient().getrange(key, startOffset, endOffset);
+			jedis = getRedisClient();
+			String result = jedis.getrange(key, startOffset, endOffset);
 			return isEmpty(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -522,10 +587,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().incr(key);
+			jedis = getRedisClient();
+			return jedis.incr(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -541,10 +609,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().incrBy(key, integer);
+			jedis = getRedisClient();
+			return jedis.incrBy(key, integer);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -552,10 +623,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().incrByFloat(key, value);
+			jedis = getRedisClient();
+			return jedis.incrByFloat(key, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -569,10 +643,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().decr(key);
+			jedis = getRedisClient();
+			return jedis.decr(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -587,10 +664,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().decrBy(key, integer);
+			jedis = getRedisClient();
+			return jedis.decrBy(key, integer);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -605,10 +685,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().append(key, value);
+			jedis = getRedisClient();
+			return jedis.append(key, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -621,10 +704,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hdel(key, field);
+			jedis = getRedisClient();
+			return jedis.hdel(key, field);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -636,10 +722,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hlen(key);
+			jedis = getRedisClient();
+			return jedis.hlen(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -652,10 +741,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hkeys(key);
+			jedis = getRedisClient();
+			return jedis.hkeys(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -668,10 +760,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hvals(key);
+			jedis = getRedisClient();
+			return jedis.hvals(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -685,10 +780,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hget(key, field);
+			jedis = getRedisClient();
+			return jedis.hget(key, field);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -703,10 +801,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().hmset(key, hash));
+			jedis = getRedisClient();
+			return "ok".equalsIgnoreCase(jedis.hmset(key, hash));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -719,10 +820,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hmget(key, fields);
+			jedis = getRedisClient();
+			return jedis.hmget(key, fields);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -735,10 +839,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return Maps.newHashMap();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hgetAll(key);
+			jedis = getRedisClient();
+			return jedis.hgetAll(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -754,10 +861,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().hexists(key, field);
+			jedis = getRedisClient();
+			return jedis.hexists(key, field);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -773,10 +883,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return 1 == getRedisClient().hset(key, field, value);
+			jedis = getRedisClient();
+			return 1 == jedis.hset(key, field, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -784,10 +897,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().blpop(timeout, key);
+			jedis = getRedisClient();
+			return jedis.blpop(timeout, key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -795,10 +911,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().blpop(timeout, key);
+			jedis = getRedisClient();
+			return jedis.blpop(timeout, key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -814,11 +933,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String result = getRedisClient().lindex(key, index);
+			jedis = getRedisClient();
+			String result = jedis.lindex(key, index);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -831,11 +953,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String result = getRedisClient().lpop(key);
+			jedis = getRedisClient();
+			String result = jedis.lpop(key);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -853,12 +978,15 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().lpush(key);
+			jedis = getRedisClient();
+			return jedis.lpush(key);
 		} catch (Exception lpushExp) {
 			return null;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -873,12 +1001,15 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().lpushx(key, value);
+			jedis = getRedisClient();
+			return jedis.lpushx(key, value);
 		} catch (Exception lpushxExp) {
 			return null;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -893,12 +1024,15 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().llen(key);
+			jedis = getRedisClient();
+			return jedis.llen(key);
 		} catch (Exception llenExp) {
 			return null;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -916,12 +1050,15 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().lrange(key, start, end);
+			jedis = getRedisClient();
+			return jedis.lrange(key, start, end);
 		} catch (Exception lrangeExp) {
 			return Lists.newArrayList();
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -940,10 +1077,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().lrem(key, count, value);
+			jedis = getRedisClient();
+			return jedis.lrem(key, count, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -962,10 +1102,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().ltrim(key, start, end));
+			jedis = getRedisClient();
+			return "ok".equalsIgnoreCase(jedis.ltrim(key, start, end));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -981,10 +1124,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().lset(key, index, value));
+			jedis = getRedisClient();
+			return "ok".equalsIgnoreCase(jedis.lset(key, index, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -997,10 +1143,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().rpop(key);
+			jedis = getRedisClient();
+			return jedis.rpop(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1017,10 +1166,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().rpush(key, string);
+			jedis = getRedisClient();
+			return jedis.rpush(key, string);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1035,10 +1187,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().rpushx(key, string);
+			jedis = getRedisClient();
+			return jedis.rpushx(key, string);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1053,10 +1208,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().sadd(key, member);
+			jedis = getRedisClient();
+			return jedis.sadd(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1069,10 +1227,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().sdiff(keys);
+			jedis = getRedisClient();
+			return jedis.sdiff(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1087,10 +1248,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().sismember(key, member);
+			jedis = getRedisClient();
+			return jedis.sismember(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1104,10 +1268,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().smembers(key);
+			jedis = getRedisClient();
+			return jedis.smembers(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1121,10 +1288,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().sinter(keys);
+			jedis = getRedisClient();
+			return jedis.sinter(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1138,11 +1308,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String result = getRedisClient().spop(key);
+			jedis = getRedisClient();
+			String result = jedis.spop(key);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1150,10 +1323,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().spop(key, count);
+			jedis = getRedisClient();
+			return jedis.spop(key, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1166,11 +1342,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String result = getRedisClient().srandmember(key);
+			jedis = getRedisClient();
+			String result = jedis.srandmember(key);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1188,10 +1367,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().srandmember(key, count);
+			jedis = getRedisClient();
+			return jedis.srandmember(key, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1205,10 +1387,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().srem(key, member) >= 0;
+			jedis = getRedisClient();
+			return jedis.srem(key, member) >= 0;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1221,10 +1406,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().scard(key);
+			jedis = getRedisClient();
+			return jedis.scard(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1237,10 +1425,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().sunion(keys);
+			jedis = getRedisClient();
+			return jedis.sunion(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1261,10 +1452,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zadd(key, score, member);
+			jedis = getRedisClient();
+			return jedis.zadd(key, score, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1278,10 +1472,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zcard(key);
+			jedis = getRedisClient();
+			return jedis.zcard(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1298,10 +1496,14 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
+
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zscore(key, member);
+			jedis = getRedisClient();
+			return jedis.zscore(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1319,10 +1521,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zcount(key, min, max);
+			jedis = getRedisClient();
+			return jedis.zcount(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1330,10 +1535,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zcount(key, min, max);
+			jedis = getRedisClient();
+			return jedis.zcount(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1341,10 +1549,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zlexcount(key, min, max);
+			jedis = getRedisClient();
+			return jedis.zlexcount(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1365,10 +1576,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrange(key, start, end);
+			jedis = getRedisClient();
+			return jedis.zrange(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1376,10 +1590,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrangeByLex(key, min, max);
+			jedis = getRedisClient();
+			return jedis.zrangeByLex(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1387,10 +1604,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrangeByLex(key, min, max, offset, count);
+			jedis = getRedisClient();
+			return jedis.zrangeByLex(key, min, max, offset, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1409,10 +1629,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrangeByScore(key, min, max);
+			jedis = getRedisClient();
+			return jedis.zrangeByScore(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1437,10 +1660,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrangeByScore(key, min, max, offset, count);
+			jedis = getRedisClient();
+			return jedis.zrangeByScore(key, min, max, offset, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1458,10 +1684,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrank(key, member);
+			jedis = getRedisClient();
+			return jedis.zrank(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1479,10 +1708,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrevrank(key, member);
+			jedis = getRedisClient();
+			return jedis.zrevrank(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1498,10 +1730,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrem(key, member);
+			jedis = getRedisClient();
+			return jedis.zrem(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1522,10 +1757,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zremrangeByRank(key, start, end);
+			jedis = getRedisClient();
+			return jedis.zremrangeByRank(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1533,10 +1771,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zremrangeByLex(key, min, max);
+			jedis = getRedisClient();
+			return jedis.zremrangeByLex(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1554,10 +1795,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zremrangeByScore(key, start, end);
+			jedis = getRedisClient();
+			return jedis.zremrangeByScore(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1565,10 +1809,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zremrangeByScore(key, start, end);
+			jedis = getRedisClient();
+			return jedis.zremrangeByScore(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1589,10 +1836,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrevrange(key, start, end);
+			jedis = getRedisClient();
+			return jedis.zrevrange(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1611,10 +1861,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrevrangeByScore(key, max, min);
+			jedis = getRedisClient();
+			return jedis.zrevrangeByScore(key, max, min);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1637,10 +1890,13 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().zrevrangeByScore(key, max, min, offset, count);
+			jedis = getRedisClient();
+			return jedis.zrevrangeByScore(key, max, min, offset, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
@@ -1650,7 +1906,8 @@ public class RedisClientSentinelHelper {
 	public List<RedisServerInfo> getRedisServerInfo() {
 		List<RedisServerInfo> redisList = Lists.newArrayList();
 		RedisServerInfo rif;
-		String[] redisServerStrs = getRedisClient().info().split("\n");
+		Jedis jedis = getRedisClient();
+		String[] redisServerStrs = jedis.info().split("\n");
 
 		if (redisServerStrs != null && redisServerStrs.length > 0) {
 			for (String redisServer : redisServerStrs) {
@@ -1672,8 +1929,11 @@ public class RedisClientSentinelHelper {
 	 */
 	public List<ClientInfo> getClientList() {
 		List<ClientInfo> clientList = Lists.newArrayList();
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			String[] clientStrs = getRedisClient().clientList().split("\n");
+			jedis = getRedisClient();
+			String[] clientStrs = jedis.clientList().split("\n");
 			if (clientStrs != null && clientStrs.length > 0) {
 				for (String client : clientStrs) {
 					ClientInfo clientInfo;
@@ -1692,7 +1952,7 @@ public class RedisClientSentinelHelper {
 				}
 			}
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 		return clientList;
 	}
@@ -1701,28 +1961,34 @@ public class RedisClientSentinelHelper {
 		if (isEmpty(addr)) {
 			return false;
 		}
-
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			getRedisClient().clientKill(addr);
+			jedis = getRedisClient();
+			jedis.clientKill(addr);
 			return true;
 		} catch (Exception e) {
 			return false;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 
 	}
 
 	public Long dbSize() {
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			return getRedisClient().dbSize();
+			jedis = getRedisClient();
+			return jedis.dbSize();
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 	}
 
 	public Map<String, Object> getMemeryInfo() {
-		String[] strs = getRedisClient().info().split("\n");
+		Jedis jedis = getRedisClient();
+		String[] strs = jedis.info().split("\n");
 		Map<String, Object> map = null;
 		for (int i = 0; i < strs.length; i++) {
 			String s = strs[i];
@@ -1743,12 +2009,15 @@ public class RedisClientSentinelHelper {
 	 * @return true:客户端和服务器连接正常 false: 客户端和服务器连接不正常(网络不正常或服务器未能正常运行)
 	 */
 	public boolean isPing() {
+		/** 非切片额客户端连接 */
+		Jedis jedis = null;
 		try {
-			if ("pong".equalsIgnoreCase(getRedisClient().ping())) {
+			jedis = getRedisClient();
+			if ("pong".equalsIgnoreCase(jedis.ping())) {
 				return true;
 			}
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedis);
 		}
 		return false;
 	}
