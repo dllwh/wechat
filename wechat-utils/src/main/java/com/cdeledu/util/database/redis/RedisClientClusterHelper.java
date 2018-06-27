@@ -31,14 +31,13 @@ import redis.clients.jedis.JedisPoolConfig;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年5月11日 上午9:34:33
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 public class RedisClientClusterHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static RedisClientClusterHelper redisClusterFactory;
 	private Set<HostAndPort> clusterNodes;
-	private JedisCluster jedisClusterClient;
 	/** 建立连接池配置参数 */
 	private JedisPoolConfig poolConfig;
 	private RedisConfigFactory factory;
@@ -65,20 +64,18 @@ public class RedisClientClusterHelper {
 	 * @方法描述 : 获取操作redis的客户端
 	 * @return
 	 */
-	private JedisCluster getRedisClient() {
-		if (jedisClusterClient == null) {
-			synchronized (JedisCluster.class) {
-				jedisClusterClient = new JedisCluster(clusterNodes, poolConfig);
-			}
-		}
-		return jedisClusterClient;
+	private synchronized JedisCluster getRedisClient() {
+		return new JedisCluster(clusterNodes, poolConfig);
 	}
 
-	private void closeRedisClient() {
-		if (jedisClusterClient != null) {
+	/**
+	 * @方法描述 : 关闭redis的客户端
+	 * @return
+	 */
+	private void closeRedisClient(JedisCluster jedisClient) {
+		if (jedisClient != null) {
 			try {
-				// jedisClusterClient.quit();
-				jedisClusterClient.close();
+				jedisClient.close();
 			} catch (Exception quitExp) {
 				quitExp.printStackTrace();
 			}
@@ -101,8 +98,10 @@ public class RedisClientClusterHelper {
 
 	public Set<String> getAllKeys() {
 		Set<String> keys = new TreeSet<>();
-		Map<String, JedisPool> clusterNodes = getRedisClient().getClusterNodes();
+		JedisCluster jedisClient = null;
 		try {
+			jedisClient = getRedisClient();
+			Map<String, JedisPool> clusterNodes = jedisClient.getClusterNodes();
 			for (String k : clusterNodes.keySet()) {
 				JedisPool jp = clusterNodes.get(k);
 				Jedis connection = jp.getResource();
@@ -110,15 +109,17 @@ public class RedisClientClusterHelper {
 			}
 		} catch (Exception e) {
 		} finally {
-			closeRedisClient();// 用完一定要close这个链接！！！
+			closeRedisClient(jedisClient);// 用完一定要close这个链接！！！
 		}
 		return keys;
 	}
 
 	public Set<String> getkeys(String pattern) {
 		Set<String> keys = new TreeSet<>();
-		Map<String, JedisPool> clusterNodes = getRedisClient().getClusterNodes();
+		JedisCluster jedisClient = null;
 		try {
+			jedisClient = getRedisClient();
+			Map<String, JedisPool> clusterNodes = jedisClient.getClusterNodes();
 			for (String k : clusterNodes.keySet()) {
 				JedisPool jp = clusterNodes.get(k);
 				Jedis connection = jp.getResource();
@@ -126,7 +127,7 @@ public class RedisClientClusterHelper {
 			}
 		} catch (Exception e) {
 		} finally {
-			closeRedisClient();// 用完一定要close这个链接！！！
+			closeRedisClient(jedisClient);// 用完一定要close这个链接！！！
 		}
 		return keys;
 	}
@@ -140,11 +141,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
+			jedisClient = getRedisClient();
 			// 获取数据并输出
-			return getRedisClient().exists(key);
+			return jedisClient.exists(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -157,11 +160,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
+			jedisClient = getRedisClient();
 			// 获取数据并输出
-			return 1 == getRedisClient().persist(key);
+			return 1 == jedisClient.persist(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -175,10 +180,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().type(key);
+			jedisClient = getRedisClient();
+			return jedisClient.type(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -197,10 +204,12 @@ public class RedisClientClusterHelper {
 		if (seconds < -1) {
 			seconds = -1;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return 1 == getRedisClient().expire(key, seconds);
+			jedisClient = getRedisClient();
+			return 1 == jedisClient.expire(key, seconds);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -212,10 +221,12 @@ public class RedisClientClusterHelper {
 		if (milliseconds < -1) {
 			milliseconds = -1;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return 1 == getRedisClient().expireAt(key, milliseconds);
+			jedisClient = getRedisClient();
+			return 1 == jedisClient.expireAt(key, milliseconds);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -229,10 +240,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().ttl(key);
+			jedisClient = getRedisClient();
+			return jedisClient.ttl(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -240,10 +253,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().pttl(key);
+			jedisClient = getRedisClient();
+			return jedisClient.pttl(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -259,10 +274,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(oldkey) || isEmpty(newkey) || oldkey.equalsIgnoreCase(newkey)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().rename(oldkey, newkey));
+			jedisClient = getRedisClient();
+			return "ok".equalsIgnoreCase(jedisClient.rename(oldkey, newkey));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -277,10 +294,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(oldkey) || exists(newkey)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return 1 == getRedisClient().renamenx(oldkey, newkey);
+			jedisClient = getRedisClient();
+			return 1 == jedisClient.renamenx(oldkey, newkey);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -293,10 +312,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().del(key) >= 0;
+			jedisClient = getRedisClient();
+			return jedisClient.del(key) >= 0;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -310,10 +331,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().set(key, value));
+			jedisClient = getRedisClient();
+			return "ok".equalsIgnoreCase(jedisClient.set(key, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -330,10 +353,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return 1 == getRedisClient().setnx(key, value);
+			jedisClient = getRedisClient();
+			return 1 == jedisClient.setnx(key, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -352,10 +377,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().setex(key, seconds, value));
+			jedisClient = getRedisClient();
+			return "ok".equalsIgnoreCase(jedisClient.setex(key, seconds, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -363,10 +390,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().psetex(key, milliseconds, value));
+			jedisClient = getRedisClient();
+			return "ok".equalsIgnoreCase(jedisClient.psetex(key, milliseconds, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -380,11 +409,17 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			String result = getRedisClient().get(key);
+			jedisClient = getRedisClient();
+			String result = jedisClient.get(key);
 			return isEmpty(result) || "nil".equalsIgnoreCase(result) ? "" : result;
+			// return result;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return "--------------";
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -398,11 +433,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key) || isEmpty(value)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			String result = getRedisClient().getSet(key, value);
+			jedisClient = getRedisClient();
+			String result = jedisClient.getSet(key, value);
 			return isEmpty(result) || "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -415,10 +452,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().strlen(key);
+			jedisClient = getRedisClient();
+			return jedisClient.strlen(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -432,10 +471,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(keys)) {
 			return Lists.newArrayList();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().mget(keys);
+			jedisClient = getRedisClient();
+			return jedisClient.mget(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -451,11 +492,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			String result = getRedisClient().getrange(key, startOffset, endOffset);
+			jedisClient = getRedisClient();
+			String result = jedisClient.getrange(key, startOffset, endOffset);
 			return isEmpty(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -468,10 +511,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().incr(key);
+			jedisClient = getRedisClient();
+			return jedisClient.incr(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -487,10 +532,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().incrBy(key, integer);
+			jedisClient = getRedisClient();
+			return jedisClient.incrBy(key, integer);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -498,10 +545,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().incrByFloat(key, value);
+			jedisClient = getRedisClient();
+			return jedisClient.incrByFloat(key, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -515,10 +564,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().decr(key);
+			jedisClient = getRedisClient();
+			return jedisClient.decr(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -533,10 +584,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().decrBy(key, integer);
+			jedisClient = getRedisClient();
+			return jedisClient.decrBy(key, integer);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -551,10 +604,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().append(key, value);
+			jedisClient = getRedisClient();
+			return jedisClient.append(key, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -567,10 +622,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hdel(key, field);
+			jedisClient = getRedisClient();
+			return jedisClient.hdel(key, field);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -582,10 +639,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hlen(key);
+			jedisClient = getRedisClient();
+			return jedisClient.hlen(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -598,10 +657,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hkeys(key);
+			jedisClient = getRedisClient();
+			return jedisClient.hkeys(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -614,10 +675,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hvals(key);
+			jedisClient = getRedisClient();
+			return jedisClient.hvals(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -631,10 +694,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hget(key, field);
+			jedisClient = getRedisClient();
+			return jedisClient.hget(key, field);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -649,10 +714,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().hmset(key, hash));
+			jedisClient = getRedisClient();
+			return "ok".equalsIgnoreCase(jedisClient.hmset(key, hash));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -665,10 +732,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hmget(key, fields);
+			jedisClient = getRedisClient();
+			return jedisClient.hmget(key, fields);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -681,10 +750,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return Maps.newHashMap();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hgetAll(key);
+			jedisClient = getRedisClient();
+			return jedisClient.hgetAll(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -700,10 +771,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().hexists(key, field);
+			jedisClient = getRedisClient();
+			return jedisClient.hexists(key, field);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -719,10 +792,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return 1 == getRedisClient().hset(key, field, value);
+			jedisClient = getRedisClient();
+			return 1 == jedisClient.hset(key, field, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -730,10 +805,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().blpop(timeout, key);
+			jedisClient = getRedisClient();
+			return jedisClient.blpop(timeout, key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -741,10 +818,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().blpop(timeout, key);
+			jedisClient = getRedisClient();
+			return jedisClient.blpop(timeout, key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -760,11 +839,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			String result = getRedisClient().lindex(key, index);
+			jedisClient = getRedisClient();
+			String result = jedisClient.lindex(key, index);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -777,11 +858,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			String result = getRedisClient().lpop(key);
+			jedisClient = getRedisClient();
+			String result = jedisClient.lpop(key);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -799,12 +882,14 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().lpush(key);
+			jedisClient = getRedisClient();
+			return jedisClient.lpush(key);
 		} catch (Exception lpushExp) {
 			return null;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -819,12 +904,14 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().lpushx(key, value);
+			jedisClient = getRedisClient();
+			return jedisClient.lpushx(key, value);
 		} catch (Exception lpushxExp) {
 			return null;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -839,12 +926,14 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().llen(key);
+			jedisClient = getRedisClient();
+			return jedisClient.llen(key);
 		} catch (Exception llenExp) {
 			return null;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -862,12 +951,14 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().lrange(key, start, end);
+			jedisClient = getRedisClient();
+			return jedisClient.lrange(key, start, end);
 		} catch (Exception lrangeExp) {
 			return Lists.newArrayList();
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -886,10 +977,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().lrem(key, count, value);
+			jedisClient = getRedisClient();
+			return jedisClient.lrem(key, count, value);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -908,10 +1001,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().ltrim(key, start, end));
+			jedisClient = getRedisClient();
+			return "ok".equalsIgnoreCase(jedisClient.ltrim(key, start, end));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -927,10 +1022,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return "ok".equalsIgnoreCase(getRedisClient().lset(key, index, value));
+			jedisClient = getRedisClient();
+			return "ok".equalsIgnoreCase(jedisClient.lset(key, index, value));
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -943,10 +1040,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().rpop(key);
+			jedisClient = getRedisClient();
+			return jedisClient.rpop(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -963,10 +1062,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().rpush(key, string);
+			jedisClient = getRedisClient();
+			return jedisClient.rpush(key, string);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -981,10 +1082,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().rpushx(key, string);
+			jedisClient = getRedisClient();
+			return jedisClient.rpushx(key, string);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -999,10 +1102,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().sadd(key, member);
+			jedisClient = getRedisClient();
+			return jedisClient.sadd(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1015,10 +1120,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().sdiff(keys);
+			jedisClient = getRedisClient();
+			return jedisClient.sdiff(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1033,10 +1140,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().sismember(key, member);
+			jedisClient = getRedisClient();
+			return jedisClient.sismember(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1050,10 +1159,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().smembers(key);
+			jedisClient = getRedisClient();
+			return jedisClient.smembers(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1067,10 +1178,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().sinter(keys);
+			jedisClient = getRedisClient();
+			return jedisClient.sinter(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1084,11 +1197,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			String result = getRedisClient().spop(key);
+			jedisClient = getRedisClient();
+			String result = jedisClient.spop(key);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1096,10 +1211,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().spop(key, count);
+			jedisClient = getRedisClient();
+			return jedisClient.spop(key, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1112,11 +1229,13 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return "";
 		}
+		JedisCluster jedisClient = null;
 		try {
-			String result = getRedisClient().srandmember(key);
+			jedisClient = getRedisClient();
+			String result = jedisClient.srandmember(key);
 			return "nil".equalsIgnoreCase(result) ? "" : result;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1134,10 +1253,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().srandmember(key, count);
+			jedisClient = getRedisClient();
+			return jedisClient.srandmember(key, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1151,10 +1272,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return false;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().srem(key, member) >= 0;
+			jedisClient = getRedisClient();
+			return jedisClient.srem(key, member) >= 0;
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1167,10 +1290,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().scard(key);
+			jedisClient = getRedisClient();
+			return jedisClient.scard(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1183,10 +1308,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(keys)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().sunion(keys);
+			jedisClient = getRedisClient();
+			return jedisClient.sunion(keys);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1207,10 +1334,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zadd(key, score, member);
+			jedisClient = getRedisClient();
+			return jedisClient.zadd(key, score, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1224,10 +1353,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zcard(key);
+			jedisClient = getRedisClient();
+			return jedisClient.zcard(key);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1244,10 +1375,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zscore(key, member);
+			jedisClient = getRedisClient();
+			return jedisClient.zscore(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1265,10 +1398,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zcount(key, min, max);
+			jedisClient = getRedisClient();
+			return jedisClient.zcount(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1276,10 +1411,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zcount(key, min, max);
+			jedisClient = getRedisClient();
+			return jedisClient.zcount(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1287,10 +1424,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zlexcount(key, min, max);
+			jedisClient = getRedisClient();
+			return jedisClient.zlexcount(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1311,10 +1450,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrange(key, start, end);
+			jedisClient = getRedisClient();
+			return jedisClient.zrange(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1322,10 +1463,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrangeByLex(key, min, max);
+			jedisClient = getRedisClient();
+			return jedisClient.zrangeByLex(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1333,10 +1476,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrangeByLex(key, min, max, offset, count);
+			jedisClient = getRedisClient();
+			return jedisClient.zrangeByLex(key, min, max, offset, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1355,10 +1500,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrangeByScore(key, min, max);
+			jedisClient = getRedisClient();
+			return jedisClient.zrangeByScore(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1383,10 +1530,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrangeByScore(key, min, max, offset, count);
+			jedisClient = getRedisClient();
+			return jedisClient.zrangeByScore(key, min, max, offset, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1404,10 +1553,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrank(key, member);
+			jedisClient = getRedisClient();
+			return jedisClient.zrank(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1425,10 +1576,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrevrank(key, member);
+			jedisClient = getRedisClient();
+			return jedisClient.zrevrank(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1444,10 +1597,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrem(key, member);
+			jedisClient = getRedisClient();
+			return jedisClient.zrem(key, member);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1468,10 +1623,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zremrangeByRank(key, start, end);
+			jedisClient = getRedisClient();
+			return jedisClient.zremrangeByRank(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1479,10 +1636,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zremrangeByLex(key, min, max);
+			jedisClient = getRedisClient();
+			return jedisClient.zremrangeByLex(key, min, max);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1500,10 +1659,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zremrangeByScore(key, start, end);
+			jedisClient = getRedisClient();
+			return jedisClient.zremrangeByScore(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1511,10 +1672,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zremrangeByScore(key, start, end);
+			jedisClient = getRedisClient();
+			return jedisClient.zremrangeByScore(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1535,10 +1698,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrevrange(key, start, end);
+			jedisClient = getRedisClient();
+			return jedisClient.zrevrange(key, start, end);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1557,10 +1722,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrevrangeByScore(key, max, min);
+			jedisClient = getRedisClient();
+			return jedisClient.zrevrangeByScore(key, max, min);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
@@ -1583,10 +1750,12 @@ public class RedisClientClusterHelper {
 		if (isEmpty(key)) {
 			return null;
 		}
+		JedisCluster jedisClient = null;
 		try {
-			return getRedisClient().zrevrangeByScore(key, max, min, offset, count);
+			jedisClient = getRedisClient();
+			return jedisClient.zrevrangeByScore(key, max, min, offset, count);
 		} finally {
-			closeRedisClient();
+			closeRedisClient(jedisClient);
 		}
 	}
 
