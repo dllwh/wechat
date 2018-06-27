@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
 import com.cdeledu.util.network.tcp.HttpURLConnHelper;
+import com.cdeledu.util.security.Md5Helper;
 import com.google.common.collect.Maps;
 
 import net.sf.json.JSONObject;
@@ -48,14 +49,22 @@ public final class ChinatetManageHelper {
 	public static boolean cancelCourse(int userId, Double tfMoney, int wareId, String cancelReason,
 			String personKey) throws Exception {
 		boolean result = false;
-		String cancelCourseUrl = "";
-		String params = "";
+		if (StringUtils.isBlank(cancelReason)) {
+			cancelReason = "正常退课-结算前退课操作";
+		}
+		String cancelCourseUrl = "http://www.chinaacc.com/kfkt/api/course/cancelCourse.shtm";
+		long nowTime = System.currentTimeMillis();
+		String pKey = Md5Helper.md5(
+				String.valueOf(nowTime) + String.valueOf(userId) + tfMoney + wareId + personKey,
+				32);
+		String params = String.format(
+				"userID=%s&wareID=%s&refundAmount=%s&nowTime=%s&key=%s&cancelReason=%s", userId,
+				wareId, tfMoney, nowTime, pKey, cancelReason);
 		String responseResult = urlConnHelper.sendPostRequest(cancelCourseUrl, params);
 		JSONObject cancelResult = JSONObject.fromObject(responseResult);
 		if (cancelResult.has("code") && ("200".equals(cancelResult.get("code").toString()))) {
 			result = true;
 		}
-
 		return result;
 	}
 
@@ -93,6 +102,17 @@ public final class ChinatetManageHelper {
 	 */
 	public static boolean synchronizationVideoConvertState() throws Exception {
 		boolean result = false;
+		String VideoConvertUrl = "http://manage.chinatet.com/chinatet_manage/openClassroom/userResource/operate.do?op=synchronization";
+		String responseResult;
+		try {
+			responseResult = urlConnHelper.sendPostRequest(VideoConvertUrl);
+			JSONObject cancelResult = JSONObject.fromObject(responseResult);
+			if (cancelResult.has("msg") && ("ok".equalsIgnoreCase(cancelResult.getString("msg")))) {
+				result = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 
@@ -108,14 +128,26 @@ public final class ChinatetManageHelper {
 	public static boolean videoCheck(String userID, String cwareID, String videoID)
 			throws Exception {
 		boolean result = false;
-		String url = "";
+		String url = "http://www.chinaacc.com/kfkt/api/course/videoCheck.shtm";
+		String t = String.valueOf(System.currentTimeMillis());
 		HashMap<String, Object> paramsMap = Maps.newHashMap();
-		String responseResult = urlConnHelper.sendPostRequest(url, paramsMap).trim();
-		if (StringUtils.isNotBlank(responseResult)) {
-			JSONObject _result = JSONObject.fromObject(responseResult);
-			if (_result.has("ret") && "1".equals(_result.getString("ret"))) {
-				result = true;
+		String pkey = Md5Helper.md5(userID + cwareID + videoID + t, 32).toUpperCase();
+		paramsMap.put("userID", userID);
+		paramsMap.put("cwareID", cwareID);
+		paramsMap.put("videoID", videoID);
+		paramsMap.put("t", t);
+		paramsMap.put("key", pkey);
+		String responseResult = "";
+		try {
+			responseResult = urlConnHelper.sendPostRequest(url, paramsMap).trim();
+			if (StringUtils.isNotBlank(responseResult)) {
+				JSONObject _result = JSONObject.fromObject(responseResult);
+				if (_result.has("ret") && "1".equals(_result.getString("ret"))) {
+					result = true;
+				}
 			}
+		} catch (Exception videoCheckExp) {
+			videoCheckExp.printStackTrace();
 		}
 		return result;
 	}
