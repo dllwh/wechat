@@ -1,26 +1,14 @@
 package com.cdeledu.util.application.email;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-
-import javax.mail.Authenticator;
-import javax.mail.Message.RecipientType;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
-
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.SimpleEmail;
 
-import com.cdeledu.common.api.email.entity.AttachBean;
-import com.cdeledu.common.api.email.entity.EmailInfo;
+import com.cdeledu.util.application.QvoConditionUtil;
 
 /**
  * @Description: JavaMail：邮件发送
@@ -28,158 +16,181 @@ import com.cdeledu.common.api.email.entity.EmailInfo;
  * @date: 2015年7月25日 上午11:55:49
  * @version: V1.0
  */
-class SendMailHelper {
-	/**
-	 * Message对象将存储我们实际发送的电子邮件信息，
-	 */
-	private MimeMessage msg;
-	/**
-	 * Session类代表JavaMail中的一个邮件会话。
-	 */
-	private Session session;
+final class SendMailHelper {
+	/** ----------------------------------------------------- Fields start */
+	private static final String CHARSET = "utf-8";
+
+	// 发送邮件的服务器的IP
+	private String mailServerHost;
+	// 发送邮件的服务器的端口号
+	private Integer mailServerPort;
+	/** 登陆邮件发送服务器的用户名 */
+	private String mailSenderUsername;
+	/** 登陆邮件发送服务器的密码 */
+	private String mailSenderPassword;
+	/** 发件人昵称 */
+	private String mailSenderNickName;
+
+	/** ----------------------------------------------------- Fields end */
+	public SendMailHelper(String mailServerHost, Integer mailServerPort, String mailSenderUsername,
+			String mailSenderPassword) {
+		this.mailServerHost = mailServerHost;
+		this.mailServerPort = mailServerPort;
+		this.mailSenderUsername = mailSenderUsername;
+		this.mailSenderPassword = mailSenderPassword;
+	}
+
+	public SendMailHelper(String mailServerHost, Integer mailServerPort, String mailSenderUsername,
+			String mailSenderPassword, String mailSenderNickName) {
+		this.mailServerHost = mailServerHost;
+		this.mailServerPort = mailServerPort;
+		this.mailSenderUsername = mailSenderUsername;
+		this.mailSenderPassword = mailSenderPassword;
+		this.mailSenderNickName = mailSenderNickName;
+	}
 
 	/**
-	 * 
-	 * @Title: createSession
-	 * @Description:
-	 * 				<ul>
-	 *               <li>邮件服务器 认证</li>
-	 *               <li>Session是JavaMail提供者配置文件以及设置属性信息的“容器”,其本身不会和邮件服务器进行任何的通信
-	 *               </li>
-	 *               </ul>
-	 * @author: 独泪了无痕
-	 * @param host
-	 * @param username
-	 * @param password
-	 * @param debug
-	 * @return
+	 * @方法描述 :发送简单文本邮件
+	 * @param fromAddress
+	 *            邮件相关信息 - 发件人的地址
+	 * @param nickName
+	 *            邮件相关信息 - 发件人昵称
+	 * @param subject
+	 *            邮件相关信息 - 邮件主题
+	 * @param textMsg
+	 *            邮件相关信息 - 邮件正文text
+	 * @param receivers
+	 *            邮件相关信息 - 接收人列表
+	 * @param ccReceivers
+	 *            邮件相关信息 - 抄送人列表
+	 * @param bccReceivers
+	 *            邮件相关信息 - 密送人列表
+	 * @throws EmailException
 	 */
-	public Session createSession(String host, final String username, final String password,
-			boolean debug) {
-		Properties prop = new Properties();
-		// 指定主机
-		if (StringUtils.isNoneEmpty(host)) {
-			prop.setProperty("mail.host", host);
+	public void sendEmail(final String subject, final String textMsg, final String[] receivers,
+			final String[] ccReceivers, final String[] bccReceivers) throws EmailException {
+		Email email = new SimpleEmail();
+		email.setHostName(mailServerHost);
+		if (QvoConditionUtil.checkInteger(mailServerPort)) {
+			email.setSmtpPort(mailServerPort);
 		}
-		// 指定验证为true
-		prop.setProperty("mail.smtp.auth", "true");
+		// 设置授权帐号和密码
+		email.setAuthenticator(new DefaultAuthenticator(mailSenderUsername, mailSenderPassword));
+		// 是否采用ssl方式连接服务
+		email.setSSLOnConnect(true);
+		// 设置邮件主体编码,必须放在前面，否则乱码
+		email.setCharset(CHARSET);
 
-		// 创建验证器
-		Authenticator auth = new Authenticator() {
-			public PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		};
-
-		// 创建一个新的Session实例，它不会在JVM中被作为默认实例共享；
-		session = Session.getInstance(prop, auth);
-		session.setDebug(debug);// 开启后有调试信息
-		return session;
-	}
-
-	/**
-	 * 
-	 * @Title：send
-	 * @Description：发送指定的邮件
-	 * @param mail
-	 * @throws AddressException
-	 * @throws MessagingException
-	 * @throws IOException
-	 * @return：void 返回类型
-	 */
-	public boolean sendAttach(Session session, EmailInfo mail) {
-		try {
-			// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
-			msg = new MimeMessage(session);
-			// 设置发件人
-			msg.setFrom(new InternetAddress(mail.getFromAddress()));
-			// 设置收件人
-			msg.addRecipients(RecipientType.TO, mail.getToAddress());
-			// 设置抄送
-			String cc = mail.getCcAddress();
-			if (StringUtils.isNotBlank(cc)) {
-				msg.addRecipients(RecipientType.CC, cc);
-			}
-			// 设置暗送
-			String bcc = mail.getBccAddress();
-			if (StringUtils.isNotBlank(bcc)) {
-				msg.addRecipients(RecipientType.BCC, bcc);
-			}
-			// 设置主题
-			msg.setSubject(mail.getSubject());
-			// 添加附件
-			MimeMultipart parts = new MimeMultipart();// 创建部件集对象
-
-			MimeBodyPart part = new MimeBodyPart();// 创建一个部件
-			part.setContent(mail.getContent(), "text/html;charset=utf-8");// 设置邮件文本内容
-			parts.addBodyPart(part);// 把部件添加到部件集中
-
-			// 添加附件
-			List<AttachBean> attachBeanList = mail.getAttachs();// 获取所有附件
-			if (attachBeanList != null) {
-				for (AttachBean attach : attachBeanList) {
-					MimeBodyPart attachPart = new MimeBodyPart();// 创建一个部件
-					attachPart.attachFile(attach.getFile());// 设置附件文件
-					// 网上流传的解决文件名乱码的方法，其实用MimeUtility.encodeWord就可以很方便的搞定
-					// 这里很重要，通过下面的Base64编码的转换可以保证你的中文附件标题名在发送时不会变成乱码
-					attachPart.setFileName(MimeUtility.encodeText(attach.getFileName()));// 设置附件文件名
-					String cid = attach.getCid();
-					if (cid != null) {
-						attachPart.setContentID(cid);
-					}
-					parts.addBodyPart(attachPart);
-				}
-			}
-			// 将multipart对象放到message中
-			msg.setContent(parts);
-			// 保存邮件
-			msg.saveChanges();
-			Transport.send(msg);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return true;
+		// 设置发送人邮箱和名字
+		if (StringUtils.isNotEmpty(mailSenderNickName)) {
+			email.setFrom(mailSenderUsername, mailSenderNickName, CHARSET);
+		} else {
+			email.setFrom(mailSenderUsername);
 		}
-	}
 
-	/**
-	 * 
-	 * @Title：sendTextMail
-	 * @Description：以文本格式发送邮件(普通邮件) @param EmailInfo
-	 * @return
-	 * @return：boolean 返回类型
-	 */
-	public boolean sendTextMail(EmailInfo emailInfo) {
-		return false;
-	}
-
-	/**
-	 * @Description：发送HTML格式的邮件
-	 * @param EmailInfo
-	 * @return
-	 * @throws MessagingException
-	 * @throws AddressException
-	 * @return：boolean 返回类型
-	 */
-	public boolean sendHtmlMail(EmailInfo emailInfo) {
-		try {
-			// 创建一个 Message,请将 Session 对象传递给 MimeMessage 构造器
-			msg = new MimeMessage(session);
-			// 设置发件人
-			msg.setFrom(new InternetAddress(emailInfo.getFromAddress()));
-			// 设置收件人
-			msg.addRecipients(RecipientType.TO, emailInfo.getToAddress());
-			// 设置主题
-			msg.setSubject(emailInfo.getSubject());
-			MimeBodyPart part = new MimeBodyPart();// 创建一个部件
-			part.setContent(emailInfo.getContent(), "text/html;charset=utf-8");// 设置邮件文本内容
-			// 保存邮件
-			msg.saveChanges();
-			Transport.send(msg);
-			return true;
-		} catch (Exception sExp) {
-			sExp.printStackTrace();
-			return false;
+		// 设置邮件标题
+		email.setSubject(subject);
+		// 设置邮件主体
+		email.setMsg(textMsg);
+		// 添加收件人地址,可以是多个
+		if (ArrayUtils.isNotEmpty(receivers)) {
+			email.addTo(receivers);
 		}
+		// 添加抄送人地址
+		if (ArrayUtils.isNotEmpty(ccReceivers)) {
+			email.addCc(ccReceivers);
+		}
+		// 添加密送人地址
+		if (ArrayUtils.isNotEmpty(bccReceivers)) {
+			email.addBcc(bccReceivers);
+		}
+		// 添加回复人地址(暂未验证)
+		// email.addReplyTo("1349310440@qq.com");
+
+		// 增加需要回执的标记(暂未验证)
+		// email.addHeader("Disposition-Notification-To", "1");
+		// 通常情况下，不能投递给收件者的邮件将会退回给发件人,，只需调用setBounceAddress 进行 退回邮件处理
+		email.setBounceAddress(mailSenderUsername);
+
+		// 确定发送邮件动作
+		email.send();
 	}
+
+	/**
+	 * @方法描述 : 发送文本格式或Html格式的Email的方式
+	 * @param fromAddress
+	 *            邮件相关信息 - 发件人的地址
+	 * @param subject
+	 *            邮件相关信息 - 邮件主题
+	 * @param textMsg
+	 *            邮件相关信息 - 邮件正文text
+	 * @param receivers
+	 *            邮件相关信息 - 接收人列表
+	 * @param ccReceivers
+	 *            邮件相关信息 - 抄送人列表
+	 * @param bccReceivers
+	 *            邮件相关信息 - 密送人列表
+	 */
+	public void sendTextEmail(final String subject, final String textMsg, final String[] receivers,
+			final String[] ccReceivers, final String[] bccReceivers) {
+	}
+
+	/**
+	 * @方法描述 : 发送HTML格式的邮件
+	 * @param fromAddress
+	 *            邮件相关信息 - 发件人的地址
+	 * @param subject
+	 *            邮件相关信息 - 邮件主题
+	 * @param textMsg
+	 *            邮件相关信息 - 邮件正文text
+	 * @param receivers
+	 *            邮件相关信息 - 接收人列表
+	 * @param ccReceivers
+	 *            邮件相关信息 - 抄送人列表
+	 * @param bccReceivers
+	 *            邮件相关信息 - 密送人列表
+	 * @return
+	 * @throws EmailException
+	 */
+	public void sendHtmlMail(final String subject, final String HtmlMsg, String textMsg,
+			final String[] receivers, final String[] ccReceivers, final String[] bccReceivers)
+			throws EmailException {
+		HtmlEmail email = new HtmlEmail();
+		email.setCharset(CHARSET);
+		// 设置smtp服务器地址
+		email.setHostName(mailServerHost);
+		// 设置smtp服务器端
+		email.setSmtpPort(mailServerPort);
+		// 设置授权帐号和密码
+		email.setAuthenticator(new DefaultAuthenticator(mailSenderUsername, mailSenderPassword));
+		// 是否采用ssl方式连接服务
+		email.setSSLOnConnect(true);
+
+		email.setSubject(subject);
+		email.setHtmlMsg(HtmlMsg);
+		if (StringUtils.isEmpty(textMsg)) {
+			textMsg = "Your email client does not support HTML messages";
+		}
+		email.setTextMsg(textMsg);
+
+		if (StringUtils.isNotEmpty(mailSenderNickName)) {
+			email.setFrom(mailSenderUsername, mailSenderNickName, CHARSET);
+		} else {
+			email.setFrom(mailSenderUsername);
+		}
+		// 添加收件人地址,可以是多个
+		if (ArrayUtils.isNotEmpty(receivers)) {
+			email.addTo(receivers);
+		}
+		// 添加抄送人地址
+		if (ArrayUtils.isNotEmpty(ccReceivers)) {
+			email.addCc(ccReceivers);
+		}
+		// 添加密送人地址
+		if (ArrayUtils.isNotEmpty(bccReceivers)) {
+			email.addBcc(bccReceivers);
+		}
+		// 发送邮件
+		email.send();
+	}	
 }
