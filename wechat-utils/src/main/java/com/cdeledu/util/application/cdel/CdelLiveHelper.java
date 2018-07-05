@@ -1,5 +1,7 @@
 package com.cdeledu.util.application.cdel;
 
+import com.cdeledu.util.network.tcp.HttpURLConnHelper;
+
 /**
  * 
  * 把今天最好的表现当作明天最新的起点．．～
@@ -14,6 +16,31 @@ package com.cdeledu.util.application.cdel;
  */
 public final class CdelLiveHelper {
 	/** ----------------------------------------------------- Fields start */
+	private static HttpURLConnHelper urlConnHelper;
 
 	/** ----------------------------------------------------- Fields end */
+	static {
+		urlConnHelper = HttpURLConnHelper.getInstance();
+	}
+
+	/**
+	 * @方法:获取服务器时间
+	 * @创建人:独泪了无痕
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getcurtime() throws Exception {
+		return urlConnHelper
+				.sendPostRequest("http://www.chinatet.com/zbapi/api/live/getcurtime.shtm").trim();
+	}
+
+	/**
+	 * @方法:网站缓存刷新
+	 * @创建人:独泪了无痕
+	 * @throws Exception
+	 */
+	public static void refreshDomainCache() throws Exception {
+		urlConnHelper
+				.sendPostRequest("www.chinatet.com/zbapi/zbShare/refreshCache.shtm?key=website");
+	}
 }
