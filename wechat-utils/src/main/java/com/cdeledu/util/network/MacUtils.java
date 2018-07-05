@@ -2,198 +2,53 @@ package com.cdeledu.util.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 
-import com.cdeledu.common.property.SystemHelper;
+import org.apache.commons.io.IOUtils;
 
 /**
  * @类描述: MAC地址工具
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年2月25日 下午5:49:12
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 public final class MacUtils {
 	/** ----------------------------------------------------- Fields start */
 	/** ----------------------------------------------------- Fields end */
 
-	/** ----------------------------------------------- [私有方法] */
 	/**
 	 * @方法描述: 获取Unix网卡的mac地址
 	 */
-	private static String getUnixMACAddress() {
+	public static String getWindowsMACAddress() {
 		String mac = "";
 		BufferedReader bufferedReader = null;
-		Process process = null;
 		try {
-			/**
-			 * Unix下的命令，一般取eth0作为本地主网卡 显示信息中包含有mac地址信息
-			 */
-			process = Runtime.getRuntime().exec("ifconfig eth0");
-			bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
-			int index = -1;
-			while ((line = bufferedReader.readLine()) != null) {
-				/**
-				 * 寻找标示字符串[hwaddr]
-				 */
-				index = line.toLowerCase().indexOf("hwaddr");
-				/**
-				 * 找到了
-				 */
-				if (index != -1) {
-					/**
-					 * 取出mac地址并去除2边空格
-					 */
-					mac = line.substring(index + "hwaddr".length() + 1).trim();
-					break;
+			// 首先获取想要查看的ip地址，这个地址唯一对应一个网卡信息
+			InetAddress ip = InetAddress.getLocalHost();
+			// 根据ip地址获得对应的网卡信息
+			NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ip);
+			// 获取网卡的mac地址字节数组，这个字节数组的长度是6，读者可以自行断点查看
+			byte[] macAddr = networkInterface.getHardwareAddress();
+			// 将字节数组转成16进制表示
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < macAddr.length; i++) {
+				// 将每个字节的值转为16进制数
+				String byteToHex = Integer.toHexString(macAddr[i] & 0xff);
+				sb.append(byteToHex);
+				// 使用-来区分每个字节的16进制数表示
+				if (i != macAddr.length - 1) {
+					sb.append("-");
 				}
 			}
+			return sb.toString();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (bufferedReader != null) {
-					bufferedReader.close();
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			bufferedReader = null;
-			process = null;
+			IOUtils.closeQuietly(bufferedReader);
 		}
 		return mac;
-	}
-
-	/**
-	 * @方法描述: 获取Linux网卡的mac地址.
-	 */
-	private static String getLinuxMACAddress() {
-		String mac = "";
-		BufferedReader bufferedReader = null;
-		Process process = null;
-		try {
-			/**
-			 * linux下的命令，一般取eth0作为本地主网卡 显示信息中包含有mac地址信息
-			 */
-			process = Runtime.getRuntime().exec("ifconfig eth0");
-			bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
-			int index = -1;
-			while ((line = bufferedReader.readLine()) != null) {
-				index = line.toLowerCase().indexOf("硬件地址");
-				/**
-				 * 找到了
-				 */
-				if (index != -1) {
-					/**
-					 * 取出mac地址并去除2边空格
-					 */
-					mac = line.substring(index + 4).trim();
-					break;
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (bufferedReader != null) {
-					bufferedReader.close();
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			bufferedReader = null;
-			process = null;
-		}
-
-		// 取不到，试下Unix取发
-		if (mac == null) {
-			return getUnixMACAddress();
-		}
-		return mac;
-	}
-
-	/**
-	 * @方法描述: 获取widnows网卡的mac地址
-	 */
-	private static String getWindowsMACAddress() {
-		String mac = "";
-		BufferedReader bufferedReader = null;
-		Process process = null;
-		try {
-			/**
-			 * windows下的命令，显示信息中包含有mac地址信息
-			 */
-			process = Runtime.getRuntime().exec("ipconfig /all");
-			bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line = null;
-			int index = -1;
-			while ((line = bufferedReader.readLine()) != null) {
-				/**
-				 * 寻找标示字符串[physical address]
-				 */
-				// index = line.toLowerCase().indexOf("physical address");
-				// if (index != -1) {
-				if (line.split("-").length == 6) {
-					index = line.indexOf(":");
-					if (index != -1) {
-						/**
-						 * 取出mac地址并去除2边空格
-						 */
-						mac = line.substring(index + 1).trim();
-					}
-					break;
-				}
-				index = line.toLowerCase().indexOf("物理地址");
-				if (index != -1) {
-					index = line.indexOf(":");
-					if (index != -1) {
-						/**
-						 * 取出mac地址并去除2边空格
-						 */
-						mac = line.substring(index + 1).trim();
-					}
-					break;
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (bufferedReader != null) {
-					bufferedReader.close();
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			bufferedReader = null;
-			process = null;
-		}
-		return mac;
-	}
-
-	/** ----------------------------------------------- [私有方法] */
-
-	/**
-	 * @方法描述: 获取网卡的mac地址.
-	 */
-	public static String getMac() {
-		// 获取当前操作系统名称. return 操作系统名称 例如:windows,Linux,Unix等.
-		String osName = SystemHelper.OS_NAME.toLowerCase();
-		String mac = "";
-		if (osName.startsWith("windows")) {
-			mac = getWindowsMACAddress();
-		} else if (osName.startsWith("linux")) {
-			mac = getLinuxMACAddress();
-		} else {
-			mac = getUnixMACAddress();
-		}
-		return mac;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(getMac());
 	}
 
 }
