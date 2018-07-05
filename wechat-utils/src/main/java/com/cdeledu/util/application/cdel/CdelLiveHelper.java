@@ -43,4 +43,40 @@ public final class CdelLiveHelper {
 		urlConnHelper
 				.sendPostRequest("www.chinatet.com/zbapi/zbShare/refreshCache.shtm?key=website");
 	}
+
+	/** 获取用户绑定的手机号 */
+	public static void ucGetUserBind(String privateKey, String ssouid) {
+	}
+
+	/** 根据uid获取用户相关信息 */
+	public static void ucGetInfo(String privateKey, String ssouid) {
+	}
+
+	/** 查询手机号是否被绑定 */
+	public static void chkMobileExist(String privateKey, String mobile) {
+	}
+
+	/** 查询用户名是否已注册 */
+	public static void chkUserNameExist(String privateKey, String userName) {
+	}
+
+	/** 根据手机号查询被绑定的用户信息 */
+	public static void ucGetInfoByMobile(String privateKey, String mobile) {
+	}
+
+	/** 密码检测 */
+	public static void ucChkPwd(String privateKey, String userName, String passwd) {
+	}
+
+	/** 根据sid获取用户登录信息 */
+	public static void ucGetUserId(String privateKey, String sid) {
+	}
+
+	/** 注册 */
+	public static void ucRegister(String privateKey, String userName, String passwd) {
+	}
+
+	/** 解除绑定 */
+	public static void ucUnBind(String privateKey, String ssouid) {
+	}
 }
