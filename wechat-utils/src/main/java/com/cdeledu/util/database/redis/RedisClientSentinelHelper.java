@@ -9,7 +9,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.cdeledu.util.database.redis.command.RedisBasicCommand;
 import com.cdeledu.util.database.redis.command.RedisConfigFactory;
+import com.cdeledu.util.database.redis.command.RedisServerCommand;
 import com.cdeledu.util.database.redis.entity.ClientInfo;
 import com.cdeledu.util.database.redis.entity.RedisServerInfo;
 import com.google.common.collect.Lists;
@@ -35,7 +37,7 @@ import redis.clients.jedis.JedisSentinelPool;
  * @版本: V2.0
  * @since: JDK 1.7
  */
-public class RedisClientSentinelHelper {
+public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServerCommand {
 	/** ----------------------------------------------------- Fields start */
 	protected static Logger logger = Logger.getLogger(RedisClientSentinelHelper.class);
 	private static RedisClientSentinelHelper redisSentinelFactory;

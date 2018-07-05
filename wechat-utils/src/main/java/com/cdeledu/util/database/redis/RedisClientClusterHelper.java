@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.cdeledu.util.database.redis.command.RedisBasicCommand;
 import com.cdeledu.util.database.redis.command.RedisConfigFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -34,7 +35,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @版本: V2.0
  * @since: JDK 1.7
  */
-public class RedisClientClusterHelper {
+public class RedisClientClusterHelper  implements RedisBasicCommand{
 	/** ----------------------------------------------------- Fields start */
 	private static RedisClientClusterHelper redisClusterFactory;
 	private Set<HostAndPort> clusterNodes;
@@ -417,7 +418,7 @@ public class RedisClientClusterHelper {
 			// return result;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			return "--------------";
+			return "";
 		} finally {
 			closeRedisClient(jedisClient);
 		}

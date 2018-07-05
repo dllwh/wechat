@@ -16,7 +16,7 @@ import java.util.Set;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-interface RedisBasicCommand {
+public interface RedisBasicCommand {
 
 	/************************************************************************/
 	/******************* Redis 键(key) **************************************/

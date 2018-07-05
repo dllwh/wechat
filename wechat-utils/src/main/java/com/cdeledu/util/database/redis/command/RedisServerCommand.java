@@ -19,7 +19,7 @@ import com.cdeledu.util.database.redis.entity.RedisServerInfo;
  * @since: JDK 1.7
  * @see <a href="redisdoc.com/server/index.html">Server（服务器）</a>
  */
-interface RedisServerCommand {
+public interface RedisServerCommand {
 
 	/** 返回关于 当前Redis 服务器的各种信息和统计数值 */
 	List<RedisServerInfo> getRedisServerInfo();

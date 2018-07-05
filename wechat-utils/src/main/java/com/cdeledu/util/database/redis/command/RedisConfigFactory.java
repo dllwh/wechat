@@ -66,15 +66,15 @@ public final class RedisConfigFactory {
 		// 设置最大连接数，默认值为8.如果赋值为-1，则表示不限制；
 		poolConfig.setMaxTotal(1024);
 		// 最大空闲连接数
-		poolConfig.setMaxIdle(100);
+		poolConfig.setMaxIdle(10);
 		// 最小空闲连接数
 		poolConfig.setMinIdle(10);
 		// 获取Jedis连接的最大等待时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException
 		poolConfig.setMaxWaitMillis(10000);
 		// 每次释放连接的最大数目
-		poolConfig.setNumTestsPerEvictionRun(100);
+		poolConfig.setNumTestsPerEvictionRun(1024);
 		// 释放连接的扫描间隔（毫秒）,如果为负数,则不运行逐出线程, 默认-1
-		poolConfig.setTimeBetweenEvictionRunsMillis(3000);
+		poolConfig.setTimeBetweenEvictionRunsMillis(30000);
 		// 连接最小空闲时间
 		poolConfig.setMinEvictableIdleTimeMillis(1800000);
 		// 连接空闲多久后释放, 当空闲时间>该值 且 空闲连接>最大空闲连接数 时直接释放
