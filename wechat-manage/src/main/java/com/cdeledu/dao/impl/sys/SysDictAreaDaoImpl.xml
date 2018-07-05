@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdeledu.dao.impl.sys.SysDictAreaDaoImpl">
 	<sql id="Base_Column_List">
-		id, areaCode, areaName, parentId, areaLevel, shortName,areaUrl
+		id, areaCode, areaName, parentId, areaLevel, shortName,areaUrl,ifVisible
 	</sql>
 	
 	<select id="findOneForJdbc" parameterType="java.lang.Integer"
