@@ -3,7 +3,6 @@ package com.cdeledu.crawler.other.crawlerCity;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapListHandler;
@@ -25,37 +24,31 @@ import com.cdeledu.util.network.IpUtilHelper;
  * @类描述: 利用网络爬虫端抓取行政区域数据
  * @创建者: 皇族灬战狼
  * @创建时间: 2016年8月16日 下午8:08:57
- * @版本: V1.2.3
+ * @版本: V1.3.0
  * @since: JDK 1.7
+ * @see <a href="www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/">统计用区划和城乡划分代码</a>
  */
 public class crawlerCityHelper {
 	/** ----------------------------------------------------- Fields start */
 	private static Logger logger = Logger.getLogger(crawlerCityHelper.class);
-	private static ResourceBundle JDBC = ResourceBundle.getBundle("datasource/jdbc");
-	private static String dbUrl = JDBC.getString("database.dbUrl");
-	private static String dbUserName = JDBC.getString("database.dbUserName");
-	private static String dbPassword = JDBC.getString("database.dbPassword");
-	private static String jdbcName = JDBC.getString("database.jdbcName");
 	/** SQL执行工具 :实例化查询接口 */
-	private static QueryRunner runner = null;
-	private static DataTableHelper dataTableHelper = null;
+	private QueryRunner runner = null;
+	private DataTableHelper dataTableHelper = null;
 	/** SQL执行工具:执行SQL语句 */
-	private static String SQL = "INSERT INTO sys_dict_area"
-			+ "(areaName,areaCode,areaUrl,parentId,areaLevel)"
-			+ " VALUES ('%s', '%s','%s', %s, '%s')";
+	private static String SQL = "INSERT INTO sys_dict_area(areaName,areaCode,areaUrl,parentId,areaLevel) VALUES ('%s', '%s','%s', %s, '%s')";
 	private static String ISEXIST = "SELECT COUNT(1) FROM sys_dict_area WHERE areaCode = '%s'";
-	private static String EACHSQL = "SELECT id,areaUrl FROM sys_dict_area"
-			+ " WHERE areaLevel = '%s' and areaUrl !=''";
+	private static String EACHSQL = "SELECT id,areaUrl FROM sys_dict_area WHERE areaLevel = '%s' and areaUrl !=''";
 
-	/** ----------------------------------------------------- Fields end */
+	/**
+	 * ----------------------------------------------------- Fields end
+	 * 
+	 * @throws SQLException
+	 */
 
-	static {
+	public crawlerCityHelper(String dbUrl, String dbUserName, String dbPassword, String jdbcName)
+			throws SQLException {
 		dataTableHelper = DataTableHelper.getInstance(dbUrl, dbUserName, dbPassword, jdbcName);
-		try {
-			runner = dataTableHelper.getQueryRunner();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		runner = dataTableHelper.getQueryRunner();
 	}
 
 	/** ----------------------------------------------- [私有方法] */
@@ -64,7 +57,7 @@ public class crawlerCityHelper {
 	 * @方法描述: 获取省份代码
 	 * @return
 	 */
-	private static String getProvinceCode(String val) {
+	private String getProvinceCode(String val) {
 
 		if (val.indexOf(".") == -1)
 			return val;
@@ -77,7 +70,7 @@ public class crawlerCityHelper {
 	 * @param val
 	 * @return
 	 */
-	private static boolean isExist(String val) {
+	private boolean isExist(String val) {
 		int resultNum = 0;
 		if (StringUtils.isNotBlank(val)) {
 			resultNum = dataTableHelper.getCount(runner, String.format(ISEXIST, val));
@@ -92,7 +85,7 @@ public class crawlerCityHelper {
 	 *            执行sql
 	 * @throws SQLException
 	 */
-	private static void saveDocument(String inserSql) throws SQLException {
+	private void saveDocument(String inserSql) throws SQLException {
 		if (logger.isDebugEnabled()) {
 			logger.info("解析数据并保存入数据库:" + inserSql);
 		}
@@ -104,7 +97,7 @@ public class crawlerCityHelper {
 	 * @param parentId
 	 * @param crawlerUrl
 	 */
-	private static void saveCityInfo(int parentId, String crawlerUrl) {
+	private void saveCityInfo(int parentId, String crawlerUrl) {
 		Document document = getDocument(crawlerUrl);
 		Elements eles01 = document.getElementsByAttributeValue("class", "citytr");
 		for (Element ele01 : eles01) {
@@ -133,7 +126,7 @@ public class crawlerCityHelper {
 	 * @param url
 	 * @return
 	 */
-	private static void saveCountyInfo(int parentId, String crawlerUrl) {
+	private void saveCountyInfo(int parentId, String crawlerUrl) {
 		Document document = getDocument(crawlerUrl);
 
 		Elements eles01 = document.getElementsByAttributeValue("class", "countytr");
@@ -163,7 +156,7 @@ public class crawlerCityHelper {
 	 * @param parentId
 	 * @param crawlerUrl
 	 */
-	private static void saveTownInfo(int parentId, String crawlerUrl) {
+	private void saveTownInfo(int parentId, String crawlerUrl) {
 		Document document = getDocument(crawlerUrl);
 		Elements eles01 = document.getElementsByAttributeValue("class", "towntr");
 		for (Element ele01 : eles01) {
@@ -191,7 +184,7 @@ public class crawlerCityHelper {
 	 * @param parentId
 	 * @param crawlerUrl
 	 */
-	private static void saveVillageInfo(int parentId, String crawlerUrl) {
+	private void saveVillageInfo(int parentId, String crawlerUrl) {
 		Document document = getDocument(crawlerUrl);
 		Elements eles01 = document.getElementsByAttributeValue("class", "villagetr");
 		for (Element ele01 : eles01) {
@@ -222,7 +215,7 @@ public class crawlerCityHelper {
 	 * @param url
 	 * @return
 	 */
-	public static Document getDocument(String url) {
+	public Document getDocument(String url) {
 		Connection conn = null;
 		Document document = null;
 		try {
@@ -250,9 +243,11 @@ public class crawlerCityHelper {
 	 * @方法描述: 省级行政区(省、自治区、直辖市、特别行政区)
 	 * @throws Exception
 	 */
-	public static void getProvinceInfo() {
+	public void getProvinceInfo() {
 		/** 初始解析网页地址 */
-		String crawlerBaseUrl = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2016/index.html";
+		// String crawlerBaseUrl =
+		// "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2016/index.html";
+		String crawlerBaseUrl = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2017/index.html";
 		Document document = getDocument(crawlerBaseUrl);
 		Elements eles01 = document.getElementsByAttributeValue("class", "provincetr");
 		for (Element ele01 : eles01) {
@@ -277,7 +272,7 @@ public class crawlerCityHelper {
 	 * @方法描述: 地级行政区划单位(地级市、地区、自治州、盟)
 	 * @return
 	 */
-	public static void getCityInfo() {
+	public void getCityInfo() {
 		String sql = String.format(EACHSQL, 1);
 		List<Map<String, Object>> result = null;
 		try {
@@ -296,7 +291,7 @@ public class crawlerCityHelper {
 	 * @param url
 	 * @return
 	 */
-	public static void getCountyInfo() {
+	public void getCountyInfo() {
 		String sql = String.format(EACHSQL, 2);
 		List<Map<String, Object>> result = null;
 		try {
@@ -313,7 +308,7 @@ public class crawlerCityHelper {
 	 * @方法描述: 乡级行政区划单位(区公所、街道、镇、乡、民族乡、苏木、民族苏木)
 	 * @return
 	 */
-	public static void getTownInfo() {
+	public void getTownInfo() {
 		String sql = String.format(EACHSQL, 3);
 		List<Map<String, Object>> result = null;
 		try {
@@ -329,7 +324,7 @@ public class crawlerCityHelper {
 	/**
 	 * @方法描述: 村级行政单位(村民委员会、居民委员会、类似村民委员会、类似居民委员)
 	 */
-	public static void getVillageInfo() {
+	public void getVillageInfo() {
 		String sql = String.format(EACHSQL, 4);
 		List<Map<String, Object>> result = null;
 		try {
@@ -345,7 +340,7 @@ public class crawlerCityHelper {
 	/**
 	 * @方法描述: 插入特别地区
 	 */
-	public static void getSpecialArea() {
+	public void getSpecialArea() {
 		// 台湾省
 		if (!isExist("710000")) {
 			String inserSql = String.format(SQL, "台湾省", "710000", "", "100000", 1);
@@ -384,12 +379,13 @@ public class crawlerCityHelper {
 		}
 	}
 
-	public static void main(String[] args) {
-		// getProvinceInfo(); // 省级行政区
-		// getSpecialArea(); // 插入特别地区
-		// getCityInfo(); // 地级行政区划单位
-		// getCountyInfo();// 县级行政区划单位
-		// getTownInfo(); // 乡级行政区划单位
-		// getVillageInfo();// 村级行政单位
+	public static void main(String[] args) throws SQLException {
+		// crawlerCityHelper cityHelper = new crawlerCityHelper("","","","");
+		// cityHelper.getProvinceInfo(); // 省级行政区
+		// cityHelper.getSpecialArea(); // 插入特别地区
+		// cityHelper.getCityInfo(); // 地级行政区划单位
+		// cityHelper.getCountyInfo();// 县级行政区划单位
+		// cityHelper.getTownInfo(); // 乡级行政区划单位
+		// cityHelper.getVillageInfo();// 村级行政单位
 	}
 }
