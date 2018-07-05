@@ -94,7 +94,7 @@
 		<sqlserver.version>4.0</sqlserver.version>
 		<c3p0.version>0.9.1.2</c3p0.version>
 		<druid.version>1.0.13</druid.version>
-		<mybatis.version>3.2.8</mybatis.version>
+		<mybatis.version>3.4.5</mybatis.version>
 		<!-- Apache POI 版本号 -->
 		<org.apache.poi.version>3.9</org.apache.poi.version>
 		<!-- org.apache.shiro 版本号(用于身份验证和授权) -->
