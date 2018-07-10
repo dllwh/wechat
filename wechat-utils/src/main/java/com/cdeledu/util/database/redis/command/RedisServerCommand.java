@@ -22,20 +22,20 @@ import com.cdeledu.util.database.redis.entity.RedisServerInfo;
 public interface RedisServerCommand {
 
 	/** 返回关于 当前Redis 服务器的各种信息和统计数值 */
-	List<RedisServerInfo> getRedisServerInfo();
+	List<RedisServerInfo> getRedisServerInfo() throws Exception;
 
 	/** 用于返回所有连接到服务器的客户端信息和统计数据 */
-	List<ClientInfo> getClientList();
+	List<ClientInfo> getClientList() throws Exception;
 
 	/** 关闭客户端连接 */
-	boolean kill(String addr);
+	boolean kill(String addr) throws Exception;
 
 	/** 获取占用内存大小:返回当前数据库的 key 的数量 */
-	Long dbSize();
+	Long dbSize() throws Exception;
 
 	/** 获取当前redis使用内存大小情况 */
-	Map<String, Object> getMemeryInfo();
+	Map<String, Object> getMemeryInfo() throws Exception;
 
 	/** 用于测试与服务器的连接是否仍然生效，或者用于测量延迟值 */
-	boolean isPing();
+	boolean isPing() throws Exception;
 }
