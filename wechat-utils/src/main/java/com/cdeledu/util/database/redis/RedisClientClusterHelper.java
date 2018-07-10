@@ -35,7 +35,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @版本: V2.0
  * @since: JDK 1.7
  */
-public class RedisClientClusterHelper  implements RedisBasicCommand{
+public class RedisClientClusterHelper implements RedisBasicCommand {
 	/** ----------------------------------------------------- Fields start */
 	private static RedisClientClusterHelper redisClusterFactory;
 	private Set<HostAndPort> clusterNodes;
@@ -1768,7 +1768,7 @@ public class RedisClientClusterHelper  implements RedisBasicCommand{
 		// hostAndPortList.add("192.168.192.106:27001");
 		// hostAndPortList.add("192.168.192.106:27002");
 		// hostAndPortList.add("192.168.192.107:27001");
-		// hostAndPortList.add("192.168.192.108:27002");
-		// RedisClusterFactory.getInstance(hostAndPortList);
+		// hostAndPortList.add("192.168.192.107:27002");
+		// RedisClientClusterHelper.getInstance(hostAndPortList);
 	}
 }
