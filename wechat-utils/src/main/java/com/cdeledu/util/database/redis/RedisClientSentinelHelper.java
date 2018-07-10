@@ -98,7 +98,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @创建人:独泪了无痕
 	 * @return
 	 */
-	private Jedis getRedisClient() {
+	private Jedis getRedisClient() throws Exception {
 		// 断言 ，当前锁是否已经锁住，如果锁住了，就啥也不干，没锁的话就执行下面步骤
 		assert !lockJedis.isHeldByCurrentThread();
 		lockJedis.lock();
@@ -106,8 +106,6 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		Jedis jedis = null;
 		try {
 			jedis = jedisPool.getResource();
-		} catch (Exception getRedisClientExp) {
-			getRedisClientExp.printStackTrace();
 		} finally {
 			lockJedis.unlock();
 		}
@@ -153,7 +151,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	/**
 	 * 遍历所有的key
 	 */
-	public Set<String> getAllKeys() {
+	public Set<String> getAllKeys() throws Exception {
 		/** 非切片额客户端连接 */
 		Jedis jedis = null;
 		try {
@@ -180,7 +178,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            符合给定模式的 key 列表。
 	 * @return
 	 */
-	public Set<String> getkeys(String pattern) {
+	public Set<String> getkeys(String pattern) throws Exception {
 		if (isEmpty(pattern)) {
 			pattern = "*";
 		}
@@ -200,7 +198,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 存在返回true，否则返回false
 	 */
-	public boolean exists(String key) {
+	public boolean exists(String key) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -220,7 +218,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 当生存时间移除成功时，返回 true. 如果 key 不存在或 key 没有设置生存时间，返回 false
 	 */
-	public boolean persist(String key) {
+	public boolean persist(String key) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -241,7 +239,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return
 	 * @throws Exception
 	 */
-	public String type(String key) {
+	public String type(String key) throws Exception {
 		if (isEmpty(key) || !exists(key)) {
 			return "";
 		}
@@ -262,7 +260,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            为Null时，将会马上过期。可以设置-1，0，表示马上过期
 	 * @return
 	 */
-	public boolean expire(String key, int seconds) {
+	public boolean expire(String key, int seconds) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -280,7 +278,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public boolean pexpireat(String key, long milliseconds) {
+	public boolean pexpireat(String key, long milliseconds) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -304,7 +302,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return 当 key 不存在时，返回 -2 。 当 key 存在但没有设置剩余生存时间时，返回 -1 。 否则，以秒为单位，返回 key
 	 *         的剩余生存时间。
 	 */
-	public Long ttl(String key) {
+	public Long ttl(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -318,7 +316,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Long pttl(String key) {
+	public Long pttl(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -340,7 +338,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean rename(String oldkey, String newkey) {
+	public boolean rename(String oldkey, String newkey) throws Exception {
 		if (isEmpty(oldkey) || isEmpty(newkey) || oldkey.equalsIgnoreCase(newkey)) {
 			return false;
 		}
@@ -361,7 +359,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean renamenx(String oldkey, String newkey) {
+	public boolean renamenx(String oldkey, String newkey) throws Exception {
 		if (isEmpty(oldkey) || exists(newkey)) {
 			return false;
 		}
@@ -380,7 +378,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 返回删除个数
 	 */
-	public boolean del(String... key) {
+	public boolean del(String... key) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -400,7 +398,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param value
 	 * @return
 	 */
-	public boolean set(String key, String value) {
+	public boolean set(String key, String value) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -423,7 +421,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param value
 	 * @return 1表示设置成功，否则0
 	 */
-	public boolean setnx(String key, String value) {
+	public boolean setnx(String key, String value) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -448,7 +446,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param value
 	 * @return
 	 */
-	public boolean setex(String key, int seconds, String value) {
+	public boolean setex(String key, int seconds, String value) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -462,7 +460,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public boolean psetex(String key, long milliseconds, String value) {
+	public boolean psetex(String key, long milliseconds, String value) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -482,7 +480,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            键值
 	 * @return 成功返回value，失败返回""
 	 */
-	public String get(String key) {
+	public String get(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -503,7 +501,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param value
 	 * @return 返回给定 key 的旧值。 当 key 没有旧值时，也即是， key 不存在时，返回 null
 	 */
-	public String getSex(String key, String value) {
+	public String getSex(String key, String value) throws Exception {
 		if (isEmpty(key) || isEmpty(value)) {
 			return "";
 		}
@@ -523,7 +521,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return
 	 */
-	public Long strLength(String key) {
+	public Long strLength(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -543,7 +541,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            键值
 	 * @return 成功返回value，失败返回""
 	 */
-	public List<String> mget(String... keys) {
+	public List<String> mget(String... keys) throws Exception {
 		if (isEmpty(keys)) {
 			return Lists.newArrayList();
 		}
@@ -565,7 +563,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return
 	 * @throws Exception
 	 */
-	public String getrange(String key, long startOffset, long endOffset) {
+	public String getrange(String key, long startOffset, long endOffset) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -585,7 +583,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 执行 INCR 命令之后 key 的值
 	 */
-	public Long incr(String key) {
+	public Long incr(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -607,7 +605,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            要增加的值
 	 * @return 加上 integer 之后key 的值
 	 */
-	public Long incrBy(String key, long integer) {
+	public Long incrBy(String key, long integer) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -621,7 +619,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Double incrByFloat(String key, double value) {
+	public Double incrByFloat(String key, double value) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -641,7 +639,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 执行 DECR 命令之后 key 的值
 	 */
-	public Long decr(String key) {
+	public Long decr(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -662,7 +660,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param integer
 	 * @return 加上 integer 之后 key 的值
 	 */
-	public Long decrBy(String key, long integer) {
+	public Long decrBy(String key, long integer) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -683,7 +681,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param value
 	 * @return 追加 value 之后 key 中字符串的长
 	 */
-	public Long append(String key, String value) {
+	public Long append(String key, String value) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -702,7 +700,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param keys
 	 * @return 被成功删除的数量.当 key 不存在时，返回 0
 	 */
-	public Long hdel(String key, String... field) {
+	public Long hdel(String key, String... field) throws Exception {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
@@ -720,7 +718,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @方法描述: 返回指定hash的field数量
 	 * @param key
 	 */
-	public Long hlen(String key) {
+	public Long hlen(String key) throws Exception {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
@@ -739,7 +737,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 一个包含哈希表中所有域的表。 当 key 不存在时，返回一个空表
 	 */
-	public Set<String> hkeys(String key) {
+	public Set<String> hkeys(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -758,7 +756,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return result 一个包含哈希表中所有值的表。 当 key 不存在时，返回一个空表。
 	 */
-	public List<String> hvals(String key) {
+	public List<String> hvals(String key) throws Exception {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
@@ -778,7 +776,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param field
 	 * @return 给定域的值。 当给定域不存在或是给定 key 不存在时，返回 null
 	 */
-	public String hget(String key, String field) {
+	public String hget(String key, String field) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -799,7 +797,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param hash
 	 * @return 如果命令执行成功，返回 true。 当 key 不是哈希表(hash)类型时，返回false
 	 */
-	public boolean hmset(String key, Map<String, String> hash) {
+	public boolean hmset(String key, Map<String, String> hash) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -818,7 +816,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @param fields
 	 */
-	public List<String> hmget(String key, String... fields) {
+	public List<String> hmget(String key, String... fields) throws Exception {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
@@ -837,7 +835,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 以列表形式返回哈希表的域和域的值。 若 key 不存在，返回空列表。
 	 */
-	public Map<String, String> hgetAll(String key) {
+	public Map<String, String> hgetAll(String key) throws Exception {
 		if (isEmpty(key)) {
 			return Maps.newHashMap();
 		}
@@ -859,7 +857,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            不能为空
 	 * @return 返回hash里面field是否存在
 	 */
-	public boolean hexists(String key, String field) {
+	public boolean hexists(String key, String field) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -881,7 +879,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param field
 	 * @param value
 	 */
-	public boolean hset(String key, String field, String value) {
+	public boolean hset(String key, String field, String value) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -895,7 +893,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public List<String> blpop(int timeout, String key) {
+	public List<String> blpop(int timeout, String key) throws Exception {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
@@ -909,7 +907,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public List<String> brpop(int timeout, String key) {
+	public List<String> brpop(int timeout, String key) throws Exception {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
@@ -931,7 +929,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            索引，0表示最新的一个元素
 	 * @return 列表中下标为指定索引值的元素。
 	 */
-	public String lindex(String key, long index) {
+	public String lindex(String key, long index) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -951,7 +949,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 列表的第一个元素。
 	 */
-	public String lpop(String key) {
+	public String lpop(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -976,7 +974,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            可以是字符传，还是可以是字符数组
 	 * @return 返回List的长度
 	 */
-	public Long lpush(String key, String... string) {
+	public Long lpush(String key, String... string) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -999,7 +997,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            可以是字符传，还是可以是字符数组
 	 * @return 返回List的长度
 	 */
-	public Long lpushx(String key, String... value) {
+	public Long lpushx(String key, String... value) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1022,7 +1020,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return
 	 */
-	public Long llen(String key) {
+	public Long llen(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1048,7 +1046,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            结束索引
 	 * @return 一个列表，包含指定区间内的元素。
 	 */
-	public List<String> lrange(String key, long start, long end) {
+	public List<String> lrange(String key, long start, long end) throws Exception {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
@@ -1075,7 +1073,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            匹配的元素
 	 * @return 被移除元素的数量。 列表不存在时返回 0 。
 	 */
-	public Long lrem(String key, long count, String value) {
+	public Long lrem(String key, long count, String value) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1100,7 +1098,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            <li>可以超出索引，不影响结果</li>
 	 * @return 命令执行成功时，返回 true。
 	 */
-	public boolean ltrim(String key, long start, long end) {
+	public boolean ltrim(String key, long start, long end) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -1122,7 +1120,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param value
 	 * @return
 	 */
-	public boolean lset(String key, long index, String value) {
+	public boolean lset(String key, long index, String value) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -1141,7 +1139,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 列表的最后一个元素。
 	 */
-	public String rpop(String key) {
+	public String rpop(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -1164,7 +1162,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            可以是字符传，还是可以是字符数组
 	 * @return 执行 RPUSH 操作后，列表的长度。
 	 */
-	public Long rpush(String key, String... string) {
+	public Long rpush(String key, String... string) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1185,7 +1183,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            可以是字符传，还是可以是字符数组
 	 * @return 执行 Rpushx 操作后，列表的长度
 	 */
-	public Long rpushx(String key, String... string) {
+	public Long rpushx(String key, String... string) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1206,7 +1204,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param members
 	 * @return 被添加到集合中的新元素的数量
 	 */
-	public Long sadd(String key, String... member) {
+	public Long sadd(String key, String... member) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1225,7 +1223,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param keys
 	 * @return 包含差集成员的列表。
 	 */
-	public Set<String> sdiff(String... keys) {
+	public Set<String> sdiff(String... keys) throws Exception {
 		if (isEmpty(keys)) {
 			return null;
 		}
@@ -1246,7 +1244,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param member
 	 * @return 如果成员元素是集合的成员，返回 true。 如果成员元素不是集合的成员，或 key 不存在，返回 false
 	 */
-	public boolean sismember(String key, String member) {
+	public boolean sismember(String key, String member) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -1266,7 +1264,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 集合中的所有成员。
 	 */
-	public Set<String> smembers(String key) {
+	public Set<String> smembers(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1286,7 +1284,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param keys
 	 * @return 交集成员的列表。
 	 */
-	public Set<String> sinter(String... keys) {
+	public Set<String> sinter(String... keys) throws Exception {
 		if (isEmpty(keys)) {
 			return null;
 		}
@@ -1306,7 +1304,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 被移除的随机元素。 当集合不存在或是空集时，返回 null
 	 */
-	public String spop(String key) {
+	public String spop(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -1321,7 +1319,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Set<String> spop(String key, long count) {
+	public Set<String> spop(String key, long count) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1340,7 +1338,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 只提供集合 key 参数时，返回一个元素；如果集合为空，返回 null
 	 */
-	public String srandmember(String key) {
+	public String srandmember(String key) throws Exception {
 		if (isEmpty(key)) {
 			return "";
 		}
@@ -1365,7 +1363,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return 只提供集合 key 参数时，返回一个元素；如果集合为空，返回 null。 如果提供了 count
 	 *         参数，那么返回一个数组；如果集合为空，返回空数组
 	 */
-	public List<String> srandmember(String key, int count) {
+	public List<String> srandmember(String key, int count) throws Exception {
 		if (isEmpty(key)) {
 			return Lists.newArrayList();
 		}
@@ -1385,7 +1383,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 被成功移除的元素的数量，不包括被忽略的元素。
 	 */
-	public boolean srem(String key, String... member) {
+	public boolean srem(String key, String... member) throws Exception {
 		if (isEmpty(key)) {
 			return false;
 		}
@@ -1404,7 +1402,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return 集合的数量。 当集合 key 不存在时，返回 0
 	 */
-	public Long scard(String key) {
+	public Long scard(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1423,7 +1421,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param keys
 	 * @return 并集成员的列表。
 	 */
-	public Set<String> sunion(String... keys) {
+	public Set<String> sunion(String... keys) throws Exception {
 		if (isEmpty(keys)) {
 			return null;
 		}
@@ -1450,7 +1448,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            成员
 	 * @return result 被成功添加的新成员的数量，不包括那些被更新的、已经存在的成员。
 	 */
-	public Long zadd(String key, double score, String member) {
+	public Long zadd(String key, double score, String member) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1470,7 +1468,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @param key
 	 * @return result 当 key 存在且是有序集类型时，返回有序集的基数。 当 key 不存在时，返回 0 。
 	 */
-	public Long zcard(String key) {
+	public Long zcard(String key) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1494,7 +1492,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            成员
 	 * @return result member 成员的 score 值，以字符串形式表示。
 	 */
-	public Double zscore(String key, String member) {
+	public Double zscore(String key, String member) throws Exception {
 		if (isEmpty(key) || !exists(key)) {
 			return null;
 		}
@@ -1519,7 +1517,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            最大分值
 	 * @return result score 值在 min 和 max 之间的成员的数量。
 	 */
-	public Long zcount(String key, double min, double max) {
+	public Long zcount(String key, double min, double max) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1533,7 +1531,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Long zcount(String key, String min, String max) {
+	public Long zcount(String key, String min, String max) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1547,7 +1545,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Long zlexcount(String key, String min, String max) {
+	public Long zlexcount(String key, String min, String max) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1574,7 +1572,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            结束位置
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
-	public Set<String> zrange(String key, long start, long end) {
+	public Set<String> zrange(String key, long start, long end) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1588,7 +1586,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Set<String> zrangeByLex(String key, String min, String max) {
+	public Set<String> zrangeByLex(String key, String min, String max) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1602,7 +1600,8 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Set<String> zrangeByLex(String key, String min, String max, int offset, int count) {
+	public Set<String> zrangeByLex(String key, String min, String max, int offset, int count)
+			throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1627,7 +1626,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            最大分值
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
-	public Set<String> zrangeByScore(String key, double min, double max) {
+	public Set<String> zrangeByScore(String key, double min, double max) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1658,7 +1657,8 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            跳过offset个指定的元素之后，要返回多少个对象
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
-	public Set<String> zrangeByScore(String key, double min, double max, int offset, int count) {
+	public Set<String> zrangeByScore(String key, double min, double max, int offset, int count)
+			throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1682,7 +1682,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return result 如果 member 是有序集 key 的成员，返回 member 的排名。 如果 member 不是有序集 key
 	 *         的成员，返回 nil 。
 	 */
-	public Long zrank(String key, String member) {
+	public Long zrank(String key, String member) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1706,7 +1706,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @return result 如果 member 是有序集 key 的成员，返回 member 的排名。 如果 member 不是有序集 key
 	 *         的成员，返回 nil 。
 	 */
-	public Long zrevrank(String key, String member) {
+	public Long zrevrank(String key, String member) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1728,7 +1728,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            成员
 	 * @return result 被成功移除的成员的数量，不包括被忽略的成员。
 	 */
-	public Long zrem(String key, String... member) {
+	public Long zrem(String key, String... member) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1755,7 +1755,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            结束位置
 	 * @return result 被移除成员的数量。
 	 */
-	public Long zremrangeByRank(String key, long start, long end) {
+	public Long zremrangeByRank(String key, long start, long end) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1769,7 +1769,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Long zremrangeByLex(String key, String min, String max) {
+	public Long zremrangeByLex(String key, String min, String max) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1793,7 +1793,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            结束分值
 	 * @return result 被移除成员的数量。
 	 */
-	public Long zremrangeByScore(String key, double start, double end) {
+	public Long zremrangeByScore(String key, double start, double end) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1807,7 +1807,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Long zremrangeByScore(String key, String start, String end) {
+	public Long zremrangeByScore(String key, String start, String end) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1834,7 +1834,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            结束位置
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
-	public Set<String> zrevrange(String key, long start, long end) {
+	public Set<String> zrevrange(String key, long start, long end) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1859,7 +1859,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            最大分值
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
-	public Set<String> zrevrangeByScore(String key, double max, double min) {
+	public Set<String> zrevrangeByScore(String key, double max, double min) throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1888,7 +1888,8 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 *            跳过offset个指定的元素之后，要返回多少个对象
 	 * @return result 指定区间内，带有 score 值(可选)的有序集成员的列表。
 	 */
-	public Set<String> zrevrangeByScore(String key, double max, double min, int offset, int count) {
+	public Set<String> zrevrangeByScore(String key, double max, double min, int offset, int count)
+			throws Exception {
 		if (isEmpty(key)) {
 			return null;
 		}
@@ -1905,7 +1906,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	/**
 	 * 获取redis 服务器信息
 	 */
-	public List<RedisServerInfo> getRedisServerInfo() {
+	public List<RedisServerInfo> getRedisServerInfo() throws Exception {
 		List<RedisServerInfo> redisList = Lists.newArrayList();
 		RedisServerInfo rif;
 		Jedis jedis = getRedisClient();
@@ -1929,7 +1930,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @方法描述: 用于返回所有连接到服务器的客户端信息和统计数据
 	 * @返回参数详情：http://redisdoc.com/server/client_list.html
 	 */
-	public List<ClientInfo> getClientList() {
+	public List<ClientInfo> getClientList() throws Exception {
 		List<ClientInfo> clientList = Lists.newArrayList();
 		/** 非切片额客户端连接 */
 		Jedis jedis = null;
@@ -1959,7 +1960,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		return clientList;
 	}
 
-	public boolean kill(String addr) {
+	public boolean kill(String addr) throws Exception {
 		if (isEmpty(addr)) {
 			return false;
 		}
@@ -1969,15 +1970,13 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 			jedis = getRedisClient();
 			jedis.clientKill(addr);
 			return true;
-		} catch (Exception e) {
-			return false;
 		} finally {
 			closeRedisClient(jedis);
 		}
 
 	}
 
-	public Long dbSize() {
+	public Long dbSize() throws Exception {
 		/** 非切片额客户端连接 */
 		Jedis jedis = null;
 		try {
@@ -1988,7 +1987,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		}
 	}
 
-	public Map<String, Object> getMemeryInfo() {
+	public Map<String, Object> getMemeryInfo() throws Exception {
 		Jedis jedis = getRedisClient();
 		String[] strs = jedis.info().split("\n");
 		Map<String, Object> map = null;
@@ -2010,7 +2009,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 * @说明 Redis Ping 命令使用客户端向 Redis 服务器发送一个 PING ，如果服务器运作正常的话，会返回一个 PONG
 	 * @return true:客户端和服务器连接正常 false: 客户端和服务器连接不正常(网络不正常或服务器未能正常运行)
 	 */
-	public boolean isPing() {
+	public boolean isPing() throws Exception {
 		/** 非切片额客户端连接 */
 		Jedis jedis = null;
 		try {
