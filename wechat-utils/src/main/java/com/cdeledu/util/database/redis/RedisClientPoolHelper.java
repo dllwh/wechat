@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.cdeledu.util.database.redis.command.RedisBasicCommand;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -26,7 +27,7 @@ public class RedisClientPoolHelper implements RedisBasicCommand {
 	/** ----------------------------------------------------- Fields start */
 	private String host;
 	private int port;
-	private boolean ssl;
+	private String auth;
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -35,14 +36,18 @@ public class RedisClientPoolHelper implements RedisBasicCommand {
 		this.port = port;
 	}
 
-	public RedisClientPoolHelper(String host, int port, boolean ssl) {
+	public RedisClientPoolHelper(String host, int port, String auth) {
 		this.host = host;
 		this.port = port;
-		this.ssl = ssl;
+		this.auth = auth;
 	}
 
-	private synchronized Jedis getRedisClient() {
-		return new Jedis(host, port, ssl);
+	private synchronized Jedis getRedisClient() throws JedisDataException {
+		Jedis jedis = new Jedis(host, port);
+		if (!isEmpty(auth)) {
+			jedis.auth(auth);
+		}
+		return jedis;
 	}
 
 	private void closeRedisClient(Jedis jedisClient) {
