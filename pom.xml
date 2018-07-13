@@ -79,7 +79,7 @@
 		<jstl.version>1.2</jstl.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<!-- spring 版本号 -->
-		<mybatis-spring.version>1.2.2</mybatis-spring.version>
+		<mybatis-spring.version>1.3.0</mybatis-spring.version>
 		<mybaitsplus.version>1.5</mybaitsplus.version>
 		<org.springframework.version>4.3.10.RELEASE</org.springframework.version>
 		<!-- spring security 版本号 -->
