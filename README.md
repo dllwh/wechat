@@ -23,9 +23,9 @@ weixin
 
 		微信支付(刷卡/扫码/JS/APP/WAP/现金红包/企业付款)
 		
-* **wechat-myBatis**
+* **wechat-monitor**
 
-		使用MyBatis Generator自动创建代码
+		Java服务端监控平台
 
 * **weixin-mp**
 
