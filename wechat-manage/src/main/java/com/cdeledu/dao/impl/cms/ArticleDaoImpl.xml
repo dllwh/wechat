@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdeledu.dao.impl.cms.ArticleDaoImpl">
+	<select id="getArticleList" parameterType="com.cdeledu.model.cms.notice.Article"
+		resultType="com.cdeledu.model.cms.notice.Article">
+		SELECT * FROM ecms_article;
+	</select>
+</mapper>
