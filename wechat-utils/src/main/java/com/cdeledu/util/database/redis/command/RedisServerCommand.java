@@ -24,6 +24,9 @@ public interface RedisServerCommand {
 	/** 返回关于 当前Redis 服务器的各种信息和统计数值 */
 	List<RedisServerInfo> getRedisServerInfo() throws Exception;
 
+	/** 根据分段获取redis info信息 */
+	String getRedisInfoBySection(String section) throws Exception;
+
 	/** 用于返回所有连接到服务器的客户端信息和统计数据 */
 	List<ClientInfo> getClientList() throws Exception;
 
@@ -38,4 +41,8 @@ public interface RedisServerCommand {
 
 	/** 用于测试与服务器的连接是否仍然生效，或者用于测量延迟值 */
 	boolean isPing() throws Exception;
+
+	/** 如果ping通，返回true，如果ping不通，则每隔1秒尝试一次重连，如果3次重连失败，则认为连接失败 */
+	boolean isConnRedisRetry() throws Exception;
+
 }
