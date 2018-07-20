@@ -1,12 +1,10 @@
 package com.cdeledu.util.database.redis;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.cdeledu.util.database.redis.command.RedisBasicCommand;
@@ -37,7 +35,8 @@ import redis.clients.jedis.JedisSentinelPool;
  * @版本: V2.0
  * @since: JDK 1.7
  */
-public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServerCommand {
+public class RedisClientSentinelHelper extends AbstractRedisService
+		implements RedisBasicCommand, RedisServerCommand {
 	/** ----------------------------------------------------- Fields start */
 	protected static Logger logger = Logger.getLogger(RedisClientSentinelHelper.class);
 	private static RedisClientSentinelHelper redisSentinelFactory;
@@ -123,20 +122,6 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 			// 2. 客户端主动关闭连接
 			jedis.close();
 			jedis.disconnect();
-		}
-	}
-
-	/**
-	 * @方法:是否为空
-	 * @创建人:独泪了无痕
-	 * @param key
-	 * @return
-	 */
-	private static boolean isEmpty(final CharSequence... key) {
-		if (StringUtils.isNoneBlank(key)) {
-			return false;
-		} else {
-			return true;
 		}
 	}
 
@@ -1908,20 +1893,12 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 	 */
 	public List<RedisServerInfo> getRedisServerInfo() throws Exception {
 		List<RedisServerInfo> redisList = Lists.newArrayList();
-		RedisServerInfo rif;
-		Jedis jedis = getRedisClient();
-		String[] redisServerStrs = jedis.info().split("\n");
-
-		if (redisServerStrs != null && redisServerStrs.length > 0) {
-			for (String redisServer : redisServerStrs) {
-				rif = new RedisServerInfo();
-				String[] str = redisServer.split(":");
-				if (str != null && str.length > 1) {
-					rif.setKey(str[0]);
-					rif.setValue(str[1]);
-					redisList.add(rif);
-				}
-			}
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			redisList = getRedisServerInfo(jedis);
+		} finally {
+			closeRedisClient(jedis);
 		}
 		return redisList;
 	}
@@ -1936,24 +1913,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		Jedis jedis = null;
 		try {
 			jedis = getRedisClient();
-			String[] clientStrs = jedis.clientList().split("\n");
-			if (clientStrs != null && clientStrs.length > 0) {
-				for (String client : clientStrs) {
-					ClientInfo clientInfo;
-					String[] infoArr = client.trim().split(" ");
-					if (infoArr != null && infoArr.length > 0) {
-						for (String info : infoArr) {
-							clientInfo = new ClientInfo();
-							String[] inFoArr2 = info.split("=");
-							if (inFoArr2 != null && inFoArr2.length > 1) {
-								clientInfo.setKey(inFoArr2[0]);
-								clientInfo.setValue(inFoArr2[1]);
-								clientList.add(clientInfo);
-							}
-						}
-					}
-				}
-			}
+			clientList = getClientList(jedis);
 		} finally {
 			closeRedisClient(jedis);
 		}
@@ -1968,8 +1928,7 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		Jedis jedis = null;
 		try {
 			jedis = getRedisClient();
-			jedis.clientKill(addr);
-			return true;
+			return kill(jedis, addr);
 		} finally {
 			closeRedisClient(jedis);
 		}
@@ -1981,27 +1940,20 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		Jedis jedis = null;
 		try {
 			jedis = getRedisClient();
-			return jedis.dbSize();
+			return dbSize(jedis);
 		} finally {
 			closeRedisClient(jedis);
 		}
 	}
 
 	public Map<String, Object> getMemeryInfo() throws Exception {
-		Jedis jedis = getRedisClient();
-		String[] strs = jedis.info().split("\n");
-		Map<String, Object> map = null;
-		for (int i = 0; i < strs.length; i++) {
-			String s = strs[i];
-			String[] detail = s.split(":");
-			if (detail[0].equals("used_memory")) {
-				map = new HashMap<String, Object>();
-				map.put("used_memory", detail[1].substring(0, detail[1].length() - 1));
-				map.put("create_time", System.currentTimeMillis());
-				break;
-			}
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			return getMemeryInfo(jedis);
+		} finally {
+			closeRedisClient(jedis);
 		}
-		return map;
 	}
 
 	/**
@@ -2014,12 +1966,19 @@ public class RedisClientSentinelHelper implements RedisBasicCommand, RedisServer
 		Jedis jedis = null;
 		try {
 			jedis = getRedisClient();
-			if ("pong".equalsIgnoreCase(jedis.ping())) {
-				return true;
-			}
+			return isPing(jedis);
 		} finally {
 			closeRedisClient(jedis);
 		}
+	}
+
+	@Override
+	public String getRedisInfoBySection(String section) throws Exception {
+		return null;
+	}
+
+	@Override
+	public boolean isConnRedisRetry() throws Exception {
 		return false;
 	}
 }
