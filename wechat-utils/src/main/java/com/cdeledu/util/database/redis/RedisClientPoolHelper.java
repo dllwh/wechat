@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.cdeledu.util.database.redis.command.RedisBasicCommand;
+import com.cdeledu.util.database.redis.command.RedisServerCommand;
+import com.cdeledu.util.database.redis.entity.ClientInfo;
+import com.cdeledu.util.database.redis.entity.RedisServerInfo;
+import com.google.common.collect.Lists;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisDataException;
@@ -23,7 +25,8 @@ import redis.clients.jedis.exceptions.JedisDataException;
  * @版本: V1.0
  * @since: JDK 1.7
  */
-public class RedisClientPoolHelper implements RedisBasicCommand {
+public class RedisClientPoolHelper extends AbstractRedisService
+		implements RedisBasicCommand, RedisServerCommand {
 	/** ----------------------------------------------------- Fields start */
 	private String host;
 	private int port;
@@ -53,20 +56,6 @@ public class RedisClientPoolHelper implements RedisBasicCommand {
 	private void closeRedisClient(Jedis jedisClient) {
 		if (jedisClient != null) {
 			jedisClient.close();
-		}
-	}
-
-	/**
-	 * @方法:是否为空
-	 * @创建人:独泪了无痕
-	 * @param key
-	 * @return
-	 */
-	private static boolean isEmpty(final CharSequence... key) {
-		if (StringUtils.isNoneBlank(key)) {
-			return false;
-		} else {
-			return true;
 		}
 	}
 
@@ -1151,5 +1140,89 @@ public class RedisClientPoolHelper implements RedisBasicCommand {
 		} finally {
 			closeRedisClient(jedisClient);
 		}
+	}
+
+	public List<RedisServerInfo> getRedisServerInfo() throws Exception {
+		List<RedisServerInfo> redisList = Lists.newArrayList();
+		Jedis jedisClient = null;
+		try {
+			jedisClient = getRedisClient();
+			redisList = getRedisServerInfo(jedisClient);
+		} finally {
+			closeRedisClient(jedisClient);
+		}
+		return redisList;
+	}
+
+	@Deprecated
+	public String getRedisInfoBySection(String section) {
+		return "";
+	}
+
+	public List<ClientInfo> getClientList() throws Exception {
+		List<ClientInfo> clientList = Lists.newArrayList();
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			clientList = getClientList(jedis);
+		} finally {
+			closeRedisClient(jedis);
+		}
+		return clientList;
+	}
+
+	public boolean kill(String addr) throws Exception {
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			return kill(jedis, addr);
+		} finally {
+			closeRedisClient(jedis);
+		}
+	}
+
+	public Long dbSize() throws Exception {
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			return dbSize(jedis);
+		} finally {
+			closeRedisClient(jedis);
+		}
+	}
+
+	public Map<String, Object> getMemeryInfo() throws Exception {
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			return getMemeryInfo(jedis);
+		} finally {
+			closeRedisClient(jedis);
+		}
+	}
+
+	public boolean isPing() throws Exception {
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			return isPing(jedis);
+		} finally {
+			closeRedisClient(jedis);
+		}
+	}
+
+	public boolean isConnRedisRetry() throws Exception {
+		Jedis jedis = null;
+		try {
+			jedis = getRedisClient();
+			return isConnRedisRetry(jedis);
+		} finally {
+			closeRedisClient(jedis);
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		RedisClientPoolHelper helper = new RedisClientPoolHelper("localhost", 6379);
+		System.out.println(helper.isPing());
 	}
 }
