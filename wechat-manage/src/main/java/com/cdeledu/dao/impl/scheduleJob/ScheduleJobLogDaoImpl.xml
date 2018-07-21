@@ -27,7 +27,7 @@
 		insert into `sys_schedule_job_log`
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="jobId != null">jobId,</if>
-			<if test=" beanName!= null and beanName != '' ">beanName,</if>
+			<if test="beanName!= null and beanName != '' ">beanName,</if>
 			<if test="methodName != null and methodName != '' ">methodName,</if>
 			<if test="params != null and params != '' ">params,</if>
 			<if test="status != null">status,</if>
@@ -37,7 +37,7 @@
 		values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="jobId != null">#{jobId},</if>
-			<if test=" beanName!= null and beanName != '' ">#{beanName},</if>
+			<if test="beanName!= null and beanName != '' ">#{beanName},</if>
 			<if test="methodName != null and methodName != '' ">#{methodName},</if>
 			<if test="params != null and params != '' ">#{params},</if>
 			<if test="status != null">#{status,</if>

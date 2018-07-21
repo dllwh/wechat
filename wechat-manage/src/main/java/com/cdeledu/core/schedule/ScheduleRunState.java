@@ -13,22 +13,22 @@ package com.cdeledu.core.schedule;
  */
 public enum ScheduleRunState {
 	// 未运行
-	NORUN("0"),
+	NORUN(0),
 	// 运行中
-	RUNNING("1"),
+	RUNNING(1),
 	// 暂停
-	PAUSE("2"),
+	PAUSE(2),
 	// 结束
-	END("3"),
+	END(3),
 	// 停止
-	STOP("4");
-	String value = "";
+	STOP(4);
+	int value = 0;
 
-	private ScheduleRunState(String value) {
+	private ScheduleRunState(int value) {
 		this.value = value;
 	}
 
-	public String getValue() {
+	public int getValue() {
 		return value;
 	}
 }
