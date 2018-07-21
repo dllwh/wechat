@@ -82,6 +82,12 @@
 			<if test="sequence != null">and `sequence` = #{sequence} </if>
 			<if test="modifier != null">and modifier = #{modifier} </if>
 			and ifEnabled = 1
+			<if test="sortName != null and sortName !='' ">
+				ORDER BY #{sortName} ${sortOrder}
+			</if>
+			<if test="sortName == null or  sortName =='' ">
+				ORDER BY sequence
+			</if>
 		</trim>
 	</sql>
 	<select id="findForJdbc" parameterType="com.cdeledu.model.rbac.SysMenu"
