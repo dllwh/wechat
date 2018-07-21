@@ -21,12 +21,9 @@ import com.baomidou.mybatisplus.annotations.TableName;
 @TableName("sys_schedule_job")
 public class ScheduleJob implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 任务调度参数key
-	 */
-	public static final String JOB_PARAM_KEY = "JOB_PARAM_KEY";
 	private Integer id;
+	/** 任务类 */
+	private String jobClass;
 	@NotBlank(message = "bean名称不能为空")
 	private String beanName;
 	@NotBlank(message = "方法名称不能为空")
@@ -41,68 +38,68 @@ public class ScheduleJob implements Serializable {
 	private String remark;
 	/** 创建时间 */
 	private Date createTime;
-
+	
+	public ScheduleJob() {
+	}
+	public ScheduleJob(Integer id, Integer status) {
+		this.id = id;
+		this.status = status;
+	}
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	public String getJobClass() {
+		return jobClass;
+	}
+	public void setJobClass(String jobClass) {
+		this.jobClass = jobClass;
+	}
 	public String getBeanName() {
 		return beanName;
 	}
-
 	public void setBeanName(String beanName) {
 		this.beanName = beanName;
 	}
-
 	public String getParams() {
 		return params;
 	}
-
 	public void setParams(String params) {
 		this.params = params;
 	}
-
 	public String getMethodName() {
 		return methodName;
 	}
-
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
-
 	public String getCronExpression() {
 		return cronExpression;
 	}
-
 	public void setCronExpression(String cronExpression) {
 		this.cronExpression = cronExpression;
 	}
-
 	public Integer getStatus() {
 		return status;
 	}
-
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-
 	public String getRemark() {
 		return remark;
 	}
-
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
 	public Date getCreateTime() {
 		return createTime;
 	}
-
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

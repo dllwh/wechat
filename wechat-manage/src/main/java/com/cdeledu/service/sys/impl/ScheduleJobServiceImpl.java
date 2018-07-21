@@ -1,66 +1,59 @@
 package com.cdeledu.service.sys.impl;
 
-import org.quartz.Scheduler;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdeledu.dao.BaseDaoSupport;
 import com.cdeledu.model.system.ScheduleJob;
 import com.cdeledu.service.sys.ScheduleJobService;
-import com.cdeledu.util.ScheduleUtils;
+import com.cdeledu.util.application.QvoConditionUtil;
 
 @Service("scheduleJobService")
+@SuppressWarnings("unchecked")
 public class ScheduleJobServiceImpl implements ScheduleJobService {
 	/** ----------------------------------------------------- Fields start */
-	
-	private Scheduler scheduler;
+	@Resource
+	private BaseDaoSupport<?> baseDao;
+	private final static String PREFIX = "com.cdeledu.dao.impl.scheduleJob.ScheduleJobDaoImpl.";
 
 	/** ----------------------------------------------------- Fields end */
-	
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void save(ScheduleJob scheduleJob) {
-		ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+
+	public List<ScheduleJob> findForJdbcParam(ScheduleJob scheduleJob) throws Exception {
+		return (List<ScheduleJob>) baseDao.findListForJdbcParam(PREFIX + "getScheduleJob",
+				scheduleJob);
 	}
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void update(ScheduleJob scheduleJob) {
-		ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
+	public Integer getCountForJdbcParam(ScheduleJob scheduleJob) throws Exception {
+		return baseDao.getCountForJdbcParam(PREFIX + "countScheduleJob", scheduleJob);
 	}
 
-	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void deleteBatch(Long[] jobIds) {
-		for (Long jobId : jobIds) {
-			ScheduleUtils.deleteScheduleJob(scheduler, jobId);
-		}
+	public boolean save(ScheduleJob scheduleJob) {
+		Integer resultCount = baseDao.insert(PREFIX, scheduleJob);
+		return QvoConditionUtil.checkInteger(resultCount);
 	}
 
-	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public int updateBatch(Long[] jobIds, int status) {
-		return 0;
+	public boolean update(ScheduleJob scheduleJob) {
+		Integer resultCount = baseDao.update(PREFIX + "update", scheduleJob);
+		return QvoConditionUtil.checkInteger(resultCount);
 	}
 
-	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void run(Long[] jobIds) {
-
+	public boolean delete(int jobId) {
+		Integer resultCount = baseDao.delete(PREFIX + "delete", jobId);
+		return QvoConditionUtil.checkInteger(resultCount);
 	}
 
-	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void pause(Long[] jobIds) {
-		for (Long jobId : jobIds) {
-			ScheduleUtils.pauseJob(scheduler, jobId);
-		}
+	public boolean updateStatus(int jobId, int status) {
+		ScheduleJob scheduleJob = new ScheduleJob(jobId, status);
+		Integer resultCount = baseDao.update(PREFIX, scheduleJob);
+		return QvoConditionUtil.checkInteger(resultCount);
 	}
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void resume(Long[] jobIds) {
-		for (Long jobId : jobIds) {
-			ScheduleUtils.resumeJob(scheduler, jobId);
-		}
-	}
 }

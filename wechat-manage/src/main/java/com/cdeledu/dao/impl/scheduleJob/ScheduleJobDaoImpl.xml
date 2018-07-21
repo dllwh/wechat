@@ -1,4 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdeledu.dao.impl.scheduleJob.ScheduleJobDaoImpl">
+
+	<insert id="save" parameterType="com.cdeledu.model.system.ScheduleJob"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_schedule_job
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="beanName!= null and beanName != '' ">beanName,</if>
+			<if test="methodName != null and methodName != '' ">methodName,</if>
+			<if test="expression != null and expression != '' ">expression,</if>
+			<if test="remark != null and remark != '' ">remark,</if>
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="beanName!= null and beanName != '' ">#{beanName},</if>
+			<if test="methodName != null and methodName != '' ">#{methodName},</if>
+			<if test="expression != null and expression != '' ">#{expression},</if>
+			<if test="remark != null and remark != '' ">#{remark},</if>
+		</trim>
+	</insert>
+
+	<delete id="delete">
+		DELETE sys_schedule_job WHERE status !=1 AND id=#{id}
+	</delete>
+
+	<update id="update" parameterType="com.cdeledu.model.system.ScheduleJob">
+		update sys_schedule_job
+		<set>
+			<if test="beanName!= null and beanName != '' ">beanName=#{beanName},</if>
+			<if test="methodName != null and methodName != '' ">methodName=#{methodName},</if>
+			<if test="expression != null and expression != '' ">expression = #{expression},</if>
+			<if test="remark != null and remark != '' ">remark = #{remark},</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+
+	<update id="updateStatus">
+		UPDATE sys_schedule_job SET status =#{status} WHERE id = #{id}
+	</update>
+
+	<select id="countScheduleJob" parameterType="com.cdeledu.model.system.ScheduleJob"
+		resultType="int">
+		SELECT count(*) FROM sys_schedule_job
+	</select>
+
+	<select id="getScheduleJob" parameterType="com.cdeledu.model.system.ScheduleJob"
+		resultType="com.cdeledu.model.system.ScheduleJob">
+		SELECT * FROM sys_schedule_job
+	</select>
 </mapper>

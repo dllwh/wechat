@@ -1,6 +1,9 @@
 package com.cdeledu.service.sys;
 
+import java.util.List;
+
 import com.cdeledu.model.system.ScheduleJob;
+import com.cdeledu.model.system.ScheduleJobLog;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -14,39 +17,27 @@ import com.cdeledu.model.system.ScheduleJob;
  * @since: JDK 1.7
  */
 public interface ScheduleJobService {
+	List<ScheduleJob> findForJdbcParam(ScheduleJob scheduleJob) throws Exception;
+
+	Integer getCountForJdbcParam(ScheduleJob scheduleJob) throws Exception;
 
 	/**
 	 * @方法描述 : 保存定时任务
 	 */
-	void save(ScheduleJob scheduleJob);
+	boolean save(ScheduleJob scheduleJob);
 
 	/**
 	 * @方法描述 : 更新定时任务
 	 */
-	void update(ScheduleJob scheduleJob);
+	boolean update(ScheduleJob scheduleJob);
 
 	/**
-	 * @方法描述 : 批量删除定时任务
+	 * @方法描述 : 删除定时任务
 	 */
-	void deleteBatch(Long[] jobIds);
+	boolean delete(int jobId);
 
 	/**
-	 * 批量更新定时任务状态
+	 * 更新定时任务状态
 	 */
-	int updateBatch(Long[] jobIds, int status);
-
-	/**
-	 * 立即执行
-	 */
-	void run(Long[] jobIds);
-
-	/**
-	 * 暂停运行
-	 */
-	void pause(Long[] jobIds);
-
-	/**
-	 * 恢复运行
-	 */
-	void resume(Long[] jobIds);
+	boolean updateStatus(int jobId, int status);
 }

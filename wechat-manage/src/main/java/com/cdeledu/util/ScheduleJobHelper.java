@@ -40,7 +40,7 @@ public class ScheduleJobHelper extends QuartzJobBean {
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		ScheduleJob scheduleJob = (ScheduleJob) context.getMergedJobDataMap()
-				.get(ScheduleJob.JOB_PARAM_KEY);
+				.get(ScheduleUtils.JOB_NAME);
 		// 获取spring bean
 		ScheduleJobLogService scheduleJobLogService = ConstantFactory.scheduleJobLogService;
 		// 数据库保存执行记录
