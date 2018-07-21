@@ -64,6 +64,18 @@ public class ScheduledController extends BaseController {
 		return ajaxJson;
 	}
 
+	/**
+	 * @方法:打开创建调度任务页面
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@RequestMapping(value = "createJob", params = "taskAdd")
+	public ModelAndView taskAdd() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/monitor/scheduled/taskAdd");
+		return mv;
+	}
+
 	@ResponseBody
 	@RequestMapping("updateJob")
 	@SystemLog(desc = "更新定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
@@ -71,6 +83,18 @@ public class ScheduledController extends BaseController {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.update(scheduleJob);
 		return ajaxJson;
+	}
+
+	/**
+	 * @方法:打开编辑调度任务页面
+	 * @创建人:独泪了无痕
+	 * @return
+	 */
+	@RequestMapping(value = "updateJob", params = "taskEdit")
+	public ModelAndView taskEdit() {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("system/monitor/scheduled/taskEdit");
+		return mv;
 	}
 
 	@ResponseBody
