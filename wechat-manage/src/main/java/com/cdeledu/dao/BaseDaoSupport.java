@@ -16,57 +16,57 @@ public class BaseDaoSupport<T> implements BaseDao<T> {
 	private SqlSessionTemplate sqlSessionTemplate;
 
 	@Override
-	public Integer insert(String statement, Object parameter) throws Exception {
+	public Integer insert(String statement, Object parameter) {
 		return sqlSessionTemplate.insert(statement, parameter);
 	}
 
 	@Override
-	public Integer delete(String statement) throws Exception {
+	public Integer delete(String statement) {
 		return sqlSessionTemplate.delete(statement);
 	}
 
 	@Override
-	public Integer delete(String statement, Object parameter) throws Exception {
+	public Integer delete(String statement, Object parameter) {
 		return sqlSessionTemplate.delete(statement, parameter);
 	}
 
 	@Override
-	public Integer update(String statement) throws Exception {
+	public Integer update(String statement) {
 		return sqlSessionTemplate.update(statement);
 	}
 
 	@Override
-	public Integer update(String statement, Object parameter) throws Exception {
+	public Integer update(String statement, Object parameter) {
 		return sqlSessionTemplate.update(statement, parameter);
 	}
 
 	@Override
-	public Object findOneForJdbcParam(String statement) throws Exception {
+	public Object findOneForJdbcParam(String statement) {
 		return sqlSessionTemplate.selectOne(statement);
 	}
 
 	@Override
-	public Object findOneForJdbcParam(String statement, Object parameter) throws Exception {
+	public Object findOneForJdbcParam(String statement, Object parameter) {
 		return sqlSessionTemplate.selectOne(statement, parameter);
 	}
 
 	@Override
-	public Object findListForJdbcParam(String statement) throws Exception {
+	public Object findListForJdbcParam(String statement) {
 		return sqlSessionTemplate.selectList(statement);
 	}
 
 	@Override
-	public Object findListForJdbcParam(String statement, Object parameter) throws Exception {
+	public Object findListForJdbcParam(String statement, Object parameter) {
 		return sqlSessionTemplate.selectList(statement, parameter);
 	}
 
 	@Override
-	public Integer getCountForJdbcParam(String statement, Object parameter) throws Exception {
+	public Integer getCountForJdbcParam(String statement, Object parameter) {
 		return (Integer) sqlSessionTemplate.selectOne(statement, parameter);
 	}
 
 	@Override
-	public Object findForMap(String statement, Object parameter, String key) throws Exception {
+	public Object findForMap(String statement, Object parameter, String key) {
 		return sqlSessionTemplate.selectMap(statement, parameter, key);
 	}
 
