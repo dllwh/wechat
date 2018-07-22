@@ -311,7 +311,7 @@
 							<div class="col-xs-12 col-sm-8">
 								<input type="text" class="form-control easyui-numberspinner" 
 									name="sequence" required="required" value="1"
-									data-options="min:0,max:100"  
+									data-options="min:0,max:100"
 									placeholder="请输入排序号" aria-required="true" aria-invalid="true" 
 									class="error" autocomplete="off">
 							</div>
@@ -409,7 +409,7 @@
 				
 				if(discount == 2){// 按钮
 					$(".form-group").show();
-					$("[name='sequence']").parent().parent().parent().hide();
+				//	$("[name='sequence']").parent().parent().parent().hide();
 					$("[name='iconClass']").parent().parent().parent().hide();
 				}
 			});
@@ -440,7 +440,7 @@
 				
 				if(discount == 2){// 按钮
 					$(".form-group").show();
-					$("[name='sequence']").parent().parent().parent().hide();
+					// $("[name='sequence']").parent().parent().parent().hide();
 					$("[name='iconClass']").parent().parent().parent().hide();
 				}
 			});
@@ -468,7 +468,7 @@
 					a +='<select class="form-control" name="parentCode" id="sParentCode">';
 					a +='<option value="">请选择</option>';
 					a +='<c:forEach items="${fns:menuList(1)}" var="menu">';
-					a +='<option value="${menu.id }">${menu.menuName}</option>		';
+					a +='<option value="${menu.id }">${menu.menuName}</option>';
 					a +='</c:forEach>';
 					a +='</select>';
 					$("#paraentMenu").html(a);
@@ -753,7 +753,7 @@
 				}
 				
 				if(this.setItem.type == 2){// 按钮
-					$("#editMenuForm input[name='sequence']").parent().parent().parent().hide();
+					// $("#editMenuForm input[name='sequence']").parent().parent().parent().hide();
 					$("#editMenuForm input[name='iconClass']").parent().parent().parent().hide();
 				}
 				
