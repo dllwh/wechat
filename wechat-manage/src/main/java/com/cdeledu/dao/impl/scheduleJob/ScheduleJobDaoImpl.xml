@@ -40,13 +40,34 @@
 		UPDATE sys_schedule_job SET status =#{status} WHERE id = #{id}
 	</update>
 
+	<sql id="getScheduleJob_body">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">AND id = #{id}</if>
+			<if test="jobClass !=null and jobClass !='' ">AND jobClass=#{jobClass} </if>
+			<if test="beanName !=null and beanName !='' ">AND beanName=#{beanName} </if>
+			<if test="methodName !=null and methodName !='' ">AND methodName=#{methodName} </if>
+			<if test="status !=null">AND status=#{status} </if>
+		</trim>
+	</sql>
+	
 	<select id="countScheduleJob" parameterType="com.cdeledu.model.system.ScheduleJob"
 		resultType="int">
 		SELECT count(*) FROM sys_schedule_job
+		<include refid="getScheduleJob_body"/>
 	</select>
-
+	
 	<select id="getScheduleJob" parameterType="com.cdeledu.model.system.ScheduleJob"
 		resultType="com.cdeledu.model.system.ScheduleJob">
 		SELECT * FROM sys_schedule_job
+		<include refid="getScheduleJob_body"/>
+		<if test="sortName != null and sortName !='' ">
+			ORDER BY #{sortName} ${sortOrder}
+		</if>
+		<if test="sortName == null or  sortName =='' ">
+			ORDER BY id ${sortOrder}
+		</if>
+		<if test="page != -1">
+			LIMIT #{startRow},#{rows}
+		</if>
 	</select>
 </mapper>
