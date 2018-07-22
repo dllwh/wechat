@@ -68,6 +68,10 @@ public class HttpURLConnHelper {
 		URLCHARSET = urlCharset;
 	}
 
+	private HttpURLConnHelper(){
+		
+	}
+	
 	/**
 	 * @方法描述: 初始化连接相关信息的Post、Get访问请求参数设置
 	 * @创建者: 皇族灬战狼
