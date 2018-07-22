@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.LayuiResponse;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
@@ -35,7 +36,7 @@ public class ScheduledController extends BaseController {
 	private ScheduleJobService scheduleJobService;
 
 	/** ----------------------------------------------------- Fields end */
-	@RequestMapping("")
+	@RequestMapping(value = "")
 	public ModelAndView index() {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/monitor/scheduled/taskInit");
@@ -46,19 +47,23 @@ public class ScheduledController extends BaseController {
 	 * @方法描述 : 定时任务列表
 	 */
 	@ResponseBody
-	@RequestMapping("getList")
-	public void list() {
+	@RequestMapping(params = "getList")
+	public LayuiResponse getList(ScheduleJob scheduleJob) {
+		LayuiResponse response = new LayuiResponse();
 		try {
-			scheduleJobService.getCountForJdbcParam(null);
-			scheduleJobService.findForJdbcParam(null);
+			response.setCount(scheduleJobService.getCountForJdbcParam(scheduleJob));
+			response.setData(scheduleJobService.findForJdbcParam(scheduleJob));
 		} catch (Exception e) {
+			response.setMsg(e.getMessage());
+			response.setCount(0);
 		}
+		return response;
 	}
 
 	@ResponseBody
-	@RequestMapping("createJob")
+	@RequestMapping(value = "createJob")
 	@SystemLog(desc = "创建定时任务", opType = SysOpType.INSERT, tableName = "sys_schedule_job")
-	public AjaxJson createJob(@RequestBody ScheduleJob scheduleJob) {
+	public AjaxJson createJob(ScheduleJob scheduleJob) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.save(scheduleJob);
 		return ajaxJson;
@@ -77,9 +82,9 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("updateJob")
+	@RequestMapping(value = "updateJob")
 	@SystemLog(desc = "更新定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson updateJob(@RequestBody ScheduleJob scheduleJob) {
+	public AjaxJson updateJob(ScheduleJob scheduleJob) {
 		AjaxJson ajaxJson = new AjaxJson();
 		scheduleJobService.update(scheduleJob);
 		return ajaxJson;
@@ -98,7 +103,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("deleteJob")
+	@RequestMapping(value = "deleteJob")
 	@SystemLog(desc = "删除定时任务", opType = SysOpType.DEL, tableName = "sys_schedule_job")
 	public AjaxJson deleteJob(@RequestBody int jobId) {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -108,7 +113,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("runJob")
+	@RequestMapping(value = "runJob")
 	@SystemLog(desc = "立即执行任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson runJob(@RequestBody int jobId) {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -118,7 +123,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("pauseJob")
+	@RequestMapping(value = "pauseJob")
 	@SystemLog(desc = "暂停定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson pauseJob(@RequestBody int jobId) {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -128,7 +133,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("startJob")
+	@RequestMapping(value = "startJob")
 	@SystemLog(desc = "启动一个定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson startJob(@RequestBody int jobId) {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -138,7 +143,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("startJobs")
+	@RequestMapping(value = "startJobs")
 	@SystemLog(desc = "启动所有定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson startJobs() {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -149,7 +154,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("resumeJob")
+	@RequestMapping(value = "resumeJob")
 	@SystemLog(desc = "恢复定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson resumeJob(@RequestBody int jobId) {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -159,7 +164,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("shutdownJob")
+	@RequestMapping(value = "shutdownJob")
 	@SystemLog(desc = "关闭定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson shutdownJob(@RequestBody int jobId) {
 		AjaxJson ajaxJson = new AjaxJson();
@@ -169,7 +174,7 @@ public class ScheduledController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping("shutdownJobs")
+	@RequestMapping(value = "shutdownJobs")
 	@SystemLog(desc = "关闭所有定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
 	public AjaxJson shutdownJobs(@RequestBody int jobId) {
 		AjaxJson ajaxJson = new AjaxJson();
