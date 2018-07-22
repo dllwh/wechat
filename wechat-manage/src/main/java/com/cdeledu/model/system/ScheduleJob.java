@@ -1,11 +1,11 @@
 package com.cdeledu.model.system;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.cdeledu.common.base.PageEntity;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @since: JDK 1.7
  */
 @TableName("sys_schedule_job")
-public class ScheduleJob implements Serializable {
+public class ScheduleJob extends PageEntity {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	/** 任务类 */
