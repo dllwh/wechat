@@ -53,6 +53,11 @@
 			<artifactId>mongo-java-driver</artifactId>
 			<version>${mongodb.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>${spring.mongodb.version}</version>
+		</dependency>
 
 		<!-- Redis -->
 		<dependency>
