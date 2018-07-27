@@ -16,3 +16,7 @@
 `阿里云`
 	
 	https://www.aliyun.com/
+	
+`视频直播用户成长集合页`
+	
+	https://promotion.aliyun.com/ntms/act/live.html
