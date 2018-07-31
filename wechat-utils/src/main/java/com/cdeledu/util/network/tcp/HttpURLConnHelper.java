@@ -10,10 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
@@ -26,6 +23,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
@@ -33,13 +31,11 @@ import org.apache.http.HttpHeaders;
 import com.cdeledu.common.browser.UserAgentType;
 import com.cdeledu.common.constant.ConstantHelper;
 import com.cdeledu.common.exception.ExceptionHelper;
-import com.cdeledu.common.httpEntity.BasicAuthenticator;
 import com.cdeledu.common.httpEntity.HttpMethod;
 import com.cdeledu.common.network.MyX509TrustManager;
 import com.cdeledu.common.network.UrlHelper;
 import com.cdeledu.util.apache.collection.MapUtilHelper;
 import com.cdeledu.util.message.unicode.CharsetHelper;
-import com.cdeledu.util.network.IpUtilHelper;
 
 /**
  * @描述:
@@ -68,10 +64,10 @@ public class HttpURLConnHelper {
 		URLCHARSET = urlCharset;
 	}
 
-	private HttpURLConnHelper(){
-		
+	private HttpURLConnHelper() {
+
 	}
-	
+
 	/**
 	 * @方法描述: 初始化连接相关信息的Post、Get访问请求参数设置
 	 * @创建者: 皇族灬战狼
@@ -84,32 +80,13 @@ public class HttpURLConnHelper {
 	 *            是否代理
 	 * @return
 	 */
-	private HttpURLConnection initConn(String url, String ReqMethod, boolean isUseProxy)
-			throws Exception {
+	private HttpURLConnection initConn(String url, String ReqMethod) throws Exception {
 		HttpURLConnection httpConn = null;
 		URLConnection urlConn = null;
 		// 打开HttpURLConnection
 		URL realUrl = new URL(url);
-		if (isUseProxy) {
-			Map<String, Object> ipMap = IpUtilHelper.getProxyIp();
-			// http访问要使用的代理服务器的地址
-			String proxyIp = String.valueOf(ipMap.get("proxyIp"));
-			// http访问要使用的代理服务器的端口
-			String proxyPort = String.valueOf(ipMap.get("proxyPort"));
-			// http访问要使用的代理服务器的用户名
-			String userName = String.valueOf(ipMap.get("userName"));
-			// http访问要使用的代理服务器的密码
-			String password = String.valueOf(ipMap.get("proxyPort"));
-			Proxy newProxy = new Proxy(Proxy.Type.HTTP,
-					new InetSocketAddress(proxyIp, Integer.parseInt(proxyPort)));
 
-			if (StringUtils.isNoneBlank(userName) && StringUtils.isNoneBlank(password)) {
-				Authenticator.setDefault(new BasicAuthenticator(userName, password));
-			}
-			urlConn = realUrl.openConnection(newProxy);
-		} else {
-			urlConn = realUrl.openConnection();
-		}
+		urlConn = realUrl.openConnection();
 
 		/** 设置http头通用的请求属性 */
 		urlConn.setRequestProperty(HttpHeaders.ACCEPT, "*/*");
@@ -175,13 +152,13 @@ public class HttpURLConnHelper {
 	}
 
 	/** 利用 HttpURLConnection发送代理服务器的POST()方法的请求 */
-	private String sendProxyRequest(String url, String params, boolean isproxy) throws Exception {
+	private String sendProxyRequest(String url, String params) throws Exception {
 		String result = "";// 响应内容
 		OutputStream outStrm = null;
 		BufferedReader reader = null;
 		HttpURLConnection httpConn = null;
 
-		httpConn = initConn(url, POST_HTTP, isproxy);
+		httpConn = initConn(url, POST_HTTP);
 
 		// 建立实际的连接
 		httpConn.connect();
@@ -278,7 +255,7 @@ public class HttpURLConnHelper {
 
 		try {
 
-			httpConn = initConn(url, HttpMethod.GET.getValue(), false);
+			httpConn = initConn(url, HttpMethod.GET.getValue());
 			if (MapUtilHelper.isNotEmpty(headerMap)) {
 				for (Map.Entry<String, String> entry : headerMap.entrySet()) {
 					httpConn.setRequestProperty(entry.getKey(), entry.getValue());
@@ -321,7 +298,7 @@ public class HttpURLConnHelper {
 	 * @return 所代表远程资源的响应结果
 	 */
 	public String sendPostRequest(String url) throws Exception {
-		return sendProxyRequest(url, null, false);
+		return sendProxyRequest(url, null);
 	}
 
 	/**
@@ -335,7 +312,7 @@ public class HttpURLConnHelper {
 	 * @return 所代表远程资源的响应结果
 	 */
 	public String sendPostRequest(String url, String params) throws Exception {
-		return sendProxyRequest(url, params, false);
+		return sendProxyRequest(url, params);
 	}
 
 	/**
@@ -348,23 +325,11 @@ public class HttpURLConnHelper {
 	 * @return
 	 */
 	public String sendPostRequest(String url, Map<String, Object> paramsMap) throws Exception {
-		String parameters = UrlHelper.formatParameters(paramsMap);
-		return sendPostRequest(url, parameters);
-	}
-
-	/**
-	 * @Title: sendPostRequest
-	 * @Description: 利用 HttpURLConnection 模拟发送http POST方法的请求
-	 * @param url
-	 *            发送请求的 URL
-	 * @param parameters
-	 *            请求参数
-	 * @param isproxy
-	 *            是否使用代理
-	 * @return
-	 */
-	public String sendPostRequest(String url, String parameters, boolean isproxy) throws Exception {
-		return sendProxyRequest(url, parameters, isproxy);
+		String parameters = "";
+		if (MapUtils.isNotEmpty(paramsMap)) {
+			parameters = UrlHelper.formatParameters(paramsMap);
+		}
+		return sendProxyRequest(url, parameters);
 	}
 
 	/**
