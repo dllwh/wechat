@@ -8,6 +8,16 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @类描述: BaseResult 统一返回结果类
+ * 
+ *       <pre>
+ *       // 请求异常
+ *       return Result.error("我是错误提示");
+ *       // 请求成功
+ *       return Result.success();
+ *       // 请求成功并返回数据
+ *       return Result.success().add("list", list);
+ *       </pre>
+ * 
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年5月20日 下午5:24:11
  * @版本: V2.0
