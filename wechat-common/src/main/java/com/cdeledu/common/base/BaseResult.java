@@ -1,39 +1,50 @@
 package com.cdeledu.common.base;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @类描述: BaseResult 统一返回结果类
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年5月20日 下午5:24:11
- * @版本: V1.0
+ * @版本: V2.0
  * @since: JDK 1.7
  */
 public class BaseResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	/** 返回状态码 */
+	/** 返回状态码，200：成功；999999：失败 */
 	private Integer code;
-
 	/** 返回信息 */
 	private String message;
-
 	/** 返回数据 */
-	private Object data;
+	private Map<String, Object> data = new HashMap<String, Object>();
 
-	public BaseResult(Integer code) {
-		this.code = code;
+	public static BaseResult success() {
+		BaseResult result = new BaseResult();
+		result.setCode(200);
+		result.setMessage("操作成功");
+		return result;
 	}
 
-	public BaseResult(Integer code, String message) {
-		this.code = code;
-		this.message = message;
+	public static BaseResult error(String msg) {
+		BaseResult result = new BaseResult();
+		result.setCode(999999);
+		if (StringUtils.isEmpty(msg)) {
+			result.setMessage("操作失败");
+		} else {
+			result.setMessage(msg);
+		}
+		return result;
 	}
 
-	public BaseResult(Integer code, String message, Object data) {
-		this.code = code;
-		this.message = message;
-		this.data = data;
+	// 链式操作返回信息
+	public BaseResult add(String key, Object value) {
+		this.getData().put(key, value);
+		return this;
 	}
 
 	public Integer getCode() {
@@ -52,11 +63,11 @@ public class BaseResult implements Serializable {
 		this.message = message;
 	}
 
-	public Object getData() {
+	public Map<String, Object> getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(Map<String, Object> data) {
 		this.data = data;
 	}
 }
