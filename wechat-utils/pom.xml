@@ -123,9 +123,22 @@
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>0.1.54</version>
-		</dependency> 
+		</dependency>
+		
+		<!--词云依赖-->
+		<dependency>
+			<groupId>com.kennycason</groupId>
+			<artifactId>kumo-core</artifactId>
+			<version>1.13</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>com.kennycason</groupId>
+			<artifactId>kumo-tokenizers</artifactId>
+			<version>1.12</version>
+		</dependency>
+		<!--词云依赖结束-->
 	</dependencies>
-
 	<build>
 		<finalName>wechat-utils</finalName>
 		<plugins>
