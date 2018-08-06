@@ -26,7 +26,7 @@ import com.kennycason.kumo.palette.LinearGradientColorPalette;
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年8月3日 下午2:25:50
  * @版本: V1.0
- * @since: JDK 1.7
+ * @since: JDK 1.8
  */
 public final class WordcloudHelper {
 	/** ----------------------------------------------------- Fields start */
