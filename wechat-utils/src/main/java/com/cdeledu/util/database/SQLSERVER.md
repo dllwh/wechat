@@ -29,3 +29,14 @@
 	FROM information_schema.COLUMNS AS a
 	LEFT JOIN sys.extended_properties AS b
 		ON a.TABLE_NAME = OBJECT_NAME(b.major_id) AND a.ORDINAL_POSITION = b.minor_id
+
+	SELECT
+		a.TABLE_NAME,
+		a.COLUMN_NAME,
+		a.DATA_TYPE,
+		a.CHARACTER_MAXIMUM_LENGTH,
+		b.value,
+		ROW_NUMBER() OVER (ORDER BY a.TABLE_NAME) AS rowNum
+	FROM information_schema.COLUMNS AS a
+	LEFT JOIN sys.extended_properties AS b
+		ON a.TABLE_NAME = OBJECT_NAME(b.major_id) AND a.ORDINAL_POSITION = b.minor_id
