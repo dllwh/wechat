@@ -20,4 +20,12 @@
 	sqlBuilder.append("  select schema_id from sys.schemas  ");
 	sqlBuilder.append(")  and c.value is not null");
 
-	
+
+	SELECT
+		a.COLUMN_NAME,
+		a.DATA_TYPE,
+		a.CHARACTER_MAXIMUM_LENGTH,
+		b.value
+	FROM information_schema.COLUMNS AS a
+	LEFT JOIN sys.extended_properties AS b
+		ON a.TABLE_NAME = OBJECT_NAME(b.major_id) AND a.ORDINAL_POSITION = b.minor_id
