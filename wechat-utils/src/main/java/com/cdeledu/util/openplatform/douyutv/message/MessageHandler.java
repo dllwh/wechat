@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.cdeledu.util.openplatform.douyutv.constants.MsgType;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -98,18 +101,21 @@ public final class MessageHandler {
 			System.arraycopy(recvByte, 0, realBuf, 0, recvLen);
 			// 根据TCP协议获取返回信息中的字符串信息
 			dataStr = new String(realBuf, 12, realBuf.length - 12);
+
+			String msgType = MessageViewUtil.getMsgText(dataStr);
 			Map<String, Object> parseRespondMap = MessageViewUtil.parseRespond(dataStr);
-			if (parseRespondMap.get("type") != null) {
+
+			if (StringUtils.isNotBlank(msgType)) {
 				// 服务器反馈错误信息
-				if (parseRespondMap.get("type").equals("error")) {
+				if (MsgType.ERROR.equals(msgType)) {
 					// 结束心跳和获取弹幕线程
 				}
 
 				/*** @TODO 根据业务需求来处理获取到的所有弹幕及礼物信息 ***********/
 				// 判断消息类型
-				if (parseRespondMap.get("type").equals("chatmsg")) {// 弹幕消息
+				if (MsgType.CHAT_MSG.equals(msgType)) {// 弹幕消息
 					logger.debug("弹幕消息===>" + parseRespondMap.toString());
-				} else if (parseRespondMap.get("type").equals("dgb")) {// 赠送礼物信息
+				} else if (MsgType.DGB.equals(msgType)) {// 赠送礼物信息
 					logger.debug("礼物消息===>" + parseRespondMap.toString());
 				} else {
 					logger.debug("其他消息===>" + parseRespondMap.toString());
