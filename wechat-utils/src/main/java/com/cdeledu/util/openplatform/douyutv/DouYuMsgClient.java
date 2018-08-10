@@ -160,7 +160,7 @@ public final class DouYuMsgClient {
 	}
 
 	/**
-	 * @方法描述 : 发送心跳消息，保持通道
+	 * @方法描述 : 客户端每隔 45 秒发送心跳信息给弹幕服务器，保持通道
 	 */
 	public void doKeepLive() {
 		// logger.info("发送心跳信息，保持通道中...");
