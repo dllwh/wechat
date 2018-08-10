@@ -102,7 +102,7 @@ public final class MessageHandler {
 			// 根据TCP协议获取返回信息中的字符串信息
 			dataStr = new String(realBuf, 12, realBuf.length - 12);
 
-			String msgType = MessageViewUtil.getMsgText(dataStr);
+			String msgType = MessageViewUtil.getMsgType(dataStr);
 			Map<String, Object> parseRespondMap = MessageViewUtil.parseRespond(dataStr);
 
 			if (StringUtils.isNotBlank(msgType)) {
