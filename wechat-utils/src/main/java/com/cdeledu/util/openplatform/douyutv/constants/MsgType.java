@@ -17,7 +17,7 @@ public final class MsgType {
 	// 登录响应
 	public static final String LOGIN_RES = "loginres";
 	// 服务心跳响应
-	public static final String KEEP_LIVE = "loginres";
+	public static final String KEEP_LIVE = "mrkl";
 	// 弹幕消息
 	public static final String CHAT_MSG = "chatmsg";
 	// 领取鱼丸暴击
