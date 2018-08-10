@@ -56,42 +56,16 @@ public final class MessageHandler {
 	}
 
 	/**
-	 * @方法描述 : 解析登录请求返回结果
-	 * @return
+	 * @方法描述 : 获取服务器返回信息
 	 */
-	public boolean parseLoginRespond() {
-		boolean result = false;
-		// 初始化获取弹幕服务器返回信息包大小
-		byte[] respond = new byte[MAX_BUFFER_LENGTH];
-		try {
-			new BufferedInputStream(socket.getInputStream()).read(respond, 0, respond.length);
-			// 1、判断返回的数据是否正确（仅包含14位信息头，没有信息内容）
-			if (respond == null || respond.length <= 12) {
-				return false;
-			}
-
-			// 2、解析返回信息包中的信息内容
-			String dataStr = new String(respond);
-			// 3、对登录返回信息进行判断
-			if ("loginres".equalsIgnoreCase(MessageViewUtil.getMsgType(dataStr))) {
-				result = true;
-			}
-		} catch (Exception e) {
-		}
-		// 4、返回登录是否成功判断结果
-		return result;
-	}
-
-	/**
-	 * @方法描述 : 读取消息,解析从服务器接受的协议，并根据需要订制业务需求
-	 */
-	public void read() {
+	private String getServerMsg() {
 		// 初始化获取弹幕服务器返回信息包大小
 		byte[] recvByte = new byte[MAX_BUFFER_LENGTH];
 		// 定义服务器返回信息的字符串
-		String dataStr = "";
+		String resultDate = "";
+		BufferedInputStream bis = null;
 		try {
-			BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
+			bis = new BufferedInputStream(socket.getInputStream());
 			// 读取服务器返回信息，并获取返回信息的整体字节长度
 			int recvLen = bis.read(recvByte, 0, recvByte.length);
 
@@ -100,14 +74,50 @@ public final class MessageHandler {
 			// 按照实际获取的字节长度读取返回信息
 			System.arraycopy(recvByte, 0, realBuf, 0, recvLen);
 			// 根据TCP协议获取返回信息中的字符串信息
-			dataStr = new String(realBuf, 12, realBuf.length - 12);
+			resultDate = new String(realBuf, 12, realBuf.length - 12);
+		} catch (Exception e) {
+		}
+		
+		return resultDate;
+	}
 
-			String msgType = MessageViewUtil.getMsgType(dataStr);
-			Map<String, Object> parseRespondMap = MessageViewUtil.parseRespond(dataStr);
+	/**
+	 * @方法描述 : 解析登录请求返回结果
+	 * @return
+	 */
+	public boolean parseLoginRespond() {
+		if (MsgType.LOGIN_RES.equalsIgnoreCase(MessageViewUtil.getMsgType(getServerMsg()))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @方法描述 : 是否是错误返回
+	 * @return
+	 */
+	public boolean ifErrorRespond() {
+		if (MsgType.ERROR.equalsIgnoreCase(MessageViewUtil.getMsgType(getServerMsg()))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @方法描述 : 读取消息,解析从服务器接受的协议，并根据需要订制业务需求
+	 */
+	public void read() {
+
+		try {
+			String result = getServerMsg();
+			String msgType = MessageViewUtil.getMsgType(result);
+			Map<String, Object> parseRespondMap = MessageViewUtil.parseRespond(result);
 
 			if (StringUtils.isNotBlank(msgType)) {
 				// 服务器反馈错误信息
-				if (MsgType.ERROR.equals(msgType)) {
+				if (ifErrorRespond()) {
 					// 结束心跳和获取弹幕线程
 				}
 
@@ -117,6 +127,8 @@ public final class MessageHandler {
 					logger.debug("弹幕消息===>" + parseRespondMap.toString());
 				} else if (MsgType.DGB.equals(msgType)) {// 赠送礼物信息
 					logger.debug("礼物消息===>" + parseRespondMap.toString());
+				} else if (MsgType.UENTER.equals(msgType)) {
+					logger.debug("用户进房通知消息===>" + parseRespondMap.toString());
 				} else {
 					logger.debug("其他消息===>" + parseRespondMap.toString());
 				}
