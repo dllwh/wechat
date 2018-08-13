@@ -24,7 +24,7 @@ import com.mongodb.client.MongoIterable;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年7月17日 下午5:29:15
- * @版本: V1.1
+ * @版本: V1.1.1
  * @since: JDK 1.7
  */
 public final class MongodbSingleHelper {
@@ -175,7 +175,6 @@ public final class MongodbSingleHelper {
 	 * @return
 	 */
 	public Long getCollectionCount(String collectionName) {
-
 		return getCollection(collectionName).count();
 	}
 
@@ -186,5 +185,33 @@ public final class MongodbSingleHelper {
 	 */
 	public void dropCollection(String collectionName) {
 		getCollection(collectionName).drop();
+	}
+
+	public void find(String collectionName) {
+		getCollection(collectionName).find();
+	}
+
+	public void findOne(String collectionName) {
+		// getCollection(collectionName).findOneAndDelete();
+		// getCollection(collectionName).findOneAndReplace();
+		// getCollection(collectionName).findOneAndUpdate();
+	}
+
+	public void update(String collectionName) {
+		// getCollection(collectionName).updateMany();
+		// getCollection(collectionName).updateOne();
+	}
+
+	public void insert(String collectionName) {
+		// getCollection(collectionName).insertMany();
+	}
+
+	public void insertList(String collectionName) {
+		// getCollection(collectionName).insertOne();
+	}
+
+	public void delete(String collectionName) {
+		// getCollection(collectionName).deleteMany();
+		// getCollection(collectionName).deleteOne();
 	}
 }
