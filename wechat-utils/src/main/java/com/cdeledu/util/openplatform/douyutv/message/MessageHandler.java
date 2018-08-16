@@ -21,15 +21,15 @@ import com.cdeledu.util.openplatform.douyutv.constants.MsgType;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年8月1日 下午2:22:08
- * @版本: V1.0
+ * @版本: V1.1
  * @since: JDK 1.7
  */
 public final class MessageHandler {
 	/** ----------------------------------------------------- Fields start */
 	private final static Logger logger = LoggerFactory.getLogger(MessageHandler.class);
-	// socket相关配置
+	/** socket相关配置 */
 	private Socket socket;
-	// 设置字节获取buffer的最大值
+	/** 设置字节获取buffer的最大值 */
 	private static final int MAX_BUFFER_LENGTH = 4096;
 
 	/** ----------------------------------------------------- Fields end */
@@ -74,10 +74,11 @@ public final class MessageHandler {
 			// 按照实际获取的字节长度读取返回信息
 			System.arraycopy(recvByte, 0, realBuf, 0, recvLen);
 			// 根据TCP协议获取返回信息中的字符串信息
-			resultDate = new String(realBuf, 12, realBuf.length - 12);
+			// resultDate = new String(realBuf, 12, realBuf.length - 12);
+			resultDate = new String(realBuf);
 		} catch (Exception e) {
 		}
-		
+
 		return resultDate;
 	}
 
