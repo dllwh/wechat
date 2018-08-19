@@ -1,5 +1,7 @@
 package com.cdeledu.util.openplatform.douyutv.factory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ import com.cdeledu.util.openplatform.douyutv.constants.MsgType;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年8月7日 下午7:32:32
- * @版本: V1.0
+ * @版本: V1.2.2
  * @since: JDK 1.7
  */
 public final class DouyuTCPDecoder {
@@ -71,6 +73,33 @@ public final class DouyuTCPDecoder {
 	}
 
 	/**
+	 * @方法:提示成功信息
+	 * @创建人:独泪了无痕
+	 * @param msg
+	 */
+	public static void showSuccessWithStatus(String msg) {
+
+	}
+
+	/**
+	 * @方法:提示错误信息
+	 * @创建人:独泪了无痕
+	 * @param msg
+	 */
+	public static void showErrorWithStatus(String msg) {
+
+	}
+
+	/**
+	 * @方法:提示消息
+	 * @创建人:独泪了无痕
+	 * @param msg
+	 */
+	public static void showsInfoWithStatus(String msg) {
+
+	}
+
+	/**
 	 * @方法描述 : 是否登陆成功
 	 * @return
 	 */
@@ -108,7 +137,7 @@ public final class DouyuTCPDecoder {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 
 		// 处理数据字符串末尾的'/0字符'
-		// data = StringUtils.substringBeforeLast(data, "/");
+		data = StringUtils.substringBeforeLast(data, "/");
 
 		// 对数据字符串进行拆分
 		String[] buff = data.split("/");
@@ -125,8 +154,8 @@ public final class DouyuTCPDecoder {
 			if (value != null) {
 				// if(value instanceof String){
 				// 如果value值中包含子序列化值，则进行递归解析
-				if (StringUtils.contains((String) value, "@A")) {
-					value = deFilterStr((String) value);
+				if (StringUtils.indexOf((String) value, "@A") > 0) {
+					value = decodeMessage((String) value);
 					value = parseRespond((String) value);
 				}
 			}
@@ -136,7 +165,25 @@ public final class DouyuTCPDecoder {
 		return resultMap;
 	}
 
-	public static String deFilterStr(String str) {
+	private static String decodeMessage(String message) {
+		String decodedMessage = message;
+		try {
+			decodedMessage = URLDecoder.decode(message, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+
+		}
+		decodedMessage = decode(decodedMessage);
+		return decodedMessage;
+	}
+
+	/**
+	 * 
+	 * @方法:根据斗鱼弹幕协议进行相应的解码处理
+	 * @创建人:独泪了无痕
+	 * @param str
+	 * @return
+	 */
+	private static String decode(String str) {
 		if (StringUtils.isBlank(str)) {
 			return str;
 		}

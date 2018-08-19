@@ -3,6 +3,8 @@ package com.cdeledu.util.openplatform.douyutv.factory;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.cdeledu.util.openplatform.douyutv.constants.DouYuConstants;
 
 /**
@@ -14,7 +16,7 @@ import com.cdeledu.util.openplatform.douyutv.constants.DouYuConstants;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年8月6日 下午8:41:38
- * @版本: V1.0
+ * @版本: V1.2.1
  * @since: JDK 1.7
  */
 public final class DouyuTCPEncoder {
@@ -23,15 +25,15 @@ public final class DouyuTCPEncoder {
 
 	/** ----------------------------------------------------- Fields end */
 	/**
-	 * @方法描述 : 根据斗鱼弹幕协议进行相应的编码处理
+	 * @方法描述 : 进行编码
 	 * @param key
 	 * @param value
 	 */
 	public void addItem(String key, Object value) {
-		buf.append(key.replaceAll("/", "@S").replaceAll("@", "@A"));
+		buf.append(encode(key));
 		buf.append("@=");
 		if (value instanceof String) {
-			buf.append(((String) value).replaceAll("/", "@S").replaceAll("@", "@A"));
+			buf.append(encode(((String) value)));
 		} else if (value instanceof Integer) {
 			buf.append(value);
 		}
@@ -46,21 +48,6 @@ public final class DouyuTCPEncoder {
 		// 数据包末尾必须以'\0'结尾
 		buf.append('\0');
 		return buf.toString();
-	}
-
-	/**
-	 * @方法: 以小端模式将int转成byte[]
-	 * @创建人:独泪了无痕
-	 * @param value
-	 * @return
-	 */
-	private static byte[] intToBytesLittle(int value) {
-		byte[] b = new byte[4];
-		b[0] = (byte) (value & 0xff);
-		b[1] = (byte) (value >> 8 & 0xff);
-		b[2] = (byte) (value >> 16 & 0xff);
-		b[3] = (byte) (value >> 24 & 0xff);
-		return b;
 	}
 
 	/**
@@ -89,5 +76,33 @@ public final class DouyuTCPEncoder {
 			e.printStackTrace();
 		}
 		return boutput.toByteArray();
+	}
+
+	/**
+	 * @方法:根据斗鱼弹幕协议进行相应的编码处理
+	 * @创建人:独泪了无痕
+	 * @param str
+	 * @return
+	 */
+	private static String encode(String str) {
+		if (StringUtils.isBlank(str)) {
+			return str;
+		}
+		return str.replace("@", "@A").replace("/", "@S");
+	}
+
+	/**
+	 * @方法: 以小端模式将int转成byte[]
+	 * @创建人:独泪了无痕
+	 * @param value
+	 * @return
+	 */
+	private static byte[] intToBytesLittle(int value) {
+		byte[] b = new byte[4];
+		b[0] = (byte) (value & 0xff);
+		b[1] = (byte) (value >> 8 & 0xff);
+		b[2] = (byte) (value >> 16 & 0xff);
+		b[3] = (byte) (value >> 24 & 0xff);
+		return b;
 	}
 }
