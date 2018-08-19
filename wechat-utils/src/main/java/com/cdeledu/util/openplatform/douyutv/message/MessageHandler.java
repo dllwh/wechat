@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cdeledu.util.openplatform.douyutv.constants.MsgType;
+import com.cdeledu.util.openplatform.douyutv.factory.DouyuTCPDecoder;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -30,7 +32,7 @@ public final class MessageHandler {
 	/** socket相关配置 */
 	private Socket socket;
 	/** 设置字节获取buffer的最大值 */
-	private static final int MAX_BUFFER_LENGTH = 4096;
+	private static final int MAX_BUFFER_LENGTH = 8192;
 
 	/** ----------------------------------------------------- Fields end */
 
@@ -42,12 +44,14 @@ public final class MessageHandler {
 	 * @方法描述 : 发送消息
 	 * @param content
 	 */
-	public void send(byte[] requestData) {
+	public void messageSend(byte[] requestData) {
 		try {
-			// 发送登陆请求数据包给弹幕服务器
-			BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
-			out.write(requestData, 0, requestData.length);
-			out.flush();
+			if (socket != null && socket.isConnected()) {
+				// 发送登陆请求数据包给弹幕服务器
+				BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
+				out.write(requestData, 0, requestData.length);
+				out.flush();
+			}
 		} catch (Exception e) {
 			if (logger.isDebugEnabled()) {
 				logger.error("发送消息出现异常:", e);
@@ -58,69 +62,37 @@ public final class MessageHandler {
 	/**
 	 * @方法描述 : 获取服务器返回信息
 	 */
-	private String getServerMsg() {
-		// 初始化获取弹幕服务器返回信息包大小
-		byte[] recvByte = new byte[MAX_BUFFER_LENGTH];
+	public String getServerMsg() {
 		// 定义服务器返回信息的字符串
 		String resultDate = "";
-		BufferedInputStream bis = null;
+
 		try {
-			bis = new BufferedInputStream(socket.getInputStream());
+			// 初始化获取弹幕服务器返回信息包大小
+			byte[] recvByte = new byte[MAX_BUFFER_LENGTH];
+			BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
 			// 读取服务器返回信息，并获取返回信息的整体字节长度
 			int recvLen = bis.read(recvByte, 0, recvByte.length);
-
 			// 根据实际获取的字节数初始化返回信息内容长度
-			byte[] realBuf = new byte[recvLen];
-			// 按照实际获取的字节长度读取返回信息
-			System.arraycopy(recvByte, 0, realBuf, 0, recvLen);
-			// 根据TCP协议获取返回信息中的字符串信息
-			// resultDate = new String(realBuf, 12, realBuf.length - 12);
-			resultDate = new String(realBuf);
+			resultDate = new String(Arrays.copyOfRange(recvByte, 0, recvLen), "UTF-8");
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 		return resultDate;
-	}
-
-	/**
-	 * @方法描述 : 解析登录请求返回结果
-	 * @return
-	 */
-	public boolean parseLoginRespond() {
-		if (MsgType.LOGIN_RES.equalsIgnoreCase(MessageViewUtil.getMsgType(getServerMsg()))) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * @方法描述 : 是否是错误返回
-	 * @return
-	 */
-	public boolean ifErrorRespond() {
-		if (MsgType.ERROR.equalsIgnoreCase(MessageViewUtil.getMsgType(getServerMsg()))) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	/**
 	 * @方法描述 : 读取消息,解析从服务器接受的协议，并根据需要订制业务需求
 	 */
-	public void read() {
+	public void messageReceived() {
 
 		try {
+			// 读取弹幕消息
 			String result = getServerMsg();
-			String msgType = MessageViewUtil.getMsgType(result);
-			Map<String, Object> parseRespondMap = MessageViewUtil.parseRespond(result);
+			// 获取消息类型
+			String msgType = DouyuTCPDecoder.getMsgType(result);
 
 			if (StringUtils.isNotBlank(msgType)) {
-				// 服务器反馈错误信息
-				if (ifErrorRespond()) {
-					// 结束心跳和获取弹幕线程
-				}
+				Map<String, Object> parseRespondMap = DouyuTCPDecoder.parseRespond(result);
 
 				/*** @TODO 根据业务需求来处理获取到的所有弹幕及礼物信息 ***********/
 				// 判断消息类型
@@ -130,12 +102,17 @@ public final class MessageHandler {
 					logger.debug("礼物消息===>" + parseRespondMap.toString());
 				} else if (MsgType.UENTER.equals(msgType)) {
 					logger.debug("用户进房通知消息===>" + parseRespondMap.toString());
-				} else {
+				} else if (DouyuTCPDecoder.ifErrorRespond(result)) { // 服务器反馈错误信息
+					// 结束心跳和获取弹幕线程
+					logger.debug("服务器反馈错误信息===>" + parseRespondMap.toString());
+				} else  {
 					logger.debug("其他消息===>" + parseRespondMap.toString());
 				}
 				// @TODO 其他业务信息根据需要进行添加
 
 				/*************************************************************/
+			} else {
+				logger.error("获取消息类型失败，消息:{}", result);
 			}
 
 		} catch (Exception e) {

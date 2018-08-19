@@ -1,5 +1,7 @@
 package com.cdeledu.util.openplatform.douyutv.message;
 
+import com.cdeledu.util.openplatform.douyutv.factory.DouyuTCPEncoder;
+
 /**
  * 把今天最好的表现当作明天最新的起点．．～
  *
@@ -18,8 +20,8 @@ public final class MessageClientUtil {
 	 * @param roomId
 	 *            所登录房间的 ID
 	 */
-	public static byte[] getLoginRequestData(int roomId) {
-		MessageFormatUtil helper = new MessageFormatUtil();
+	public static byte[] getLoginCmd(int roomId) {
+		DouyuTCPEncoder helper = new DouyuTCPEncoder();
 		helper.addItem("type", "loginreq");
 		helper.addItem("roomid", roomId);
 		return helper.getByte(helper.getResult());
@@ -32,8 +34,8 @@ public final class MessageClientUtil {
 	 * @param groupId
 	 *            分组号，第三方平台建议选择-9999（即海量弹幕模式）
 	 */
-	public static byte[] getJoinGroupRequest(int roomId, int groupId) {
-		MessageFormatUtil helper = new MessageFormatUtil();
+	public static byte[] getJoinGroupCmd(int roomId, String groupId) {
+		DouyuTCPEncoder helper = new DouyuTCPEncoder();
 		helper.addItem("type", "joingroup");
 		helper.addItem("rid", roomId);
 		helper.addItem("gid", groupId);
@@ -43,8 +45,8 @@ public final class MessageClientUtil {
 	/**
 	 * @方法描述 : 生成心跳协议数据包
 	 */
-	public static byte[] getKeepAliveData() {
-		MessageFormatUtil helper = new MessageFormatUtil();
+	public static byte[] getKeepAliveCmd() {
+		DouyuTCPEncoder helper = new DouyuTCPEncoder();
 		helper.addItem("type", "mrkl");
 		return helper.getByte(helper.getResult());
 	}
@@ -52,8 +54,8 @@ public final class MessageClientUtil {
 	/**
 	 * @方法描述 : 生成登出消息数据包
 	 */
-	public static byte[] getLogoutRequestData() {
-		MessageFormatUtil helper = new MessageFormatUtil();
+	public static byte[] getLogoutCmd() {
+		DouyuTCPEncoder helper = new DouyuTCPEncoder();
 		helper.addItem("type", "logout");
 		return helper.getByte(helper.getResult());
 	}
