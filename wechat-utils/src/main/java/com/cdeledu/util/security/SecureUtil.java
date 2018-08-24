@@ -20,6 +20,7 @@ public class SecureUtil {
 	public final static String MD4 = "MD4";
 	public final static String MD5 = "MD5";
 	public final static String DES = "DES";
+	public final static String AES = "AES";
 	public final static String SHA1 = "SHA-1";
 	public final static String SHA256 = "SHA-256";
 	/**
@@ -30,6 +31,7 @@ public class SecureUtil {
 	 *常见的填充模式有： 'pkcs5','pkcs7','iso10126','ansix923','zero' 类型
 	 * </pre>
 	 */
+	public final static String AES_CBC_PKCS7 = "AES/CBC/PKCS7Padding";
 	public final static String DES_ECB_PKCS5 = "DES/ECB/PKCS5Padding";
 	public final static String DES_ECB_PKCS7 = "DES/ECB/PKCS7Padding";
 	public final static String DES_ECB_ZERO = "DES/ECB/zeropadding";
@@ -77,8 +79,8 @@ public class SecureUtil {
 	 *            长度
 	 * @return 返回加密后的数据
 	 */
-	public static String encrypt(String dataSource, String key, String algorithmName,  String fillType,Integer length)
-			throws Exception {
+	public static String encrypt(String dataSource, String key, String algorithmName,
+			String fillType, Integer length) throws Exception {
 		String result = "";
 		switch (algorithmName) {
 		case MD2:
@@ -88,11 +90,11 @@ public class SecureUtil {
 		case MD5:
 			result = Md5Helper.md5(dataSource, length);
 			break;
-		case DES:{
-			if(StringUtils.isBlank(fillType)){
+		case DES: {
+			if (StringUtils.isBlank(fillType)) {
 				fillType = DES_CBC_PKCS5;
 			}
-			result = DesHelper.encrypt(dataSource, key,fillType);
+			result = DesHelper.encrypt(dataSource, key, fillType);
 			break;
 		}
 		case SHA1:
@@ -118,8 +120,8 @@ public class SecureUtil {
 	 *            长度
 	 * @return 返回解密后的数据
 	 */
-	public static String decrypt(String dataSource, String key, String algorithmName, String fillType,Integer length)
-			throws Exception {
+	public static String decrypt(String dataSource, String key, String algorithmName,
+			String fillType, Integer length) throws Exception {
 		String result = "";
 		switch (algorithmName) {
 		case MD2:
@@ -128,11 +130,11 @@ public class SecureUtil {
 			break;
 		case MD5:
 			break;
-		case DES:{
-			if(StringUtils.isBlank(fillType)){
+		case DES: {
+			if (StringUtils.isBlank(fillType)) {
 				fillType = DES_CBC_PKCS5;
 			}
-			result = DesHelper.decrypt(dataSource, key,fillType);
+			result = DesHelper.decrypt(dataSource, key, fillType);
 			break;
 		}
 		case SHA1:
