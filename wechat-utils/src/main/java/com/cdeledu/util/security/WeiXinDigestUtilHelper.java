@@ -1,5 +1,7 @@
 package com.cdeledu.util.security;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -64,5 +66,20 @@ public class WeiXinDigestUtilHelper {
 	public static String MD5(String content) {
 		byte[] data = StringUtilHelper.getBytesUtf8(content);
 		return HexUtilHelper.encodeHexStr(getDigest(WeiXinConstants.MD5).digest(data));
+	}
+
+	/**
+	 * @方法描述 : 解密
+	 * @param decryptData
+	 * @param iv
+	 * @param key
+	 * @param decryptType
+	 * @param decryMode
+	 * @return
+	 * @throws Exception
+	 */
+	public static String WXBizDataCrypt(String decryptData, String iv, String key,
+			String decryptType, String decryMode) throws Exception {
+		return AESHelper.decrypt(decryptData, iv, key, decryptType, decryMode);
 	}
 }
