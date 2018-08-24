@@ -36,7 +36,7 @@ public class AESHelper {
 	}
 
 	/**
-	 * @方法描述 : TODO(这里用一句话描述这个方法的作用)
+	 * @方法描述 : 加密数据解密算法
 	 * @param encryptedData
 	 *            解密数据
 	 * @param iv
