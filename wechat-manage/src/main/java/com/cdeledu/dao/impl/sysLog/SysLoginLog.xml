@@ -8,6 +8,7 @@
 				and userCode LIKE CONCAT(CONCAT('%', #{userCode}),'%')
 			</if>
 		</where>
+		ORDER BY  `createTime`  DESC 
 	</sql>
 	
 	<select id="getLoginLogList" parameterType="com.cdeledu.model.system.SysLoginLog"
