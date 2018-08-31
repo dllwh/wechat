@@ -1,11 +1,13 @@
 package com.cdeledu.util.xml;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -16,7 +18,7 @@ import org.dom4j.io.SAXReader;
  * @Description: xml与其他文件的相关操作(外部)
  * @author: 独泪了无痕
  * @date: 2015年9月18日 上午11:35:43
- * @version: V1.0
+ * @version: V1.1
  * @history:
  */
 public class XmlUtilsHelper {
@@ -44,8 +46,19 @@ public class XmlUtilsHelper {
 		List<Element> elementList = root.elements();
 		// 遍历所有子节点
 		for (Element ele : elementList) {
-			resultMap.put(ele.getName(), ele.getText());
+			resultMap.put(ele.getName(), ele.getTextTrim());
 		}
 		return resultMap;
+	}
+
+	public static Map<String, Object> parseXml(String content, String charset)
+			throws Exception, IOException, DocumentException {
+		InputStream inputStream = null;
+		if (StringUtils.isNotBlank(charset)) {
+			inputStream = new ByteArrayInputStream(content.getBytes(charset));
+		} else {
+			inputStream = new ByteArrayInputStream(content.getBytes());
+		}
+		return parseXml(inputStream);
 	}
 }
