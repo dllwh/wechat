@@ -6,7 +6,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.CacheConstans;
 import com.cdeledu.model.rbac.SysUser;
 import com.cdeledu.model.system.OnlineUser;
@@ -43,16 +43,16 @@ public class CustomSessionManager {
 	 * @param status
 	 * @return
 	 */
-	public AjaxJson changeSessionStatus(String sessionId, Boolean status) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean changeSessionStatus(String sessionId, Boolean status) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
 
 		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setResultCode(500);
-			result.setMsg("改变失败，有可能Session不存在，请刷新再试！");
+			responseBean.setSuccess(false);
+			responseBean.setResultCode(500);
+			responseBean.setMsg("改变失败，有可能Session不存在，请刷新再试！");
 		}
-		return result;
+		return responseBean;
 
 	}
 

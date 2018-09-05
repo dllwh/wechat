@@ -15,7 +15,7 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.model.rbac.SysUser;
 
@@ -26,12 +26,12 @@ public class ShiroHelper {
 
 	/** ----------------------------------------------------- Fields end */
 
-	public static AjaxJson login(String userName, String passWord) {
+	public static ResponseBean login(String userName, String passWord) {
 		// 用户名密码令牌
 		UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
 		token.setRememberMe(false);
 		String logMsg = "", resultMsg = "";
-		AjaxJson ajaxJson = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		boolean suc = false;
 
 		// 获得当前登录用户对象Subject，现在状态为 “未认证”
@@ -71,10 +71,10 @@ public class ShiroHelper {
 			token.clear();
 		}
 
-		ajaxJson.setSuccess(suc);
-		ajaxJson.setMsg(resultMsg);
-		ajaxJson.setObj(logMsg);
-		return ajaxJson;
+		responseBean.setSuccess(suc);
+		responseBean.setMsg(resultMsg);
+		responseBean.setObj(logMsg);
+		return responseBean;
 	}
 
 	/**

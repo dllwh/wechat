@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
@@ -67,24 +67,24 @@ public class SysNoticeController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "create")
-	public AjaxJson create(SysNotice notice) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean create(SysNotice notice) {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "update")
 	@SystemLog(desc = "修改通知", opType = SysOpType.UPDATE, tableName = "sys_notice")
-	public AjaxJson update(@RequestBody SysNotice param) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean update(@RequestBody SysNotice param) {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "delete")
 	@SystemLog(desc = "删除通知", opType = SysOpType.DEL, tableName = "sys_notice")
-	public AjaxJson delete(@RequestBody SysNotice param) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean delete(@RequestBody SysNotice param) {
+		ResponseBean responseBean  = new ResponseBean();
+		return responseBean ;
 	}
 }

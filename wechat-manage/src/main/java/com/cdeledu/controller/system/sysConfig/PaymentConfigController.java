@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.base.LayuiResponse;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
@@ -101,15 +101,15 @@ public class PaymentConfigController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "updateBank")
-	public AjaxJson updateBank(PayBank payBank) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean updateBank(PayBank payBank) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
 			paymentService.updateBank(payBank);
-			ajaxJson.setSuccess(true);
+			responseBean.setSuccess(true);
 		} catch (Exception e) {
-			ajaxJson.setSuccess(false);
+			responseBean.setSuccess(false);
 		}
-		return ajaxJson;
+		return responseBean;
 	}
 
 	/**
@@ -132,17 +132,17 @@ public class PaymentConfigController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "saveBank")
 	@SystemLog(tableName = "sys_payment_bank", opType = SysOpType.INSERT, desc = "新增加银行")
-	public AjaxJson saveBank(PayBank payBank) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean saveBank(PayBank payBank) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
 			paymentService.insertBank(payBank);
-			ajaxJson.setSuccess(true);
+			responseBean.setSuccess(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			ajaxJson.setMsg(e.getMessage());
-			ajaxJson.setSuccess(false);
+			responseBean.setMsg(e.getMessage());
+			responseBean.setSuccess(false);
 		}
-		return ajaxJson;
+		return responseBean;
 	}
 
 	/**
@@ -153,15 +153,15 @@ public class PaymentConfigController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "delBank")
 	@SystemLog(tableName = "sys_payment_bank,sys_payment_config,sys_payment_config_bank", opType = SysOpType.DEL, desc = "删除银行")
-	public AjaxJson delBank(PayBank payBank) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean delBank(PayBank payBank) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
 			payBank.setIfEnabled(0);
 			paymentService.updateBank(payBank);
-			ajaxJson.setSuccess(true);
+			responseBean.setSuccess(true);
 		} catch (Exception e) {
-			ajaxJson.setSuccess(false);
+			responseBean.setSuccess(false);
 		}
-		return ajaxJson;
+		return responseBean;
 	}
 }

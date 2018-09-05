@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
@@ -25,28 +25,29 @@ import com.cdeledu.core.annotation.SystemLog;
 public class SysEmailController extends BaseController {
 	/** ----------------------------------------------------- Fields start */
 	private static final long serialVersionUID = 1L;
+
 	/** ----------------------------------------------------- Fields end */
 	@ResponseBody
 	@RequestMapping(value = "create")
 	@SystemLog(desc = "创建邮件", opType = SysOpType.UPDATE, tableName = "sys_email")
-	public AjaxJson create() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean create() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "update")
 	@SystemLog(desc = "修改邮件", opType = SysOpType.UPDATE, tableName = "sys_email")
-	public AjaxJson update() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean update() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "delete")
 	@SystemLog(desc = "删除邮件", opType = SysOpType.DEL, tableName = "sys_email")
-	public AjaxJson delete() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean delete() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 }

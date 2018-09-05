@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
@@ -45,31 +45,31 @@ public class RoleOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "addRole", method = RequestMethod.POST)
 	@SystemLog(desc = "角色添加", opType = SysOpType.INSERT, tableName = "sys_role")
-	public AjaxJson addRole(SysRole role) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean addRole(SysRole role) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
 			if (roleService.existRoleWithRoleCode(role.getRoleCode())) {
-				resultMsg.setSuccess(false);
-				resultMsg.setMsg(MessageConstant.EXISTED);
-				resultMsg.setResultCode(201);
+				responseBean.setSuccess(false);
+				responseBean.setMsg(MessageConstant.EXISTED);
+				responseBean.setResultCode(201);
 			} else {
 				roleService.insert(role);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			resultMsg.setMsg(MessageConstant.FAILURE_SAVE_MESSAGE);
-			resultMsg.setResultCode(500);
+			responseBean.setSuccess(false);
+			responseBean.setMsg(MessageConstant.FAILURE_SAVE_MESSAGE);
+			responseBean.setResultCode(500);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "saveRole")
 	@SystemLog(desc = "角色更新", opType = SysOpType.UPDATE, tableName = "sys_role")
-	public AjaxJson saveRole(HttpServletRequest request, HttpServletResponse response,
+	public ResponseBean saveRole(HttpServletRequest request, HttpServletResponse response,
 			SysRole role) {
-		AjaxJson resultMsg = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		String msg = "";
 		try {
 			if (null != role) {
@@ -83,25 +83,25 @@ public class RoleOperateController extends BaseController {
 						roleService.update(role);
 					} else {
 						if (roleService.existRoleWithRoleCode(roleCode)) {
-							resultMsg.setSuccess(false);
+							responseBean.setSuccess(false);
 							msg = MessageConstant.EXISTED;
 						} else {
 							roleService.update(role);
 						}
 					}
 				} else {
-					resultMsg.setSuccess(false);
-					resultMsg.setResultCode(201);
-					resultMsg.setMsg("该角色不允许更新");
+					responseBean.setSuccess(false);
+					responseBean.setResultCode(201);
+					responseBean.setMsg("该角色不允许更新");
 				}
 			}
 		} catch (Exception e) {
-			resultMsg.setSuccess(false);
-			resultMsg.setResultCode(500);
+			responseBean.setSuccess(false);
+			responseBean.setResultCode(500);
 			msg = MessageConstant.MSG_OPERATION_FAILED;
 		}
-		resultMsg.setMsg(msg);
-		return resultMsg;
+		responseBean.setMsg(msg);
+		return responseBean;
 	}
 
 	/**
@@ -112,52 +112,52 @@ public class RoleOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "delRole")
 	@SystemLog(desc = "角色删除", opType = SysOpType.DEL, tableName = "sys_role")
-	public AjaxJson delRole(
+	public ResponseBean delRole(
 			@RequestParam(name = "delId", required = true, defaultValue = "-1") int roleId) {
-		AjaxJson resultMsg = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		try {
 			if (roleId != 1) {
 				SysRole seacherRole = roleService.getRoleById(roleId);
 				if (seacherRole != null && seacherRole.getAllowDelete() == 1) { // 角色允许删除
 					if (roleService.hasMenuByRole(roleId)) {
-						resultMsg.setSuccess(false);
-						resultMsg.setResultCode(201);
-						resultMsg.setMsg("该角色已经含有权限,无法直接删除!");
+						responseBean.setSuccess(false);
+						responseBean.setResultCode(201);
+						responseBean.setMsg("该角色已经含有权限,无法直接删除!");
 					} else {
 						if (roleService.hasUserByRole(roleId)) {
-							resultMsg.setSuccess(false);
-							resultMsg.setResultCode(201);
-							resultMsg.setMsg("该角色已被使用，无法直接删除！");
+							responseBean.setSuccess(false);
+							responseBean.setResultCode(201);
+							responseBean.setMsg("该角色已被使用，无法直接删除！");
 						} else {
 							roleService.delete(roleId);
-							resultMsg.setSuccess(true);
-							resultMsg.setResultCode(200);
-							resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+							responseBean.setSuccess(true);
+							responseBean.setResultCode(200);
+							responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 						}
 					}
 				} else {
-					resultMsg.setSuccess(false);
-					resultMsg.setResultCode(201);
-					resultMsg.setMsg("该角色不允许删除");
+					responseBean.setSuccess(false);
+					responseBean.setResultCode(201);
+					responseBean.setMsg("该角色不允许删除");
 				}
 			} else {
-				resultMsg.setSuccess(false);
-				resultMsg.setResultCode(201);
-				resultMsg.setMsg("无法删除超级管理员");
+				responseBean.setSuccess(false);
+				responseBean.setResultCode(201);
+				responseBean.setMsg("无法删除超级管理员");
 			}
 		} catch (Exception e) {
-			resultMsg.setSuccess(false);
-			resultMsg.setResultCode(500);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setResultCode(500);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "updateMenuByRole")
 	@SystemLog(desc = "更新角色的权限", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
-	public AjaxJson updateMenuByRole(Integer roleId, String ids) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean updateMenuByRole(Integer roleId, String ids) {
+		ResponseBean ResponseBean = new ResponseBean();
 		if (roleId != null && StringUtils.isNoneBlank(ids)) {
 			if (roleId != 1) {
 				roleService.delRoleAccess(roleId);
@@ -171,49 +171,49 @@ public class RoleOperateController extends BaseController {
 				}
 
 			} else {
-				ajaxJson.setSuccess(false);
-				ajaxJson.setResultCode(10005);
-				ajaxJson.setMsg("该资源需要appkey拥有授权");
+				ResponseBean.setSuccess(false);
+				ResponseBean.setResultCode(10005);
+				ResponseBean.setMsg("该资源需要appkey拥有授权");
 			}
 		} else {
-			ajaxJson.setSuccess(false);
-			ajaxJson.setResultCode(10006);
-			ajaxJson.setMsg("缺少source (appkey) 参数");
+			ResponseBean.setSuccess(false);
+			ResponseBean.setResultCode(10006);
+			ResponseBean.setMsg("缺少source (appkey) 参数");
 		}
-		return ajaxJson;
+		return ResponseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping("roleVisibleButton")
 	@SystemLog(desc = "启用、禁用账户", opType = SysOpType.UPDATE, tableName = "sys_role_menu")
-	public AjaxJson roleVisibleButton(
+	public ResponseBean roleVisibleButton(
 			@RequestParam(name = "id", required = true, defaultValue = "") int id,
 			@RequestParam(name = "visible", required = true, defaultValue = "1") int visible) {
-		AjaxJson resultMsg = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		SysRole role = new SysRole();
 		role.setId(id);
 		role.setIfVisible(visible);
 		try {
 			if (!roleService.hasMenuByRole(id) && !roleService.hasUserByRole(id) && id != 1) {
 				roleService.update(role);
-				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+				responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 			} else {
-				resultMsg.setSuccess(false);
-				resultMsg.setMsg("错误提示：该角色下尚有用户未解除！");
+				responseBean.setSuccess(false);
+				responseBean.setMsg("错误提示：该角色下尚有用户未解除！");
 			}
 		} catch (Exception e) {
-			resultMsg.setSuccess(false);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping("updateRoleUser")
 	@SystemLog(desc = "角色用户管理", opType = SysOpType.UPDATE, tableName = "sys_user_role")
-	public AjaxJson updateRoleUser(SysUserRole sysUserRole,
+	public ResponseBean updateRoleUser(SysUserRole sysUserRole,
 			@RequestParam(name = "opType", required = true, defaultValue = "0") int opType) {
-		AjaxJson resultMsg = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		int userCode = sysUserRole.getUserId();
 		boolean result = false;
 		String msg = "";
@@ -251,9 +251,9 @@ public class RoleOperateController extends BaseController {
 		}
 		
 
-		resultMsg.setSuccess(result);
-		resultMsg.setMsg(msg);
+		responseBean.setSuccess(result);
+		responseBean.setMsg(msg);
 
-		return resultMsg;
+		return responseBean;
 	}
 }

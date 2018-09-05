@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.base.LayuiResponse;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
@@ -63,10 +63,10 @@ public class ScheduledController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "createJob")
 	@SystemLog(desc = "创建定时任务", opType = SysOpType.INSERT, tableName = "sys_schedule_job")
-	public AjaxJson createJob(ScheduleJob scheduleJob) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean createJob(ScheduleJob scheduleJob) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.save(scheduleJob);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	/**
@@ -84,10 +84,10 @@ public class ScheduledController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "updateJob")
 	@SystemLog(desc = "更新定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson updateJob(ScheduleJob scheduleJob) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean updateJob(ScheduleJob scheduleJob) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.update(scheduleJob);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	/**
@@ -105,81 +105,81 @@ public class ScheduledController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "deleteJob")
 	@SystemLog(desc = "删除定时任务", opType = SysOpType.DEL, tableName = "sys_schedule_job")
-	public AjaxJson deleteJob(@RequestBody int jobId) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean deleteJob(@RequestBody int jobId) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.delete(jobId);
 		// ScheduleUtils.deleteScheduleJob(scheduler, beanName);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "runJob")
 	@SystemLog(desc = "立即执行任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson runJob(@RequestBody int jobId) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean runJob(@RequestBody int jobId) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.updateStatus(jobId, ScheduleRunState.RUNNING.getValue());
 		// ScheduleUtils.run(null, beanName);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "pauseJob")
 	@SystemLog(desc = "暂停定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson pauseJob(@RequestBody int jobId) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean pauseJob(@RequestBody int jobId) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.updateStatus(jobId, ScheduleRunState.PAUSE.getValue());
 		// ScheduleUtils.pauseJob(scheduler, beanName);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "startJob")
 	@SystemLog(desc = "启动一个定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson startJob(@RequestBody int jobId) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean startJob(@RequestBody int jobId) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.updateStatus(jobId, ScheduleRunState.RUNNING.getValue());
 		// ScheduleUtils.startTask(scheduler, scheduleJob);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "startJobs")
 	@SystemLog(desc = "启动所有定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson startJobs() {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean startJobs() {
+		ResponseBean responseBean = new ResponseBean();
 		// scheduleJobService.updateStatus(null,
 		// ScheduleRunState.RUNNING.getValue());
 		// ScheduleUtils.startJobs(scheduler);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "resumeJob")
 	@SystemLog(desc = "恢复定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson resumeJob(@RequestBody int jobId) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean resumeJob(@RequestBody int jobId) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.updateStatus(jobId, ScheduleRunState.RUNNING.getValue());
 		// ScheduleUtils.resumeJob(scheduler, beanName);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "shutdownJob")
 	@SystemLog(desc = "关闭定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson shutdownJob(@RequestBody int jobId) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean shutdownJob(@RequestBody int jobId) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.updateStatus(jobId, ScheduleRunState.STOP.getValue());
 		// ScheduleUtils.deleteScheduleJob(scheduler, beanName);
-		return ajaxJson;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "shutdownJobs")
 	@SystemLog(desc = "关闭所有定时任务", opType = SysOpType.UPDATE, tableName = "sys_schedule_job")
-	public AjaxJson shutdownJobs(@RequestBody int jobId) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean shutdownJobs(@RequestBody int jobId) {
+		ResponseBean responseBean = new ResponseBean();
 		scheduleJobService.updateStatus(jobId, ScheduleRunState.STOP.getValue());
 		// ScheduleUtils.shutdownJobs(scheduler);
-		return ajaxJson;
+		return responseBean;
 	}
 }

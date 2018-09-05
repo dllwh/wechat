@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.core.annotation.SystemLog;
 
@@ -37,17 +37,17 @@ public class MenuApiController {
 	@ResponseBody
 	@SystemLog(desc="创建菜单",opType = SysOpType.INSERT,tableName="")
 	@RequestMapping(value = "create", method = { RequestMethod.GET, RequestMethod.POST })
-	public AjaxJson createMenu() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean createMenu() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "remove",method = {RequestMethod.DELETE})
 	@SystemLog(desc="删除菜单",opType = SysOpType.DEL,tableName="")
-	public AjaxJson remove() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean remove() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 	
 	@ResponseBody

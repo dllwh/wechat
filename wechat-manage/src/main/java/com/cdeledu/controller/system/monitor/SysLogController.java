@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.base.LayuiResponse;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
@@ -88,22 +88,22 @@ public class SysLogController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "loginLog/remove")
 	@SystemLog(desc = "删除登录日志", opType = SysOpType.DEL, tableName = "sys_log_loning")
-	public AjaxJson sysLoginLogRemove() {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
+	public ResponseBean sysLoginLogRemove() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@SystemLog(desc = "清空日志", opType = SysOpType.RESET, tableName = "sys_log_loning")
 	@RequestMapping(value = "loginLog/reset")
-	public AjaxJson sysLoginLogReset() {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean sysLoginLogReset() {
+		ResponseBean responseBean = new ResponseBean();
 
 		// 需要超级管理员才能删除
 		if (WebUtilHelper.getCurrentUserId() == 1) {
 
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**

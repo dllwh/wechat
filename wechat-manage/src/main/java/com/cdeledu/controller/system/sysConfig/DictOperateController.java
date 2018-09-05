@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
@@ -24,36 +24,36 @@ public class DictOperateController extends BaseController {
 
 	@RequestMapping("add")
 	@SystemLog(desc = "添加字典记录", opType = SysOpType.INSERT, tableName = "sys_dict")
-	public AjaxJson add(String dictName, String dictValues) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean add(String dictName, String dictValues) {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@RequestMapping("edit")
 	@SystemLog(desc = "编辑字典记录", opType = SysOpType.UPDATE, tableName = "sys_dict")
-	public AjaxJson edit() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean edit() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@RequestMapping("delete")
 	@SystemLog(desc = "删除字典记录", opType = SysOpType.DEL, tableName = "sys_dict")
-	public AjaxJson delete() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean delete() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@RequestMapping("disable")
 	@SystemLog(desc = "禁用字典记录", opType = SysOpType.UPDATE, tableName = "sys_dict")
-	public AjaxJson disable() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean disable() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@RequestMapping("enable")
 	@SystemLog(desc = "启用字典记录", opType = SysOpType.UPDATE, tableName = "sys_dict")
-	public AjaxJson enable(String dictName, String dictValues) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean enable(String dictName, String dictValues) {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 }

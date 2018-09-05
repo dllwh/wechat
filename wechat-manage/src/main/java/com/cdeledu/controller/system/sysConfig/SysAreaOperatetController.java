@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.controller.BaseController;
 
 /**
@@ -30,23 +30,23 @@ public class SysAreaOperatetController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("save")
-	public AjaxJson save() {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
+	public ResponseBean save() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping("update")
-	public AjaxJson update() {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
+	public ResponseBean update() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping("del")
-	public AjaxJson del() {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
+	public ResponseBean del() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 }

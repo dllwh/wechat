@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.MessageConstant;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
@@ -49,22 +49,22 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "singUp")
-	public AjaxJson singUp(SysUser managerUser) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean singUp(SysUser managerUser) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
 			if (manageruserService.getUserByName(managerUser.getUserName()) == null) {
 				manageruserService.insert(managerUser);
-				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+				responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 			} else {
-				resultMsg.setSuccess(false);
-				resultMsg.setMsg(MessageConstant.EXISTED);
+				responseBean.setSuccess(false);
+				responseBean.setMsg(MessageConstant.EXISTED);
 			}
 
 		} catch (Exception e) {
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
-			resultMsg.setSuccess(false);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**
@@ -77,24 +77,24 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "updateUser")
-	public AjaxJson updateUser(SysUser managerUser) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean updateUser(SysUser managerUser) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
 			if (managerUser != null && managerUser.getId() != null) {
 				managerUser.setUserName(null);// 不能更新username
 				manageruserService.update(managerUser);
-				resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+				responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 			} else {
-				resultMsg.setSuccess(false);
-				resultMsg.setResultCode(10017);
-				resultMsg.setMsg("缺失必选参数 (%s)");
+				responseBean.setSuccess(false);
+				responseBean.setResultCode(10017);
+				responseBean.setMsg("缺失必选参数 (%s)");
 			}
 		} catch (Exception e) {
-			resultMsg.setSuccess(false);
-			resultMsg.setResultCode(500);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setResultCode(500);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**
@@ -107,32 +107,33 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "deleteUser")
-	public AjaxJson delUser(@RequestParam(value = "id", required = true,defaultValue = "-1") Integer id) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean delUser(
+			@RequestParam(value = "id", required = true, defaultValue = "-1") Integer id) {
+		ResponseBean responseBean = new ResponseBean();
 		try {
-			if(id != 1 ){
+			if (id != 1) {
 				SysUser sysUser = new SysUser();
 				sysUser.setId(id);
 				List<SysUserRole> userRoleList = manageruserService.getUserRole(sysUser);
 				if (userRoleList == null || userRoleList.isEmpty() || userRoleList.size() == 0) {
 					manageruserService.delete(id);
-					resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+					responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 				} else {
-					resultMsg.setSuccess(false);
-					resultMsg.setMsg("删除失败，该用户已分配角色");
+					responseBean.setSuccess(false);
+					responseBean.setMsg("删除失败，该用户已分配角色");
 				}
 			} else {
-				resultMsg.setSuccess(false);
-				resultMsg.setResultCode(403);
-				resultMsg.setMsg("无法删除超级管理员账号");
+				responseBean.setSuccess(false);
+				responseBean.setResultCode(403);
+				responseBean.setMsg("无法删除超级管理员账号");
 			}
-			
+
 		} catch (Exception e) {
-			resultMsg.setSuccess(false);
-			resultMsg.setResultCode(10001);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			responseBean.setSuccess(false);
+			responseBean.setResultCode(10001);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**
@@ -144,8 +145,9 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "bathDelUser")
-	public AjaxJson bathDelUser(@RequestParam(value = "delIds", required = true) String delIds) {
-		AjaxJson reslutMsg = new AjaxJson();
+	public ResponseBean bathDelUser(
+			@RequestParam(value = "delIds", required = true) String delIds) {
+		ResponseBean reslutMsg = new ResponseBean();
 		if (StringUtils.isNotBlank(delIds)) {
 			List<Integer> ids = Arrays.asList();
 			for (String id : delIds.split(",")) {
@@ -168,8 +170,8 @@ public class SysUserOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping("enable")
 	@SystemLog(desc = " 启用账户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
-	public AjaxJson updateUserEnable(int userId) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean updateUserEnable(int userId) {
+		ResponseBean responseBean = new ResponseBean();
 		SysUser user = new SysUser();
 		user.setId(userId);
 
@@ -181,21 +183,21 @@ public class SysUserOperateController extends BaseController {
 				sysUser.setIfVisible(1);
 				manageruserService.update(sysUser);
 			}
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			resultMsg.setResultCode(500);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setResultCode(500);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping("disable")
 	@SystemLog(desc = " 禁用账户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
-	public AjaxJson updateUserDisable(int userId) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean updateUserDisable(int userId) {
+		ResponseBean responseBean = new ResponseBean();
 		SysUser user = new SysUser();
 		user.setId(userId);
 
@@ -207,14 +209,14 @@ public class SysUserOperateController extends BaseController {
 				sysUser.setIfVisible(0);
 				manageruserService.update(sysUser);
 			}
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			resultMsg.setResultCode(500);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setResultCode(500);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**
@@ -227,9 +229,9 @@ public class SysUserOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "forbidUserById", method = RequestMethod.POST)
 	@SystemLog(desc = "禁止登录/允许登录", opType = SysOpType.UPDATE, tableName = { "sys_user" })
-	public AjaxJson forbidUserById(@RequestParam(name = "id", required = true) int userId,
+	public ResponseBean forbidUserById(@RequestParam(name = "id", required = true) int userId,
 			@RequestParam(name = "status", required = true, defaultValue = "1") int status) {
-		AjaxJson resultMsg = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		SysUser user = new SysUser();
 		user.setId(userId);
 
@@ -240,21 +242,20 @@ public class SysUserOperateController extends BaseController {
 				sysUser.setLoginFlag(status);
 				manageruserService.update(sysUser);
 			}
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
-	
 	@ResponseBody
 	@RequestMapping(value = "lockUser", method = RequestMethod.POST)
 	@SystemLog(desc = "锁定用户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
-	public AjaxJson lockUser(@RequestParam(name = "id", required = true) int userId) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean lockUser(@RequestParam(name = "id", required = true) int userId) {
+		ResponseBean responseBean = new ResponseBean();
 		SysUser user = new SysUser();
 		user.setId(userId);
 
@@ -265,20 +266,20 @@ public class SysUserOperateController extends BaseController {
 				sysUser.setIfLocked(0);
 				manageruserService.update(sysUser);
 			}
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "unlockUser")
 	@SystemLog(desc = "解锁用户", opType = SysOpType.UPDATE, tableName = { "sys_user" })
-	public AjaxJson unlockUser(@RequestParam(name = "id", required = true) int userId) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean unlockUser(@RequestParam(name = "id", required = true) int userId) {
+		ResponseBean responseBean = new ResponseBean();
 		SysUser user = new SysUser();
 		user.setId(userId);
 
@@ -289,27 +290,27 @@ public class SysUserOperateController extends BaseController {
 				sysUser.setIfLocked(1);
 				manageruserService.update(sysUser);
 			}
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultMsg.setSuccess(false);
-			resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+			responseBean.setSuccess(false);
+			responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 		}
-		return resultMsg;
+		return responseBean;
 	}
-	
+
 	/**
 	 * @方法描述: 重置密码
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("reset")
-	public AjaxJson updatePswd(int userId, String pswd, String newPswd) {
-		AjaxJson resultMsg = new AjaxJson();
+	public ResponseBean updatePswd(int userId, String pswd, String newPswd) {
+		ResponseBean responseBean = new ResponseBean();
 		// 根据当前登录的用户帐号 + 老密码，查询。
 
 		// 管理员不准修改密码
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**
@@ -323,20 +324,20 @@ public class SysUserOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "roleAssign", params = "saveRoleUser")
 	@SystemLog(desc = "用户-角色录入(授权)", opType = SysOpType.INSERT, tableName = "sys_user_role")
-	public AjaxJson saveRoleUser(@RequestParam(value = "userCode", required = true) int id,
+	public ResponseBean saveRoleUser(@RequestParam(value = "userCode", required = true) int id,
 			@RequestParam(value = "roleID", defaultValue = "1", required = false) int roleID) {
-		AjaxJson resultMsg = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		SysUser user = new SysUser();
 		user.setId(id);
 		try {
-			if(roleID == 1){//超级管理员不参与分配
-				resultMsg.setSuccess(false);
-				resultMsg.setMsg("无法授予权限");
+			if (roleID == 1) {// 超级管理员不参与分配
+				responseBean.setSuccess(false);
+				responseBean.setMsg("无法授予权限");
 			}
 			SysUser tSUser = manageruserService.findOneForJdbc(user);
 			if (null == tSUser) {
-				resultMsg.setMsg("不存在");
-				resultMsg.setSuccess(false);
+				responseBean.setMsg("不存在");
+				responseBean.setSuccess(false);
 			} else {
 				SysUserRole managerUserRole = new SysUserRole();
 				managerUserRole.setUserId(tSUser.getId());
@@ -344,11 +345,11 @@ public class SysUserOperateController extends BaseController {
 				manageruserService.saveRoleUser(managerUserRole);
 			}
 		} catch (Exception e) {
-			resultMsg.setResultCode(500);
-			resultMsg.setMsg("分配角色时出现异常");
-			resultMsg.setSuccess(false);
+			responseBean.setResultCode(500);
+			responseBean.setMsg("分配角色时出现异常");
+			responseBean.setSuccess(false);
 		}
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**
@@ -358,26 +359,26 @@ public class SysUserOperateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "roleAssign", params = "clearRoleUser")
 	@SystemLog(desc = "用户-角色(解除授权)", opType = SysOpType.INSERT, tableName = "sys_user")
-	public AjaxJson clearRoleByUserIds(SysUserRole sysUserRole) {
-		AjaxJson resultMsg = new AjaxJson();
-		if(sysUserRole.getUserId() != null){
-			if(WebUtilHelper.getCurrentUserId() != sysUserRole.getUserId()){
+	public ResponseBean clearRoleByUserIds(SysUserRole sysUserRole) {
+		ResponseBean responseBean = new ResponseBean();
+		if (sysUserRole.getUserId() != null) {
+			if (WebUtilHelper.getCurrentUserId() != sysUserRole.getUserId()) {
 				try {
 					manageruserService.deleteUserRole(sysUserRole);
 				} catch (Exception e) {
 					e.printStackTrace();
-					resultMsg.setSuccess(false);
-					resultMsg.setResultCode(500);
-					resultMsg.setMsg(MessageConstant.MSG_OPERATION_FAILED);
+					responseBean.setSuccess(false);
+					responseBean.setResultCode(500);
+					responseBean.setMsg(MessageConstant.MSG_OPERATION_FAILED);
 				}
 			} else {
-				resultMsg.setSuccess(false);
-				resultMsg.setResultCode(500);
-				resultMsg.setMsg("不能解除当前用户权限");
+				responseBean.setSuccess(false);
+				responseBean.setResultCode(500);
+				responseBean.setMsg("不能解除当前用户权限");
 			}
 		}
 		// 超级管理员不能删除
-		return resultMsg;
+		return responseBean;
 	}
 
 	/**
@@ -387,9 +388,9 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "changeSessionStatus", method = RequestMethod.POST)
-	public AjaxJson changeSessionStatus(Boolean status, String sessionIds) {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
+	public ResponseBean changeSessionStatus(Boolean status, String sessionIds) {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	/**
@@ -398,8 +399,8 @@ public class SysUserOperateController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("updateSelf")
-	public AjaxJson updateSelf(SysUser sysUser) {
-		AjaxJson resultMsg = new AjaxJson();
-		return resultMsg;
+	public ResponseBean updateSelf(SysUser sysUser) {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 }

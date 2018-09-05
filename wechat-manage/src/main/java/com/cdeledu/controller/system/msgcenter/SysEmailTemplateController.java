@@ -4,10 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.SystemConstant.SysOpType;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.core.annotation.SystemLog;
+
 /**
  * 
  * 把今天最好的表现当作明天最新的起点．．～
@@ -30,24 +31,24 @@ public class SysEmailTemplateController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "create")
 	@SystemLog(desc = "创建邮件", opType = SysOpType.UPDATE, tableName = "sys_email_template")
-	public AjaxJson create() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean create() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "update")
 	@SystemLog(desc = "修改邮件", opType = SysOpType.UPDATE, tableName = "sys_email_template")
-	public AjaxJson update() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean update() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "delete")
 	@SystemLog(desc = "删除邮件", opType = SysOpType.DEL, tableName = "sys_email_template")
-	public AjaxJson delete() {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean delete() {
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 }

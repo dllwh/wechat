@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -97,15 +97,15 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(NullPointerException.class)
-	public AjaxJson nullPointerExceptionHandler(NullPointerException ex) {
-		AjaxJson ajaxJson = new AjaxJson();
+	public ResponseBean nullPointerExceptionHandler(NullPointerException ex) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error("空指针异常:", ex);
 		}
-		ajaxJson.setSuccess(false);
-		ajaxJson.setResultCode(500);
-		ajaxJson.setMsg(NullPointerException.class.getName());
-		return ajaxJson;
+		responseBean.setSuccess(false);
+		responseBean.setResultCode(500);
+		responseBean.setMsg(NullPointerException.class.getName());
+		return responseBean;
 	}
 
 	/**
@@ -218,15 +218,15 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(BindException.class)
-	public AjaxJson handleBindException(final BindException e) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean handleBindException(final BindException e) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error("BindException", e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(400);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(400);
+		return responseBean;
 	}
 
 	/**
@@ -234,15 +234,15 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(TypeMismatchException.class)
-	public AjaxJson requestTypeMismatch(TypeMismatchException ex) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean requestTypeMismatch(TypeMismatchException ex) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error("TypeMismatchException", ex);
 		}
-		result.setSuccess(false);
-		result.setMsg(ex.getMessage());
-		result.setResultCode(400);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(ex.getMessage());
+		responseBean.setResultCode(400);
+		return responseBean;
 	}
 
 	/**
@@ -250,15 +250,15 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public AjaxJson requestMissingServletRequest(MissingServletRequestParameterException ex) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean requestMissingServletRequest(MissingServletRequestParameterException ex) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error("MissingServletRequestParameterException", ex);
 		}
-		result.setSuccess(false);
-		result.setMsg(ex.getMessage());
-		result.setResultCode(400);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(ex.getMessage());
+		responseBean.setResultCode(400);
+		return responseBean;
 	}
 
 	/**
@@ -267,16 +267,16 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ExceptionHandler(SQLException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public AjaxJson handleSQLException(final SQLException e) {
+	public ResponseBean handleSQLException(final SQLException e) {
 
-		AjaxJson result = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error("SQLException", e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(400);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(400);
+		return responseBean;
 	}
 
 	/**
@@ -285,15 +285,15 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public AjaxJson handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error("MethodArgumentNotValidException", e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(400);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(400);
+		return responseBean;
 	}
 
 	/**
@@ -302,16 +302,16 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public AjaxJson handleHttpRequestMethodNotSupportedException(
+	public ResponseBean handleHttpRequestMethodNotSupportedException(
 			final HttpRequestMethodNotSupportedException e) {
-		AjaxJson result = new AjaxJson();
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase(), e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(405);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(405);
+		return responseBean;
 	}
 
 	/**
@@ -319,15 +319,15 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-	public AjaxJson request406(HttpMediaTypeNotAcceptableException e) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean request406(HttpMediaTypeNotAcceptableException e) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase(), e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(406);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(406);
+		return responseBean;
 	}
 
 	/**
@@ -336,15 +336,15 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-	public AjaxJson handleHttpMediaTypeNotSupportedException(final Exception e) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean handleHttpMediaTypeNotSupportedException(final Exception e) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.UNSUPPORTED_MEDIA_TYPE.getReasonPhrase(), e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(415);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(415);
+		return responseBean;
 	}
 
 	/**
@@ -352,15 +352,15 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(ConversionNotSupportedException.class)
-	public AjaxJson conversionNotSupportedException(ConversionNotSupportedException e) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean conversionNotSupportedException(ConversionNotSupportedException e) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(500);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(500);
+		return responseBean;
 	}
 
 	/**
@@ -368,15 +368,15 @@ public class GlobalExceptionHandler {
 	 */
 	@ResponseBody
 	@ExceptionHandler(HttpMessageNotWritableException.class)
-	public AjaxJson httpMessageNotWritableException(HttpMessageNotWritableException e) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean httpMessageNotWritableException(HttpMessageNotWritableException e) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(500);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(500);
+		return responseBean;
 	}
 	
 	/**
@@ -391,14 +391,14 @@ public class GlobalExceptionHandler {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
-	public AjaxJson defaultExceptionHandler(final Exception e) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean defaultExceptionHandler(final Exception e) {
+		ResponseBean responseBean = new ResponseBean();
 		if (logger.isDebugEnabled()) {
 			logger.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
 		}
-		result.setSuccess(false);
-		result.setMsg(e.getMessage());
-		result.setResultCode(500);
-		return result;
+		responseBean.setSuccess(false);
+		responseBean.setMsg(e.getMessage());
+		responseBean.setResultCode(500);
+		return responseBean;
 	}
 }

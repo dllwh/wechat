@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.common.constants.FilterHelper;
 import com.cdeledu.common.constants.GlobalConstants;
 import com.cdeledu.common.constants.MessageConstant;
@@ -54,8 +54,8 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(params = "checkuser")
 	@ResponseBody
-	public AjaxJson checkuser(HttpServletRequest request, SysUser user) {
-		AjaxJson reslutMsg = new AjaxJson();
+	public ResponseBean checkuser(HttpServletRequest request, SysUser user) {
+		ResponseBean responseBean = new ResponseBean();
 		HttpSession session = WebUtilHelper.getSession();
 		// Session session = ShiroHelper.getSession();
 		boolean suc = true;
@@ -63,7 +63,7 @@ public class LoginController extends BaseController {
 		String userName = user.getUserName().trim();
 		try {
 			String password = PasswordUtil.encrypt(userName, user.getPassword().trim());
-			AjaxJson loginResult = ShiroHelper.login(userName, password);
+			ResponseBean loginResult = ShiroHelper.login(userName, password);
 			int loginStatus = 2;
 			if (loginResult.isSuccess()) {
 				loginStatus = 1;
@@ -85,9 +85,9 @@ public class LoginController extends BaseController {
 			logMsg = "用户名或密码错误,请重新登录!";
 			suc = false;
 		}
-		reslutMsg.setMsg(logMsg);
-		reslutMsg.setSuccess(suc);
-		return reslutMsg;
+		responseBean.setMsg(logMsg);
+		responseBean.setSuccess(suc);
+		return responseBean;
 	}
 
 	/***
@@ -128,15 +128,19 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "register", method = RequestMethod.GET)
-	public AjaxJson register(SysUser user) {
-		AjaxJson result = new AjaxJson();
-		boolean namestander = user.getUserName().trim().startsWith("qq") || user.getUserName().trim().startsWith("sina") || user.getUserName().trim().startsWith("github") || user.getUserName().trim().startsWith("baidu") || user.getUserName().trim().startsWith("weixin");
+	public ResponseBean register(SysUser user) {
+		ResponseBean result = new ResponseBean();
+		boolean namestander = user.getUserName().trim().startsWith("qq")
+				|| user.getUserName().trim().startsWith("sina")
+				|| user.getUserName().trim().startsWith("github")
+				|| user.getUserName().trim().startsWith("baidu")
+				|| user.getUserName().trim().startsWith("weixin");
 		if (namestander) {
 			result.setSuccess(false);
 			result.setMsg("不能以qq、sina、weixin、baidu、github 开头注册");
 			return result;
 		}
-		
+
 		return result;
 	}
 
@@ -158,9 +162,11 @@ public class LoginController extends BaseController {
 			String browser = getBrowser(request);
 			try {
 				ShiroHelper.logout();
-				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,"成功退出系统", -1, ip,browser));
+				LogManager.getInstance()
+						.executeLog(LogTaskFactory.loginLog(userName, "成功退出系统", -1, ip, browser));
 			} catch (Exception e) {
-				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,"退出失败，原因:"+e.getMessage(), -2, ip,browser));
+				LogManager.getInstance().executeLog(LogTaskFactory.loginLog(userName,
+						"退出失败，原因:" + e.getMessage(), -2, ip, browser));
 			}
 		}
 		return FilterHelper.LOGIN_SHORT;
@@ -186,11 +192,11 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "updateUser")
 	@SystemLog(desc = "更新当前登录用户用户", opType = SysOpType.UPDATE, tableName = "sys_user")
-	public AjaxJson updateUser(SysUser user) {
-		
-		AjaxJson result = new AjaxJson();
+	public ResponseBean updateUser(SysUser user) {
+
+		ResponseBean result = new ResponseBean();
 		try {
-			if(WebUtilHelper.getCurrenLoginUser() != null){
+			if (WebUtilHelper.getCurrenLoginUser() != null) {
 				user.setId(WebUtilHelper.getCurrentUserId());
 				userService.update(user);
 			}
@@ -205,8 +211,8 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "resetPwd")
 	@SystemLog(desc = "重置密码", opType = SysOpType.UPDATE, tableName = "sys_user")
-	public AjaxJson resetPwd(String oldPassWord, String newPassWord) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean resetPwd(String oldPassWord, String newPassWord) {
+		ResponseBean result = new ResponseBean();
 		SysUser currenLoginUser = ShiroHelper.getPrincipal();
 		// 判断用户是否为空,不为空,则清空session中的用户object
 		if (currenLoginUser != null) {

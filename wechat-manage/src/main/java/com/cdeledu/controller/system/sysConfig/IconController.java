@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 import com.cdeledu.controller.BaseController;
 import com.cdeledu.model.system.SysIcon;
 import com.cdeledu.service.sys.SysIconService;
@@ -28,12 +28,13 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/IconController")
-public class IconController  extends BaseController{
+public class IconController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	/** ----------------------------------------------------- Fields start */
 	private String message;// 操作提示语
 	@Autowired
 	private SysIconService sysIconService;
+
 	/** ----------------------------------------------------- Fields end */
 	/**
 	 * @方法描述: 图标列表页面跳转
@@ -47,27 +48,31 @@ public class IconController  extends BaseController{
 		mv.setViewName("system/icon/iconInit");
 		return mv;
 	}
-	
+
 	@RequestMapping(value = "initIcon")
 	@ResponseBody
-	public AjaxJson initIcon() {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean initIcon() {
+		ResponseBean result = new ResponseBean();
 
 		try {
 			result.setMsg("数据初始化成功");
 			Map<String, String> filePathMap = Maps.newConcurrentMap();
 			ClassLoader baseUrl = Thread.currentThread().getContextClassLoader();
-			filePathMap.put("bootstrap", baseUrl.getResource("bootstrapIconInfo/bootstrap.css").getPath());
-			filePathMap.put("fontAwesome", baseUrl.getResource("bootstrapIconInfo/font-awesome.css").getPath());
-			filePathMap.put("simpleLine", baseUrl.getResource("bootstrapIconInfo/simple-line-icons.css").getPath());
-			List<Map<String, String>> resultList=BootstrapHelper.getBootstrapIconInfo(filePathMap);
+			filePathMap.put("bootstrap",
+					baseUrl.getResource("bootstrapIconInfo/bootstrap.css").getPath());
+			filePathMap.put("fontAwesome",
+					baseUrl.getResource("bootstrapIconInfo/font-awesome.css").getPath());
+			filePathMap.put("simpleLine",
+					baseUrl.getResource("bootstrapIconInfo/simple-line-icons.css").getPath());
+			List<Map<String, String>> resultList = BootstrapHelper
+					.getBootstrapIconInfo(filePathMap);
 			SysIcon sysIcon;
 			for (Map<String, String> map : resultList) {
 				try {
 					sysIcon = new SysIcon();
 					sysIcon.setDisplayName(map.get("displayName"));
 					sysIcon.setSourceType(map.get("sourceType"));
-					if(sysIconService.findOneForJdbc(sysIcon) != null){
+					if (sysIconService.findOneForJdbc(sysIcon) != null) {
 						sysIcon.setClassName(map.get("className"));
 						sysIconService.insert(sysIcon);
 					}
@@ -75,9 +80,9 @@ public class IconController  extends BaseController{
 					continue;
 				}
 			}
-			
+
 		} catch (Exception e) {
-			result.setMsg("数据初始化失败，原因"+e.getMessage());
+			result.setMsg("数据初始化失败，原因" + e.getMessage());
 			result.setSuccess(false);
 		}
 		return result;
@@ -104,13 +109,14 @@ public class IconController  extends BaseController{
 	 */
 	@RequestMapping(value = "saveIcon")
 	@ResponseBody
-	public AjaxJson saveIcon(HttpServletRequest request) throws Exception {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean saveIcon(HttpServletRequest request) throws Exception {
+		ResponseBean responseBean = new ResponseBean();
 		message = "上传成功";
-		result.setMsg(message);
+		responseBean.setMsg(message);
 		// 图标的css样式
-		// String css = ".back{background:url('../images/back.png') no-repeat;}";
-		return result;
+		// String css = ".back{background:url('../images/back.png')
+		// no-repeat;}";
+		return responseBean;
 	}
 
 	/**
@@ -122,13 +128,13 @@ public class IconController  extends BaseController{
 	 */
 	@RequestMapping(params = "delIcon")
 	@ResponseBody
-	public AjaxJson del(HttpServletRequest request) {
-		AjaxJson result = new AjaxJson();
+	public ResponseBean del(HttpServletRequest request) {
+		ResponseBean responseBean = new ResponseBean();
 		// 删除图标时先检查该图标是否正在使用
 		boolean isPermit = false;
-		if(isPermit){
-			
+		if (isPermit) {
+
 		}
-		return result;
+		return responseBean;
 	}
 }

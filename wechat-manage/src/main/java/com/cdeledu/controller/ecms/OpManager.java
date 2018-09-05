@@ -2,7 +2,7 @@ package com.cdeledu.controller.ecms;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.cdeledu.common.base.AjaxJson;
+import com.cdeledu.common.base.ResponseBean;
 
 /**
  * 把今天最好的表现当作明天最新的起点．．～
@@ -33,12 +33,12 @@ public class OpManager {
 	 *            在发现的时候检查并添加该服务。false - 发现的时候不检查。
 	 * @return
 	 */
-	public AjaxJson addServiceMonitor(String apiKey, String serviceName, String portNumber,
+	public ResponseBean addServiceMonitor(String apiKey, String serviceName, String portNumber,
 			@RequestParam(defaultValue = "0") long timeOut,
 			@RequestParam(defaultValue = "1") int failureThreshold,
 			@RequestParam(defaultValue = "true") boolean autoDiscovery) {
-		AjaxJson result = new AjaxJson();
-		return result;
+		ResponseBean responseBean = new ResponseBean();
+		return responseBean;
 	}
 
 	/**
@@ -48,9 +48,9 @@ public class OpManager {
 	 * @param serviceName
 	 * @return
 	 */
-	public AjaxJson deleteServiceMonitor(String apiKey, String serviceName) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean deleteServiceMonitor(String apiKey, String serviceName) {
+		ResponseBean responseBean  = new ResponseBean();
+		return responseBean ;
 	}
 
 	/**
@@ -61,9 +61,9 @@ public class OpManager {
 	 *            要删除服务的显示名称
 	 * @return
 	 */
-	public AjaxJson deleteWindowsServiceMonitor(String apiKey, String serviceDisplayName) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean deleteWindowsServiceMonitor(String apiKey, String serviceDisplayName) {
+		ResponseBean responseBean  = new ResponseBean();
+		return responseBean ;
 	}
 
 	/**
@@ -72,9 +72,9 @@ public class OpManager {
 	 * @param serviceDisplayName
 	 * @return
 	 */
-	public AjaxJson updateServiceMonitor(String apiKey, String serviceDisplayName) {
-		AjaxJson result = new AjaxJson();
-		return result;
+	public ResponseBean updateServiceMonitor(String apiKey, String serviceDisplayName) {
+		ResponseBean responseBean  = new ResponseBean();
+		return responseBean ;
 	}
 
 	/**
