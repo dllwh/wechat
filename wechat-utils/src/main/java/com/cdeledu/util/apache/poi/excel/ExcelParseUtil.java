@@ -42,7 +42,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public final class ExcelParseUtil {
 	/** ----------------------------------------------------- Fields start */
-	private static Logger logger = Logger.getLogger(ExcelImportUtil.class);
+	private static Logger logger = Logger.getLogger(ExcelParseUtil.class);
 	/* 默认的日期格式 */
 	private static SimpleDateFormat Format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
