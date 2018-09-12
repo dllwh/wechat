@@ -10,6 +10,13 @@ import org.apache.commons.lang3.StringUtils;
  * Today the best performance as tomorrow newest starter!
  *
  * @类描述: readis
+ * 
+ *       <pre>
+ * Redis 监控最直接的方法就是使用系统提供的 info 命令，只需要执行redis-cli info命令，就能获得 Redis 系统的状态报告。
+ * 结果会返回 Server、Clients、Memory、Persistence、Stats、Replication、CPU、Keyspace 8个部分。
+ * 从info大返回结果中提取相关信息，就可以达到有效监控的目的。
+ *       </pre>
+ * 
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年9月11日 下午4:44:28
  * @版本: V1.0
@@ -18,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 public class RedisServerInfo {
 	/** ----------------------------------------------------- Fields start */
 	private static LinkedHashMap<String, String> map = new LinkedHashMap<>();
+
 	/** ----------------------------------------------------- Fields end */
 
 	static {
@@ -31,7 +39,7 @@ public class RedisServerInfo {
 		map.put("arch_bits", " 架构（32 或 64 位）");
 		map.put("multiplexing_api", "Redis 所使用的事件处理机制");
 		map.put("gcc_version", "编译 Redis 时所使用的 GCC 版本");
-		map.put("process_id", "服务器进程的 PID");
+		map.put("process_id", "当前 Redis 服务器进程id");
 		map.put("run_id", "Redis 服务器的随机标识符（用于 Sentinel 和集群）");
 		map.put("tcp_port", "TCP/IP 监听端口");
 		map.put("uptime_in_seconds", "自 Redis 服务器启动以来，经过的秒数");
@@ -85,6 +93,11 @@ public class RedisServerInfo {
 		map.put("used_cpu_user", "Redis服务器耗费的用户CPU");
 		map.put("used_cpu_sys_children", " 	Redis后台进程耗费的系统CPU");
 		map.put("used_cpu_user_children", "Redis后台进程耗费的用户CPU");
+
+		/**
+		 * Keyspace
+		 */
+		map.put("db0", "各个数据库的 key 的数量，以及带有生存期的 key 的数量");
 	}
 
 	private String key;
