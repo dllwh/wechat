@@ -59,8 +59,8 @@ Redis-cli命令总结:
 > +  `ttl：获得一个key的活动时间`
 > +  `move(key, dbindex)：移动当前数据库中的key到dbindex数据库`
 > +  `flushdb：删除当前选择数据库中的所有key`
-> +  `flushall：删除所有数据库中的所有key
-`
+> +  `flushall：删除所有数据库中的所有key`
+
 * **对String操作的命令**
 
 > +  `set(key, value)：给数据库中名称为key的string赋予值value`
