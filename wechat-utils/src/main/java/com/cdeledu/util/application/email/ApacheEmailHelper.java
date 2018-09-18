@@ -235,14 +235,4 @@ public final class ApacheEmailHelper {
 	public void moveMail() {
 
 	}
-
-	public static void main(String[] args) throws Exception {
-		ApacheEmailHelper apacheEmailHelper = new ApacheEmailHelper("smtp.sina.com",
-				"dllwhcrawler@sina.com", "dllwhcrawler");
-		// apacheEmailHelper.sendEmail("测试", "来自一封遥远星球的友好问候",
-		// "1349310440@qq.com".split(","), null,null);
-		apacheEmailHelper.sendHtmlMail(null, null, null, "1349310440@qq.com".split(","), null,
-				null);
-
-	}
 }
