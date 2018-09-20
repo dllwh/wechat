@@ -123,7 +123,7 @@ public final class JavaMailHelper {
 	 * @方法描述 : 初始化邮件发送服务器
 	 * @param serverHost
 	 */
-	public void init(String serverHost) {
+	private void init(String serverHost) {
 		// 指定邮件的发送服务器地址
 		props.put("mail.host", serverHost);
 		// 服务器是否要验证用户的身份信息
