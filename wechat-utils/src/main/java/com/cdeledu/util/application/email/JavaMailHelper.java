@@ -1,6 +1,5 @@
 package com.cdeledu.util.application.email;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -13,10 +12,11 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
+import javax.mail.event.TransportEvent;
+import javax.mail.event.TransportListener;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,7 +33,7 @@ import com.google.common.collect.Maps;
  * @创建者: 皇族灬战狼
  * @联系方式: duleilewuhen@sina.com
  * @创建时间: 2018年9月18日 下午6:21:09
- * @版本: V0.0.1
+ * @版本: V0.0.2
  * @since: JDK 1.7
  */
 public final class JavaMailHelper {
@@ -42,78 +42,48 @@ public final class JavaMailHelper {
 	private transient Properties props = System.getProperties();
 	private final String CHARSET = ConstantHelper.UTF_8.name();
 	/** 是否开始调试模式 */
-	private boolean debug = false;
+	private static boolean debug = false;
 	/** 服务器是否要验证用户的身份信息 */
 	private static boolean auth = false;
 	/** 基本邮件会话(session)，是Java Mail API最高层入口类 */
-	private static Session session;
+	private static Session sendMailSession;
 
 	/** ----------------------------------------------------- Fields end */
 	/** 邮件服务器的用户名 */
-	private String userName;
+	private String serverHost;
+	/** 邮件服务器的用户名 */
+	private String serverUserName;
 	/** 登陆邮件服务器的密码 */
 	private String password;
-	/** 邮件服务器的昵称 */
-	private String nickName;
 	/** 邮箱所使用的协议 */
 	private String protocol;
 
-	private JavaMailHelper() {
+	JavaMailHelper() {
 
 	}
 
-	private JavaMailHelper(String host, String userName, String password, String nickName) {
-		this.userName = userName;
+	public JavaMailHelper(String host, String userName, String password, String protocol) {
+		this.serverHost = host;
+		this.serverUserName = userName;
 		this.password = password;
-		this.nickName = nickName;
-		init(host);
-	}
-
-	private JavaMailHelper(String host, String protocol, String userName, String password,
-			String nickName) {
-		this.userName = userName;
 		this.protocol = protocol;
-		this.password = password;
-		this.nickName = nickName;
-		init(host);
+		init();
 	}
 
-	/**
-	 * @方法描述 : 邮件实例,仅仅支持发送
-	 * @return
-	 */
-	public static JavaMailHelper getSendInstance(String host, String userName) {
+	public static JavaMailHelper getInstance(String host, String userName) {
 		auth = false;
-		return new JavaMailHelper(host, userName, null, "");
+		return new JavaMailHelper(host, userName, null, null);
 	}
 
-	/**
-	 * @方法描述 : 邮件实例,仅仅支持发送
-	 * @return
-	 */
-	public static JavaMailHelper getSendInstance(String host, String userName, String nickName) {
-		auth = false;
-		return new JavaMailHelper(host, userName, nickName, "");
+	public static JavaMailHelper getInstance(String host, String userName, String password) {
+		auth = true;
+		return new JavaMailHelper(host, userName, password, null);
 	}
 
-	/**
-	 * @方法描述 : 邮件实例,仅仅支持发送
-	 * @return
-	 */
 	public static JavaMailHelper getInstance(String host, String userName, String password,
-			String nickName) {
+			String protocol) {
 		auth = true;
-		return new JavaMailHelper(host, userName, password, nickName);
-	}
-
-	/**
-	 * @方法描述 : 邮件实例
-	 * @return
-	 */
-	public static JavaMailHelper getInstance(String host, String protocol, String userName,
-			String password, String nickName) {
-		auth = true;
-		return new JavaMailHelper(host, protocol, userName, password, nickName);
+		return new JavaMailHelper(host, userName, password, protocol);
 	}
 
 	/************************************************************************/
@@ -123,27 +93,28 @@ public final class JavaMailHelper {
 	 * @方法描述 : 初始化邮件发送服务器
 	 * @param serverHost
 	 */
-	private void init(String serverHost) {
+	private void init() {
 		// 指定邮件的发送服务器地址
 		props.put("mail.host", serverHost);
 		// 服务器是否要验证用户的身份信息
 		props.put("mail.auth", String.valueOf(auth));
+		props.put("mail.port", 465);
 		// 是否输出DEBUG信息。默认为false
 		props.put("mail.debug", debug);
 
 		if (auth) { // 邮件服务器登录验证
-			session = Session.getDefaultInstance(props, new Authenticator() {
+			sendMailSession = Session.getDefaultInstance(props, new Authenticator() {
 				// 授权凭证（用户名和密码）以及主机
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(userName, password);
+					return new PasswordAuthentication(serverUserName, password);
 				}
 			});
 		} else {
-			session = Session.getDefaultInstance(props);
+			sendMailSession = Session.getDefaultInstance(props);
 		}
 
 		// 设置为debug模式, 可以查看详细的发送 log
-		session.setDebug(debug);
+		sendMailSession.setDebug(debug);
 	}
 
 	/**
@@ -211,17 +182,8 @@ public final class JavaMailHelper {
 	private MimeMessage createMimeMessage(String subject, String textMsg, String receiver,
 			String ccReceiver, String bccReceiver, List<String> receivers, List<String> ccReceivers,
 			List<String> bccReceivers) throws AddressException, MessagingException {
-		MimeMessage mmessage = new MimeMessage(session);
-
-		if (StringUtils.isNotBlank(nickName)) {
-			try {
-				nickName = MimeUtility.encodeText(nickName);
-			} catch (UnsupportedEncodingException e) {
-
-			}
-		}
-
-		mmessage.setFrom(new InternetAddress(nickName + " <" + userName + ">"));
+		MimeMessage mmessage = new MimeMessage(sendMailSession);
+		mmessage.setFrom(new InternetAddress(serverUserName));
 
 		if (receivers != null) {// To: 群发收件人
 			int receiverNum = receivers.size();
@@ -284,7 +246,27 @@ public final class JavaMailHelper {
 			String bccReceiver) throws AddressException, MessagingException {
 		Message msg = createMimeMessage(subject, textMsg, receiver, ccReceiver, bccReceiver, null,
 				null, null);
-		Transport.send(msg);
+		if (auth) {
+			Transport transport = sendMailSession.getTransport();
+			transport.addTransportListener(new TransportListener() {
+				// 邮件部分发送成功
+				public void messagePartiallyDelivered(TransportEvent transportEvent) {
+				}
+
+				// 邮件发送失败
+				public void messageNotDelivered(TransportEvent transportEvent) {
+				}
+
+				// 邮件发送成功
+				public void messageDelivered(TransportEvent transportEvent) {
+				}
+			});
+			transport.connect(serverUserName, password);
+			transport.sendMessage(msg, msg.getRecipients(Message.RecipientType.TO));
+			transport.close();
+		} else {
+			Transport.send(msg);
+		}
 	}
 
 	/**
@@ -343,7 +325,7 @@ public final class JavaMailHelper {
 		Store store = null;
 		Folder folder = null;
 		try {
-			store = getStoreClient(session);
+			store = getStoreClient(sendMailSession);
 			// 获得收件箱
 			folder = store.getFolder("INBOX");
 			folder.open(Folder.READ_ONLY);
@@ -369,7 +351,7 @@ public final class JavaMailHelper {
 	 */
 	public List<Map<String, Object>> showFolderInfo() throws Exception {
 		List<Map<String, Object>> resultList = Lists.newArrayList();
-		Store store = getStoreClient(session);
+		Store store = getStoreClient(sendMailSession);
 		try {
 			Folder rootFolder = store.getDefaultFolder();// 默认父目录
 			Folder[] folders = rootFolder.list();// 默认目录列表
@@ -396,7 +378,7 @@ public final class JavaMailHelper {
 	public void showMessages() throws Exception {
 		Store store = null;
 		try {
-			store = getStoreClient(session);
+			store = getStoreClient(sendMailSession);
 			Folder[] folders = store.getDefaultFolder().list();// 默认目录列表
 			Folder popFolder = null;
 			for (Folder folder : folders) {
