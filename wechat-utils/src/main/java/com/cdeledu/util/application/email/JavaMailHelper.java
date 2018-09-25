@@ -98,7 +98,7 @@ public final class JavaMailHelper {
 		props.put("mail.host", serverHost);
 		// 服务器是否要验证用户的身份信息
 		props.put("mail.auth", String.valueOf(auth));
-		props.put("mail.port", 465);
+		// props.put("mail.port", 465);
 		// 是否输出DEBUG信息。默认为false
 		props.put("mail.debug", debug);
 
