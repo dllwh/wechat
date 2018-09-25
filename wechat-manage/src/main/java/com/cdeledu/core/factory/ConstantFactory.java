@@ -4,6 +4,7 @@ import com.cdeledu.core.shiro.service.ShiroService;
 import com.cdeledu.service.log.LoginLogService;
 import com.cdeledu.service.log.OperateLogService;
 import com.cdeledu.service.sys.CountService;
+import com.cdeledu.service.sys.DictService;
 import com.cdeledu.service.sys.ManagerUserService;
 import com.cdeledu.service.sys.RoleService;
 import com.cdeledu.service.sys.ScheduleJobLogService;
@@ -44,4 +45,6 @@ public final class ConstantFactory {
 	public static OperateLogService operateLogService = SpringContextUtil.getBean("operateLogService");
 	/** 登录、退出日志处理层 */
 	public static LoginLogService loginLogService = SpringContextUtil.getBean("loginLogService");
+	/** 数据字典 */
+	public static DictService dictService = SpringContextUtil.getBean("dictService");
 }
