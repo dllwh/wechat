@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
  * 
  * @创建者: 皇族灬战狼
  * @创建时间: 2017年9月11日 下午4:44:28
- * @版本: V1.0
+ * @版本: V0.0.2
  * @since: JDK 1.7
  */
 public class RedisServerInfo {
@@ -44,7 +44,8 @@ public class RedisServerInfo {
 		map.put("tcp_port", "TCP/IP 监听端口");
 		map.put("uptime_in_seconds", "自 Redis 服务器启动以来，经过的秒数");
 		map.put("uptime_in_days", "自 Redis 服务器启动以来，经过的天数");
-		map.put("lru_clock", " 以分钟为单位进行自增的时钟，用于 LRU 管理");
+		map.put("lru_clock", "以分钟为单位进行自增的时钟，用于 LRU 管理");
+		map.put("config_file", "配置文件路径");
 
 		/**
 		 * Clients:记录了已连接客户端的信息
@@ -67,27 +68,36 @@ public class RedisServerInfo {
 		map.put("mem_allocator", "在编译时指定的， Redis 所使用的内存分配器。可以是 libc 、 jemalloc 或者 tcmalloc");
 
 		/**
-		 * Stats
+		 * Stats: 一般统计信息
 		 */
 		map.put("total_connections_received", "运行以来连接过的客户端的总数量");
 		map.put("total_commands_processed", "运行以来执行过的命令的总数量");
+		map.put("instantaneous_ops_per_sec", "redis当前的qps，redis内部较实时的每秒执行的命令数");
+		map.put("total_net_input_bytes", "redis网络入口流量字节数");
+		map.put("total_net_output_bytes", "redis网络出口流量字节数");
+		map.put("instantaneous_input_kbps", "redis网络入口kps");
+		map.put("instantaneous_output_kbps", "redis网络出口kps");
+		map.put("rejected_connections", "拒绝的连接个数，redis连接个数达到maxclients限制，拒绝新连接的个数");
+		map.put("sync_full", "主从完全同步成功次数");
+		map.put("sync_partial_ok", "主从部分同步成功次数");
+		map.put("sync_partial_err", "主从部分同步失败次数");
 		map.put("expired_keys", "运行以来过期的 key 的数量");
 		map.put("evicted_keys", "运行以来删除过的key的数量");
-		map.put("instantaneous_ops_per_sec", "服务器每秒中执行的命令数量");
-		map.put("rejected_connections", "因为最大客户端数量限制而被拒绝的连接请求数量");
 		map.put("keyspace_hits", "查找数据库键成功的次数");
 		map.put("keyspace_misses", "查找数据库键失败的次数");
 		map.put("pubsub_channels", "目前被订阅的频道数量");
 		map.put("pubsub_patterns", "目前被订阅的模式数量");
 
 		/**
-		 * Replication
+		 * Replication : 主/从信息
 		 */
 		map.put("role", "当前实例的角色master还是slave");
 		map.put("connected_slaves", "有多少个slave节点");
+		map.put("master_host", "此节点对应的master的ip");
+		map.put("master_port", "此节点对应的master的port");
 
 		/**
-		 * CPU
+		 * CPU : CPU 计算量统计信息
 		 */
 		map.put("used_cpu_sys", "Redis服务器耗费的系统CPU");
 		map.put("used_cpu_user", "Redis服务器耗费的用户CPU");
@@ -95,9 +105,17 @@ public class RedisServerInfo {
 		map.put("used_cpu_user_children", "Redis后台进程耗费的用户CPU");
 
 		/**
-		 * Keyspace
+		 * Keyspace : 数据库相关的统计信息
 		 */
 		map.put("db0", "各个数据库的 key 的数量，以及带有生存期的 key 的数量");
+
+		/**
+		 * Cluster : Redis 集群信息
+		 */
+		map.put("cluster_enabled", "实例是否启用集群模式");
+		/**
+		 * Commandstats : 各种不同类型的命令的执行统计信息
+		 */
 	}
 
 	private String key;
