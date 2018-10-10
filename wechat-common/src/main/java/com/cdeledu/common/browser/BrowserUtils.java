@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
+import nl.bitwalker.useragentutils.Browser;
+import nl.bitwalker.useragentutils.UserAgent;
+
 public class BrowserUtils {
 	/*--------------------------私有属性 start -------------------------------*/
 	private final static String IE11 = "rv:11.0";
@@ -27,8 +30,7 @@ public class BrowserUtils {
 
 	/*--------------------------私有属性 end   -------------------------------*/
 	/*--------------------------私有方法 start -------------------------------*/
-	private static boolean getBrowserType(HttpServletRequest request,
-			String brosertype) {
+	private static boolean getBrowserType(HttpServletRequest request, String brosertype) {
 		String userAgent = request.getHeader("USER-AGENT").toLowerCase();
 		return userAgent.indexOf(brosertype) > 0 ? true : false;
 	}
@@ -52,8 +54,7 @@ public class BrowserUtils {
 	 */
 	public static boolean isIE(HttpServletRequest request) {
 		String userAgent = request.getHeader("USER-AGENT").toLowerCase();
-		return (userAgent.indexOf("msie") > 0 || userAgent.indexOf("rv:11.0") > 0) ? true
-				: false;
+		return (userAgent.indexOf("msie") > 0 || userAgent.indexOf("rv:11.0") > 0) ? true : false;
 	}
 
 	/**
@@ -168,7 +169,7 @@ public class BrowserUtils {
 			return IE6;
 		return OTHER;
 	}
-	
+
 	/**
 	 * 判断是否是Chrome浏览器
 	 * 
@@ -191,5 +192,16 @@ public class BrowserUtils {
 	public static boolean isFirefox(String userAgent) {
 		userAgent = userAgent.toLowerCase();
 		return StringUtils.contains(userAgent, "firefox");
+	}
+
+	/**
+	 * @方法描述 : 获取浏览器对象
+	 * @param request
+	 * @return
+	 */
+	public Browser callBrowser(HttpServletRequest request) {
+		UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+		Browser browser = userAgent.getBrowser();
+		return browser;
 	}
 }
