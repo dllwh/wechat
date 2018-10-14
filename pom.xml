@@ -133,7 +133,7 @@
 		<module>weixin-qy</module>
 		<module>wechat-manage</module>
 		<module>wechat-monitor</module>
-		<module>crapApi-ApiManager</module>
+		
 	</modules>
 
 
