@@ -64,9 +64,9 @@ public class CodeHelper {
 	 */
 	
 //	private static JTextField driverField = new JTextField("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//	private static JTextField urlField = new JTextField("jdbc:sqlserver://192.168.192.250:1433;DatabaseName=chinatet_live_302");
-//	private static JTextField usernameField = new JTextField("sa");
-//	private static JTextField passwordField = new JTextField("cailiqiang");
+//	private static JTextField urlField = new JTextField("");
+//	private static JTextField usernameField = new JTextField("");
+//	private static JTextField passwordField = new JTextField("");
 //	private static JTextField tableField = new JTextField("chat_client");
 	
 	/**
