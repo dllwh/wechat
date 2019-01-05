@@ -106,7 +106,7 @@
 		<!-- Java开源爬虫框架WebCollector 2.x -->
 		<webCollector.version>2.32</webCollector.version>
 
-		<jackson.version>2.9.6</jackson.version>
+		<jackson.version>2.9.8</jackson.version>
 		<fastjson.version>1.2.47</fastjson.version>
 		<mongodb.version>3.4.2</mongodb.version>
 		<jedis.version>2.9.0</jedis.version>
