@@ -15,29 +15,31 @@ import java.io.Serializable;
  * @since: JDK 1.7
  */
 public class LiveVideoInfo implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 1L;
 	/** 回放id */
-	private String id;
+	private String				id;
 	/** 直播id */
-	private String liveId;
+	private String				liveId;
 	/** 开始时间 , 格式为"yyyy-MM-dd HH:mm:ss */
-	private String startTime;
+	private String				startTime;
 	/** 结束时间, 格式为"yyyy-MM-dd HH:mm:ss", 如果直播未结束，该值则为"" */
-	private String stopTime;
+	private String				stopTime;
 	/** 录制状态，0表示录制未结束，1表示录制完成 */
-	private String recordStatus;
+	private String				recordStatus;
 	/** 录制视频id，如果recordStatus为0则返回-1 */
-	private String recordVideoId;
+	private String				recordVideoId;
 	/** 回放地址，当recordStatus为0时返回"" */
-	private String replayUrl;
+	private String				replayUrl;
 	/** 离线包下载地址，注：只有开通离线播放权限才会返回该参数 */
-	private String offlinePackageUrl;
+	private String				offlinePackageUrl;
 	/** 离线包md5，注：只有开通离线播放权限才会返回该参数 */
-	private String offlinePackageMd5;
+	private String				offlinePackageMd5;
 	/** 回放视频下载地址,该下载地址具有时效性，有效时间为2小时 */
-	private String downloadUrl;
+	private String				downloadUrl;
 	/** 直播模板类型 */
-	private Integer templateType;
+	private Integer				templateType;
+	/** 回放来源，0：录制； 1：合并； 2：迁移； 3：上传 */
+	private Integer				sourceType;
 
 	public String getId() {
 		return id;
@@ -127,12 +129,20 @@ public class LiveVideoInfo implements Serializable {
 		this.templateType = templateType;
 	}
 
+	public Integer getSourceType() {
+		return sourceType;
+	}
+
+	public void setSourceType(Integer sourceType) {
+		this.sourceType = sourceType;
+	}
+
 	@Override
 	public String toString() {
-		return "LiveVideoInfo [id=" + id + ", liveId=" + liveId + ", startTime=" + startTime
-				+ ", stopTime=" + stopTime + ", recordStatus=" + recordStatus + ", recordVideoId="
-				+ recordVideoId + ", replayUrl=" + replayUrl + ", offlinePackageUrl="
-				+ offlinePackageUrl + ", offlinePackageMd5=" + offlinePackageMd5 + ", downloadUrl="
-				+ downloadUrl + ", templateType=" + templateType + "]";
+		return "LiveVideoInfo [id=" + id + ", liveId=" + liveId + ", startTime=" + startTime + ", stopTime="
+				+ stopTime + ", recordStatus=" + recordStatus + ", recordVideoId=" + recordVideoId
+				+ ", replayUrl=" + replayUrl + ", offlinePackageUrl=" + offlinePackageUrl
+				+ ", offlinePackageMd5=" + offlinePackageMd5 + ", downloadUrl=" + downloadUrl
+				+ ", templateType=" + templateType + ", sourceType=" + sourceType + "]";
 	}
 }
