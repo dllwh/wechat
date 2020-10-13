@@ -144,7 +144,7 @@
 		<dependency>
 			<groupId>junit</groupId> 		<!--依赖的group ID -->
 			<artifactId>junit</artifactId>	<!--依赖的artifact ID -->
-			<version>4.11</version>			<!--依赖的版本号。 在Maven 2里, 也可以配置成版本号的范围。 -->
+			<version>4.13.1</version>			<!--依赖的版本号。 在Maven 2里, 也可以配置成版本号的范围。 -->
 			<scope>test</scope>				<!-- 依赖项的适用范围：test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。 -->
 		</dependency>
 		<!-- 单元测试(end ) -->
