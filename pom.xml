@@ -107,7 +107,7 @@
 		<webCollector.version>2.32</webCollector.version>
 
 		<jackson.version>2.10.1</jackson.version>
-		<fastjson.version>1.2.47</fastjson.version>
+		<fastjson.version>1.2.83</fastjson.version>
 		<mongodb.version>3.4.2</mongodb.version>
 		<jedis.version>2.9.0</jedis.version>
 		<spring.redis.version>1.7.2.RELEASE</spring.redis.version>
